@@ -87,7 +87,8 @@ function twShow(tw) {
 // 新規twitの出現アニメーション処理
 function animate(elem, max, cur) {
 	elem.style.maxHeight = cur;
-	if (cur == max) return;
+	if (cur == max)
+		return elem.style.maxHeight = 'none';
 	cur += Math.ceil(Math.min(Math.min(cur/5, (max-cur)/3), 20))+1;
 	if (cur > max) cur = max;
 	setTimeout(function(){ animate(elem, max, cur) }, 30);
