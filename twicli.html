@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>twicli</tltle>
+<style>
+body {background-color: transparent; margin: 1px;}
+#tw, #tw_p { font-size: small; }
+img { border: 0; }
+.status { text-decoration: none; color: black; cursor: pointer; }
+#loading {opacity: 0.5; position: absolute; left: 50px; top: 2px; widht: 220px; height: 19; }
+#fst { position: absolute; left: 56px; top: 0px; width: 208px; }
+#rst { position: absolute; left: 264px; top: 6px; text-decoration: none; }
+hr { margin: 3px; padding: 0; }
+</style>
+</head>
+<body>
+<iframe style="display:none;" name="tx"></iframe>
+<a href="http://twitter.com/home" target="twitter"><b><small>Twitter</small></b></a>
+<form name="frm" action="http://twitter.com/statuses/update.xml" method="POST" style="display: inline;" onSubmit="if (this.status.value == '') { reload(0); return false; } this.status.select(); reload(3000)" target="tx">
+<small><input id="fst" type="text" name="status">
+<a id="rst" href="javascript:document.frm.reset()"><img src="clr.png"></a>
+</small><img id="loading" src="loading.gif"></form>
+<hr>
+<div id="tw"><div></div></div>
+
+<script>
+var nr_limit = 200;				// 表示するtwitの上限数
+
+var seq = 0;
+var since_id = false;
+var old_script_ele = false;
+// ローディング表示ON、twit更新
+function reload(to) {
+	document.getElementById("loading").style.display = "block";
+	setTimeout("update()", to);
+}
+// 最新twitを取得
+function update(page) {
+	if (old_script_ele)
+		old_script_ele.parentNode.removeChild(old_script_ele);
+	var s = document.createElement('script');
+	s.src = 'http://twitter.com/statuses/friends_timeline?seq='+(seq++)+'&callback=twShow' +
+		(page ? '&page='+page : '') + (!page && since_id ? '&since_id='+since_id : '');
+	document.body.appendChild(s);
+	old_script_ele_p = s;
+}
+// twitのHTML表現を生成
+function q(str) { return "'"+str+"'" }
+function makeHTML(tw) {
+	return (tw.user.url ? '<a target="twitter" href="'+tw.user.url+'">' : '') +
+		'<img border="0" align="left" width="24" height="24" alt="'+ tw.user.name +
+			'" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
+		'<a target="twitter" href="http://twitter.com/'+tw.user.screen_name+'">' +
+		tw.user.screen_name + (tw.user.name!=tw.user.screen_name?'('+tw.user.name+')':'') + '</a> ' +
+		'<span onClick="if (\'\' == window.getSelection().toString()) { document.frm.status.value = '+
+			q("@"+tw.user.screen_name+" ")+'; document.frm.status.focus() }" class="status">' +
+			tw.text.replace(/(https?:\/\/[^ ]*)/g, " <a target=\"_blank\" href=\"$1\">$1</a>")
+				.replace(/@([0-9A-Za-z_\-]+)/g, "<a target=\"twitter\" href=\"http://twitter.com/$1\">@$1</a>") +
+		'</span><br clear="left"><hr>';
+}
+// 受信twitを表示
+function twShow(tw) {
+	var len = tw.length;
+	if (len == 0) return;
+	var twNode = document.getElementById('tw');
+	var pNode = document.createElement('div');
+	pNode.appendChild(document.createElement('div'));
+	since_id = tw[0].id;
+	for (i = len-1; i >= 0; i--) {
+		var s = document.createElement('div');
+		if (tw[i].user.profile_image_url) {
+			s.innerHTML = makeHTML(tw[i]);
+			pNode.insertBefore(s, pNode.childNodes[0]);
+		}
+	}
+	twNode.insertBefore(pNode, twNode.childNodes[0]);
+	var maxH = pNode.clientHeight;
+	pNode.style.overflow = "hidden";
+	animate(pNode, maxH, 0);
+	while (twNode.childNodes.length > nr_limit)
+		twNode.removeChild(twNode.childNodes[nr_limit]);
+	document.getElementById('loading').style.display='none';
+	if (failover_timeout) clearTimeout(failover_timeout);
+	failover_timeout = false;
+}
+// 新規twitの出現アニメーション処理
+function animate(elem, max, cur) {
+	elem.style.maxHeight = cur;
+	if (cur == max) return;
+	cur += Math.ceil(Math.min(Math.min(cur/5, (max-cur)/3), 20))+1;
+	if (cur > max) cur = max;
+	setTimeout(function(){ animate(elem, max, cur) }, 30);
+}
+// 初回アップデート
+setTimeout("update();", 0);
+// ログインしていなかったときなどに15秒で本家にリダイレクト
+var failover_timeout = setTimeout("location.href='http://twitter.com/home'", 15*1000);
+setInterval("update()", 30*1000);
+
+// ホイールの回転でスクロール (スクロール不可のウィンドウ・フレーム内で有効)
+function wheel(event) {
+	var delta = 0;
+	if (!event) event = window.event;
+	if (event.wheelDelta) {
+		delta = event.wheelDelta/10;
+	} else if (event.detail)
+		delta = -event.detail;
+	if (delta)
+		scrollBy(0, -delta);
+	if (event.preventDefault)
+		event.preventDefault();
+	event.returnValue = false;
+}
+if (window.addEventListener) window.addEventListener('DOMMouseScroll', wheel, false);
+window.onmousewheel = document.onmousewheel = wheel;
+</script>
+</body>
+</html>
