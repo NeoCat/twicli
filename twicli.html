@@ -9,7 +9,9 @@ body {background-color: transparent; margin: 1px;}
 #tw, #tw_p { font-size: small; }
 img { border: 0; }
 .status { text-decoration: none; color: black; cursor: pointer; }
-#loading {opacity: 0.5; position: absolute; left: 50px; top: 2px; widht: 220px; height: 19; }
+.fromme { background-color: #cfc; }
+.tome { background-color: #ccf; }
+#loading {opacity: 0.5; position: absolute; left: 50px; top: 2px; width: 220px; height: 19; }
 #fst { position: absolute; left: 56px; top: 0px; width: 208px; }
 #rst { position: absolute; left: 264px; top: 6px; text-decoration: none; }
 hr { margin: 3px; padding: 0; }
@@ -18,10 +20,13 @@ hr { margin: 3px; padding: 0; }
 <body>
 <iframe style="display:none;" name="tx"></iframe>
 <a href="http://twitter.com/home" target="twitter"><b><small>Twitter</small></b></a>
-<form name="frm" action="http://twitter.com/statuses/update.xml" method="POST" style="display: inline;" onSubmit="if (this.status.value == '') { reload(0); return false; } this.status.select(); reload(3000)" target="tx">
-<small><input id="fst" type="text" name="status">
+<!--発言フォーム-->
+<form name="frm" action="http://twitter.com/statuses/update.xml" method="POST" style="display: inline;" onSubmit="if (this.status.value == '') { reload(0); return false; } this.status.select(); setTimeout('document.frm.reset()',10); reload(3000)" target="tx">
+<small><input id="fst" type="text" name="status"><input type="hidden" name="source" value="twicli">
 <a id="rst" href="javascript:document.frm.reset()"><img src="clr.png"></a>
 </small><img id="loading" src="loading.gif"></form>
+<!--favフォーム-->
+<form name="favf" action="" method="POST" style="display: inline;" target="tx"></form>
 <hr>
 <div id="tw"><div></div></div>
 
@@ -30,6 +35,7 @@ var nr_limit = 200;				// 表示するtwitの上限数
 
 var seq = (new Date).getTime();
 var since_id = false;
+var myname = false;
 var old_script_ele = false;
 // ローディング表示ON、twit更新
 function reload(to) {
@@ -52,6 +58,8 @@ function makeHTML(tw) {
 	return (tw.user.url ? '<a target="twitter" href="'+tw.user.url+'">' : '') +
 		'<img border="0" align="left" width="24" height="24" alt="'+ tw.user.name +
 			'" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
+		'<img align="right" src="http://assets3.twitter.com/images/icon_star_'+(tw.favorited?'full':'empty')+'.gif" '+
+		'onClick="fav(this,' + tw.id + ')">' + 
 		'<a target="twitter" href="http://twitter.com/'+tw.user.screen_name+'">' +
 		tw.user.screen_name + (tw.user.name!=tw.user.screen_name?'('+tw.user.name+')':'') + '</a> ' +
 		'<span onClick="if (\'\' == window.getSelection().toString()) { document.frm.status.value = '+
@@ -59,6 +67,17 @@ function makeHTML(tw) {
 			tw.text.replace(/(https?:\/\/[^ ]*)/g, " <a onClick=\"event.stopPropagation();\" target=\"_blank\" href=\"$1\">$1</a>")
 				.replace(/@([0-9A-Za-z_\-]+)/g, "<a onClick=\"event.stopPropagation();\" target=\"twitter\" href=\"http://twitter.com/$1\">@$1</a>") +
 		'</span><br clear="left"><hr>';
+}
+// favoriteの追加(f=true)/削除(f=false)
+function fav(img, id) {
+	var f = img.src.match('empty');
+	document.favf.action = 'http://twitter.com/favourings/' + (f ? 'create' : 'destroy') + '/' + id + '.xml';
+	document.favf.submit();
+	img.src = 'http://assets3.twitter.com/images/icon_star_' + (f ? 'full' : 'empty') + '.gif';
+}
+// 自分の最新の発言を受信
+function twUser(tw) {
+	myname = tw[0].user.screen_name;
 }
 // 受信twitを表示
 function twShow(tw) {
@@ -72,6 +91,10 @@ function twShow(tw) {
 		var s = document.createElement('div');
 		if (tw[i].user.profile_image_url) {
 			s.innerHTML = makeHTML(tw[i]);
+			if (tw[i].text.match('@'+myname+' '))
+				s.className = "tome";
+			if (tw[i].user.screen_name == myname)
+				s.className = "fromme";
 			pNode.insertBefore(s, pNode.childNodes[0]);
 		}
 	}
@@ -108,6 +131,8 @@ function wheel(event) {
 		delta = event.wheelDelta/10;
 	} else if (event.detail)
 		delta = -event.detail;
+	if (navigator.userAgent.indexOf("Firefox") != -1)
+		delta *= 10;
 	if (delta)
 		scrollBy(0, -delta);
 	if (event.preventDefault)
@@ -117,5 +142,6 @@ function wheel(event) {
 if (window.addEventListener) window.addEventListener('DOMMouseScroll', wheel, false);
 window.onmousewheel = document.onmousewheel = wheel;
 </script>
+<script src="http://twitter.com/statuses/user_timeline.json?count=1&callback=twUser"></script>
 </body>
 </html>
