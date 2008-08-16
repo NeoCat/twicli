@@ -7,31 +7,34 @@
 <style>
 body {background-color: transparent; margin: 1px;}
 #tw, #tw_p { font-size: small; }
+#tw div div, #tw_p div div { padding: 2px; }
 img { border: 0; }
 .status { text-decoration: none; color: black; cursor: pointer; }
+.date { color: #999; font-size: x-small; }
 .fromme { background-color: #cfc; }
 .tome { background-color: #ccf; }
 #loading {opacity: 0.5; position: absolute; left: 50px; top: 2px; width: 220px; height: 19; }
 #fst { position: absolute; left: 56px; top: 0px; width: 208px; }
 #rst { position: absolute; left: 264px; top: 6px; text-decoration: none; }
-hr { margin: 3px; padding: 0; }
+hr { margin: 0; padding: 0; }
+form { margin: 5px; }
 </style>
 </head>
 <body>
 <iframe style="display:none;" name="tx"></iframe>
 <a href="http://twitter.com/home" target="twitter"><b><small>Twitter</small></b></a>
 <!--発言フォーム-->
-<form name="frm" action="http://twitter.com/statuses/update.xml" method="POST" style="display: inline;" onSubmit="if (this.status.value == '') { reload(0); return false; } this.status.select(); setTimeout('document.frm.reset()',10); reload(3000)" target="tx">
+<form name="frm" action="http://twitter.com/statuses/update.xml" method="POST" onSubmit="if (this.status.value == '') { reload(0); return false; } this.status.select(); setTimeout('document.frm.reset()',10); reload(3000)" target="tx">
 <small><input id="fst" type="text" name="status"><input type="hidden" name="source" value="twicli">
 <a id="rst" href="javascript:document.frm.reset()"><img src="clr.png"></a>
 </small><img id="loading" src="loading.gif"></form>
 <!--favフォーム-->
-<form name="favf" action="" method="POST" style="display: inline;" target="tx"></form>
-<hr>
-<div id="tw"><div></div></div>
+<form name="favf" action="" method="POST" target="tx"></form>
+
+<div id="tw"><hr></div>
 
 <script>
-var nr_limit = 200;				// 表示するtwitの上限数
+var nr_limit = 50;				// 表示する更新回数の上限
 
 var seq = (new Date).getTime();
 var since_id = false;
@@ -54,7 +57,10 @@ function update(page) {
 }
 // twitのHTML表現を生成
 function q(str) { return "'"+str+"'" }
+function d2(dig) { return (dig>9?"":"0") + dig }
 function makeHTML(tw) {
+	var d = new Date(tw.created_at);
+	d = d.getDate() + "日 " + d.getHours() + ":" + d2(d.getMinutes()) + ":" + d2(d.getSeconds());
 	return (tw.user.url ? '<a target="twitter" href="'+tw.user.url+'">' : '') +
 		'<img border="0" align="left" width="24" height="24" alt="'+ tw.user.name +
 			'" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
@@ -66,7 +72,7 @@ function makeHTML(tw) {
 			q("@"+tw.user.screen_name+" ")+'; document.frm.status.focus() }" class="status">' +
 			tw.text.replace(/(https?:\/\/[^ ]*)/g, " <a onClick=\"event.stopPropagation();\" target=\"_blank\" href=\"$1\">$1</a>")
 				.replace(/@([0-9A-Za-z_\-]+)/g, "<a onClick=\"event.stopPropagation();\" target=\"twitter\" href=\"http://twitter.com/$1\">@$1</a>") +
-		'</span><br clear="left"><hr>';
+		'</span> <span class="date">' + d + '</span><br clear="left">';
 }
 // favoriteの追加(f=true)/削除(f=false)
 function fav(img, id) {
@@ -85,9 +91,10 @@ function twShow(tw) {
 	if (len == 0) return;
 	var twNode = document.getElementById('tw');
 	var pNode = document.createElement('div');
-	pNode.appendChild(document.createElement('div'));
-	since_id = tw[0].id;
+	var dummy = pNode.appendChild(document.createElement('div'));
 	for (i = len-1; i >= 0; i--) {
+		if (since_id && since_id >= tw[i].id)
+			continue;
 		var s = document.createElement('div');
 		if (tw[i].user.profile_image_url) {
 			s.innerHTML = makeHTML(tw[i]);
@@ -96,8 +103,10 @@ function twShow(tw) {
 			if (tw[i].user.screen_name == myname)
 				s.className = "fromme";
 			pNode.insertBefore(s, pNode.childNodes[0]);
+			pNode.insertBefore(document.createElement('hr'), s);
 		}
 	}
+	pNode.removeChild(dummy);
 	twNode.insertBefore(pNode, twNode.childNodes[0]);
 	var maxH = pNode.clientHeight;
 	pNode.style.overflow = "hidden";
@@ -107,15 +116,16 @@ function twShow(tw) {
 	document.getElementById('loading').style.display='none';
 	if (failover_timeout) clearTimeout(failover_timeout);
 	failover_timeout = false;
+	since_id = tw[0].id;
 }
 // 新規twitの出現アニメーション処理
 function animate(elem, max, cur) {
 	elem.style.maxHeight = cur;
 	if (cur == max)
 		return elem.style.maxHeight = 'none';
-	cur += Math.ceil(Math.min(Math.min(cur/5, (max-cur)/3), 20))+1;
+	cur += Math.ceil(Math.min(Math.min(cur/3, (max-cur)/2), 30))+1;
 	if (cur > max) cur = max;
-	setTimeout(function(){ animate(elem, max, cur) }, 30);
+	setTimeout(function(){ animate(elem, max, cur) }, 50);
 }
 // 初回アップデート
 setTimeout("update();", 0);
