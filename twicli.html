@@ -53,7 +53,7 @@ function update(page) {
 	s.src = 'http://twitter.com/statuses/friends_timeline?seq='+(seq++)+'&callback=twShow' +
 		(page ? '&page='+page : '') + (!page && since_id ? '&since_id='+since_id : '');
 	document.body.appendChild(s);
-	old_script_ele_p = s;
+	old_script_ele = s;
 }
 // twitのHTML表現を生成
 function q(str) { return "'"+str+"'" }
