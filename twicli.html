@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport" content="width=300">
+<meta name="viewport" content="width=device-width">
 <title>twicli</title>
 <style>
 body {background-color: transparent; margin: 1px;}
@@ -56,23 +56,30 @@ function update(page) {
 	old_script_ele = s;
 }
 // twitのHTML表現を生成
-function q(str) { return "'"+str+"'" }
-function d2(dig) { return (dig>9?"":"0") + dig }
 function makeHTML(tw) {
+	function q(str) { return "'" + str + "'" }
+	function d2(dig) { return (dig>9?"":"0") + dig }
 	var d = new Date(tw.created_at);
 	d = d.getDate() + "日 " + d.getHours() + ":" + d2(d.getMinutes()) + ":" + d2(d.getSeconds());
+	//ユーザアイコン
 	return (tw.user.url ? '<a target="twitter" href="'+tw.user.url+'">' : '') +
-		'<img border="0" align="left" width="24" height="24" alt="'+ tw.user.name +
+		'<img border="0" align="left" width="24" height="24" alt="' + tw.user.name +
 			'" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
-		'<img align="right" src="http://assets3.twitter.com/images/icon_star_'+(tw.favorited?'full':'empty')+'.gif" '+
+		//fav
+		'<img align="right" src="http://assets3.twitter.com/images/icon_star_'+(tw.favorited?'full':'empty')+'.gif" ' +
 		'onClick="fav(this,' + tw.id + ')">' + 
-		'<a target="twitter" href="http://twitter.com/'+tw.user.screen_name+'">' +
-		tw.user.screen_name + (tw.user.name!=tw.user.screen_name?'('+tw.user.name+')':'') + '</a> ' +
-		'<span onClick="if (\'\' == window.getSelection().toString()) { document.frm.status.value = '+
-			q("@"+tw.user.screen_name+" ")+'; document.frm.status.focus() }" class="status">' +
-			tw.text.replace(/(https?:\/\/[^ ]*)/g, " <a onClick=\"event.stopPropagation();\" target=\"_blank\" href=\"$1\">$1</a>")
-				.replace(/@([0-9A-Za-z_\-]+)/g, "<a onClick=\"event.stopPropagation();\" target=\"twitter\" href=\"http://twitter.com/$1\">@$1</a>") +
-		'</span> <span class="date">' + d + '</span><br clear="left">';
+		//名前(Twitter本家のリンク)
+		'<a target="twitter" href="http://twitter.com/' + tw.user.screen_name + '">' + tw.user.screen_name +
+		 /*プロフィールの名前*/ (tw.user.name!=tw.user.screen_name ? '('+tw.user.name+')' : '') + '</a> ' +
+		//本文クリックで@追加
+		'<span onClick="if (\'\' == window.getSelection().toString()) { document.frm.status.value += ' +
+			q("@"+tw.user.screen_name+" ") + '; document.frm.status.focus() }" class="status">' +
+		//本文 (https〜をリンクに置換 + @をtwitter本家へのリンクに置換)
+		tw.text.replace(/(https?:\/\/[^ ]*)/g, " <a onClick=\"event.stopPropagation();\" target=\"_blank\" href=\"$1\">$1</a>")
+				.replace(/@([0-9A-Za-z_\-]+)/g, "<a onClick=\"event.stopPropagation();\" target=\"twitter\" " +
+							"href=\"http://twitter.com/$1\">@$1</a>") + '</span>' +
+		//日付
+		'<span class="date">' + d + '</span><br clear="left">';
 }
 // favoriteの追加(f=true)/削除(f=false)
 function fav(img, id) {
@@ -110,7 +117,10 @@ function twShow(tw) {
 	twNode.insertBefore(pNode, twNode.childNodes[0]);
 	var maxH = pNode.clientHeight;
 	pNode.style.overflow = "hidden";
-	animate(pNode, maxH, 0);
+	if ((window.pageYOffset || document.body.scrollTop) > 10)
+		window.scrollBy(0, maxH);
+	else
+		animate(pNode, maxH, (new Date).getTime());
 	while (twNode.childNodes.length > nr_limit)
 		twNode.removeChild(twNode.childNodes[nr_limit]);
 	document.getElementById('loading').style.display='none';
@@ -119,13 +129,12 @@ function twShow(tw) {
 	since_id = tw[0].id;
 }
 // 新規twitの出現アニメーション処理
-function animate(elem, max, cur) {
-	elem.style.maxHeight = cur;
-	if (cur == max)
+function animate(elem, max, start) {
+	var t = (new Date).getTime();
+	if (start+1000 <= t)
 		return elem.style.maxHeight = 'none';
-	cur += Math.ceil(Math.min(Math.min(cur/3, (max-cur)/2), 30))+1;
-	if (cur > max) cur = max;
-	setTimeout(function(){ animate(elem, max, cur) }, 50);
+	elem.style.maxHeight = Math.ceil(max*(1-Math.cos((t-start)/1000*Math.PI))/2);
+	setTimeout(function(){ animate(elem, max, start) }, 50);
 }
 // 初回アップデート
 setTimeout("update();", 0);
