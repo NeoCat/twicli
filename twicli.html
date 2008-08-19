@@ -16,48 +16,136 @@ img { border: 0; }
 #loading {opacity: 0.5; position: absolute; left: 50px; top: 2px; width: 220px; height: 19; }
 #fst { position: absolute; left: 56px; top: 0px; width: 208px; }
 #rst { position: absolute; left: 264px; top: 6px; text-decoration: none; }
+.inreply { text-decoration: none; }
+#rep { display: none; background-color: #fee; position: absolute; width: 90%; left: 4%; top: 200px; border: #666 4px solid; }
 hr { margin: 0; padding: 0; }
 form { margin: 5px; }
 </style>
 </head>
-<body>
+<body onLoad="init()">
 <iframe style="display:none;" name="tx"></iframe>
 <a href="http://twitter.com/home" target="twitter"><b><small>Twitter</small></b></a>
 <!--発言フォーム-->
-<form name="frm" action="http://twitter.com/statuses/update.xml" method="POST" onSubmit="if (this.status.value == '') { reload(0); return false; } this.status.select(); setTimeout('document.frm.reset()',10); reload(3000)" target="tx">
+<form name="frm" action="http://twitter.com/statuses/update.xml" method="POST" onSubmit="return twSend();" target="tx">
 <small><input id="fst" type="text" name="status"><input type="hidden" name="source" value="twicli">
-<a id="rst" href="javascript:document.frm.reset()"><img src="clr.png"></a>
+<a id="rst" href="javascript:void(resetFrm())"><img src="clr.png"></a>
 </small><img id="loading" src="loading.gif"></form>
 <!--favフォーム-->
 <form name="favf" action="" method="POST" target="tx"></form>
 
 <div id="tw"><hr></div>
+<div id="rep"><a href="javascript:closeRep()" style="color: red;">[x]</a><p id="reps"><p></div>
 
 <script>
 var nr_limit = 50;				// 表示する更新回数の上限
 
 var seq = (new Date).getTime();
 var since_id = false;
+var in_reply_to_user = false;
 var myname = false;
-var old_script_ele = false;
+var update_ele = false;
+var reply_ele = false;
+var rep_top = 0;
+var failover_timeout = false;
+// クロスドメインなJavaScriptを呼び出し
+function loadXDomainScript(url, ele) {
+	if (ele)
+		ele.parentNode.removeChild(ele);
+	ele = document.createElement("script");
+	ele.src = url;
+	document.body.appendChild(ele);
+	return ele;
+}
+// 要素の位置を取得
+function cumulativeOffset(ele) {
+	var top = 0, left = 0;
+	do {
+		top += ele.offsetTop  || 0;
+		left += ele.offsetLeft || 0;
+		ele = ele.offsetParent;
+	} while (ele);
+	return [left, top];
+}
 // ローディング表示ON、twit更新
 function reload(to) {
 	document.getElementById("loading").style.display = "block";
 	setTimeout("update()", to);
 }
+// 発言
+function twSend() {
+	if (document.frm.status.value == '') { // 空欄であればTimeline更新のみ
+		reload(0);
+		return false;
+	}
+	if (!document.frm.status.value.match("@"+in_reply_to_user)) // @ユーザが含まれているときのみ返信先を指定
+		setReplyId(false);
+	in_reply_to_user = "";
+	document.frm.status.select();
+	setTimeout(resetFrm, 10); // twit送信後にフォームをクリア
+	reload(3000); // 送信3秒後にTimelineを更新
+}
+// フォームの初期化
+function resetFrm() {
+	document.frm.reset();
+	setReplyId(false);
+}
+// reply先の設定/解除
+function setReplyId(id) {
+	var repid = document.getElementById('in_reply_to_status_id');
+	if (repid)
+		repid.parentNode.removeChild(repid);
+	if (id) {
+		repid = document.createElement('input');
+		repid.type = 'hidden';
+		repid.id = repid.name = 'in_reply_to_status_id';
+		repid.value = id;
+		document.frm.appendChild(repid)
+	}
+}
+// reply
+function replyTo(user, id) {
+	if (window.getSelection().toString() == '') {
+		in_reply_to_user = user;
+		document.frm.status.value += "@" + user + " ";
+		setReplyId(id);
+		document.frm.status.focus();
+	}
+}
+// reply先を表示
+function dispReply(id,ele) {
+	var d = document.getElementById(id);
+	if (!d) {
+		reply_ele = loadXDomainScript('http://twitter.com/statuses/show/'+id+'.json?seq='+(seq++)+'&callback=dispReply2', reply_ele);
+		rep_top = cumulativeOffset(ele)[1] + 20;
+		return;
+	}
+	closeRep();
+	var top = cumulativeOffset(d)[1];
+	var sc_top = window.pageYOffset || document.body.scrollTop;
+	var h = window.innerHeight;
+	if (top < sc_top || sc_top+h < top+32)
+		scrollTo(0, top);
+	var old = d.style.backgroundColor;
+	d.style.backgroundColor = '#fcc';
+	setTimeout(function(){d.style.backgroundColor = old}, 2000);
+}
+// reply先をoverlay表示 (Timelineに無い場合)
+function dispReply2(tw) {
+	document.getElementById('reps').innerHTML = makeHTML(tw);
+	document.getElementById('rep').style.display = "block";
+	document.getElementById('rep').style.top = rep_top;
+}
+// replyのoverlay表示を閉じる
+function closeRep() {
+	document.getElementById('rep').style.display='none';
+}
 // 最新twitを取得
-function update(page) {
-	if (old_script_ele)
-		old_script_ele.parentNode.removeChild(old_script_ele);
-	var s = document.createElement('script');
-	s.src = 'http://twitter.com/statuses/friends_timeline?seq='+(seq++)+'&callback=twShow' +
-		(page ? '&page='+page : '') + (!page && since_id ? '&since_id='+since_id : '');
-	document.body.appendChild(s);
-	old_script_ele = s;
+function update() {
+	update_ele = loadXDomainScript('http://twitter.com/statuses/friends_timeline?seq=' + (seq++) +
+									'&callback=twShow' + (since_id ? '&since_id='+since_id : ''), update_ele);
 }
 // twitのHTML表現を生成
 function makeHTML(tw) {
-	function q(str) { return "'" + str + "'" }
 	function d2(dig) { return (dig>9?"":"0") + dig }
 	var d = new Date(tw.created_at);
 	d = d.getDate() + "日 " + d.getHours() + ":" + d2(d.getMinutes()) + ":" + d2(d.getSeconds());
@@ -72,14 +160,16 @@ function makeHTML(tw) {
 		'<a target="twitter" href="http://twitter.com/' + tw.user.screen_name + '">' + tw.user.screen_name +
 		 /*プロフィールの名前*/ (tw.user.name!=tw.user.screen_name ? '('+tw.user.name+')' : '') + '</a> ' +
 		//本文クリックで@追加
-		'<span onClick="if (\'\' == window.getSelection().toString()) { document.frm.status.value += ' +
-			q("@"+tw.user.screen_name+" ") + '; document.frm.status.focus() }" class="status">' +
+		"<span onClick=\"replyTo('" + tw.user.screen_name + "'," + tw.id + ")\" class=\"status\">" +
 		//本文 (https〜をリンクに置換 + @をtwitter本家へのリンクに置換)
 		tw.text.replace(/(https?:\/\/[^ ]*)/g, " <a onClick=\"event.stopPropagation();\" target=\"_blank\" href=\"$1\">$1</a>")
 				.replace(/@([0-9A-Za-z_\-]+)/g, "<a onClick=\"event.stopPropagation();\" target=\"twitter\" " +
 							"href=\"http://twitter.com/$1\">@$1</a>") + '</span>' +
 		//日付
-		'<span class="date">' + d + '</span><br clear="left">';
+		'<span class="date">' + d + '</span>' +
+		//返信元へのリンク
+		(tw.in_reply_to_status_id ? ' <a class="inreply" href="#" onClick="dispReply('+tw.in_reply_to_status_id+',this);return false;">☞</a>' : '') +
+		'<br clear="left">';
 }
 // favoriteの追加(f=true)/削除(f=false)
 function fav(img, id) {
@@ -102,8 +192,9 @@ function twShow(tw) {
 	for (i = len-1; i >= 0; i--) {
 		if (since_id && since_id >= tw[i].id)
 			continue;
-		var s = document.createElement('div');
 		if (tw[i].user.profile_image_url) {
+			var s = document.createElement('div');
+			s.id = tw[i].id;
 			s.innerHTML = makeHTML(tw[i]);
 			if (tw[i].text.match('@'+myname+' '))
 				s.className = "tome";
@@ -136,11 +227,13 @@ function animate(elem, max, start) {
 	elem.style.maxHeight = Math.ceil(max*(1-Math.cos((t-start)/1000*Math.PI))/2);
 	setTimeout(function(){ animate(elem, max, start) }, 50);
 }
-// 初回アップデート
-setTimeout("update();", 0);
-// ログインしていなかったときなどに15秒で本家にリダイレクト
-var failover_timeout = setTimeout("location.href='http://twitter.com/home'", 15*1000);
-setInterval("update()", 30*1000);
+function init() {
+	// 初回アップデート
+	setTimeout(update, 0);
+	setInterval(update, 30*1000);
+	// ログインしていなかったときなどに15秒で本家にリダイレクト
+	failover_timeout = setTimeout("location.href='http://twitter.com/home'", 15*1000);
+}
 
 // ホイールの回転でスクロール (スクロール不可のウィンドウ・フレーム内で有効)
 function wheel(event) {
