@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width">
 <title>twicli</title>
 <style>
-body {background-color: transparent; margin: 1px;}
+body {background-color: transparent; margin: 1px; min-height: 500px;}
 #tw, #tw_p { font-size: small; }
 #tw div div, #tw_p div div { padding: 2px; }
 img { border: 0; }
@@ -115,16 +115,17 @@ function replyTo(user, id) {
 function dispReply(id,ele) {
 	var d = document.getElementById(id);
 	if (!d) {
-		reply_ele = loadXDomainScript('http://twitter.com/statuses/show/'+id+'.json?seq='+(seq++)+'&callback=dispReply2', reply_ele);
 		rep_top = cumulativeOffset(ele)[1] + 20;
+		reply_ele = loadXDomainScript('http://twitter.com/statuses/show/'+id+'.json?seq='+(seq++)+'&callback=dispReply2', reply_ele);
 		return;
 	}
 	closeRep();
 	var top = cumulativeOffset(d)[1];
+	var h = d.offsetHeight;
 	var sc_top = window.pageYOffset || document.body.scrollTop;
-	var h = window.innerHeight;
-	if (top < sc_top || sc_top+h < top+32)
-		scrollTo(0, top);
+	var win_h = window.innerHeight;
+	if (top < sc_top) scrollTo(0, top);
+	if (sc_top+win_h < top+h) scrollTo(0, top+h-win_h);
 	var old = d.style.backgroundColor;
 	d.style.backgroundColor = '#fcc';
 	setTimeout(function(){d.style.backgroundColor = old}, 2000);
@@ -158,9 +159,10 @@ function makeHTML(tw) {
 		'onClick="fav(this,' + tw.id + ')">' + 
 		//名前(Twitter本家のリンク)
 		'<a target="twitter" href="http://twitter.com/' + tw.user.screen_name + '">' + tw.user.screen_name +
-		 /*プロフィールの名前*/ (tw.user.name!=tw.user.screen_name ? '('+tw.user.name+')' : '') + '</a> ' +
+		 /*プロフィールの名前*/ (tw.user.name!=tw.user.screen_name ? '('+tw.user.name+')' : '') + '</a>' +
+		 /* protected? */ (tw.user.protected ? '<img src="http://assets0.twitter.com/images/icon_red_lock.gif">' : '') +
 		//本文クリックで@追加
-		"<span onClick=\"replyTo('" + tw.user.screen_name + "'," + tw.id + ")\" class=\"status\">" +
+		" <span onClick=\"replyTo('" + tw.user.screen_name + "'," + tw.id + ")\" class=\"status\">" +
 		//本文 (https〜をリンクに置換 + @をtwitter本家へのリンクに置換)
 		tw.text.replace(/(https?:\/\/[^ ]*)/g, " <a onClick=\"event.stopPropagation();\" target=\"_blank\" href=\"$1\">$1</a>")
 				.replace(/@([0-9A-Za-z_\-]+)/g, "<a onClick=\"event.stopPropagation();\" target=\"twitter\" " +
@@ -184,6 +186,9 @@ function twUser(tw) {
 }
 // 受信twitを表示
 function twShow(tw) {
+	document.getElementById('loading').style.display='none';
+	if (failover_timeout) clearTimeout(failover_timeout);
+	failover_timeout = false;
 	var len = tw.length;
 	if (len == 0) return;
 	var twNode = document.getElementById('tw');
@@ -209,14 +214,11 @@ function twShow(tw) {
 	var maxH = pNode.clientHeight;
 	pNode.style.overflow = "hidden";
 	if ((window.pageYOffset || document.body.scrollTop) > 10)
-		window.scrollBy(0, maxH);
+		scrollBy(0, maxH);
 	else
 		animate(pNode, maxH, (new Date).getTime());
 	while (twNode.childNodes.length > nr_limit)
 		twNode.removeChild(twNode.childNodes[nr_limit]);
-	document.getElementById('loading').style.display='none';
-	if (failover_timeout) clearTimeout(failover_timeout);
-	failover_timeout = false;
 	since_id = tw[0].id;
 }
 // 新規twitの出現アニメーション処理
@@ -228,6 +230,7 @@ function animate(elem, max, start) {
 	setTimeout(function(){ animate(elem, max, start) }, 50);
 }
 function init() {
+	setTimeout(scrollTo, 0, 0, 1);
 	// 初回アップデート
 	setTimeout(update, 0);
 	setInterval(update, 30*1000);
