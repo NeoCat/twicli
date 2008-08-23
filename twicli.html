@@ -41,7 +41,7 @@ hr { margin: 0; padding: 0; }
 <input type="hidden" name="source" value="twicli">
 <a id="rst" href="javascript:void(resetFrm())"><img src="clr.png"></a>
 <div id="loading"><img src="loading.gif"></div></form>
-<!--favフォーム-->
+<!--fav/followフォーム-->
 <form name="favf" action="" method="POST" target="tx"></form>
 <!--メニュー-->
 <div id="menu">
@@ -49,6 +49,7 @@ hr { margin: 0; padding: 0; }
 <a id="reply" href="javascript:void switchReply()">reply</a>
 <a id="user" href="javascript:void switchUser()">user</a>
 <a id="direct" href="javascript:void switchDirect()">direct</a>
+<a id="help" href="javascript:void switchHelp()">?</a>
 </div>
 </div>
 <!--タイムライン-->
@@ -68,6 +69,8 @@ var myname = false;
 var last_user = false;
 var update_ele = false;
 var update_ele2 = false;
+var direct_ele1 = false;
+var direct_ele2 = false;
 var reply_ele = false;
 var rep_top = 0;
 var selected_menu = $("TL");
@@ -140,8 +143,9 @@ function replyTo(user, id) {
 }
 // reply先を表示
 function dispReply(id,ele) {
-	var d = $(id);
+	var d = $((selected_menu.id == "TL" ? "tw" : "tw2") + "-" + id);
 	if (!d) {
+		$("loading").style.display = "block";
 		rep_top = cumulativeOffset(ele)[1] + 20;
 		reply_ele = loadXDomainScript('http://twitter.com/statuses/show/'+id+'.json?seq='+(seq++)+'&callback=dispReply2', reply_ele);
 		return;
@@ -159,6 +163,7 @@ function dispReply(id,ele) {
 }
 // reply先をoverlay表示 (Timelineに無い場合)
 function dispReply2(tw) {
+	$("loading").style.display = "none";
 	$('reps').innerHTML = makeHTML(tw);
 	$('rep').style.display = "block";
 	$('rep').style.top = rep_top;
@@ -173,10 +178,11 @@ function update() {
 									'&callback=twShow' + (since_id ? '&since_id='+since_id : ''), update_ele);
 }
 // twitのHTML表現を生成
-function makeHTML(tw, no_name) {
+function dateFmt(d) {
 	function d2(dig) { return (dig>9?"":"0") + dig }
-	var d = new Date(tw.created_at);
-	d = d.getDate() + "日 " + d.getHours() + ":" + d2(d.getMinutes()) + ":" + d2(d.getSeconds());
+	return (d.getMonth()+1) + "/" + d.getDate() + " " + d.getHours() + ":" + d2(d.getMinutes()) + ":" + d2(d.getSeconds());
+}
+function makeHTML(tw, no_name) {
 	return /*fav*/ '<img align="right" src="http://assets3.twitter.com/images/icon_star_'+(tw.favorited?'full':'empty')+'.gif" ' +
 			'onClick="fav(this,' + tw.id + ')">' + 
 		 (!no_name ?
@@ -195,7 +201,7 @@ function makeHTML(tw, no_name) {
 				.replace(/@([0-9A-Za-z_\-]+)/g, "<a onClick=\"event.stopPropagation();\" " +
 							"href=\"javascript:switchUser('$1')\">@$1</a>") + '</span>' +
 		//日付
-		'<span class="date">' + d + '</span>' +
+		'<span class="date">' + dateFmt(new Date(tw.created_at)) + '</span>' +
 		//返信元へのリンク
 		(tw.in_reply_to_status_id ? ' <a class="inreply" href="#" onClick="dispReply('+tw.in_reply_to_status_id+',this);return false;">☞</a>' : '') +
 		'<br clear="left">';
@@ -207,10 +213,29 @@ function fav(img, id) {
 	document.favf.submit();
 	img.src = 'http://assets3.twitter.com/images/icon_star_' + (f ? 'full' : 'empty') + '.gif';
 }
+// followとremove
+function follow(f) {
+	document.favf.action = 'http://twitter.com/friendships/' + (f ? 'create' : 'destroy') + '/' + last_user + '.xml';
+	document.favf.submit();
+	$("loading").style.display = "block";
+	setTimeout(function(){switchUser()}, 3000);
+}
 // 自分の最新の発言を受信
 function twUser(tw) {
 	myname = last_user = tw[0].user.screen_name;
 	$("user").innerHTML = last_user;
+}
+// API制限情報の受信
+function twLimit(lim) {
+	$("tw2c").innerHTML = "<b>Twitter API status:</b><br>" +
+					"hourly limit : " + lim.remaining_hits + " / " + lim.hourly_limit + "<br>" +
+					"reset at : " + dateFmt(new Date(lim.reset_time));
+}
+// follow関係の受信
+function twFollow(fl) {
+	fl = fl == "true";
+	$("user_info").innerHTML += '<input type="button" value="' + (fl ? 'Remove ' : 'Follow ') + last_user + 
+					'" onClick="follow('+!fl+')">';
 }
 // 受信twitを表示
 function twShow(tw) {
@@ -225,7 +250,10 @@ function twShow2(tw) {
 								(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
 								(user.url ? '<b>URL</b>: <a target="twitter" href="' + user.url + '">' + user.url + '</a><br>' : '') +
 								(user.description ? user.description : '') +
-								' <a target="twitter" href="http://twitter.com/' + user.screen_name + '">→Twitter</a></td></tr></table>';
+								'</td></tr></table><a target="twitter" href="http://twitter.com/' + user.screen_name + '">→Twitter</a> ';
+		if (myname != user.screen_name)
+			update_ele2 = loadXDomainScript('http://twitter.com/friendships/exists.json?seq=' + (seq++) +
+									'&user_a=' + myname + '&user_b=' + user.screen_name + '&callback=twFollow', update_ele2);
 	}
 	twShowToNode(tw, $("tw2c"), !!user_info);
 }
@@ -242,7 +270,7 @@ function twShowToNode(tw, twNode, no_name, animation, check_since) {
 			continue;
 		if (tw[i].user) {
 			var s = document.createElement('div');
-			s.id = tw[i].id;
+			s.id = twNode.id + "-" + tw[i].id;
 			s.innerHTML = makeHTML(tw[i], no_name);
 			if (tw[i].text.match('@'+myname+' '))
 				s.className = "tome";
@@ -305,7 +333,17 @@ function switchUser(user) {
 }
 function switchDirect() {
 	switchTo("direct");
-	$("tw2h").innerHTML = "Sorry! not yet implemented ...";
+	direct_ele1 = loadXDomainScript('http://twitter.com/direct_messages.json?seq=' + (seq++) +
+										'&callback=twDirect1', direct_ele1);
+	direct_ele2 = loadXDomainScript('http://twitter.com/direct_messages/sent.json?seq=' + (seq++) +
+										'&callback=twDirect2', direct_ele2);
+}
+function switchHelp() {
+	switchTo("help");
+	$("tw2h").innerHTML = '<p><a target="twitter" href="index.html"><b>twicli</b></a> : browser-base Twitter client</p><hr>' +
+								'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">show user info : @<input type="text" size="15" id="user_id"></form></p><hr>';
+	update_ele2 = loadXDomainScript('http://twitter.com/account/rate_limit_status.json?seq=' + (seq++) +
+										'&id=' + user + '&callback=twLimit', update_ele2);
 }
 // 初期化
 function init() {
