@@ -11,8 +11,9 @@ hr { margin: 0; padding: 0; }
 
 #control { position: fixed; top: 0; left: 0; width: 100%; height: 52px; border-bottom: solid 1px black; background-color: white; z-index: 3; background-color: #eee; }
 #loading { opacity: 0.5; position: absolute; top: 6px; width: 100%; height: 20px; z-index: 3; text-align: center; }
-#fst { position: absolute; left: 1px; top: 1px; width: 95%; height: 30px; font-size: small; }
-#rst { text-decoration: none; position: absolute; left: 96%; top: 10px; }
+#fst { position: absolute; left: 1px; top: 1px; width: 94%; height: 30px; font-size: small; }
+#go { text-decoration: none; position: absolute; left: 95%; top: 1px; }
+#rst { text-decoration: none; position: absolute; left: 95%; top: 16px; }
 #menu { position: absolute; left: 0px; top: 32px; height: 20px; }
 #menu a { display: block; float: left; font-size: 13px; height: 18px; border: black solid 1px; border-bottom: 0; background-color: #ccc; color: #242; padding: 0 4px; margin: 0 2px; text-decoration: none; font-family: sans-serif; }
 #menu a.sel { height: 20px; background-color: #fff; color: #002; border-bottom: #fff; }
@@ -39,6 +40,7 @@ hr { margin: 0; padding: 0; }
 <form name="frm" action="http://twitter.com/statuses/update.xml" method="POST" target="tx">
 <textarea id="fst" type="text" name="status" onkeypress="return press(event)"></textarea>
 <input type="hidden" name="source" value="twicli">
+<a id="go" href="javascript:void(press(1))"><img src="go.png"></a>
 <a id="rst" href="javascript:void(resetFrm())"><img src="clr.png"></a>
 <div id="loading"><img src="loading.gif"></div></form>
 <!--fav/followフォーム-->
@@ -101,7 +103,7 @@ function reload(to) {
 }
 // enterキーで発言
 function press(e) {
-	if (e.keyCode != 13) return true;
+	if (e != 1 && e.keyCode != 13) return true;
 	if (document.frm.status.value == '') { // 空欄であればTimeline更新のみ
 		reload(0);
 		return false;
@@ -281,15 +283,20 @@ function twShowToNode(tw, twNode, no_name, animation, check_since) {
 	}
 	pNode.removeChild(dummy);
 	pNode.style.overflow = "hidden";
+	var animation2 = animation && (window.pageYOffset || document.body.scrollTop) < 10;
+	var maxH;
+	if (animation2) { // get maxH
+		twNode.appendChild(pNode);
+		maxH = pNode.clientHeight;
+		twNode.removeChild(pNode);
+		pNode.style.minHeight = 0;
+	}
 	twNode.insertBefore(pNode, twNode.childNodes[0]);
-	var maxH = pNode.clientHeight;
-	if (animation) {
-		if ((window.pageYOffset || document.body.scrollTop) > 10) {
-			$('rep').style.top = (rep_top += maxH);
-			scrollBy(0, maxH);
-		} else {
-			animate(pNode, maxH, (new Date).getTime());
-		}
+	if (animation2)
+		animate(pNode, maxH, (new Date).getTime());
+	else if (animation) {
+		$('rep').style.top = (rep_top += pNode.clientHeight);
+		scrollBy(0, pNode.clientHeight);
 	}
 	while (twNode.childNodes.length > nr_limit)
 		twNode.removeChild(twNode.childNodes[nr_limit]);
