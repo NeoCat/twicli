@@ -40,8 +40,8 @@ hr { margin: 0; padding: 0; }
 <form name="frm" action="http://twitter.com/statuses/update.xml" method="POST" target="tx">
 <textarea id="fst" type="text" name="status" onkeypress="return press(event)"></textarea>
 <input type="hidden" name="source" value="twicli">
-<a id="go" href="javascript:void(press(1))"><img src="go.png"></a>
-<a id="rst" href="javascript:void(resetFrm())"><img src="clr.png"></a>
+<a id="go" href="javascript:void press(1)"><img src="go.png"></a>
+<a id="rst" href="javascript:void resetFrm()"><img src="clr.png"></a>
 <div id="loading"><img src="loading.gif"></div></form>
 <!--fav/followフォーム-->
 <form name="favf" action="" method="POST" target="tx"></form>
@@ -60,16 +60,16 @@ hr { margin: 0; padding: 0; }
 <div id="rep"><a href="javascript:closeRep()" style="color: red;">[x]</a><div id="reps"></div></div>
 <!---->
 
-<script>
+<script type="text/javascript">
 var nr_limit = 500;				// 表示する発言数の上限
 
 function $(id) { return document.getElementById(id); }
 var nr_tw = 0;
 var seq = (new Date).getTime();
-var since_id = false;
-var in_reply_to_user = false;
-var myname = false;
-var last_user = false;
+var since_id = null;
+var in_reply_to_user = null;
+var myname = null;
+var last_user = null;
 var update_ele = false;
 var update_ele2 = false;
 var direct_ele1 = false;
@@ -86,6 +86,7 @@ function loadXDomainScript(url, ele) {
 		ele.parentNode.removeChild(ele);
 	ele = document.createElement("script");
 	ele.src = url;
+	ele.type = "text/javascript";
 	document.body.appendChild(ele);
 	return ele;
 }
@@ -102,7 +103,7 @@ function cumulativeOffset(ele) {
 // ローディング表示ON、twit更新
 function reload(to) {
 	$("loading").style.display = "block";
-	setTimeout("update()", to);
+	setTimeout(update, to);
 }
 // enterキーで発言
 function press(e) {
@@ -111,7 +112,7 @@ function press(e) {
 		reload(0);
 		return false;
 	}
-	if (!document.frm.status.value.match("@"+in_reply_to_user)) // @ユーザが含まれているときのみ返信先を指定
+	if (document.frm.status.value.indexOf("@"+in_reply_to_user) < 0) // @ユーザが含まれているときのみ返信先を指定
 		setReplyId(false);
 	in_reply_to_user = "";
 	document.frm.status.select();
@@ -139,7 +140,7 @@ function setReplyId(id) {
 }
 // reply
 function replyTo(user, id) {
-	if (window.getSelection().toString() == '') {
+	if (window.getSelection() && window.getSelection().toString() == '') {
 		in_reply_to_user = user;
 		document.frm.status.value += "@" + user + " ";
 		setReplyId(id);
@@ -175,7 +176,7 @@ function dispReply2(tw) {
 }
 // replyのoverlay表示を閉じる
 function closeRep() {
-	$('rep').style.display='none';
+	$('rep').style.display = 'none';
 }
 // 最新タイムラインを取得
 function update() {
@@ -189,10 +190,10 @@ function dateFmt(d) {
 }
 function makeHTML(tw, no_name) {
 	return /*fav*/ '<img align="right" src="http://assets3.twitter.com/images/icon_star_'+(tw.favorited?'full':'empty')+'.gif" ' +
-			'onClick="fav(this,' + tw.id + ')">' + 
+			'onClick="fav(this,' + tw.id + ')">' +
 		 (!no_name ?
 			//ユーザアイコン
-		 	(tw.user.url ? '<a target="twitter" href="'+tw.user.url+'">' : '') +
+			(tw.user.url ? '<a target="twitter" href="'+tw.user.url+'">' : '') +
 			'<img align="left" width="24" height="24" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
 			/*ダイレクトメッセージの方向*/ (tw.d_dir == 1 ? '<b>←</b> ' : tw.d_dir == 2 ? '<b>→</b> ' : '') +
 			//名前
@@ -203,9 +204,9 @@ function makeHTML(tw, no_name) {
 		//本文クリックで@追加
 		" <span onClick=\"replyTo('" + tw.user.screen_name + "'," + tw.id + ")\" class=\"status\">" +
 		//本文 (https〜をリンクに置換 + @をtwitter本家へのリンクに置換)
-		tw.text.replace(/(https?:\/\/[^ \n]+)/g, " <a onClick=\"event.stopPropagation();\" target=\"_blank\" href=\"$1\">$1</a>")
-				.replace(/@([0-9A-Za-z_\-]+)/g, "<a onClick=\"event.stopPropagation();\" " +
-							"href=\"javascript:switchUser('$1')\">@$1</a>").replace(/\n/g, "<br>") + '</span>' +
+		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a onClick=\"event.stopPropagation();\" target=\"_blank\" href=\"$&\">$&</a>")
+				.replace(/@([\w-]+)/g, "<a onClick=\"event.stopPropagation();\" " +
+							"href=\"javascript:switchUser('$1')\">$&</a>").replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付
 		'<span class="date">' + dateFmt(new Date(tw.created_at)) + '</span>' +
 		//返信元へのリンク
@@ -214,7 +215,7 @@ function makeHTML(tw, no_name) {
 }
 // favoriteの追加(f=true)/削除(f=false)
 function fav(img, id) {
-	var f = img.src.match('empty');
+	var f = img.src.indexOf('empty') != -1;
 	document.favf.action = 'http://twitter.com/favourings/' + (f ? 'create' : 'destroy') + '/' + id + '.xml';
 	document.favf.submit();
 	img.src = 'http://assets3.twitter.com/images/icon_star_' + (f ? 'full' : 'empty') + '.gif';
@@ -224,7 +225,7 @@ function follow(f) {
 	document.favf.action = 'http://twitter.com/friendships/' + (f ? 'create' : 'destroy') + '/' + last_user + '.xml';
 	document.favf.submit();
 	$("loading").style.display = "block";
-	setTimeout(function(){switchUser()}, 3000);
+	setTimeout(switchUser, 3000);
 }
 // 自分の最新の発言を受信
 function twUser(tw) {
@@ -267,7 +268,7 @@ function twLimit(lim) {
 // follow関係の受信
 function twFollow(fl) {
 	fl = fl == "true";
-	$("user_info").innerHTML += '<input type="button" value="' + (fl ? 'Remove ' : 'Follow ') + last_user + 
+	$("user_info").innerHTML += '<input type="button" value="' + (fl ? 'Remove ' : 'Follow ') + last_user +
 					'" onClick="follow('+!fl+')">';
 }
 // 受信twitを表示
@@ -298,14 +299,14 @@ function twShowToNode(tw, twNode, no_name, animation, check_since) {
 	if (len == 0) return;
 	var pNode = document.createElement('div');
 	var dummy = pNode.appendChild(document.createElement('div'));
-	for (i = len-1; i >= 0; i--) {
+	for (var i = len-1; i >= 0; i--) {
 		if (check_since && since_id && since_id >= tw[i].id)
 			continue;
 		if (tw[i].user) {
 			var s = document.createElement('div');
 			s.id = twNode.id + "-" + tw[i].id;
 			s.innerHTML = makeHTML(tw[i], no_name);
-			if (tw[i].d_dir == 1 || tw[i].text.match('@'+myname+' '))
+			if (tw[i].d_dir == 1 || tw[i].text.indexOf('@'+myname+' ') != -1)
 				s.className = "tome";
 			if (tw[i].d_dir == 2 || tw[i].user.screen_name == myname)
 				s.className = "fromme";
@@ -345,7 +346,7 @@ function animate(elem, max, start) {
 	if (start+1000 <= t)
 		return elem.style.maxHeight = 'none';
 	elem.style.maxHeight = Math.ceil(max*(1-Math.cos((t-start)/1000*Math.PI))/2);
-	setTimeout(function(){ animate(elem, max, start) }, 50);
+	setTimeout(animate, 50, elem, max, start);
 }
 // タイムライン切り替え
 function switchTo(id) {
@@ -411,7 +412,7 @@ function wheel(event) {
 		delta = event.wheelDelta/10;
 	} else if (event.detail)
 		delta = -event.detail;
-	if (navigator.userAgent.indexOf("Firefox") != -1)
+	if (navigator.userAgent.indexOf("Gecko/") != -1)
 		delta *= 10;
 	if (delta)
 		scrollBy(0, -delta);
@@ -422,6 +423,6 @@ function wheel(event) {
 if (window.addEventListener) window.addEventListener('DOMMouseScroll', wheel, false);
 window.onmousewheel = document.onmousewheel = wheel;
 </script>
-<script src="http://twitter.com/statuses/user_timeline.json?count=1&callback=twUser"></script>
+<script type="text/javascript" src="http://twitter.com/statuses/user_timeline.json?count=1&callback=twUser"></script>
 </body>
 </html>

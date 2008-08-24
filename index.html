@@ -4,14 +4,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>twicli - web browser base Twitter light-weight client</title>
-<style><!--
+<style type="text/css"><!--
+body { background-color: #666; }
 li { margin: 4px; }
 --></style>
 </head>
-<body style="background-color: #666;">
+<body>
 <div style="width: 800px; padding: 20px; border: 1px solid #333; margin: 4px; background-color: #fff; font-size: small">
 <img src="screenshot2.png" align="right">
 <h3>twicliとは</h3>
+<p>
 twicliはWebブラウザーベースの軽いTwitterクライアントです。
 <ul>
 <li>Webブラウザ上で動くのでインストール不要です。
@@ -19,22 +21,22 @@ twicliはWebブラウザーベースの軽いTwitterクライアントです。
 <li>専用サーバなどは介さず、クロスドメインJavaScriptで直接Twitterにアクセスします。パスワード等がTwitter以外に送信されることはありません。
 </ul>
 
+<p>
 ネットカフェで他事しながらTwitterを眺めたいときなどに便利かも。<br>
 今のところFirefox, Safari, Operaで動いています。<br>
-iPod touch/iPhoneのMobileSafariでもOKです。<br>
+iPhone/iPod touchのMobileSafariでもOKです。<br>
 <small>(IEだと他ドメインのスクリプトに送られるCookieが何か変でNG…。)</small>
-<p>
-<div style="margin-left: 100px; padding: 10px; text-align: center; color: #00f; background-color: #cfc; border: 2px solid #393; width: 200px; font-size: large;"><a href="javascript:void(window.open('http://www.geocities.jp/twicli/twicli.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=no,location=no,status=no'))">twicliを起動</a></div>
+<div style="margin-left: 100px; padding: 10px; text-align: center; color: #00f; background-color: #cfc; border: 2px solid #393; width: 200px; font-size: large;"><a href="javascript:void window.open('http://www.geocities.jp/twicli/twicli.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=no,location=no,status=no')">twicliを起動</a></div>
 <p>
 ※タイムラインの更新だけを取得したい場合は軽量なsimpleバージョン(旧バージョン)もあります。
-<div style="margin-left: 100px; padding: 10px; text-align: center; color: #00f; background-color: #cfc; border: 2px solid #393; width: 200px; font-size: large;"><a href="javascript:void(window.open('http://www.geocities.jp/twicli/twicli_s.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=no,location=no,status=no'))">twicli simpleを起動</a></div>
+<div style="margin-left: 100px; padding: 10px; text-align: center; color: #00f; background-color: #cfc; border: 2px solid #393; width: 200px; font-size: large;"><a href="javascript:void window.open('http://www.geocities.jp/twicli/twicli_s.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=no,location=no,status=no')">twicli simpleを起動</a></div>
 
 <h3>使い方</h3>
 <ol>
 <li>起動
 <ul>
-<li><a href="http://twitter.com/">Twitter</a>にログインしておく(「次回から入力を省略」ON推奨) 
-<li>上のリンク(bookmarklet)をクリック、またはブックマークにD&Dで登録して選択すると、別窓で起動します。
+<li><a href="http://twitter.com/">Twitter</a>にログインしておく(「次回から入力を省略」ON推奨)
+<li>上のリンク(bookmarklet)をクリック、またはブックマークにD&amp;Dで登録して選択すると、別窓で起動します。
 </ul>
 <li>TL(タイムライン表示)
 <ul>
@@ -46,24 +48,26 @@ iPod touch/iPhoneのMobileSafariでもOKです。<br>
 <li>発言／fav
 <ul>
 <li>最上部のフィールドにテキストを入力してenterキーで発言
-<li>発言本文をクリックすると@〜を自動入力。また@〜を消さない場合、発言の返信先を設定します。
-<li>twit右の☆をクリックするとfav追加。★を再度クリックでfav解除。
+<li>発言本文をクリックすると「@〜」を自動入力。また「@〜」を消さない場合、発言の返信先を設定します。
+<li>twit右の「☆」をクリックするとfav追加。「★」を再度クリックでfav解除。
 <li>初回の発言やfav時に認証を求められた場合は、Twitterのアカウント／パスワードを入力してください。
 </ul>
 <li>タブ
 <ul>
-<li>TL: タイムライン、reply: 自分宛の返信を表示、ユーザ名: ユーザ情報、direct: ダイレクトメッセージを表示します。
+<li>TL: タイムライン、reply: あなた宛のつぶやきを表示、ユーザ名: ユーザ情報、direct: ダイレクトメッセージを表示します。
 <li>TL以外は自動でアップデートされません。更新するには再度タブをクリックしてください。
 <li>他のタブに切り替えている間もTLは更新されていきます。
 </ul>
 </ol>
+<p>
 なお開発途上なので随時アップデートすることがあります。
 
 <h3>ソース</h3>
-<a href="http://coderepos.org/share/browser/websites/twicli/twicli.html">twicli.html</a>が全てです。現在HTML+CSS+JavaScriptで400行くらい。
-<br><a href="http://coderepos.org/share/browser/websites/twicli/">CodeRepos</a>にも上げておきます。改造などはご自由に。
+<p><a href="http://coderepos.org/share/browser/websites/twicli/twicli.html">twicli.html</a>が全てです。現在HTML+CSS+JavaScriptで400行くらい。<br>
+<a href="http://coderepos.org/share/browser/websites/twicli/">CodeRepos</a>にも上げておきます。改造などはご自由に。
 
-<p><b>作ってる人</b>: <a href="http://twitter.com/NeoCat/">@NeoCat</a>　<a href="http://d.hatena.ne.jp/NeoCat/20080819">技術メモ</a>
+<p><b>作ってる人</b>: <a href="http://twitter.com/NeoCat">@NeoCat</a> <a href="http://d.hatena.ne.jp/NeoCat/20080819">技術メモ</a>
+</div>
 
 <br><br><br>
 </body>
