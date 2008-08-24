@@ -4,10 +4,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width">
 <title>twicli</title>
-<style>
+<style type="text/css"><!--
 body { background-color: transparent; margin: 1px; min-height: 500px; }
 img { border: 0; }
 hr { margin: 0; padding: 0; }
+iframe { display: none; }
 
 #control { position: fixed; top: 0; left: 0; width: 100%; height: 52px; border-bottom: solid 1px black; background-color: white; z-index: 3; background-color: #eee; }
 #loading { opacity: 0.5; position: absolute; top: 6px; width: 100%; height: 20px; z-index: 3; text-align: center; }
@@ -28,14 +29,15 @@ hr { margin: 0; padding: 0; }
 .tome { background-color: #ccf; }
 .inreply { text-decoration: none; }
 .lock { position: relative; top: 2px; left: 0; }
+.close { color: red; }
 #rep { display: none; background-color: #fee; position: absolute; width: 90%; left: 4%; top: 200px; border: #666 4px solid; z-index: 2; padding: 2px; font-size: small; }
 #user_info { margin: 1px; border: #888 solid 1px: }
 #user_info td { font-size: small; }
-</style>
+--></style>
 </head>
 <body onLoad="init()">
 <div id="control">
-<iframe style="display:none;" name="tx"></iframe>
+<iframe name="tx"></iframe>
 <!--発言フォーム-->
 <form name="frm" action="http://twitter.com/statuses/update.xml" method="POST" target="tx">
 <textarea id="fst" type="text" name="status" onkeypress="return press(event)"></textarea>
@@ -57,7 +59,7 @@ hr { margin: 0; padding: 0; }
 <!--タイムライン-->
 <div id="tw"></div>
 <div id="tw2"><div id="tw2h"></div><div id="tw2c"></div></div>
-<div id="rep"><a href="javascript:closeRep()" style="color: red;">[x]</a><div id="reps"></div></div>
+<div id="rep"><a href="javascript:closeRep()" class="close">[x]</a><div id="reps"></div></div>
 <!---->
 
 <script type="text/javascript">
