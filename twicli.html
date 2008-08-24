@@ -61,9 +61,10 @@ hr { margin: 0; padding: 0; }
 <!---->
 
 <script>
-var nr_limit = 50;				// 表示する更新回数の上限
+var nr_limit = 500;				// 表示する発言数の上限
 
 function $(id) { return document.getElementById(id); }
+var nr_tw = 0;
 var seq = (new Date).getTime();
 var since_id = false;
 var in_reply_to_user = false;
@@ -328,8 +329,14 @@ function twShowToNode(tw, twNode, no_name, animation, check_since) {
 		$('rep').style.top = (rep_top += pNode.clientHeight);
 		scrollBy(0, pNode.clientHeight);
 	}
-	while (twNode.childNodes.length > nr_limit)
-		twNode.removeChild(twNode.childNodes[nr_limit]);
+	if (animation) {
+		nr_tw += len;
+		while (nr_tw > nr_limit) {
+			var last_node = twNode.childNodes[twNode.childNodes.length-1];
+			nr_tw -= last_node.childNodes.length;
+			twNode.removeChild(last_node);
+		}
+	}
 	if (check_since) since_id = tw[0].id;
 }
 // 新規twitの出現アニメーション処理
