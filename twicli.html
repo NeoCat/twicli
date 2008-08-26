@@ -40,7 +40,7 @@ iframe { display: none; }
 <iframe name="tx"></iframe>
 <!--発言フォーム-->
 <form name="frm" action="http://twitter.com/statuses/update.xml" method="POST" target="tx">
-<textarea id="fst" type="text" name="status" onkeypress="return press(event)"></textarea>
+<textarea id="fst" type="text" name="status" onkeyup="if (this.value.indexOf('\n') >= 0) return press(1)" onkeypress="return press(event)"></textarea>
 <input type="hidden" name="source" value="twicli">
 <a id="go" href="javascript:void press(1)"><img src="go.png"></a>
 <a id="rst" href="javascript:void resetFrm()"><img src="clr.png"></a>
