@@ -30,6 +30,7 @@ iframe { display: none; }
 .inreply { text-decoration: none; font-size: medium; }
 .lock { position: relative; top: 2px; left: 0; }
 .close { color: red; }
+#next { text-align: center; background-color: #999; color: #fec; cursor: pointer; }
 #rep { display: none; background-color: #fee; position: absolute; width: 90%; left: 4%; top: 200px; border: #666 4px solid; z-index: 2; padding: 2px; font-size: small; }
 #user_info { margin: 1px; border: #888 solid 1px: }
 #user_info td { font-size: small; }
@@ -156,7 +157,7 @@ function dispReply(id,ele) {
 	if (!d) {
 		$("loading").style.display = "block";
 		rep_top = cumulativeOffset(ele)[1] + 20;
-		reply_ele = loadXDomainScript('http://twitter.com/statuses/show/'+id+'.json?seq='+(seq++)+'&callback=dispReply2', reply_ele);
+		reply_ele = loadXDomainScript('http://twitter.com/statuses/show/'+id+'.json?callback=dispReply2', reply_ele);
 		return;
 	}
 	closeRep();
@@ -276,11 +277,13 @@ function twFollow(fl) {
 }
 // 受信twitを表示
 function twShow(tw) {
-	twShowToNode(tw, $("tw"), false, true, true);
+	twShowToNode(tw, $("tw"), false, false, true, true);
 }
 function twShow2(tw) {
 	var user_info = $("user_info");
-	if (user_info && tw.length > 0) {
+	var tmp = $("tmp");
+	if (tmp) tmp.parentNode.removeChild(tmp);
+	if (cur_page == 1 && user_info && tw.length > 0) {
 		var user = tw[0].user;
 		user_info.innerHTML = '<table><tr><td><img align="left" src="' + user.profile_image_url + '"></td><td>' +
 								'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b><br>' +
@@ -292,9 +295,11 @@ function twShow2(tw) {
 			update_ele2 = loadXDomainScript('http://twitter.com/friendships/exists.json?seq=' + (seq++) +
 									'&user_a=' + myname + '&user_b=' + user.screen_name + '&callback=twFollow', update_ele2);
 	}
-	twShowToNode(tw, $("tw2c"), !!user_info);
+	twShowToNode(tw, $("tw2c"), !!user_info, cur_page > 1);
+	if (selected_menu.id == "reply" || selected_menu.id == "user")
+		$("tw2c").innerHTML += '<div onClick="getNext(this)" id="next">▽</div>';
 }
-function twShowToNode(tw, twNode, no_name, animation, check_since) {
+function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 	$('loading').style.display = 'none';
 	if (failover_timeout) clearTimeout(failover_timeout);
 	failover_timeout = false;
@@ -303,7 +308,7 @@ function twShowToNode(tw, twNode, no_name, animation, check_since) {
 	var pNode = document.createElement('div');
 	var dummy = pNode.appendChild(document.createElement('div'));
 	for (var i = len-1; i >= 0; i--) {
-		if (check_since && since_id && since_id >= tw[i].id)
+		if (check_since && since_id && since_id >= tw[i].id || $(twNode.id + "-" + tw[i].id))
 			continue;
 		if (tw[i].user) {
 			var s = document.createElement('div');
@@ -326,12 +331,15 @@ function twShowToNode(tw, twNode, no_name, animation, check_since) {
 		twNode.removeChild(pNode);
 		pNode.style.minHeight = 0;
 	}
-	twNode.insertBefore(pNode, twNode.childNodes[0]);
+	if (after)
+		twNode.appendChild(pNode);
+	else
+		twNode.insertBefore(pNode, twNode.childNodes[0]);
 	if (animation2)
 		animate(pNode, maxH, (new Date).getTime());
 	else if (animation) {
 		$('rep').style.top = (rep_top += pNode.clientHeight);
-		scrollBy(0, pNode.clientHeight);
+		scrollBy(0, pNode.clientHeight+1);
 	}
 	if (animation) {
 		nr_tw += len;
@@ -351,6 +359,21 @@ function animate(elem, max, start) {
 	elem.style.maxHeight = Math.ceil(max*(1-Math.cos((t-start)/1000*Math.PI))/2);
 	setTimeout(animate, 50, elem, max, start);
 }
+// 次ページ取得
+function getNext(ele) {
+	var tmp = document.createElement("div");
+	tmp.id = "tmp";
+	tmp.innerHTML = "<p></p>";
+	ele.parentNode.appendChild(tmp);
+	ele.parentNode.removeChild(ele);
+	$("loading").style.display = "block";
+	if (selected_menu.id == "user")
+		update_ele2 = loadXDomainScript('http://twitter.com/statuses/user_timeline.json?seq=' + (seq++) +
+								'&page=' + (++cur_page) + '&id=' + last_user + '&callback=twShow2', update_ele2);
+	else if (selected_menu.id == "reply")
+		update_ele2 = loadXDomainScript('http://twitter.com/statuses/replies.json?seq=' + (seq++) +
+								'&page=' + (++cur_page) + '&callback=twShow2', update_ele2);
+}
 // タイムライン切り替え
 function switchTo(id) {
 	selected_menu.className = "";
@@ -362,6 +385,7 @@ function switchTo(id) {
 	$("tw2").style.display = id!="TL"?"block":"none";
 	$("rep").style.display = "none";
 	scrollTo(0, 1);
+	cur_page = 1;
 }
 function switchTL() {
 	switchTo("TL");
