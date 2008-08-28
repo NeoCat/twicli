@@ -79,10 +79,13 @@ var direct_ele1 = false;
 var direct_ele2 = false;
 var direct1 = false;
 var direct2 = false;
+var cur_page = 1;
+var fav_mode = 0;
 var reply_ele = false;
 var rep_top = 0;
 var selected_menu = $("TL");
 var failover_timeout = false;
+
 // クロスドメインなJavaScriptを呼び出し
 function loadXDomainScript(url, ele) {
 	if (ele)
@@ -283,19 +286,19 @@ function twShow2(tw) {
 	var user_info = $("user_info");
 	var tmp = $("tmp");
 	if (tmp) tmp.parentNode.removeChild(tmp);
-	if (cur_page == 1 && user_info && tw.length > 0) {
+	if (cur_page == 1 && !fav_mode && user_info && tw.length > 0) {
 		var user = tw[0].user;
 		user_info.innerHTML = '<table><tr><td><img align="left" src="' + user.profile_image_url + '"></td><td>' +
-								'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b><br>' +
-								(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
-								(user.url ? '<b>URL</b>: <a target="twitter" href="' + user.url + '">' + user.url + '</a><br>' : '') +
-								(user.description ? user.description : '') +
-								'</td></tr></table><a target="twitter" href="http://twitter.com/' + user.screen_name + '">→Twitter</a> ';
+					'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b><br>' +
+					(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
+					(user.url ? '<b>URL</b>: <a target="twitter" href="' + user.url + '">' + user.url + '</a><br>' : '') +
+					(user.description ? user.description : '') +
+					'</td></tr></table><a target="twitter" href="http://twitter.com/' + user.screen_name + '">[ Twitter ]</a> <a href="javascript:switchFav()">[ fav ]</a> ';
 		if (myname != user.screen_name)
 			update_ele2 = loadXDomainScript('http://twitter.com/friendships/exists.json?seq=' + (seq++) +
 									'&user_a=' + myname + '&user_b=' + user.screen_name + '&callback=twFollow', update_ele2);
 	}
-	twShowToNode(tw, $("tw2c"), !!user_info, cur_page > 1);
+	twShowToNode(tw, $("tw2c"), !!user_info && !fav_mode, cur_page > 1);
 	if (selected_menu.id == "reply" || selected_menu.id == "user")
 		$("tw2c").innerHTML += '<div onClick="getNext(this)" id="next">▽</div>';
 }
@@ -367,9 +370,12 @@ function getNext(ele) {
 	ele.parentNode.appendChild(tmp);
 	ele.parentNode.removeChild(ele);
 	$("loading").style.display = "block";
-	if (selected_menu.id == "user")
+	if (selected_menu.id == "user" && !fav_mode)
 		update_ele2 = loadXDomainScript('http://twitter.com/statuses/user_timeline.json?seq=' + (seq++) +
 								'&page=' + (++cur_page) + '&id=' + last_user + '&callback=twShow2', update_ele2);
+	else if (selected_menu.id == "user" && fav_mode)
+		update_ele2 = loadXDomainScript('http://twitter.com/favorites/' + last_user + '.json?seq=' + (seq++) +
+								'&page=' + (++cur_page) + '&callback=twShow2', update_ele2);
 	else if (selected_menu.id == "reply")
 		update_ele2 = loadXDomainScript('http://twitter.com/statuses/replies.json?seq=' + (seq++) +
 								'&page=' + (++cur_page) + '&callback=twShow2', update_ele2);
@@ -386,6 +392,7 @@ function switchTo(id) {
 	$("rep").style.display = "none";
 	scrollTo(0, 1);
 	cur_page = 1;
+	fav_mode = 0;
 }
 function switchTL() {
 	switchTo("TL");
@@ -406,6 +413,14 @@ function switchUser(user) {
 	update_ele2 = loadXDomainScript('http://twitter.com/statuses/user_timeline.json?seq=' + (seq++) +
 										'&id=' + user + '&callback=twShow2', update_ele2);
 }
+function switchFav() {
+	$("loading").style.display = "block";
+	cur_page = 1;
+	fav_mode = 1;
+	$("tw2c").innerHTML = "";
+	update_ele2 = loadXDomainScript('http://twitter.com/favorites/' + last_user + '.json?seq=' + (seq++) +
+										'&callback=twShow2', update_ele2);
+}
 function switchDirect() {
 	switchTo("direct");
 	$("loading").style.display = "block";
@@ -417,7 +432,7 @@ function switchDirect() {
 function switchHelp() {
 	switchTo("help");
 	$("tw2h").innerHTML = '<p><a target="twitter" href="index.html"><b>twicli</b></a> : browser-base Twitter client</p><hr>' +
-								'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">show user info : @<input type="text" size="15" id="user_id"></form></p><hr>';
+								'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"></form></p><hr>';
 	$("loading").style.display = "block";
 	update_ele2 = loadXDomainScript('http://twitter.com/account/rate_limit_status.json?seq=' + (seq++) +
 										'&id=' + user + '&callback=twLimit', update_ele2);
