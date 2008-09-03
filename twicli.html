@@ -234,7 +234,7 @@ function closeRep() {
 }
 // 最新タイムラインを取得
 function update() {
-	for (var i in plugins) if (plugins[i].update) plugins[i].update(s, tw);
+	callPlugins("update");
 	update_ele = loadXDomainScript('http://twitter.com/statuses/friends_timeline?seq=' + (seq++) +
 									'&callback=twShow' + (since_id ? '&since_id='+since_id : ''), update_ele);
 }
