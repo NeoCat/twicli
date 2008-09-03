@@ -489,7 +489,7 @@ function switchMisc() {
 	switchTo("misc");
 	$("tw2h").innerHTML = '<p><a target="twitter" href="index.html"><b>twicli</b></a> : browser-base Twitter client</p><hr>' +
 					'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="go.png"></form></p><hr>' +
-					'<p><form onSubmit="setPugins(this.list.value); return false;"><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br><input type="submit" value="register"></form></p><hr>';
+					'<p>Plugins:<form onSubmit="setPugins(this.list.value); return false;"><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br><input type="submit" value="register"></form></p><hr>';
 	$("loading").style.display = "block";
 	update_ele2 = loadXDomainScript('http://twitter.com/account/rate_limit_status.json?seq=' + (seq++) +
 										'&id=' + myname + '&callback=twLimit', update_ele2);
