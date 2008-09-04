@@ -131,7 +131,7 @@ function twAuth(a) {} // 認証(FIXME - FF:毎回認証要求される・Safari:
 <!---->
 
 <script type="text/javascript">
-var pluginstr = readCookie('tw_plugins') || '';
+var pluginstr = readCookie('tw_plugins') || 'search.js';
 var plugins = new Array;
 var nr_tw = 0;
 var seq = (new Date).getTime();
@@ -151,6 +151,7 @@ var reply_ele = false;
 var rep_top = 0;
 var selected_menu = $("TL");
 var failover_timeout = false;
+var get_next_func;
 
 // ローディング表示ON、twit更新
 function reload(to) {
@@ -262,11 +263,20 @@ function makeHTML(tw, no_name) {
 		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a onClick=\"event.stopPropagation();\" target=\"_blank\" href=\"$&\">$&</a>")
 				.replace(/@([\w-]+)/g, "<a onClick=\"event.stopPropagation();\" " +
 							"href=\"javascript:switchUser('$1')\">$&</a>").replace(/\r?\n|\r/g, "<br>") + '</span>' +
-		//日付
+		//日付'
 		'<span class="date">' + dateFmt(new Date(tw.created_at)) + '</span>' +
 		//返信元へのリンク
 		(tw.in_reply_to_status_id ? ' <a class="inreply" href="#" onClick="dispReply('+tw.in_reply_to_status_id+',this);return false;">☞</a>' : '') +
 		'<br clear="left">';
+}
+// ユーザ情報のHTML表現を生成
+function makeUserInfoHTML(user) {
+	return '<table><tr><td><img align="left" src="' + user.profile_image_url + '"></td><td>' +
+					'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b><br>' +
+					(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
+					(user.url ? '<b>URL</b>: <a target="twitter" href="' + user.url + '">' + user.url + '</a><br>' : '') +
+					(user.description ? user.description : '') +
+					'</td></tr></table><a target="twitter" href="http://twitter.com/' + user.screen_name + '">[ Twitter ]</a> <a href="javascript:switchFav()">[ fav ]</a> ';
 }
 // favoriteの追加(f=true)/削除(f=false)
 function fav(img, id) {
@@ -339,20 +349,18 @@ function twShow2(tw) {
 	var tmp = $("tmp");
 	if (tmp) tmp.parentNode.removeChild(tmp);
 	if (cur_page == 1 && !fav_mode && user_info && tw.length > 0) {
-		var user = tw[0].user;
-		user_info.innerHTML = '<table><tr><td><img align="left" src="' + user.profile_image_url + '"></td><td>' +
-					'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b><br>' +
-					(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
-					(user.url ? '<b>URL</b>: <a target="twitter" href="' + user.url + '">' + user.url + '</a><br>' : '') +
-					(user.description ? user.description : '') +
-					'</td></tr></table><a target="twitter" href="http://twitter.com/' + user.screen_name + '">[ Twitter ]</a> <a href="javascript:switchFav()">[ fav ]</a> ';
+		user_info.innerHTML = makeUserInfoHTML(tw[0].user);
+		callPlugins("newUserInfoElement", user_info, user);
 		if (myname != user.screen_name)
 			update_ele2 = loadXDomainScript('http://twitter.com/friendships/exists.json?seq=' + (seq++) +
-									'&user_a=' + myname + '&user_b=' + user.screen_name + '&callback=twFollow', update_ele2);
+									'&user_a=' + myname + '&user_b=' + user.screen_name +
+									'&callback=twFollow', update_ele2);
 	}
 	twShowToNode(tw, $("tw2c"), !!user_info && !fav_mode, cur_page > 1);
-	if (selected_menu.id == "reply" || selected_menu.id == "user")
+	if (selected_menu.id == "reply" || selected_menu.id == "user") {
 		$("tw2c").innerHTML += '<div onClick="getNext(this)" id="next">▽</div>';
+		get_next_func = getNextFuncCommon;
+	}
 }
 function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 	$('loading').style.display = 'none';
@@ -426,6 +434,9 @@ function getNext(ele) {
 	ele.parentNode.appendChild(tmp);
 	ele.parentNode.removeChild(ele);
 	$("loading").style.display = "block";
+	get_next_func();
+}
+function getNextFuncCommon() {
 	if (selected_menu.id == "user" && !fav_mode)
 		update_ele2 = loadXDomainScript('http://twitter.com/statuses/user_timeline.json?seq=' + (seq++) +
 								'&page=' + (++cur_page) + '&id=' + last_user + '&callback=twShow2', update_ele2);
@@ -490,6 +501,7 @@ function switchMisc() {
 	$("tw2h").innerHTML = '<p><a target="twitter" href="index.html"><b>twicli</b></a> : browser-base Twitter client</p><hr>' +
 					'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="go.png"></form></p><hr>' +
 					'<p>Plugins:<form onSubmit="setPugins(this.list.value); return false;"><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br><input type="submit" value="register"></form></p><hr>';
+	callPlugins("miscTab", $("tw2h"));
 	$("loading").style.display = "block";
 	update_ele2 = loadXDomainScript('http://twitter.com/account/rate_limit_status.json?seq=' + (seq++) +
 										'&id=' + myname + '&callback=twLimit', update_ele2);
