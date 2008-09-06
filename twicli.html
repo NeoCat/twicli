@@ -406,7 +406,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 	if (animation2)
 		animate(pNode, maxH, (new Date).getTime());
 	else if (animation) {
-		$('rep').style.top = (rep_top += pNode.clientHeight);
+		$('rep').style.top = (rep_top += pNode.clientHeight+1);
 		scrollBy(0, pNode.clientHeight+1);
 	}
 	if (animation) {
@@ -520,7 +520,7 @@ function callPlugins(name) {
 	args.shift();
 	for (var i in plugins)
 		if (typeof plugins[i][name] == "function")
-			plugins[i][name].apply(this, args);
+			plugins[i][name].apply(plugins[i], args);
 }
 if (pluginstr) {
 	var list = pluginstr.split("\n");
