@@ -282,9 +282,8 @@ function makeHTML(tw, no_name) {
 		: '') +
 		//本文 (https〜をリンクに置換 + @をJavaScriptリンクに置換)
 		" <span class=\"status\">" +
-		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a onClick=\"event.stopPropagation();\" target=\"twitter\" href=\"$&\">$&</a>")
-				.replace(/@([\w-]+)/g, "<a onClick=\"event.stopPropagation();\" " +
-							"href=\"javascript:switchUser('$1')\">$&</a>").replace(/\r?\n|\r/g, "<br>") + '</span>' +
+		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a target=\"twitter\" href=\"$&\">$&</a>")
+				.replace(/@([\w-]+)/g, "<a href=\"http://twitter.com/$1\" onClick=\"switchUser('$1'); return false;\" >$&</a>").replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付'
 		' <span class="date">' + dateFmt(new Date(tw.created_at)) + '</span>' +
 		//返信先を設定
