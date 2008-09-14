@@ -32,42 +32,55 @@ iPhone/iPod touchのMobileSafariでもOKです。<br>
 <div style="margin-left: 100px; padding: 10px; text-align: center; color: #00f; background-color: #cfc; border: 2px solid #393; width: 200px; font-size: large;"><a href="javascript:void window.open('http://www.geocities.jp/twicli/twicli_s.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=no,location=no,status=no')">twicli simpleを起動</a></div>
 
 <h3>使い方</h3>
+Twitter自体の機能の説明は省きます。twicli自体もまあ使ってみたら何とかなる?
 <ol>
-<li>起動
+<li><b>起動</b>
 <ul>
 <li><a href="http://twitter.com/">Twitter</a>にログインしておく(「次回から入力を省略」ON推奨)
 <li>上のリンク(bookmarklet)をクリック、またはブックマークにD&amp;Dで登録して選択すると、別窓で起動します。
+<li>ログインしていない場合、しばらく待つと本家ログインページが表示されるのでそこでログインしてください。
 </ul>
-<li>TL(タイムライン表示)
+<li><b>タイムライン表示</b>
 <ul>
 <li>タイムラインはホイールでスクロール(最大500件)
 <li>ユーザ名をクリックするとユーザ情報や発言を表示
 <li>ユーザのアイコンをクリックするとプロフィールのWebページへジャンプ(設定されている場合のみ)
-<li>「☞」をクリックすると、返信先を次々と辿っていくことができます。一覧に無い場合も返信先をオーバーレイ表示します。
+<li>「<span style="color:#f29;">☞</span>」をクリックすると、返信先を次々と辿っていくことができます。一覧に無い場合も返信先をオーバーレイ表示します。
 <li>ユーザのTLの最後に▽が出ている場合、クリックすると過去の発言を取得します。
 </ul>
-<li>発言／fav
+<li><b>発言／fav</b>
 <ul>
 <li>最上部のフィールドにテキストを入力してenterキーで発言
-<li>発言本文をクリックすると「@〜」を自動入力。また「@〜」を消さない場合、発言の返信先を設定します。
-<li>twit右の「☆」をクリックするとfav追加。「★」を再度クリックでfav解除。
+<li>「<span style="color:#f29;">↩</span>」をクリックすると「@ユーザ名」を自動入力 & 発言の返信先を設定。
+<li>twit右の「☆」をクリックするとfav追加。「<span style="color:orange">★</span>」を再度クリックでfav解除。
 <li>初回の発言やfav時に認証を求められた場合は、Twitterのアカウント／パスワードを入力してください。
 </ul>
-<li>タブ
+<li><b>タブ (TL: タイムライン、reply: あなた宛のつぶやきを表示、direct: ダイレクトメッセージ)</b>
 <ul>
-<li>TL: タイムライン、reply: あなた宛のつぶやきを表示、ユーザ名: ユーザ情報、direct: ダイレクトメッセージを表示します。
 <li>TL以外は自動でアップデートされません。更新するには再度タブをクリックしてください。
 <li>他のタブに切り替えている間もTLは更新されていきます。
+</ul>
+<li><b>ユーザ別タブ (発言中の「@〜」をクリック、または「+」タブでユーザ名を入力)</b>
+<ul>
+<li>プロフィールや過去の発言を表示します(自動更新はしません)。自分の情報も表示できます。
+<li>[Twitter]: 本家Twitterのユーザページへ　[fav]: その人がつけたfavを表示 (自分も可)
+<li>follow/remove: フォローを開始または解除
+<li>[search]: ユーザに関連する発言を<a href="http://search.twitter.com/">公式検索</a>で検索(search.jsプラグイン有効時)
+</ul>
+<li><b>「+」タブ</b>
+<ul>
+<li>オプションの設定や拡張機能が利用できます。
+<li>#msgs of TL on update: TL更新時に1度に取得する発言数を指定します。
+<li>#msgs of user on update: ユーザ別タブの更新時に取得する発言数を指定します。
+<li>Plugin: <a href="http://d.hatena.ne.jp/NeoCat/20080904">こちら</a>を参照。
+<li>Twitter search: <a href="http://search.twitter.com/">公式検索</a>でキーワードを検索(search.jsプラグイン有効時)
 </ul>
 </ol>
 <p>
 なお開発途上なので随時アップデートすることがあります。
 
-<h3>Pluginについて</h3>
-<a href="http://d.hatena.ne.jp/NeoCat/20080904">こちら</a>を参照。
-
 <h3>ソース</h3>
-<p><a href="http://coderepos.org/share/browser/websites/twicli/twicli.html">twicli.html</a>が全てです。現在HTML+CSS+JavaScriptで500行くらい。<br>
+<p><a href="http://coderepos.org/share/browser/websites/twicli/twicli.html">twicli.html</a>が全てです。現在HTML+CSS+JavaScriptで600行くらい。<br>
 <a href="http://coderepos.org/share/browser/websites/twicli/">CodeRepos</a>にも上げておきます。改造などはご自由に。
 
 <p><b>作ってる人</b>: <a href="http://twitter.com/NeoCat">@NeoCat</a> <a href="http://d.hatena.ne.jp/NeoCat/20080819">技術メモ</a>

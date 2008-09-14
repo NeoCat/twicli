@@ -16,19 +16,19 @@ iframe { display: none; }
 #go { text-decoration: none; position: absolute; left: 95%; top: 1px; }
 #rst { text-decoration: none; position: absolute; left: 95%; top: 16px; }
 #menu { position: absolute; left: 0px; top: 32px; height: 20px; }
-#menu a { display: block; float: left; font-size: 13px; height: 18px; border: black solid 1px; border-bottom: 0; background-color: #ccc; color: #242; padding: 0 4px; margin: 0 2px; text-decoration: none; font-family: sans-serif; }
-#menu a.sel { height: 20px; background-color: #fff; color: #002; border-bottom: #fff; }
+#menu a { display: block; float: left; font-size: 13px; height: 18px; border: black solid 1px; border-bottom: 0; background-color: #aaa; color: #242; padding: 0 4px; margin: 0 2px; text-decoration: none; font-family: sans-serif; }
+#menu a.sel { height: 20px; background-color: #ffe; color: #002; border-bottom: #fff; }
 
 #tw, #tw2 { position: absolute; left: 0px; top: 52px; width: 100%; font-size: small; }
 #tw2 { background-color: #fec; display: none; min-height: 448px; }
 #tw div { border-bottom: solid 1px #777; }
 #tw div div, #tw2 div div { padding: 2px; border-bottom: solid 1px #999; }
 .dir { color: #679; }
-.status { text-decoration: none; color: black; cursor: pointer; }
+.status { text-decoration: none; color: black; }
 .date { color: #999; font-size: x-small; }
 .fromme { background-color: #cfc; }
 .tome { background-color: #ccf; }
-.inreply { text-decoration: none; font-size: medium; }
+.button { color: #f29; border: solid 1px #ddd; text-decoration: none; font-size: medium; }
 .lock { position: relative; top: 2px; left: 0; }
 .close { color: red; }
 #next { text-align: center; background-color: #999; color: #fec; cursor: pointer; }
@@ -41,7 +41,7 @@ var nr_limit = 500;				// 表示する発言数の上限
 function $(id) { return document.getElementById(id); }
 // クロスドメインJavaScript呼び出し
 function loadXDomainScript(url, ele) {
-	if (ele)
+	if (ele && ele.parentNode)
 		ele.parentNode.removeChild(ele);
 	ele = document.createElement("script");
 	ele.src = url;
@@ -66,9 +66,9 @@ XDomainScript.prototype = {
 	},
 	abort: function(id) {
 		var ele = this['cbe' + id];
-		ele.parentNode.removeChild(ele);
-		delete this['cb' + id];
-		delete this['cbe' + id];
+		if (ele && ele.parentNode) ele.parentNode.removeChild(ele);
+		if (this['cb' + id]) delete this['cb' + id];
+		if (this['cbe' + id]) delete this['cbe' + id];
 	}
 };
 var xds = new XDomainScript;
@@ -87,8 +87,8 @@ function readCookie(key) {
 	key += "=";
 	var scookie = document.cookie + ";";
 	start = scookie.indexOf(key);
-	if (start != -1) {
-		var end = scookie.indexOf(";", key);
+	if (start >= 0) {
+		var end = scookie.indexOf(";", start);
 		return unescape(scookie.substring(start + key.length, end));
 	}
 	return null;
@@ -97,6 +97,18 @@ function writeCookie(key, val, days) {
 	var sday = new Date();
 	sday.setTime(sday.getTime() + (days * 1000 * 60 * 60 * 24));
 	document.cookie = key + "=" + escape(val) + ";expires=" + sday.toGMTString();
+}
+// Array.mapの再実装(Opera用)
+if (!Array.prototype.map) {
+	Array.prototype.map = function(fun) {
+		var len = this.length;
+		var res = new Array(len);
+		var thisp = arguments[1];
+		for (var i = 0; i < len; i++)
+			if (i in this)
+				res[i] = fun.call(thisp, this[i], i, this);
+		return res;
+	};
 }
 
 function twAuth(a) {} // 認証(FIXME - FF:毎回認証要求される・Safari:ログインできない)
@@ -127,11 +139,14 @@ function twAuth(a) {} // 認証(FIXME - FF:毎回認証要求される・Safari:
 <!--タイムライン-->
 <div id="tw"></div>
 <div id="tw2"><div id="tw2h"></div><div id="tw2c"></div></div>
-<div id="rep"><a href="javascript:closeRep()" class="close">[x]</a><div id="reps"></div></div>
+<div id="rep"><a href="javascript:closeRep()" class="close">[x]</a>
+	<a href="javascript:pickup2()" class="close">[⇔]</a><div id="reps"></div></div>
 <!---->
 
 <script type="text/javascript">
 var pluginstr = readCookie('tw_plugins') || 'search.js';
+var max_count = readCookie('max_count') || 50;
+var max_count_u = readCookie('max_count_u') || 50;
 var plugins = new Array;
 var nr_tw = 0;
 var seq = (new Date).getTime();
@@ -139,12 +154,16 @@ var since_id = null;
 var in_reply_to_user = null;
 var myname = null;
 var last_user = null;
-var update_ele = false;
-var update_ele2 = false;
-var direct_ele1 = false;
-var direct_ele2 = false;
-var direct1 = false;
-var direct2 = false;
+var users_log = [];
+var users_xds = [];
+var update_ele = null;
+var update_ele2 = null;
+var direct_ele1 = null;
+var direct_ele2 = null;
+var direct1 = null;
+var direct2 = null;
+var user_pick1 = null;
+var user_pick2 = null;
 var cur_page = 1;
 var fav_mode = 0;
 var reply_ele = false;
@@ -182,7 +201,7 @@ function resetFrm() {
 // reply先の設定/解除
 function setReplyId(id) {
 	var repid = $('in_reply_to_status_id');
-	if (repid)
+	if (repid && repid.parentNode)
 		repid.parentNode.removeChild(repid);
 	if (id) {
 		repid = document.createElement('input');
@@ -194,15 +213,14 @@ function setReplyId(id) {
 }
 // reply先を設定
 function replyTo(user, id) {
-	if (window.getSelection() && window.getSelection().toString() == '') {
-		in_reply_to_user = user;
-		document.frm.status.value += "@" + user + " ";
-		setReplyId(id);
-		document.frm.status.select();
-	}
+	in_reply_to_user = user;
+	document.frm.status.value += "@" + user + " ";
+	setReplyId(id);
+	document.frm.status.select();
 }
 // reply先を表示
-function dispReply(id,ele) {
+function dispReply(user, id, ele) {
+	user_pick1 = user;
 	var d = $((selected_menu.id == "TL" ? "tw" : "tw2c") + "-" + id);
 	if (!d) {
 		$("loading").style.display = "block";
@@ -228,16 +246,21 @@ function dispReply2(tw) {
 	callPlugins("newMessageElement", $('reps'), tw);
 	$('rep').style.display = "block";
 	$('rep').style.top = rep_top;
+	user_pick2 = tw.user.screen_name;
 }
 // replyのoverlay表示を閉じる
 function closeRep() {
 	$('rep').style.display = 'none';
 }
+// replyからユーザ間のタイムラインを取得
+function pickup2() {
+	switchUser(user_pick1 + "," + user_pick2);
+}
 // 最新タイムラインを取得
 function update() {
 	callPlugins("update");
 	update_ele = loadXDomainScript('http://twitter.com/statuses/friends_timeline?seq=' + (seq++) +
-									'&callback=twShow' + (since_id ? '&since_id='+since_id : ''), update_ele);
+						'&count=' + max_count + '&callback=twShow' + (since_id ? '&since_id='+since_id : ''), update_ele);
 }
 // twitのHTML表現を生成
 function dateFmt(d) {
@@ -257,16 +280,17 @@ function makeHTML(tw, no_name) {
 			 /* protected? */ (tw.user.protected ? '<img class="lock" src="http://assets0.twitter.com/images/icon_red_lock.gif">' : '') +
 			/*ダイレクトメッセージの方向*/ (tw.d_dir == 1 ? '<span class="dir">→</span> ' : tw.d_dir == 2 ? '<span class="dir">←</span> ' : '')
 		: '') +
-		//本文クリックで@追加
-		" <span onClick=\"replyTo('" + tw.user.screen_name + "'," + tw.id + ")\" class=\"status\">" +
 		//本文 (https〜をリンクに置換 + @をJavaScriptリンクに置換)
+		" <span class=\"status\">" +
 		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a onClick=\"event.stopPropagation();\" target=\"twitter\" href=\"$&\">$&</a>")
 				.replace(/@([\w-]+)/g, "<a onClick=\"event.stopPropagation();\" " +
 							"href=\"javascript:switchUser('$1')\">$&</a>").replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付'
-		'<span class="date">' + dateFmt(new Date(tw.created_at)) + '</span>' +
+		' <span class="date">' + dateFmt(new Date(tw.created_at)) + '</span>' +
+		//返信先を設定
+		' <a class="button" href="javascript:replyTo(\'' + tw.user.screen_name + "'," + tw.id + ')">↩</a>' +
 		//返信元へのリンク
-		(tw.in_reply_to_status_id ? ' <a class="inreply" href="#" onClick="dispReply('+tw.in_reply_to_status_id+',this);return false;">☞</a>' : '') +
+		(tw.in_reply_to_status_id ? ' <a class="button" href="#" onClick="dispReply(\''+tw.user.screen_name+'\','+tw.in_reply_to_status_id+',this); return false;">☞</a>' : '') +
 		'<br clear="left">';
 }
 // ユーザ情報のHTML表現を生成
@@ -276,11 +300,11 @@ function makeUserInfoHTML(user) {
 					(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
 					(user.url ? '<b>URL</b>: <a target="twitter" href="' + user.url + '">' + user.url + '</a><br>' : '') +
 					(user.description ? user.description : '') +
-					'</td></tr></table><a target="twitter" href="http://twitter.com/' + user.screen_name + '">[ Twitter ]</a> <a href="javascript:switchFav()">[ fav ]</a> ';
+					'</td></tr></table><a target="twitter" href="http://twitter.com/' + user.screen_name + '">[Twitter]</a> <a href="javascript:switchFav()">[fav]</a> ';
 }
 // favoriteの追加(f=true)/削除(f=false)
 function fav(img, id) {
-	var f = img.src.indexOf('empty') != -1;
+	var f = img.src.indexOf('empty') >= 0;
 	document.favf.action = 'http://twitter.com/favourings/' + (f ? 'create' : 'destroy') + '/' + id + '.xml';
 	document.favf.submit();
 	img.src = 'http://assets3.twitter.com/images/icon_star_' + (f ? 'full' : 'empty') + '.gif';
@@ -347,7 +371,7 @@ function twShow(tw) {
 function twShow2(tw) {
 	var user_info = $("user_info");
 	var tmp = $("tmp");
-	if (tmp) tmp.parentNode.removeChild(tmp);
+	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
 	if (cur_page == 1 && !fav_mode && user_info && tw.length > 0) {
 		var user = tw[0].user;
 		user_info.innerHTML = makeUserInfoHTML(user);
@@ -358,9 +382,19 @@ function twShow2(tw) {
 									'&callback=twFollow', update_ele2);
 	}
 	twShowToNode(tw, $("tw2c"), !!user_info && !fav_mode, cur_page > 1);
-	if (selected_menu.id == "reply" || selected_menu.id == "user") {
+	if (selected_menu.id == "reply" || selected_menu.id == "user" && last_user.indexOf(',') < 0) {
 		$("tw2c").innerHTML += '<div onClick="getNext(this)" id="next">▽</div>';
 		get_next_func = getNextFuncCommon;
+	}
+}
+function twShow3(tw) {
+	users_log.push(tw);
+	if (users_log.length == last_user.split(',').length) {
+		var tws = [];
+		for (var i = 0; i < users_log.length; i++)
+			tws = tws.concat(users_log[i]);
+		tws = tws.sort(function(a,b){return b.id - a.id});
+		twShow2(tws);
 	}
 }
 function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
@@ -381,7 +415,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 			var s = document.createElement('div');
 			s.id = twNode.id + "-" + tw[i].id;
 			s.innerHTML = makeHTML(tw[i], no_name);
-			if (tw[i].d_dir == 1 || tw[i].text.indexOf('@'+myname+' ') != -1)
+			if (tw[i].d_dir == 1 || tw[i].text.indexOf('@'+myname+' ') >= 0)
 				s.className = "tome";
 			if (tw[i].d_dir == 2 || tw[i].user.screen_name == myname)
 				s.className = "fromme";
@@ -440,13 +474,14 @@ function getNext(ele) {
 function getNextFuncCommon() {
 	if (selected_menu.id == "user" && !fav_mode)
 		update_ele2 = loadXDomainScript('http://twitter.com/statuses/user_timeline.json?seq=' + (seq++) +
-								'&page=' + (++cur_page) + '&id=' + last_user + '&callback=twShow2', update_ele2);
+					'&count=' + max_count_u + '&page=' + (++cur_page) + '&id=' + last_user +
+					'&callback=twShow2', update_ele2);
 	else if (selected_menu.id == "user" && fav_mode)
 		update_ele2 = loadXDomainScript('http://twitter.com/favorites/' + last_user + '.json?seq=' + (seq++) +
-								'&page=' + (++cur_page) + '&callback=twShow2', update_ele2);
+					'&page=' + (++cur_page) + '&callback=twShow2', update_ele2);
 	else if (selected_menu.id == "reply")
 		update_ele2 = loadXDomainScript('http://twitter.com/statuses/replies.json?seq=' + (seq++) +
-								'&page=' + (++cur_page) + '&callback=twShow2', update_ele2);
+					'&page=' + (++cur_page) + '&callback=twShow2', update_ele2);
 }
 // タイムライン切り替え
 function switchTo(id) {
@@ -458,7 +493,7 @@ function switchTo(id) {
 	$("tw2c").innerHTML = "";
 	$("tw2").style.display = id!="TL"?"block":"none";
 	$("rep").style.display = "none";
-	scrollTo(0, 1);
+	scrollTo(0, 1); scrollTo(0, 0);
 	cur_page = 1;
 	fav_mode = 0;
 }
@@ -476,10 +511,21 @@ function switchUser(user) {
 	last_user = user;
 	$("user").innerHTML = user;
 	switchTo("user");
-	$("tw2h").innerHTML = "<div id=\"user_info\">loading ...</div>";
 	$("loading").style.display = "block";
-	update_ele2 = loadXDomainScript('http://twitter.com/statuses/user_timeline.json?seq=' + (seq++) +
-										'&id=' + user + '&callback=twShow2', update_ele2);
+	var users = user.split(',');
+	if (users.length == 1) {
+		$("tw2h").innerHTML = "<div id=\"user_info\"></div>";
+		update_ele2 = loadXDomainScript('http://twitter.com/statuses/user_timeline.json?seq=' + (seq++) +
+							'&count=' + max_count_u + '&id=' + user + '&callback=twShow2', update_ele2);
+	} else {
+		users_log = [];
+		for (var i = 0; i < users_xds.length; i++)
+			xds.abort(users_xds[i]);
+		users_xds = users.map(function(u) {
+			xds.load('http://twitter.com/statuses/user_timeline.json?id=' + u +
+							 '&count=' + max_count_u, twShow3);
+		});
+	}
 }
 function switchFav() {
 	$("loading").style.display = "block";
@@ -501,17 +547,19 @@ function switchMisc() {
 	switchTo("misc");
 	$("tw2h").innerHTML = '<p><a target="twitter" href="index.html"><b>twicli</b></a> : browser-base Twitter client</p><hr>' +
 					'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="go.png"></form></p><hr>' +
-					'<p>Plugins:<form onSubmit="setPugins(this.list.value); return false;"><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br><input type="submit" value="register"></form></p><hr>';
+					'<p><b>Preferences:</b><form onSubmit="setPreps(this.maxc.value, this.maxu.value, this.list.value); return false;">#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br><input type="submit" value="Save"></form></p><hr>';
 	callPlugins("miscTab", $("tw2h"));
 	$("loading").style.display = "block";
 	update_ele2 = loadXDomainScript('http://twitter.com/account/rate_limit_status.json?seq=' + (seq++) +
 										'&id=' + myname + '&callback=twLimit', update_ele2);
 }
-// プラグイン
-function setPugins(str) {
-	alert("Plugins are registerd. Please reload.");
-	writeCookie('tw_plugins', str, 3652);
+function setPreps(maxc, maxu, plugin_list) {
+	alert("Saved in Cookie. Please reload.");
+	writeCookie('max_count', maxc, 3652);
+	writeCookie('max_count_u', maxu, 3652);
+	writeCookie('tw_plugins', plugin_list, 3652);
 }
+// プラグイン
 function registerPlugin(obj) {
 	plugins.push(obj);
 }
@@ -533,8 +581,8 @@ function init() {
 	// 初回アップデート
 	setTimeout(update, 0);
 	setInterval(update, 30*1000);
-	// ログインしていなかったときなどに15秒で本家にリダイレクト
-	failover_timeout = setTimeout(function(){ switchTo("misc"); $("tw2c").innerHTML = '<iframe style="display:block" src="http://twitter.com/home" width="100%" height="400"></iframe>' }, 15*1000);
+	// ログインしていなかったときなどに20秒で本家にリダイレクト
+	failover_timeout = setTimeout(function(){ switchTo("misc"); $("tw2c").innerHTML = '<iframe style="display:block" src="http://twitter.com/home" width="100%" height="400"></iframe>' }, 20*1000);
 }
 
 // ホイールの回転でスクロール (スクロール不可のウィンドウ・フレーム内で有効)
@@ -545,7 +593,7 @@ function wheel(event) {
 		delta = event.wheelDelta/10;
 	} else if (event.detail)
 		delta = -event.detail;
-	if (navigator.userAgent.indexOf("Gecko/") != -1)
+	if (navigator.userAgent.indexOf("Gecko/") >= 0)
 		delta *= 10;
 	if (delta)
 		scrollBy(0, -delta);

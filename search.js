@@ -3,6 +3,7 @@ function twsSearch(q) {
 	tws_page = 0;
 	update_ele2 = loadXDomainScript('http://search.twitter.com/search.json?seq=' + (seq++) +
 							'&q=' + q + '&callback=twsSearchShow', update_ele2);
+	$("loading").style.display = "block";
 }
 function twsSearchShow(res) {
 	var tmp = $("tmp");
@@ -32,4 +33,10 @@ registerPlugin({
 		ele.appendChild(e);
 		ele.appendChild(document.createElement("hr"));
 	},
+	newUserInfoElement: function(ele, user) {
+		var e = document.createElement("a");
+		e.href = "javascript:twsSearch('" + user.screen_name + "')";
+		e.innerHTML = '[search]';
+		ele.appendChild(e);
+	}
 });
