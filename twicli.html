@@ -268,6 +268,7 @@ function dateFmt(d) {
 	return (d.getMonth()+1) + "/" + d.getDate() + " " + d.getHours() + ":" + d2(d.getMinutes()) + ":" + d2(d.getSeconds());
 }
 function makeHTML(tw, no_name) {
+	var un = tw.user.screen_name;
 	return /*fav*/ '<img align="right" src="http://assets3.twitter.com/images/icon_star_'+(tw.favorited?'full':'empty')+'.gif" ' +
 			'onClick="fav(this,' + tw.id + ')">' +
 		 (!no_name ?
@@ -275,21 +276,21 @@ function makeHTML(tw, no_name) {
 			(tw.user.url ? '<a target="twitter" href="'+tw.user.url+'">' : '') +
 			'<img align="left" width="24" height="24" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
 			//名前
-			"<a href=\"javascript:switchUser('" + tw.user.screen_name + "')\">" + tw.user.screen_name +
-			 /*プロフィールの名前*/ (tw.user.name!=tw.user.screen_name ? '('+tw.user.name+')' : '') + '</a>' +
+			"<a href=\"http://twitter.com/" + un + "\" "+ "onClick=\"switchUser('" + un + "');return false\">" + un +
+			 /*プロフィールの名前*/ (tw.user.name!=un ? '('+tw.user.name+')' : '') + '</a>' +
 			 /* protected? */ (tw.user.protected ? '<img class="lock" src="http://assets0.twitter.com/images/icon_red_lock.gif">' : '') +
 			/*ダイレクトメッセージの方向*/ (tw.d_dir == 1 ? '<span class="dir">→</span> ' : tw.d_dir == 2 ? '<span class="dir">←</span> ' : '')
 		: '') +
-		//本文 (https〜をリンクに置換 + @をJavaScriptリンクに置換)
+		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span class=\"status\">" +
 		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a target=\"twitter\" href=\"$&\">$&</a>")
 				.replace(/@([\w-]+)/g, "<a href=\"http://twitter.com/$1\" onClick=\"switchUser('$1'); return false;\" >$&</a>").replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付'
 		' <span class="date">' + dateFmt(new Date(tw.created_at)) + '</span>' +
 		//返信先を設定
-		' <a class="button" href="javascript:replyTo(\'' + tw.user.screen_name + "'," + tw.id + ')">↩</a>' +
+		' <a class="button" href="javascript:replyTo(\'' + un + "'," + tw.id + ')">↩</a>' +
 		//返信元へのリンク
-		(tw.in_reply_to_status_id ? ' <a class="button" href="#" onClick="dispReply(\''+tw.user.screen_name+'\','+tw.in_reply_to_status_id+',this); return false;">☞</a>' : '') +
+		(tw.in_reply_to_status_id ? ' <a class="button" href="#" onClick="dispReply(\'' + un + '\',' + tw.in_reply_to_status_id + ',this); return false;">☞</a>' : '') +
 		'<br clear="left">';
 }
 // ユーザ情報のHTML表現を生成
