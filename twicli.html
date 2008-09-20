@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=280">
 <title>twicli</title>
 <style type="text/css"><!--
-body { background-color: transparent; margin: 1px; min-height: 500px; }
+body { background-image: url(block_bg.png); background-attachment: fixed; background-color: transparent; margin: 1px; min-height: 500px; }
 img { border: 0; }
 hr { margin: 0; padding: 0; }
 iframe { display: none; }
@@ -25,10 +25,11 @@ iframe { display: none; }
 #tw div div, #tw2 div div { padding: 2px; border-bottom: solid 1px #999; }
 .dir { color: #679; }
 .status { text-decoration: none; color: black; }
-.date { color: #999; font-size: x-small; }
+.prop, .prop a { color: #999; font-size: x-small; }
 .fromme { background-color: #cfc; }
 .tome { background-color: #ccf; }
 .button { color: #f29; border: solid 1px #ddd; text-decoration: none; font-size: medium; }
+.green { color: #195; }
 .lock { position: relative; top: 2px; left: 0; }
 .close { color: red; }
 #next { text-align: center; background-color: #999; color: #fec; cursor: pointer; }
@@ -285,10 +286,10 @@ function makeHTML(tw, no_name) {
 		" <span class=\"status\">" +
 		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a target=\"twitter\" href=\"$&\">$&</a>")
 				.replace(/@([\w-]+)/g, "<a href=\"http://twitter.com/$1\" onClick=\"switchUser('$1'); return false;\" >$&</a>").replace(/\r?\n|\r/g, "<br>") + '</span>' +
-		//日付'
-		' <span class="date">' + dateFmt(new Date(tw.created_at)) + '</span>' +
+		//日付'クライアント
+		' <span class="prop">' + dateFmt(new Date(tw.created_at)) + ' / ' + tw.source + '</span>' +
 		//返信先を設定
-		' <a class="button" href="javascript:replyTo(\'' + un + "'," + tw.id + ')">↩</a>' +
+		' <a class="button green" href="javascript:replyTo(\'' + un + "'," + tw.id + ')">↩</a>' +
 		//返信元へのリンク
 		(tw.in_reply_to_status_id ? ' <a class="button" href="#" onClick="dispReply(\'' + un + '\',' + tw.in_reply_to_status_id + ',this); return false;">☞</a>' : '') +
 		'<br clear="left">';
