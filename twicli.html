@@ -95,12 +95,7 @@ function postInIFrame(url, done, err) {
 	var pfr = document.createElement("iframe"); // formのtargetとなるiframeを生成
 	pfr.name = "pfr" + seq;
 	pfr.src = "about:blank";
-	pfr.style.display = "block";
-	pfr.style.position = "absolute";
-	pfr.style.width = 300;
-	pfr.style.height = 200;
-	pfr.style.top = 100;
-	pfr.style.left = 200;
+	pfr.style.display = "none";
 	var errTimer = false;
 	if (err) {  // 10秒で正常終了しなければエラーとみなす
 		errTimer = setTimeout(function(){
