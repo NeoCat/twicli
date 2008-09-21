@@ -168,6 +168,7 @@ function twAuth(a) {} // 認証(FIXME - FF:毎回認証要求される・Safari:
 </head>
 <body onLoad="init()">
 <div id="control">
+<script type="text/javascript">update = function(){}</script>
 <iframe name="tx" onload="update()"></iframe>
 <!--発言フォーム-->
 <form name="frm" action="http://twitter.com/statuses/update.xml" method="POST" target="tx">
@@ -193,7 +194,7 @@ function twAuth(a) {} // 認証(FIXME - FF:毎回認証要求される・Safari:
 <!---->
 
 <script type="text/javascript">
-var pluginstr = readCookie('tw_plugins') || 'search.js';
+var pluginstr = readCookie('tw_plugins') || 'search.js\nfavotter.js';
 var nr_limit = readCookie('limit') || 500;				// 表示する発言数の上限
 var max_count = readCookie('max_count') || 50;
 var max_count_u = readCookie('max_count_u') || 50;
@@ -302,7 +303,7 @@ function pickup2() {
 	switchUser(user_pick1 + "," + user_pick2);
 }
 // 最新タイムラインを取得
-function update() {
+update = function() {
 	callPlugins("update");
 	update_ele = loadXDomainScript('http://twitter.com/statuses/friends_timeline?seq=' + (seq++) +
 						'&count=' + max_count + '&callback=twShow' + (since_id ? '&since_id='+since_id : ''), update_ele);
@@ -327,7 +328,7 @@ function makeHTML(tw, no_name) {
 			/*ダイレクトメッセージの方向*/ (tw.d_dir == 1 ? '<span class="dir">→</span> ' : tw.d_dir == 2 ? '<span class="dir">←</span> ' : '')
 		: '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
-		" <span class=\"status\">" +
+		" <span id=\"text" + tw.id + "\" class=\"status\">" +
 		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a target=\"twitter\" href=\"$&\">$&</a>")
 				.replace(/@([\w-]+)/g, "<a href=\"http://twitter.com/$1\" onClick=\"switchUser('$1'); return false;\" >$&</a>").replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付'クライアント
