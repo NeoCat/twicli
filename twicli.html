@@ -161,6 +161,9 @@ if (!Array.prototype.map) {
 		return res;
 	};
 }
+// user-defined CSS
+var user_style = readCookie('user_style') || "";
+document.write('<style>' + user_style + '</style>');
 
 function twAuth(a) {} // 認証(FIXME - FF:毎回認証要求される・Safari:ログインできない)
 </script>
@@ -593,17 +596,18 @@ function switchMisc() {
 	switchTo("misc");
 	$("tw2h").innerHTML = '<p><a target="twitter" href="index.html"><b>twicli</b></a> : browser-base Twitter client</p><hr>' +
 					'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="go.png"></form></p><hr>' +
-					'<p><b>Preferences:</b><form onSubmit="setPreps(this.limit.value, this.maxc.value, this.maxu.value, this.list.value); return false;">max #msgs in TL: <input name="limit" size="3" value="' + nr_limit + '"><br>#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br><input type="submit" value="Save"></form></p><hr>';
+					'<p><b>Preferences:</b><form onSubmit="setPreps(this.limit.value, this.maxc.value, this.maxu.value, this.list.value, this.user_style.value); return false;">max #msgs in TL: <input name="limit" size="3" value="' + nr_limit + '"><br>#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br><input type="submit" value="Save"></form></p><hr>'
 	callPlugins("miscTab", $("tw2h"));
 	$("loading").style.display = "block";
 	update_ele2 = loadXDomainScript('http://twitter.com/account/rate_limit_status.json?seq=' + (seq++) +
 										'&id=' + myname + '&callback=twLimit', update_ele2);
 }
-function setPreps(limit, maxc, maxu, plugin_list) {
+function setPreps(limit, maxc, maxu, plugin_list, style) {
 	writeCookie('limit', limit, 3652);
 	writeCookie('max_count', maxc, 3652);
 	writeCookie('max_count_u', maxu, 3652);
 	writeCookie('tw_plugins', plugin_list, 3652);
+	writeCookie('user_style', style, 3652);
 	alert("Saved in Cookie. Please reload.");
 }
 // プラグイン
