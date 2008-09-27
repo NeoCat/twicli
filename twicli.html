@@ -11,7 +11,7 @@ hr { margin: 0; padding: 0; }
 iframe { display: none; }
 
 #control { position: fixed; top: 0; left: 0; width: 100%; height: 52px; border-bottom: solid 1px black; background-color: white; z-index: 3; background-color: #eee; }
-#loading { opacity: 0.5; position: absolute; top: 6px; width: 100%; height: 20px; z-index: 3; text-align: center; }
+#loading { opacity: 0.5; position: absolute; top: 6px; width: 100%; height: 20px; z-index: 4; text-align: center; }
 #fst { position: absolute; left: 1px; top: 1px; width: 94%; height: 30px; font-size: small; }
 #go { text-decoration: none; position: absolute; left: 95%; top: 1px; }
 #rst { text-decoration: none; position: absolute; left: 95%; top: 16px; }
@@ -25,15 +25,22 @@ iframe { display: none; }
 #tw div div, #tw2 div div { padding: 2px; border-bottom: solid 1px #999; }
 .dir { color: #679; }
 .status { text-decoration: none; color: black; }
+.utils { white-space: nowrap; text-align: right }
 .prop, .prop a { color: #999; font-size: x-small; }
 .fromme { background-color: #cfc; }
 .tome { background-color: #ccf; }
 .button { color: #f29; border: solid 1px #ddd; text-decoration: none; font-size: medium; }
 .green { color: #195; }
+.popup { padding: 0 4px; color: #888; }
 .lock { position: relative; top: 2px; left: 0; }
 .close { color: red; }
 #next { text-align: center; background-color: #999; color: #fec; cursor: pointer; }
 #rep { display: none; background-color: #fee; position: absolute; width: 90%; left: 4%; top: 200px; border: #666 4px solid; z-index: 2; padding: 2px; font-size: small; }
+#popup { display: none; background-color: #eee; position: absolute; left: 0; top: 200px; border: #666 2px solid; z-index: 6; font-size: small; }
+#popup a { display: block; background-color: #fff; color: black; text-decoration: none; padding: 3px; border-bottom: solid 1px #888; }
+#popup a:hover { background-color: #33f; color: #fff; text-decoration: none; }
+#popup a.row2 { background-color: #eee; }
+#popup_hide { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; background-color: black; z-index: 5; }
 #user_info { margin: 1px; border: solid 1px #888; }
 #user_info td { font-size: small; }
 --></style>
@@ -189,12 +196,20 @@ function twAuth(a) {} // 認証(FIXME - FF:毎回認証要求される・Safari:
 <a id="misc" href="javascript:void switchMisc()">+</a>
 </div>
 </div>
-<!--タイムライン-->
+<!--メインタイムライン-->
 <div id="tw"></div>
+<!--TL以外のタブ-->
 <div id="tw2"><div id="tw2h"></div><div id="tw2c"></div></div>
+<!--返信-->
 <div id="rep"><a href="javascript:closeRep()" class="close">[x]</a>
 	<a href="javascript:pickup2()" class="close">[⇔]</a><div id="reps"></div></div>
-<!---->
+<!--ポップアップメニュー-->
+<div id="popup" onClick="popup_hide()">
+<a id="popup_link_user" href="" target="twitter">Twitter / User</a>
+<a id="popup_link_status" href="" target="twitter">Twitter / Status</a>
+</div>
+<!--ポップアップメニュー非表示用-->
+<div id="popup_hide" onClick="popup_hide();"></div>
 
 <script type="text/javascript">
 var pluginstr = readCookie('tw_plugins') || 'search.js\nfavotter.js';
@@ -218,10 +233,12 @@ var direct1 = null;
 var direct2 = null;
 var user_pick1 = null;
 var user_pick2 = null;
+var user_popup = null;
 var cur_page = 1;
 var fav_mode = 0;
 var reply_ele = false;
 var rep_top = 0;
+var popup_top = 0;
 var selected_menu = $("TL");
 var failover_timeout = false;
 var get_next_func;
@@ -305,6 +322,24 @@ function closeRep() {
 function pickup2() {
 	switchUser(user_pick1 + "," + user_pick2);
 }
+// ポップアップメニューを表示
+function popup(user, id, ele) {
+	user_popup = user;
+	callPlugins("popup", $('popup'), user, id);
+	$('popup_link_user').href = 'http://twitter.com/' + user;
+	$('popup_link_status').href = 'http://twitter.com/' + user + '/statuses/' + id;
+	$('popup').style.display = "block";
+	var pos = cumulativeOffset(ele);
+	$('popup').style.left = pos[0] <  $('popup').offsetWidth - ele.offsetWidth ? 0 : pos[0] - $('popup').offsetWidth + ele.offsetWidth;
+	$('popup').style.top = popup_top = pos[1] + 20;
+	$('popup_hide').style.height = document.body.scrollHeight;
+	$('popup_hide').style.display = "block";
+}
+// ポップアップメニューを非表示
+function popup_hide() {
+	$('popup').style.display = 'none';
+	$('popup_hide').style.display = 'none'
+}
 // 最新タイムラインを取得
 update = function() {
 	callPlugins("update");
@@ -323,7 +358,7 @@ function makeHTML(tw, no_name) {
 		 (!no_name ?
 			//ユーザアイコン
 			(tw.user.url ? '<a target="twitter" href="'+tw.user.url+'">' : '') +
-			'<img align="left" width="24" height="24" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
+			'<img align="left" width="32" height="32" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
 			//名前
 			"<a href=\"http://twitter.com/" + un + "\" "+ "onClick=\"switchUser('" + un + "');return false\">" + un +
 			 /*プロフィールの名前*/ (tw.user.name!=un ? '('+tw.user.name+')' : '') + '</a>' +
@@ -335,12 +370,14 @@ function makeHTML(tw, no_name) {
 		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a target=\"twitter\" href=\"$&\">$&</a>")
 				.replace(/@([\w-]+)/g, "<a href=\"http://twitter.com/$1\" onClick=\"switchUser('$1'); return false;\" >$&</a>").replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付'クライアント
-		' <span class="prop">' + dateFmt(new Date(tw.created_at)) + ' / ' + tw.source + '</span>' +
+		' <span class="utils"><span class="prop">' + dateFmt(new Date(tw.created_at)) + ' / ' + tw.source + '</span>' +
 		//返信先を設定
 		' <a class="button green" href="javascript:replyTo(\'' + un + "'," + tw.id + ')">↩</a>' +
 		//返信元へのリンク
 		(tw.in_reply_to_status_id ? ' <a class="button" href="#" onClick="dispReply(\'' + un + '\',' + tw.in_reply_to_status_id + ',this); return false;">☞</a>' : '') +
-		'<br clear="left">';
+		//popupメニュー表示
+		' <a class="button popup" href="#" onClick="popup(\'' + un + "'," + tw.id + ', this); return false;"><small><small>▼</small></small></a>' +
+		'</span><br clear="left">';
 }
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
@@ -490,6 +527,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 		animate(pNode, maxH, (new Date).getTime());
 	else if (animation) {
 		$('rep').style.top = (rep_top += pNode.clientHeight+1);
+		$('popup').style.top = (popup_top += pNode.clientHeight+1);
 		scrollBy(0, pNode.clientHeight+1);
 	}
 	if (animation) {
@@ -654,7 +692,7 @@ function wheel(event) {
 }
 if (window.addEventListener) window.addEventListener('DOMMouseScroll', wheel, false);
 window.onmousewheel = document.onmousewheel = wheel;
-loadXDomainScript('http://twitter.com/statuses/user_timeline.json?count=1&callback=twUser&seq=' + (seq++));
+loadXDomainScript('http://twitter.com/statuses/user_timeline.json?count=1&callback=twUser');
 </script>
 </body>
 </html>
