@@ -1,11 +1,14 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>
+<html manifest="cache-manifest">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="viewport" content="width=280">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="shortcut icon" href="favicon.ico">
 <title>twicli</title>
 <style type="text/css"><!--
-body { background-image: url(block_bg.png); background-attachment: fixed; background-color: transparent; margin: 1px; min-height: 500px; }
+body { background-image: url(block_bg.png); background-attachment: fixed; margin: 1px; min-height: 500px; }
 img { border: 0 none; }
 hr { margin: 0; padding: 0; }
 iframe { display: none; }
@@ -29,7 +32,7 @@ iframe { display: none; }
 .prop, .prop a { color: #999; font-size: x-small; }
 .fromme { background-color: #cfc; }
 .tome { background-color: #ccf; }
-.button { color: #f29; border: 1px solid #ddd; text-decoration: none; font-size: medium; }
+.button { color: #f29; border: 1px solid #ddd; text-decoration: none; font-size: medium; -webkit-text-size-adjust:120%; }
 .green { color: #195; }
 .popup { padding: 0 4px; color: #888; }
 .lock { position: relative; top: 2px; left: 0; }
@@ -45,6 +48,7 @@ iframe { display: none; }
 #user_info td { font-size: small; }
 --></style>
 <script type="text/javascript">
+var iphone = navigator.userAgent.indexOf('iPhone OS') >= 0;
 function $(id) { return document.getElementById(id); }
 // クロスドメインJavaScript呼び出し
 function loadXDomainScript(url, ele) {
@@ -168,6 +172,15 @@ if (!Array.prototype.map) {
 		return res;
 	};
 }
+// iPhone / iPod touchではリンクをフレームに開く
+function clickLink(ele) {
+	if (iphone) {
+		switchTo("misc");
+		var height = Math.max(document.body.scrollHeight, $("tw").offsetHeight+$("control").offsetHeight) - 54;
+		$("tw2c").innerHTML = '<iframe style="display:block; border: 0;" src="' + ele.href + '" width="100%" height="' + height + '"></iframe>';
+	}
+	return !iphone;
+}
 // user-defined CSS
 var user_style = readCookie('user_style') || "";
 document.write('<style>' + user_style + '</style>');
@@ -205,8 +218,8 @@ function twAuth(a) {} // 認証(FIXME - FF:毎回認証要求される・Safari:
 	<a href="javascript:pickup2()" class="close">[⇔]</a><div id="reps"></div></div>
 <!--ポップアップメニュー-->
 <div id="popup" onClick="popup_hide()">
-<a id="popup_link_user" href="" target="twitter">Twitter / User</a>
-<a id="popup_link_status" href="" target="twitter">Twitter / Status</a>
+<a id="popup_link_user" href="" target="twitter" onClick="return clickLink(this)">Twitter / User</a>
+<a id="popup_link_status" href="" target="twitter" onClick="return clickLink(this)">Twitter / Status</a>
 </div>
 <!--ポップアップメニュー非表示用-->
 <div id="popup_hide" onClick="popup_hide();"></div>
@@ -324,7 +337,7 @@ function pickup2() {
 	switchUser(user_pick1 + "," + user_pick2);
 }
 // ポップアップメニューを表示
-function popup(user, id, ele) {
+function popup_menu(user, id, ele) {
 	user_popup = user;
 	callPlugins("popup", $('popup'), user, id);
 	$('popup_link_user').href = 'http://twitter.com/' + user;
@@ -358,7 +371,7 @@ function makeHTML(tw, no_name) {
 			'onClick="fav(this,' + tw.id + ')">' +
 		 (!no_name ?
 			//ユーザアイコン
-			(tw.user.url ? '<a target="twitter" href="'+tw.user.url+'">' : '') +
+			(tw.user.url ? '<a target="twitter" onClick="return clickLink(this)" href="'+tw.user.url+'">' : '') +
 			'<img align="left" width="32" height="32" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
 			//名前
 			"<a href=\"http://twitter.com/" + un + "\" "+ "onClick=\"switchUser('" + un + "');return false\">" + un +
@@ -368,7 +381,7 @@ function makeHTML(tw, no_name) {
 		: '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text" + tw.id + "\" class=\"status\">" +
-		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a target=\"twitter\" href=\"$&\">$&</a>")
+		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a target=\"twitter\" onClick=\"return clickLink(this)\" href=\"$&\">$&</a>")
 				.replace(/@([\w-]+)/g, "<a href=\"http://twitter.com/$1\" onClick=\"switchUser('$1'); return false;\" >$&</a>").replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付'クライアント
 		' <span class="utils"><span class="prop">' + dateFmt(new Date(tw.created_at)) + ' / ' + tw.source + '</span>' +
@@ -377,7 +390,7 @@ function makeHTML(tw, no_name) {
 		//返信元へのリンク
 		(tw.in_reply_to_status_id ? ' <a class="button" href="#" onClick="dispReply(\'' + un + '\',' + tw.in_reply_to_status_id + ',this); return false;">☞</a>' : '') +
 		//popupメニュー表示
-		'&nbsp;&nbsp;&nbsp;<a class="button popup" href="#" onClick="popup(\'' + un + "'," + tw.id + ', this); return false;"><small><small>▼</small></small></a>' +
+		'&nbsp;&nbsp;&nbsp;<a class="button popup" href="#" onClick="popup_menu(\'' + un + "'," + tw.id + ', this); return false;"><small><small>▼</small></small></a>' +
 		'</span><br clear="left">';
 }
 // ユーザ情報のHTML表現を生成
@@ -385,9 +398,9 @@ function makeUserInfoHTML(user) {
 	return '<table><tr><td><img align="left" src="' + user.profile_image_url + '"></td><td>' +
 					'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b><br>' +
 					(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
-					(user.url ? '<b>URL</b>: <a target="twitter" href="' + user.url + '">' + user.url + '</a><br>' : '') +
+					(user.url ? '<b>URL</b>: <a target="twitter" onClick="return clickLink(this)" href="' + user.url + '">' + user.url + '</a><br>' : '') +
 					(user.description ? user.description : '') +
-					'</td></tr></table><a target="twitter" href="http://twitter.com/' + user.screen_name + '">[Twitter]</a> <a href="javascript:switchFav()">[fav]</a> ';
+					'</td></tr></table><a target="twitter" onClick="return clickLink(this)" href="http://twitter.com/' + user.screen_name + '">[Twitter]</a> <a href="javascript:switchFav()">[fav]</a> ';
 }
 // favoriteの追加(f=true)/削除(f=false)
 function fav(img, id) {
@@ -633,7 +646,7 @@ function switchDirect() {
 }
 function switchMisc() {
 	switchTo("misc");
-	$("tw2h").innerHTML = '<p><a target="twitter" href="index.html"><b>twicli</b></a> : browser-base Twitter client</p><hr>' +
+	$("tw2h").innerHTML = '<p><a target="twitter" onClick="return clickLink(this)" href="index.html"><b>twicli</b></a> : browser-base Twitter client</p><hr>' +
 					'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="go.png"></form></p><hr>' +
 					'<p><b>Preferences:</b><form onSubmit="setPreps(this.limit.value, this.maxc.value, this.maxu.value, this.list.value, this.user_style.value); return false;">max #msgs in TL: <input name="limit" size="3" value="' + nr_limit + '"><br>#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br><input type="submit" value="Save"></form></p><hr>'
 	callPlugins("miscTab", $("tw2h"));
@@ -649,6 +662,15 @@ function setPreps(limit, maxc, maxu, plugin_list, style) {
 	writeCookie('tw_plugins', plugin_list, 3652);
 	writeCookie('user_style', style, 3652);
 	alert("Saved in Cookie. Please reload.");
+}
+// 初期化
+function init() {
+	setTimeout(scrollTo, 0, 0, 1);
+	// 初回アップデート
+	setTimeout(update, 0);
+	setInterval(update, 45*1000);
+	// ログインしていなかったときなどに20秒でログインを試みる
+	failover_timeout = setTimeout(function(){ switchTo("misc"); $("tw2c").innerHTML = '<iframe style="display:block" src="http://twitter.com/home" width="100%" height="400"></iframe>' }, 20*1000);
 }
 // プラグイン
 function registerPlugin(obj) {
@@ -666,16 +688,6 @@ if (pluginstr) {
 	for (var i = 0; i < list.length; i++)
 		document.write('<scr'+'ipt src="'+list[i]+'"></scr'+'ipt>');
 }
-// 初期化
-function init() {
-	setTimeout(scrollTo, 0, 0, 1);
-	// 初回アップデート
-	setTimeout(update, 0);
-	setInterval(update, 60*1000);
-	// ログインしていなかったときなどに20秒で本家にリダイレクト
-	failover_timeout = setTimeout(function(){ switchTo("misc"); $("tw2c").innerHTML = '<iframe style="display:block" src="http://twitter.com/home" width="100%" height="400"></iframe>' }, 20*1000);
-}
-
 // ホイールの回転でスクロール (スクロール不可のウィンドウ・フレーム内で有効)
 function wheel(event) {
 	var delta = 0;
@@ -695,6 +707,7 @@ function wheel(event) {
 if (window.addEventListener) window.addEventListener('DOMMouseScroll', wheel, false);
 window.onmousewheel = document.onmousewheel = wheel;
 
+// 自ユーザ名ロード
 loadXDomainScript('http://twitter.com/statuses/user_timeline.json?count=1&callback=twUser');
 </script>
 </body>
