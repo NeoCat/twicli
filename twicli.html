@@ -294,7 +294,7 @@ function setReplyId(id) {
 // reply先を設定
 function replyTo(user, id) {
 	in_reply_to_user = user;
-	document.frm.status.value = "@" + user + " " + document.frm.status.value;
+	document.frm.status.value = (selected_menu.id == "direct" ? "d " : "@") + user + " " + document.frm.status.value;
 	setReplyId(id);
 	document.frm.status.select();
 }
@@ -384,7 +384,7 @@ function makeHTML(tw, no_name) {
 		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a target=\"twitter\" onClick=\"return clickLink(this)\" href=\"$&\">$&</a>")
 				.replace(/@([\w-]+)/g, "<a href=\"http://twitter.com/$1\" onClick=\"switchUser('$1'); return false;\" >$&</a>").replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付'クライアント
-		' <span class="utils"><span class="prop">' + dateFmt(new Date(tw.created_at)) + ' / ' + tw.source + '</span>' +
+		' <span class="utils"><span class="prop">' + dateFmt(new Date(tw.created_at)) + (tw.source ? ' / ' + tw.source : '') + '</span>' +
 		//返信先を設定
 		' <a class="button green" href="javascript:replyTo(\'' + un + "'," + tw.id + ')">↩</a>' +
 		//返信元へのリンク
