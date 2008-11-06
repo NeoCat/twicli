@@ -48,6 +48,8 @@ iframe { display: none; }
 #user_info td { font-size: small; }
 --></style>
 <script type="text/javascript">
+if (navigator.userAgent.indexOf("Opera") >= 0)
+	document.write("<style>#control { height: 58px; } #menu { top: 38px; } #tw, #tw2 { top: 58px; }</style>");
 var iphone = navigator.userAgent.indexOf('iPhone OS') >= 0;
 function $(id) { return document.getElementById(id); }
 // クロスドメインJavaScript呼び出し
