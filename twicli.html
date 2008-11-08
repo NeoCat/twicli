@@ -558,15 +558,6 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 }
 // 新規twitの出現アニメーション処理
 function animate(elem, max, start) {
-	if (navigator.userAgent.indexOf('AppleWebKit') >= 0 && navigator.userAgent.indexOf('Mobile') < 0) {
-		// WebkitTransitionによるアニメーション
-		elem.style.height = 0;
-		elem.style.maxHeight = 'none';
-		elem.style.WebkitTransition = 'all 1s ease-in-out';
-		setTimeout(function(){elem.style.height = max;}, 0);
-		return;
-	}
-	// 自分でアニメーション
 	var t = (new Date).getTime();
 	if (start+1000 <= t)
 		return elem.style.maxHeight = 'none';
