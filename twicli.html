@@ -19,7 +19,7 @@ iframe { display: none; }
 #go { text-decoration: none; position: absolute; left: 95%; top: 1px; }
 #rst { text-decoration: none; position: absolute; left: 95%; top: 16px; }
 #menu { position: absolute; left: 0px; top: 32px; height: 20px; }
-#menu a { display: block; float: left; font-size: 13px; height: 18px; border: 1px solid black; border-bottom: 0 none; background-color: #aaa; color: #242; padding: 0 4px; margin: 0 2px; text-decoration: none; font-family: sans-serif; }
+#menu a { display: inline-block; font-size: 13px; height: 18px; border: 1px solid black; border-bottom: 0 none; background-color: #aaa; color: #242; padding: 0 4px; margin: 0; text-decoration: none; font-family: sans-serif; }
 #menu a.sel { height: 20px; background-color: #ffe; color: #002; border-bottom-color: #fff; }
 
 #tw, #tw2 { position: absolute; left: 0px; top: 52px; width: 100%; font-size: small; }
@@ -203,13 +203,13 @@ function twAuth(a) {} // 認証(FIXME - FF:毎回認証要求される・Safari:
 <a id="rst" href="javascript:void resetFrm()"><img src="clr.png"></a>
 <div id="loading"><img src="loading.gif"></div></form>
 <!--メニュー-->
-<div id="menu">
+<div id="menu"><nobr>
 <a id="TL" class="sel" href="javascript:void switchTL()">TL</a>
 <a id="reply" href="javascript:void switchReply()">reply</a>
 <a id="user" href="javascript:void switchUser()">user</a>
 <a id="direct" href="javascript:void switchDirect()">direct</a>
 <a id="misc" href="javascript:void switchMisc()">+</a>
-</div>
+</nobr></div>
 </div>
 <!--メインタイムライン-->
 <div id="tw"></div>
@@ -222,12 +222,14 @@ function twAuth(a) {} // 認証(FIXME - FF:毎回認証要求される・Safari:
 <div id="popup" onClick="popup_hide()">
 <a id="popup_link_user" href="" target="twitter" onClick="return clickLink(this)">Twitter / User</a>
 <a id="popup_link_status" href="" target="twitter" onClick="return clickLink(this)">Twitter / Status</a>
+<a id="popup_status_delete" href="#" onClick="return deleteStatus()">Delete Status</a>
 </div>
 <!--ポップアップメニュー非表示用-->
 <div id="popup_hide" onClick="popup_hide();"></div>
 
 <script type="text/javascript">
 var cookieVer = readCookie('ver') || 0;
+var updateFreq = readCookie('update_freq') || 45;
 var pluginstr = (cookieVer>0) && readCookie('tw_plugins') || 'search.js\nfavotter.js';
 var nr_limit = readCookie('limit') || 500;				// 表示する発言数の上限
 var max_count = readCookie('max_count') || 50;
@@ -249,7 +251,8 @@ var direct1 = null;
 var direct2 = null;
 var user_pick1 = null;
 var user_pick2 = null;
-var user_popup = null;
+var popup_user = null;
+var popup_id = null;
 var cur_page = 1;
 var fav_mode = 0;
 var reply_ele = false;
@@ -340,10 +343,12 @@ function pickup2() {
 }
 // ポップアップメニューを表示
 function popup_menu(user, id, ele) {
-	user_popup = user;
+	popup_user = user;
+	popup_id = id
 	callPlugins("popup", $('popup'), user, id);
 	$('popup_link_user').href = 'http://twitter.com/' + user;
 	$('popup_link_status').href = 'http://twitter.com/' + user + '/statuses/' + id;
+	$('popup_status_delete').style.display = (user == myname ? "block" : "none");
 	$('popup').style.display = "block";
 	var pos = cumulativeOffset(ele);
 	$('popup').style.left = pos[0] <  $('popup').offsetWidth - ele.offsetWidth ? 0 : pos[0] - $('popup').offsetWidth + ele.offsetWidth;
@@ -355,6 +360,17 @@ function popup_menu(user, id, ele) {
 function popup_hide() {
 	$('popup').style.display = 'none';
 	$('popup_hide').style.display = 'none';
+	popup_user = popup_id = null;
+}
+// 発言の削除
+function deleteStatus() {
+	if (!popup_id) return false;
+	if (!confirm("Are you sure to delete this message (@"+popup_user+" / "+popup_id+")?")) return false;
+	$("loading").style.display = "display";
+	if ($("text" + popup_id)) $("text" + popup_id).style.textDecoration = "line-through";
+	enqueuePost('http://twitter.com/status/destroy/' + popup_id + '.xml',
+		function(){$("loading").style.display = "none";}, function(){$("loading").style.display = "none";});
+	return false;
 }
 // 最新タイムラインを取得
 update = function() {
@@ -650,17 +666,18 @@ function switchMisc() {
 	switchTo("misc");
 	$("tw2h").innerHTML = '<p><a target="twitter" onClick="return clickLink(this)" href="index.html"><b>twicli</b></a> : browser-base Twitter client</p><hr>' +
 					'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="go.png"></form></p><hr>' +
-					'<p><b>Preferences:</b><form onSubmit="setPreps(this.limit.value, this.maxc.value, this.maxu.value, this.list.value, this.user_style.value); return false;">max #msgs in TL: <input name="limit" size="3" value="' + nr_limit + '"><br>#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br><input type="submit" value="Save"></form></p><hr>'
+					'<p><b>Preferences:</b><form onSubmit="setPreps(this.limit.value, this.maxc.value, this.maxu.value, this.freq.value, this.list.value, this.user_style.value); return false;">max #msgs in TL: <input name="limit" size="5" value="' + nr_limit + '"><br>#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>update frequency: <input name="freq" size="3" value="' + updateFreq + '"> sec<br>Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br><input type="submit" value="Save"></form></p><hr>'
 	callPlugins("miscTab", $("tw2h"));
 	$("loading").style.display = "block";
 	update_ele2 = loadXDomainScript('http://twitter.com/account/rate_limit_status.json?seq=' + (seq++) +
 										'&id=' + myname + '&callback=twLimit', update_ele2);
 }
-function setPreps(limit, maxc, maxu, plugin_list, style) {
+function setPreps(limit, maxc, maxu, freq, plugin_list, style) {
 	writeCookie('ver', 0.1, 3652);
 	writeCookie('limit', limit, 3652);
 	writeCookie('max_count', maxc, 3652);
 	writeCookie('max_count_u', maxu, 3652);
+	writeCookie('update_freq', freq, 3652);
 	writeCookie('tw_plugins', plugin_list, 3652);
 	writeCookie('user_style', style, 3652);
 	alert("Saved in Cookie. Please reload.");
@@ -670,7 +687,7 @@ function init() {
 	setTimeout(scrollTo, 0, 0, 1);
 	// 初回アップデート
 	setTimeout(update, 0);
-	setInterval(update, 45*1000);
+	setInterval(update, updateFreq*1000);
 	// ログインしていなかったときなどに20秒でログインを試みる
 	failover_timeout = setTimeout(function(){ switchTo("misc"); $("tw2c").innerHTML = '<iframe style="display:block" src="http://twitter.com/home" width="100%" height="400"></iframe>' }, 20*1000);
 }
