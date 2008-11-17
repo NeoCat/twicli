@@ -37,7 +37,7 @@ iframe { display: none; }
 .popup { padding: 0 4px; color: #888; }
 .lock { position: relative; top: 2px; left: 0; }
 .close { color: red; }
-#next { text-align: center; background-color: #999; color: #fec; cursor: pointer; }
+#get_old, #next { text-align: center; background-color: #999; color: #fec; cursor: pointer; }
 #rep { display: none; background-color: #fee; position: absolute; width: 90%; left: 4%; top: 200px; border: 4px solid #666; z-index: 2; padding: 2px; font-size: small; }
 #popup { display: none; background-color: #eee; position: absolute; left: 0; top: 200px; border: 2px solid #666; z-index: 6; font-size: small; }
 #popup a { display: block; background-color: #fff; color: black; text-decoration: none; padding: 3px; border-bottom: 1px solid #888; }
@@ -228,14 +228,16 @@ function twAuth(a) {} // 認証(FIXME - FF:毎回認証要求される・Safari:
 <div id="popup_hide" onClick="popup_hide();"></div>
 
 <script type="text/javascript">
+var twitterURL = 'https://explore.twitter.com/';
 var cookieVer = readCookie('ver') || 0;
-var updateFreq = readCookie('update_freq') || 45;
+var updateInterval = readCookie('update_interval') || 45;
 var pluginstr = (cookieVer>0) && readCookie('tw_plugins') || 'search.js\nfavotter.js';
 var nr_limit = readCookie('limit') || 500;				// 表示する発言数の上限
 var max_count = readCookie('max_count') || 50;
 var max_count_u = readCookie('max_count_u') || 50;
 var plugins = new Array;
 var nr_tw = 0;
+var nr_page = 1;
 var seq = (new Date).getTime();
 var since_id = null;
 var in_reply_to_user = null;
@@ -260,6 +262,7 @@ var rep_top = 0;
 var popup_top = 0;
 var selected_menu = $("TL");
 var failover_timeout = false;
+var userinfo_timeout = false;
 var get_next_func;
 
 // enterキーで発言
@@ -310,7 +313,7 @@ function dispReply(user, id, ele) {
 	if (!d) {
 		$("loading").style.display = "block";
 		rep_top = cumulativeOffset(ele)[1] + 20;
-		reply_ele = loadXDomainScript('http://twitter.com/statuses/show/'+id+'.json?callback=dispReply2', reply_ele);
+		reply_ele = loadXDomainScript(twitterURL + 'statuses/show/'+id+'.json?callback=dispReply2', reply_ele);
 		return;
 	}
 	closeRep();
@@ -346,8 +349,8 @@ function popup_menu(user, id, ele) {
 	popup_user = user;
 	popup_id = id
 	callPlugins("popup", $('popup'), user, id);
-	$('popup_link_user').href = 'http://twitter.com/' + user;
-	$('popup_link_status').href = 'http://twitter.com/' + user + '/statuses/' + id;
+	$('popup_link_user').href = twitterURL + user;
+	$('popup_link_status').href = twitterURL + user + '/statuses/' + id;
 	$('popup_status_delete').style.display = (user == myname ? "block" : "none");
 	$('popup').style.display = "block";
 	var pos = cumulativeOffset(ele);
@@ -368,14 +371,14 @@ function deleteStatus() {
 	if (!confirm("Are you sure to delete this message (@"+popup_user+" / "+popup_id+")?")) return false;
 	$("loading").style.display = "display";
 	if ($("text" + popup_id)) $("text" + popup_id).style.textDecoration = "line-through";
-	enqueuePost('http://twitter.com/status/destroy/' + popup_id + '.xml',
+	enqueuePost(twitterURL + 'status/destroy/' + popup_id + '.xml',
 		function(){$("loading").style.display = "none";}, function(){$("loading").style.display = "none";});
 	return false;
 }
 // 最新タイムラインを取得
 update = function() {
 	callPlugins("update");
-	update_ele = loadXDomainScript('http://twitter.com/statuses/friends_timeline?seq=' + (seq++) +
+	update_ele = loadXDomainScript(twitterURL + 'statuses/friends_timeline?seq=' + (seq++) +
 						'&count=' + max_count + '&callback=twShow' + (since_id ? '&since_id='+since_id : ''), update_ele);
 }
 // twitのHTML表現を生成
@@ -424,15 +427,25 @@ function makeUserInfoHTML(user) {
 function fav(img, id) {
 	if (img.src.indexOf('throbber') >= 0) return;
 	var f = img.src.indexOf('empty') >= 0;
-	img.src = 'http://twitter.com/images/icon_throbber.gif';
-	enqueuePost('http://twitter.com/favourings/' + (f ? 'create' : 'destroy') + '/' + id + '.xml',
+	img.src = twitterURL + 'images/icon_throbber.gif';
+	enqueuePost(twitterURL + 'favourings/' + (f ? 'create' : 'destroy') + '/' + id + '.xml',
 		function(){ img.src = 'http://assets3.twitter.com/images/icon_star_' + (f ? 'full' : 'empty') + '.gif'; },
 		function(){ img.src = 'http://assets3.twitter.com/images/icon_star_' + (!f ? 'full' : 'empty') + '.gif'; });
 }
 // followとremove
 function follow(f) {
-	enqueuePost('http://twitter.com/friendships/' + (f ? 'create' : 'destroy') + '/' + last_user + '.xml', switchUser);
+	enqueuePost(twitterURL + 'friendships/' + (f ? 'create' : 'destroy') + '/' + last_user + '.xml', switchUser);
 	$("loading").style.display = "block";
+}
+// ユーザ情報を表示
+function twUserInfo(user) {
+	elem = $('user_info');
+	elem.innerHTML = makeUserInfoHTML(user);
+	callPlugins("newUserInfoElement", elem, user);
+	if (myname != user.screen_name)
+		update_ele2 = loadXDomainScript(twitterURL + 'friendships/exists.json?seq=' + (seq++) +
+								'&user_a=' + myname + '&user_b=' + user.screen_name +
+								'&callback=twFollow', update_ele2);
 }
 // 自分の最新の発言を受信
 function twUser(tw) {
@@ -484,21 +497,28 @@ function twShow(tw) {
 	tw.reverse();
 	for (var j in tw) callPlugins("gotNewMessage", tw[j]);
 	tw.reverse();
+	if (nr_page == 1) {
+		$("tw").innerHTML += '<div onClick="getNext(this)" id="get_old">▽(2)</div>';
+		nr_page = 2;
+	}
 	twShowToNode(tw, $("tw"), false, false, true, true);
 }
-function twShow2(tw) {
-	var user_info = $("user_info");
+function twOld(tw) {
 	var tmp = $("tmp");
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
-	if (cur_page == 1 && !fav_mode && user_info && tw.length > 0) {
-		var user = tw[0].user;
-		user_info.innerHTML = makeUserInfoHTML(user);
-		callPlugins("newUserInfoElement", user_info, user);
-		if (myname != user.screen_name)
-			update_ele2 = loadXDomainScript('http://twitter.com/friendships/exists.json?seq=' + (seq++) +
-									'&user_a=' + myname + '&user_b=' + user.screen_name +
-									'&callback=twFollow', update_ele2);
+	var cnt = twShowToNode(tw, $("tw"), false, true);
+	if (cnt) $("tw").innerHTML += '<div onClick="getNext(this)" id="get_old">▽('+nr_page+')</div>';
+}
+function twShow2(tw) {
+	if (userinfo_timeout) {
+		clearTimeout(userinfo_timeout);
+		userinfo_timeout = false;
 	}
+	var tmp = $("tmp");
+	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
+	var user_info = $("user_info");
+	if (cur_page == 1 && !fav_mode && user_info && tw.length > 0)
+		twUserInfo(tw[0].user, user_info, 1);
 	twShowToNode(tw, $("tw2c"), !!user_info && !fav_mode, cur_page > 1);
 	if (selected_menu.id == "reply" || selected_menu.id == "user" && last_user.indexOf(',') < 0) {
 		$("tw2c").innerHTML += '<div onClick="getNext(this)" id="next">▽</div>';
@@ -516,6 +536,7 @@ function twShow3(tw) {
 	}
 }
 function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
+	var cnt = 0;
 	$('loading').style.display = 'none';
 	if (failover_timeout) {
 		clearTimeout(failover_timeout);
@@ -540,6 +561,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 			callPlugins("newMessageElement", s, tw[i]);
 			pNode.insertBefore(s, pNode.childNodes[0]);
 		}
+		cnt++;
 	}
 	pNode.removeChild(dummy);
 	pNode.style.overflow = "hidden";
@@ -564,6 +586,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 	}
 	if (animation) {
 		nr_tw += len;
+		nr_recv += len;
 		while (nr_tw > nr_limit) {
 			var last_node = twNode.childNodes[twNode.childNodes.length-1];
 			nr_tw -= last_node.childNodes.length;
@@ -571,6 +594,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 		}
 	}
 	if (check_since) since_id = tw[0].id;
+	return cnt;
 }
 // 新規twitの出現アニメーション処理
 function animate(elem, max, start) {
@@ -590,16 +614,21 @@ function getNext(ele) {
 	$("loading").style.display = "block";
 	get_next_func();
 }
+function getOldTL() {
+	update_ele2 = loadXDomainScript(twitterURL + 'statuses/friends_timeline.json?seq=' + (seq++) +
+				'&count=' + max_count + '&page=' + (nr_page++) + '&id=' + last_user +
+				'&callback=twOld', update_ele2);
+}
 function getNextFuncCommon() {
 	if (selected_menu.id == "user" && !fav_mode)
-		update_ele2 = loadXDomainScript('http://twitter.com/statuses/user_timeline.json?seq=' + (seq++) +
+		update_ele2 = loadXDomainScript(twitterURL + 'statuses/user_timeline.json?seq=' + (seq++) +
 					'&count=' + max_count_u + '&page=' + (++cur_page) + '&id=' + last_user +
 					'&callback=twShow2', update_ele2);
 	else if (selected_menu.id == "user" && fav_mode)
-		update_ele2 = loadXDomainScript('http://twitter.com/favorites/' + last_user + '.json?seq=' + (seq++) +
+		update_ele2 = loadXDomainScript(twitterURL + 'favorites/' + last_user + '.json?seq=' + (seq++) +
 					'&page=' + (++cur_page) + '&callback=twShow2', update_ele2);
 	else if (selected_menu.id == "reply")
-		update_ele2 = loadXDomainScript('http://twitter.com/statuses/replies.json?seq=' + (seq++) +
+		update_ele2 = loadXDomainScript(twitterURL + 'statuses/replies.json?seq=' + (seq++) +
 					'&page=' + (++cur_page) + '&callback=twShow2', update_ele2);
 }
 // タイムライン切り替え
@@ -617,12 +646,13 @@ function switchTo(id) {
 	fav_mode = 0;
 }
 function switchTL() {
+	get_next_func = getOldTL;
 	switchTo("TL");
 }
 function switchReply() {
 	switchTo("reply");
 	$("loading").style.display = "block";
-	update_ele2 = loadXDomainScript('http://twitter.com/statuses/replies.json?seq=' + (seq++) +
+	update_ele2 = loadXDomainScript(twitterURL + 'statuses/replies.json?seq=' + (seq++) +
 										'&callback=twShow2', update_ele2);
 }
 function switchUser(user) {
@@ -634,14 +664,17 @@ function switchUser(user) {
 	var users = user.split(',');
 	if (users.length == 1) {
 		$("tw2h").innerHTML = "<div id=\"user_info\"></div>";
-		update_ele2 = loadXDomainScript('http://twitter.com/statuses/user_timeline.json?seq=' + (seq++) +
-							'&count=' + max_count_u + '&id=' + user + '&callback=twShow2', update_ele2);
+		update_ele2 = loadXDomainScript(twitterURL + 'statuses/user_timeline.json?seq=' + (seq++) +
+					'&count=' + max_count_u + '&id=' + user + '&callback=twShow2', update_ele2);
+		userinfo_timeout = setTimeout(function(){
+							update_ele2 = loadXDomainScript(twitterURL + 'users/show/' +
+							user + '.json?callback=twUserInfo', update_ele2); }, 10000);
 	} else {
 		users_log = [];
 		for (var i = 0; i < users_xds.length; i++)
 			xds.abort(users_xds[i]);
 		users_xds = users.map(function(u) {
-			xds.load('http://twitter.com/statuses/user_timeline.json?id=' + u +
+			xds.load(twitterURL + 'statuses/user_timeline.json?id=' + u +
 							 '&count=' + max_count_u, twShow3);
 		});
 	}
@@ -651,33 +684,33 @@ function switchFav() {
 	cur_page = 1;
 	fav_mode = 1;
 	$("tw2c").innerHTML = "";
-	update_ele2 = loadXDomainScript('http://twitter.com/favorites/' + last_user + '.json?seq=' + (seq++) +
+	update_ele2 = loadXDomainScript(twitterURL + 'favorites/' + last_user + '.json?seq=' + (seq++) +
 										'&callback=twShow2', update_ele2);
 }
 function switchDirect() {
 	switchTo("direct");
 	$("loading").style.display = "block";
-	direct_ele1 = loadXDomainScript('http://twitter.com/direct_messages.json?seq=' + (seq++) +
+	direct_ele1 = loadXDomainScript(twitterURL + 'direct_messages.json?seq=' + (seq++) +
 										'&callback=twDirect1', direct_ele1);
-	direct_ele2 = loadXDomainScript('http://twitter.com/direct_messages/sent.json?seq=' + (seq++) +
+	direct_ele2 = loadXDomainScript(twitterURL + 'direct_messages/sent.json?seq=' + (seq++) +
 										'&callback=twDirect2', direct_ele2);
 }
 function switchMisc() {
 	switchTo("misc");
 	$("tw2h").innerHTML = '<p><a target="twitter" onClick="return clickLink(this)" href="index.html"><b>twicli</b></a> : browser-base Twitter client</p><hr>' +
 					'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="go.png"></form></p><hr>' +
-					'<p><b>Preferences:</b><form onSubmit="setPreps(this.limit.value, this.maxc.value, this.maxu.value, this.freq.value, this.list.value, this.user_style.value); return false;">max #msgs in TL: <input name="limit" size="5" value="' + nr_limit + '"><br>#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>update frequency: <input name="freq" size="3" value="' + updateFreq + '"> sec<br>Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br><input type="submit" value="Save"></form></p><hr>'
+					'<p><b>Preferences:</b><form onSubmit="setPreps(this.limit.value, this.maxc.value, this.maxu.value, this.interval.value, this.list.value, this.user_style.value); return false;">max #msgs in TL: <input name="limit" size="5" value="' + nr_limit + '"><br>#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>update interval: <input name="interval" size="3" value="' + updateInterval + '"> sec<br>Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br><input type="submit" value="Save"></form></p><hr>'
 	callPlugins("miscTab", $("tw2h"));
 	$("loading").style.display = "block";
-	update_ele2 = loadXDomainScript('http://twitter.com/account/rate_limit_status.json?seq=' + (seq++) +
+	update_ele2 = loadXDomainScript(twitterURL + 'account/rate_limit_status.json?seq=' + (seq++) +
 										'&id=' + myname + '&callback=twLimit', update_ele2);
 }
-function setPreps(limit, maxc, maxu, freq, plugin_list, style) {
+function setPreps(limit, maxc, maxu, interval, plugin_list, style) {
 	writeCookie('ver', 0.1, 3652);
 	writeCookie('limit', limit, 3652);
 	writeCookie('max_count', maxc, 3652);
 	writeCookie('max_count_u', maxu, 3652);
-	writeCookie('update_freq', freq, 3652);
+	writeCookie('update_interval', interval, 3652);
 	writeCookie('tw_plugins', plugin_list, 3652);
 	writeCookie('user_style', style, 3652);
 	alert("Saved in Cookie. Please reload.");
@@ -687,7 +720,7 @@ function init() {
 	setTimeout(scrollTo, 0, 0, 1);
 	// 初回アップデート
 	setTimeout(update, 0);
-	setInterval(update, updateFreq*1000);
+	setInterval(update, updateInterval*1000);
 	// ログインしていなかったときなどに20秒でログインを試みる
 	failover_timeout = setTimeout(function(){ switchTo("misc"); $("tw2c").innerHTML = '<iframe style="display:block" src="http://twitter.com/home" width="100%" height="400"></iframe>' }, 20*1000);
 }
@@ -727,7 +760,7 @@ if (window.addEventListener) window.addEventListener('DOMMouseScroll', wheel, fa
 window.onmousewheel = document.onmousewheel = wheel;
 
 // 自ユーザ名ロード
-loadXDomainScript('http://twitter.com/statuses/user_timeline.json?count=1&callback=twUser');
+loadXDomainScript(twitterURL + 'statuses/user_timeline.json?count=1&callback=twUser');
 </script>
 </body>
 </html>
