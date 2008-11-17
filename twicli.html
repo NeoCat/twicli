@@ -586,7 +586,6 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 	}
 	if (animation) {
 		nr_tw += len;
-		nr_recv += len;
 		while (nr_tw > nr_limit) {
 			var last_node = twNode.childNodes[twNode.childNodes.length-1];
 			nr_tw -= last_node.childNodes.length;
