@@ -759,7 +759,7 @@ if (window.addEventListener) window.addEventListener('DOMMouseScroll', wheel, fa
 window.onmousewheel = document.onmousewheel = wheel;
 
 // 自ユーザ名ロード
-loadXDomainScript(twitterURL + 'statuses/user_timeline.json?count=1&callback=twUser');
+loadXDomainScript(twitterURL + 'statuses/user_timeline.json?count=1&callback=twUser&seq='+(seq++));
 </script>
 </body>
 </html>
