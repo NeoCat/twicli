@@ -506,8 +506,8 @@ function twShow(tw) {
 function twOld(tw) {
 	var tmp = $("tmp");
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
-	var cnt = twShowToNode(tw, $("tw"), false, true);
-	if (cnt) $("tw").innerHTML += '<div onClick="getNext(this)" id="get_old">▽('+nr_page+')</div>';
+	if (twShowToNode(tw, $("tw"), false, true))
+		$("tw").innerHTML += '<div onClick="getNext(this)" id="get_old">▽('+nr_page+')</div>';
 }
 function twShow2(tw) {
 	if (userinfo_timeout) {
@@ -536,7 +536,6 @@ function twShow3(tw) {
 	}
 }
 function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
-	var cnt = 0;
 	$('loading').style.display = 'none';
 	if (failover_timeout) {
 		clearTimeout(failover_timeout);
@@ -544,7 +543,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 	}
 	failover_timeout = false;
 	var len = tw.length;
-	if (len == 0) return;
+	if (len == 0) return len;
 	var pNode = document.createElement('div');
 	var dummy = pNode.appendChild(document.createElement('div'));
 	for (var i = len-1; i >= 0; i--) {
@@ -561,7 +560,6 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 			callPlugins("newMessageElement", s, tw[i]);
 			pNode.insertBefore(s, pNode.childNodes[0]);
 		}
-		cnt++;
 	}
 	pNode.removeChild(dummy);
 	pNode.style.overflow = "hidden";
@@ -593,7 +591,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 		}
 	}
 	if (check_since) since_id = tw[0].id;
-	return cnt;
+	return len
 }
 // 新規twitの出現アニメーション処理
 function animate(elem, max, start) {
