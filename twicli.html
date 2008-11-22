@@ -229,12 +229,12 @@ function twAuth(a) {} // 認証(FIXME - FF:毎回認証要求される・Safari:
 
 <script type="text/javascript">
 var twitterURL = 'http://twitter.com/';
-var cookieVer = readCookie('ver') || 0;
-var updateInterval = readCookie('update_interval') || 45;
-var pluginstr = (cookieVer>0) && readCookie('tw_plugins') || 'search.js\nfavotter.js';
-var nr_limit = readCookie('limit') || 500;				// 表示する発言数の上限
-var max_count = readCookie('max_count') || 50;
-var max_count_u = readCookie('max_count_u') || 50;
+var cookieVer = parseInt(readCookie('ver')) || 0;
+var updateInterval = parseInt(readCookie('update_interval')) || 45;
+var pluginstr = (cookieVer>0) && readCookie('tw_plugins') || 'outputz.js\nsearch.js\nfavotter.js';
+var nr_limit = parseInt(readCookie('limit')) || 500;				// 表示する発言数の上限
+var max_count = parseInt(readCookie('max_count')) || 50;
+var max_count_u = parseInt(readCookie('max_count_u')) || 50;
 var plugins = new Array;
 var nr_tw = 0;
 var nr_page = 1;
@@ -277,6 +277,7 @@ function press(e) {
 	if (document.frm.status.value.indexOf("@"+in_reply_to_user) < 0) // @ユーザが含まれているときのみ返信先を指定
 		setReplyId(false);
 	in_reply_to_user = "";
+	callPlugins("post", document.frm.status.value);
 	document.frm.status.select();
 	setTimeout(resetFrm, 10); // twit送信後にフォームをクリア
 	document.frm.submit();
@@ -703,7 +704,7 @@ function switchMisc() {
 										'&id=' + myname + '&callback=twLimit', update_ele2);
 }
 function setPreps(limit, maxc, maxu, interval, plugin_list, style) {
-	writeCookie('ver', 0.1, 3652);
+	writeCookie('ver', 1, 3652);
 	writeCookie('limit', limit, 3652);
 	writeCookie('max_count', maxc, 3652);
 	writeCookie('max_count_u', maxu, 3652);
