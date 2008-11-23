@@ -547,6 +547,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 	if (len == 0) return len;
 	var pNode = document.createElement('div');
 	var dummy = pNode.appendChild(document.createElement('div'));
+	var myname_r = new RegExp("@"+myname+"\\b","i");
 	for (var i = len-1; i >= 0; i--) {
 		if (check_since && since_id && since_id >= tw[i].id || $(twNode.id + "-" + tw[i].id))
 			continue;
@@ -554,7 +555,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 			var s = document.createElement('div');
 			s.id = twNode.id + "-" + tw[i].id;
 			s.innerHTML = makeHTML(tw[i], no_name);
-			if (tw[i].d_dir == 1 || tw[i].text.indexOf('@'+myname+' ') >= 0)
+			if (tw[i].d_dir == 1 || tw[i].text.match(myname_r))
 				s.className = "tome";
 			if (tw[i].d_dir == 2 || tw[i].user.screen_name == myname)
 				s.className = "fromme";
