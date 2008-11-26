@@ -50,7 +50,6 @@ iframe { display: none; }
 <script type="text/javascript">
 if (navigator.userAgent.indexOf("Opera") >= 0)
 	document.write("<style>#control { height: 58px; } #menu { top: 38px; } #tw, #tw2 { top: 58px; }</style>");
-var iphone = navigator.userAgent.indexOf('iPhone OS') >= 0;
 function $(id) { return document.getElementById(id); }
 // クロスドメインJavaScript呼び出し
 function loadXDomainScript(url, ele) {
@@ -174,15 +173,6 @@ if (!Array.prototype.map) {
 		return res;
 	};
 }
-// iPhone / iPod touchではリンクをフレームに開く
-function clickLink(ele) {
-	if (iphone) {
-		switchTo("misc");
-		var height = Math.max(document.body.scrollHeight, $("tw").offsetHeight+$("control").offsetHeight) - 54;
-		$("tw2c").innerHTML = '<iframe style="display:block; border: 0;" src="' + ele.href + '" width="100%" height="' + height + '"></iframe>';
-	}
-	return !iphone;
-}
 // user-defined CSS
 var user_style = readCookie('user_style') || "";
 document.write('<style>' + user_style + '</style>');
@@ -220,8 +210,8 @@ function twAuth(a) {} // 認証(FIXME - FF:毎回認証要求される・Safari:
 	<a href="javascript:pickup2()" class="close">[⇔]</a><div id="reps"></div></div>
 <!--ポップアップメニュー-->
 <div id="popup" onClick="popup_hide()">
-<a id="popup_link_user" href="" target="twitter" onClick="return clickLink(this)">Twitter / User</a>
-<a id="popup_link_status" href="" target="twitter" onClick="return clickLink(this)">Twitter / Status</a>
+<a id="popup_link_user" href="" target="twitter">Twitter / User</a>
+<a id="popup_link_status" href="" target="twitter">Twitter / Status</a>
 <a id="popup_status_delete" href="#" onClick="return deleteStatus()">Delete Status</a>
 </div>
 <!--ポップアップメニュー非表示用-->
@@ -394,7 +384,7 @@ function makeHTML(tw, no_name) {
 			'onClick="fav(this,' + tw.id + ')">' +
 		 (!no_name ?
 			//ユーザアイコン
-			(tw.user.url ? '<a target="twitter" onClick="return clickLink(this)" href="'+tw.user.url+'">' : '') +
+			(tw.user.url ? '<a target="twitter" href="'+tw.user.url+'">' : '') +
 			'<img align="left" width="32" height="32" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
 			//名前
 			"<a href=\"http://twitter.com/" + un + "\" "+ "onClick=\"switchUser('" + un + "');return false\">" + un +
@@ -404,7 +394,7 @@ function makeHTML(tw, no_name) {
 		: '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text" + tw.id + "\" class=\"status\">" +
-		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a target=\"twitter\" onClick=\"return clickLink(this)\" href=\"$&\">$&</a>")
+		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a target=\"twitter\" href=\"$&\">$&</a>")
 				.replace(/@([\w-]+)/g, "<a href=\"http://twitter.com/$1\" onClick=\"switchUser('$1'); return false;\" >$&</a>").replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付'クライアント
 		' <span class="utils"><span class="prop">' + dateFmt(new Date(tw.created_at)) + (tw.source ? ' / ' + tw.source : '') + '</span>' +
@@ -422,9 +412,9 @@ function makeUserInfoHTML(user) {
 					(user.protected ? '<img src="http://assets0.twitter.com/images/icon_red_lock.gif">' : '') +
 					'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b><br>' +
 					(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
-					(user.url ? '<b>URL</b>: <a target="twitter" onClick="return clickLink(this)" href="' + user.url + '">' + user.url + '</a><br>' : '') +
+					(user.url ? '<b>URL</b>: <a target="twitter" href="' + user.url + '">' + user.url + '</a><br>' : '') +
 					(user.description ? user.description : '') +
-					'</td></tr></table><a target="twitter" onClick="return clickLink(this)" href="http://twitter.com/' + user.screen_name + '">[Twitter]</a> <a href="javascript:switchFav()">[fav]</a> ';
+					'</td></tr></table><a target="twitter" href="http://twitter.com/' + user.screen_name + '">[Twitter]</a> <a href="javascript:switchFav()">[fav]</a> ';
 }
 // favoriteの追加(f=true)/削除(f=false)
 function fav(img, id) {
@@ -698,7 +688,7 @@ function switchDirect() {
 }
 function switchMisc() {
 	switchTo("misc");
-	$("tw2h").innerHTML = '<p><a target="twitter" onClick="return clickLink(this)" href="index.html"><b>twicli</b></a> : browser-base Twitter client</p><hr>' +
+	$("tw2h").innerHTML = '<p><a target="twitter" href="index.html"><b>twicli</b></a> : browser-base Twitter client</p><hr>' +
 					'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="go.png"></form></p><hr>' +
 					'<p><b>Preferences:</b><form onSubmit="setPreps(this.limit.value, this.maxc.value, this.maxu.value, this.interval.value, this.list.value, this.user_style.value); return false;">max #msgs in TL: <input name="limit" size="5" value="' + nr_limit + '"><br>#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>update interval: <input name="interval" size="3" value="' + updateInterval + '"> sec<br>Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br><input type="submit" value="Save"></form></p><hr>'
 	callPlugins("miscTab", $("tw2h"));
