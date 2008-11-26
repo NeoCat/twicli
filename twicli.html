@@ -1,8 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html manifest="cache-manifest">
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="viewport" content="width=280">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="shortcut icon" href="favicon.ico">
@@ -39,6 +38,7 @@ iframe { display: none; }
 .close { color: red; }
 #get_old, #next { text-align: center; background-color: #999; color: #fec; cursor: pointer; }
 #rep { display: none; background-color: #fee; position: absolute; width: 90%; left: 4%; top: 200px; border: 4px solid #666; z-index: 2; padding: 2px; font-size: small; }
+#reps { margin-top: 5px; }
 #popup { display: none; background-color: #eee; position: absolute; left: 0; top: 200px; border: 2px solid #666; z-index: 6; font-size: small; }
 #popup a { display: block; background-color: #fff; color: black; text-decoration: none; padding: 3px; border-bottom: 1px solid #888; }
 #popup a:hover { background-color: #33f; color: #fff; text-decoration: none; }
@@ -264,6 +264,7 @@ var selected_menu = $("TL");
 var failover_timeout = false;
 var userinfo_timeout = false;
 var get_next_func;
+var update_timer = null;
 
 // enterキーで発言
 function press(e) {
@@ -418,6 +419,7 @@ function makeHTML(tw, no_name) {
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
 	return '<table><tr><td><img align="left" src="' + user.profile_image_url + '"></td><td>' +
+					(user.protected ? '<img src="http://assets0.twitter.com/images/icon_red_lock.gif">' : '') +
 					'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b><br>' +
 					(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
 					(user.url ? '<b>URL</b>: <a target="twitter" onClick="return clickLink(this)" href="' + user.url + '">' + user.url + '</a><br>' : '') +
@@ -667,7 +669,7 @@ function switchUser(user) {
 					'&count=' + max_count_u + '&id=' + user + '&callback=twShow2', update_ele2);
 		userinfo_timeout = setTimeout(function(){
 							update_ele2 = loadXDomainScript(twitterURL + 'users/show/' +
-							user + '.json?callback=twUserInfo', update_ele2); }, 10000);
+							user + '.json?callback=twUserInfo', update_ele2); }, 20000);
 	} else {
 		users_log = [];
 		for (var i = 0; i < users_xds.length; i++)
@@ -713,13 +715,15 @@ function setPreps(limit, maxc, maxu, interval, plugin_list, style) {
 	writeCookie('tw_plugins', plugin_list, 3652);
 	writeCookie('user_style', style, 3652);
 	alert("Saved in Cookie. Please reload.");
+	clearInterval(update_timer);
+	update_timer = setInterval(update, (updateInterval=interval)*1000);
 }
 // 初期化
 function init() {
 	setTimeout(scrollTo, 0, 0, 1);
 	// 初回アップデート
 	setTimeout(update, 0);
-	setInterval(update, updateInterval*1000);
+	update_timer = setInterval(update, updateInterval*1000);
 	// ログインしていなかったときなどに20秒でログインを試みる
 	failover_timeout = setTimeout(function(){ switchTo("misc"); $("tw2c").innerHTML = '<iframe style="display:block" src="http://twitter.com/home" width="100%" height="400"></iframe>' }, 20*1000);
 }
