@@ -408,8 +408,8 @@ function makeHTML(tw, no_name) {
 }
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
-	return '<table><tr><td><a href="http://twitter.com/account/profile_image/'+user.screen_name+
-						'"><img align="left" src="' + user.profile_image_url + '"></a></td><td>' +
+	return '<table><tr><td><a target="twitter" href="http://twitter.com/account/profile_image/'+
+					user.screen_name+'"><img align="left" src="' + user.profile_image_url + '"></a></td><td>' +
 					(user.protected ? '<img src="http://assets0.twitter.com/images/icon_red_lock.gif">' : '') +
 					'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b><br>' +
 					(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
