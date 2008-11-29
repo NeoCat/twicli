@@ -221,7 +221,7 @@ function twAuth(a) {} // 認証(FIXME - FF:毎回認証要求される・Safari:
 var twitterURL = 'http://twitter.com/';
 var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = parseInt(readCookie('update_interval')) || 45;
-var pluginstr = (cookieVer>0) && readCookie('tw_plugins') || 'outputz.js\nsearch.js\nfavotter.js';
+var pluginstr = (cookieVer>1) && readCookie('tw_plugins') || 'outputz.js\nsearch.js\nsearch2.js\nfavotter.js';
 var nr_limit = parseInt(readCookie('limit')) || 500;				// 表示する発言数の上限
 var max_count = parseInt(readCookie('max_count')) || 50;
 var max_count_u = parseInt(readCookie('max_count_u')) || 50;
@@ -691,11 +691,14 @@ function switchMisc() {
 	switchTo("misc");
 	$("tw2h").innerHTML = '<p><a target="twitter" href="index.html"><b>twicli</b></a> : browser-base Twitter client</p><hr>' +
 					'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="go.png"></form></p><hr>' +
-					'<p><b>Preferences:</b><form onSubmit="setPreps(this.limit.value, this.maxc.value, this.maxu.value, this.interval.value, this.list.value, this.user_style.value); return false;">max #msgs in TL: <input name="limit" size="5" value="' + nr_limit + '"><br>#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>update interval: <input name="interval" size="3" value="' + updateInterval + '"> sec<br>Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br><input type="submit" value="Save"></form></p><hr>'
+					'<p><a href="javascript:togglePreps()">▼<b>Preferences</b></a><form id="preps" onSubmit="setPreps(this.limit.value, this.maxc.value, this.maxu.value, this.interval.value, this.list.value, this.user_style.value); return false;" style="display: none;">max #msgs in TL: <input name="limit" size="5" value="' + nr_limit + '"><br>#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>update interval: <input name="interval" size="3" value="' + updateInterval + '"> sec<br>Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br><input type="submit" value="Save"></form></p><hr>';
 	callPlugins("miscTab", $("tw2h"));
 	$("loading").style.display = "block";
 	update_ele2 = loadXDomainScript(twitterURL + 'account/rate_limit_status.json?seq=' + (seq++) +
 										'&id=' + myname + '&callback=twLimit', update_ele2);
+}
+function togglePreps() {
+	$('preps').style.display = $('preps').style.display == 'block' ? 'none' : 'block';
 }
 function setPreps(limit, maxc, maxu, interval, plugin_list, style) {
 	writeCookie('ver', 1, 3652);
