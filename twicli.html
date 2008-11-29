@@ -12,16 +12,16 @@ img { border: 0 none; }
 hr { margin: 0; padding: 0; }
 iframe { display: none; }
 
-#control { position: fixed; top: 0; left: 0; width: 100%; height: 52px; border-bottom: 1px solid black; background-color: white; z-index: 3; background-color: #eee; }
+#control { position: fixed; top: 0; left: 0; width: 100%; height: 53px; border-bottom: 1px solid black; background-color: white; z-index: 3; background-color: #eee; }
 #loading { opacity: 0.5; position: absolute; top: 6px; width: 100%; height: 20px; z-index: 4; text-align: center; }
 #fst { position: absolute; left: 1px; top: 1px; width: 94%; height: 30px; font-size: small; }
 #go { text-decoration: none; position: absolute; left: 95%; top: 1px; }
 #rst { text-decoration: none; position: absolute; left: 95%; top: 16px; }
-#menu { position: absolute; left: 0px; top: 32px; height: 20px; }
-#menu a { display: inline-block; font-size: 13px; height: 18px; border: 1px solid black; border-bottom: 0 none; background-color: #aaa; color: #242; padding: 0 4px; margin: 0; text-decoration: none; font-family: sans-serif; }
+#menu { position: absolute; left: 0px; top: 33px; height: 20px; }
+#menu a { display: inline-block; font-size: 13px; height: 18px; border: 1px solid black; border-bottom: 0 none; background-color: #aaa; color: #242; padding: 0 4px; margin: 0; text-decoration: none; font-family: sans-serif;  -moz-border-radius: 5px 5px 0 0; -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px;  }
 #menu a.sel { height: 20px; background-color: #ffe; color: #002; border-bottom-color: #fff; }
 
-#tw, #tw2 { position: absolute; left: 0px; top: 52px; width: 100%; font-size: small; }
+#tw, #tw2 { position: absolute; left: 0px; top: 53px; width: 100%; font-size: small; }
 #tw2 { background-color: #fec; display: none; min-height: 448px; }
 #tw div { border-bottom: 1px solid #777; }
 #tw div div, #tw2 div div { padding: 2px; border-bottom: 1px solid #999; }
@@ -408,7 +408,8 @@ function makeHTML(tw, no_name) {
 }
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
-	return '<table><tr><td><img align="left" src="' + user.profile_image_url + '"></td><td>' +
+	return '<table><tr><td><a href="http://twitter.com/account/profile_image/'+user.screen_name+
+						'"><img align="left" src="' + user.profile_image_url + '"></a></td><td>' +
 					(user.protected ? '<img src="http://assets0.twitter.com/images/icon_red_lock.gif">' : '') +
 					'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b><br>' +
 					(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
