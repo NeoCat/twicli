@@ -187,7 +187,7 @@ function twAuth(a) {} // 認証(FIXME - FF:毎回認証要求される・Safari:
 <iframe name="tx" onload="update()"></iframe>
 <!--発言フォーム-->
 <form name="frm" action="http://twitter.com/statuses/update.xml" method="POST" target="tx">
-<textarea id="fst" name="status" onkeyup="if (this.value.indexOf('\n') >= 0) return press(1)" onkeypress="return press(event)"></textarea>
+<textarea id="fst" name="status" onkeyup="if (!key_press_detected && this.value.indexOf('\n') >= 0) return press(1)" onkeypress="return press(event)"></textarea>
 <input type="hidden" name="source" value="twicli">
 <a id="go" href="javascript:void press(1)"><img src="go.png"></a>
 <a id="rst" href="javascript:void resetFrm()"><img src="clr.png"></a>
@@ -255,11 +255,13 @@ var failover_timeout = false;
 var userinfo_timeout = false;
 var get_next_func;
 var update_timer = null;
+var key_press_detected = false;
 
 // enterキーで発言
 function press(e) {
-	if (e != 1 && e.keyCode != 13) return true;
-	document.frm.status.value = document.frm.status.value.replace(/\n/g, "");
+	if (e != 1) key_press_detected = true;
+	if (e != 1 && e.keyCode != 13 && e.keyCode != 10 || e.ctrlKey || e.shiftKey) return true;
+	if (!key_press_detected) document.frm.status.value = document.frm.status.value.replace(/\n/g, "");
 	if (document.frm.status.value == '') { // 空欄であればTimeline更新のみ
 		$("loading").style.display = "block";
 		update();
