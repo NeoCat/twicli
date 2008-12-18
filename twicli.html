@@ -177,9 +177,15 @@ if (!Array.prototype.map) {
 var user_style = readCookie('user_style') || "";
 document.write('<style>' + user_style + '</style>');
 
-function twAuth(a) {} // 認証(FIXME - FF:毎回認証要求される・Safari:ログインできない)
+// ユーザ認証
+var myname = null;
+var last_user = null;
+function twAuth(a) {
+	if (a.error) return alert(a.error);
+	myname = last_user = a.screen_name;
+}
 </script>
-<!--script src="http://twitter.com/account/verify_credentials.json?callback=twAuth"></script-->
+<script src="http://twitter.com/account/verify_credentials.json?callback=twAuth"></script>
 </head>
 <body onLoad="init()">
 <div id="control">
@@ -231,12 +237,11 @@ var nr_page = 1;
 var seq = (new Date).getTime();
 var since_id = null;
 var in_reply_to_user = null;
-var myname = null;
-var last_user = null;
 var users_log = [];
 var users_xds = [];
 var update_ele = null;
 var update_ele2 = null;
+var update_ele_ui = null;
 var direct_ele1 = null;
 var direct_ele2 = null;
 var direct1 = null;
@@ -324,6 +329,7 @@ function dispReply(user, id, ele) {
 // reply先をoverlay表示 (Timelineに無い場合)
 function dispReply2(tw) {
 	$("loading").style.display = "none";
+	if (tw.error) return alert(tw.error);
 	$('reps').innerHTML = makeHTML(tw);
 	callPlugins("newMessageElement", $('reps'), tw);
 	$('rep').style.display = "block";
@@ -417,6 +423,10 @@ function makeUserInfoHTML(user) {
 					(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
 					(user.url ? '<b>URL</b>: <a target="twitter" href="' + user.url + '">' + user.url + '</a><br>' : '') +
 					(user.description ? user.description : '') +
+					'<br><b>' + user.friends_count + '<small>following</small> / ' + 
+								user.followers_count + '<small>followers</small>' +
+					'<br>' + user.statuses_count + '<small>updates</small> / ' +
+								user.favourites_count + '<small>favs</small></b>' +
 					'</td></tr></table><a target="twitter" href="http://twitter.com/' + user.screen_name + '">[Twitter]</a> <a href="javascript:switchFav()">[fav]</a> ';
 }
 // favoriteの追加(f=true)/削除(f=false)
@@ -435,27 +445,24 @@ function follow(f) {
 }
 // ユーザ情報を表示
 function twUserInfo(user) {
+	if (user.error) return alert(user.error);
 	elem = $('user_info');
 	elem.innerHTML = makeUserInfoHTML(user);
 	callPlugins("newUserInfoElement", elem, user);
-	if (myname != user.screen_name)
-		update_ele2 = loadXDomainScript(twitterURL + 'friendships/exists.json?seq=' + (seq++) +
-								'&user_a=' + myname + '&user_b=' + user.screen_name +
-								'&callback=twFollow', update_ele2);
-}
-// 自分の最新の発言を受信
-function twUser(tw) {
-	if (!tw[0]) return;
-	myname = last_user = tw[0].user.screen_name;
-	$("user").innerHTML = last_user;
+	if (myname != user.screen_name) {
+		$("user_info").innerHTML += '<input type="button" value="' + (user.following ? 'Remove ' : 'Follow ') + 
+					last_user + '" onClick="follow('+!user.following+')">';
+	}
 }
 // ダイレクトメッセージ一覧の受信
 function twDirect1(tw) {
+	if (tw.error) return alert(tw.error);
 	direct1 = tw;
 	if (direct2)
 		twDirectShow();
 }
 function twDirect2(tw) {
+	if (tw.error) return alert(tw.error);
 	direct2 = tw;
 	if (direct1)
 		twDirectShow();
@@ -482,14 +489,9 @@ function twLimit(lim) {
 					"hourly limit : " + lim.remaining_hits + " / " + lim.hourly_limit + "<br>" +
 					"reset at : " + dateFmt(new Date(lim.reset_time));
 }
-// follow関係の受信
-function twFollow(fl) {
-	fl = fl == "true";
-	$("user_info").innerHTML += '<input type="button" value="' + (fl ? 'Remove ' : 'Follow ') + last_user +
-					'" onClick="follow('+!fl+')">';
-}
 // 受信twitを表示
 function twShow(tw) {
+	if (tw.error) return alert(tw.error);
 	tw.reverse();
 	for (var j in tw) callPlugins("gotNewMessage", tw[j]);
 	tw.reverse();
@@ -500,12 +502,14 @@ function twShow(tw) {
 	twShowToNode(tw, $("tw"), false, false, true, true);
 }
 function twOld(tw) {
+	if (tw.error) return alert(tw.error);
 	var tmp = $("tmp");
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
 	if (twShowToNode(tw, $("tw"), false, true))
 		$("tw").innerHTML += '<div onClick="getNext(this)" id="get_old">▽('+nr_page+')</div>';
 }
 function twShow2(tw) {
+	if (tw.error) return alert(tw.error);
 	if (userinfo_timeout) {
 		clearTimeout(userinfo_timeout);
 		userinfo_timeout = false;
@@ -513,8 +517,6 @@ function twShow2(tw) {
 	var tmp = $("tmp");
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
 	var user_info = $("user_info");
-	if (cur_page == 1 && !fav_mode && user_info && tw.length > 0)
-		twUserInfo(tw[0].user, user_info, 1);
 	twShowToNode(tw, $("tw2c"), !!user_info && !fav_mode, cur_page > 1);
 	if (selected_menu.id == "reply" || selected_menu.id == "user" && last_user.indexOf(',') < 0) {
 		$("tw2c").innerHTML += '<div onClick="getNext(this)" id="next">▽</div>';
@@ -522,6 +524,7 @@ function twShow2(tw) {
 	}
 }
 function twShow3(tw) {
+	if (tw.error) return alert(tw.error);
 	users_log.push(tw);
 	if (users_log.length == last_user.split(',').length) {
 		var tws = [];
@@ -617,7 +620,7 @@ function getNextFuncCommon() {
 	if (selected_menu.id == "user" && !fav_mode)
 		update_ele2 = loadXDomainScript(twitterURL + 'statuses/user_timeline.json?seq=' + (seq++) +
 					'&count=' + max_count_u + '&page=' + (++cur_page) + '&id=' + last_user +
-					'&callback=twShow2', update_ele2);
+					'&suppress_response_codes=true&callback=twShow2', update_ele2);
 	else if (selected_menu.id == "user" && fav_mode)
 		update_ele2 = loadXDomainScript(twitterURL + 'favorites/' + last_user + '.json?seq=' + (seq++) +
 					'&page=' + (++cur_page) + '&callback=twShow2', update_ele2);
@@ -659,17 +662,16 @@ function switchUser(user) {
 	if (users.length == 1) {
 		$("tw2h").innerHTML = "<div id=\"user_info\"></div>";
 		update_ele2 = loadXDomainScript(twitterURL + 'statuses/user_timeline.json?seq=' + (seq++) +
-					'&count=' + max_count_u + '&id=' + user + '&callback=twShow2', update_ele2);
-		userinfo_timeout = setTimeout(function(){
-							update_ele2 = loadXDomainScript(twitterURL + 'users/show/' +
-							user + '.json?callback=twUserInfo', update_ele2); }, 20000);
+			'&count=' + max_count_u + '&id=' + user + '&callback=twShow2&suppress_response_codes=true', update_ele2);
+		update_ele_ui = loadXDomainScript(twitterURL + 'users/show/' + user + '.json?seq=' + (seq++) +
+			'&callback=twUserInfo', update_ele_ui);
 	} else {
 		users_log = [];
 		for (var i = 0; i < users_xds.length; i++)
 			xds.abort(users_xds[i]);
 		users_xds = users.map(function(u) {
 			xds.load(twitterURL + 'statuses/user_timeline.json?id=' + u +
-							 '&count=' + max_count_u, twShow3);
+							 '&suppress_response_codes=true&count=' + max_count_u, twShow3);
 		});
 	}
 }
@@ -703,7 +705,7 @@ function togglePreps() {
 	$('preps').style.display = $('preps').style.display == 'block' ? 'none' : 'block';
 }
 function setPreps(limit, maxc, maxu, interval, plugin_list, style) {
-	writeCookie('ver', 1, 3652);
+	writeCookie('ver', 2, 3652);
 	writeCookie('limit', limit, 3652);
 	writeCookie('max_count', maxc, 3652);
 	writeCookie('max_count_u', maxu, 3652);
@@ -716,12 +718,17 @@ function setPreps(limit, maxc, maxu, interval, plugin_list, style) {
 }
 // 初期化
 function init() {
+	if (myname) $("user").innerHTML = myname; else jumpToLogin();
 	setTimeout(scrollTo, 0, 0, 1);
 	// 初回アップデート
 	setTimeout(update, 0);
 	update_timer = setInterval(update, updateInterval*1000);
 	// ログインしていなかったときなどに20秒でログインを試みる
-	failover_timeout = setTimeout(function(){ switchTo("misc"); $("tw2c").innerHTML = '<iframe style="display:block" src="http://twitter.com/home" width="100%" height="400"></iframe>' }, 20*1000);
+	failover_timeout = setTimeout(jumpToLogin, 20*1000);
+}
+function jumpToLogin() {
+	switchTo("misc");
+	$("tw2c").innerHTML = '<iframe style="display:block" src="http://twitter.com/home" width="100%" height="400"></iframe>';
 }
 // プラグイン
 function registerPlugin(obj) {
@@ -757,9 +764,6 @@ function wheel(event) {
 }
 if (window.addEventListener) window.addEventListener('DOMMouseScroll', wheel, false);
 window.onmousewheel = document.onmousewheel = wheel;
-
-// 自ユーザ名ロード
-loadXDomainScript(twitterURL + 'statuses/user_timeline.json?count=1&callback=twUser&seq='+(seq++));
 </script>
 </body>
 </html>
