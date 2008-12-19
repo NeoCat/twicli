@@ -397,7 +397,7 @@ function makeHTML(tw, no_name) {
 			//名前
 			"<a href=\"http://twitter.com/" + un + "\" "+ "onClick=\"switchUser('" + un + "');return false\">" + un +
 			 /*プロフィールの名前*/ (tw.user.name!=un ? '('+tw.user.name+')' : '') + '</a>' +
-			 /* protected? */ (tw.user.protected ? '<img class="lock" src="http://assets0.twitter.com/images/icon_red_lock.gif">' : '') +
+			 /* protected? */ (tw.user.protected ? '<img class="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
 			/*ダイレクトメッセージの方向*/ (tw.d_dir == 1 ? '<span class="dir">→</span> ' : tw.d_dir == 2 ? '<span class="dir">←</span> ' : '')
 		: '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
@@ -418,7 +418,7 @@ function makeHTML(tw, no_name) {
 function makeUserInfoHTML(user) {
 	return '<table><tr><td><a target="twitter" href="http://twitter.com/account/profile_image/'+
 					user.screen_name+'"><img align="left" src="' + user.profile_image_url + '"></a></td><td>' +
-					(user.protected ? '<img src="http://assets0.twitter.com/images/icon_red_lock.gif">' : '') +
+					(user.protected ? '<img src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
 					'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b><br>' +
 					(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
 					(user.url ? '<b>URL</b>: <a target="twitter" href="' + user.url + '">' + user.url + '</a><br>' : '') +
