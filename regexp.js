@@ -1,4 +1,4 @@
-var pickup_regexp = readCookie('pickup_regexp') || '「「:mickey24|syou6162:「「';
+var pickup_regexp = readCookie('pickup_regexp') || '';
 var pickup_tab_list = new Array();	// タブ一覧
 
 // 発言(JSON)が指定タブの条件にマッチするか判定
@@ -40,13 +40,15 @@ function initRegexp() {
 	var list = pickup_regexp.split('\n');
 	// 抽出タブを生成
 	for (var id = 0; id < list.length; id++) {
+		var tabname = list[id].split(':')[0];
+		var regexp = list[id].split(':')[1];
+		var regexp2 = list[id].split(':')[2];
+		if (!tabname) continue;
 		var ptab = document.createElement('a');
 		ptab.id = 'pickup' + id;
-		ptab.innerHTML = list[id].split(':')[0];
+		ptab.innerHTML = tabname;
 		ptab.href = '#';
-		var regexp = list[id].split(':')[1];
 		if (regexp) ptab.regexp_id = new RegExp(regexp);
-		var regexp2 = list[id].split(':')[2];
 		if (regexp2) ptab.regexp_text = new RegExp(regexp2);
 		ptab.onclick = function() { switchRegexp(this); return false; };
 		$('menu2').insertBefore(ptab, $('misc'));
