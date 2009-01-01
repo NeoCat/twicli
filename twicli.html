@@ -20,6 +20,7 @@ iframe { display: none; }
 #menu { position: absolute; left: 0px; top: 33px; height: 20px; }
 #menu a { display: inline-block; font-size: 13px; height: 18px; border: 1px solid black; border-bottom: 0 none; background-color: #aaa; color: #242; padding: 0 4px; margin: 0; text-decoration: none; font-family: sans-serif;  -moz-border-radius: 5px 5px 0 0; -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px;  }
 #menu a.sel { height: 20px; background-color: #ffe; color: #002; border-bottom-color: #fff; }
+#menu a.new { background-color: #fcc; }
 
 #tw, #tw2 { position: absolute; left: 0px; top: 53px; width: 100%; font-size: small; }
 #tw2 { background-color: #fec; display: none; min-height: 448px; }
@@ -199,11 +200,11 @@ function twAuth(a) {
 <a id="rst" href="javascript:void resetFrm()"><img src="clr.png"></a>
 <div id="loading"><img src="loading.gif"></div></form>
 <!--メニュー-->
-<div id="menu"><nobr>
+<div id="menu"><nobr id='menu2'>
 <a id="TL" class="sel" href="javascript:void switchTL()">TL</a>
-<a id="reply" href="javascript:void switchReply()">reply</a>
+<a id="reply" href="javascript:void switchReply()">Re</a>
 <a id="user" href="javascript:void switchUser()">user</a>
-<a id="direct" href="javascript:void switchDirect()">direct</a>
+<a id="direct" href="javascript:void switchDirect()">D</a>
 <a id="misc" href="javascript:void switchMisc()">+</a>
 </nobr></div>
 </div>
@@ -227,7 +228,7 @@ function twAuth(a) {
 var twitterURL = 'http://twitter.com/';
 var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = parseInt(readCookie('update_interval')) || 45;
-var pluginstr = (cookieVer>1) && readCookie('tw_plugins') || 'outputz.js\nsearch.js\nsearch2.js\nfavotter.js';
+var pluginstr = (cookieVer>2) && readCookie('tw_plugins') || 'regexp.js\noutputz.js\nsearch.js\nsearch2.js\nfavotter.js';
 var nr_limit = parseInt(readCookie('limit')) || 500;				// 表示する発言数の上限
 var max_count = parseInt(readCookie('max_count')) || 50;
 var max_count_u = parseInt(readCookie('max_count_u')) || 50;
@@ -557,7 +558,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 				s.className = "tome";
 			if (tw[i].d_dir == 2 || tw[i].user.screen_name == myname)
 				s.className = "fromme";
-			callPlugins("newMessageElement", s, tw[i]);
+			callPlugins("newMessageElement", s, tw[i], twNode.id);
 			pNode.insertBefore(s, pNode.childNodes[0]);
 		}
 	}
@@ -705,7 +706,7 @@ function togglePreps() {
 	$('preps').style.display = $('preps').style.display == 'block' ? 'none' : 'block';
 }
 function setPreps(limit, maxc, maxu, interval, plugin_list, style) {
-	writeCookie('ver', 2, 3652);
+	writeCookie('ver', 3, 3652);
 	writeCookie('limit', limit, 3652);
 	writeCookie('max_count', maxc, 3652);
 	writeCookie('max_count_u', maxu, 3652);
