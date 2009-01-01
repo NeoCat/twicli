@@ -49,7 +49,7 @@ function initRegexp() {
 		ptab.innerHTML = tabname;
 		ptab.href = '#';
 		if (regexp) ptab.regexp_id = new RegExp(regexp);
-		if (regexp2) ptab.regexp_text = new RegExp(regexp2);
+		if (regexp2) ptab.regexp_text = new RegExp(regexp2, 'i');
 		ptab.onclick = function() { switchRegexp(this); return false; };
 		$('menu2').insertBefore(ptab, $('misc'));
 		var space = document.createTextNode(' ');
