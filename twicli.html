@@ -18,14 +18,14 @@ iframe { display: none; }
 #go { text-decoration: none; position: absolute; left: 95%; top: 1px; }
 #rst { text-decoration: none; position: absolute; left: 95%; top: 16px; }
 #menu { position: absolute; left: 0px; top: 33px; height: 20px; }
-#menu a { display: inline-block; font-size: 13px; height: 18px; border: 1px solid black; border-bottom: 0 none; background-color: #aaa; color: #242; padding: 0 4px; margin: 0; text-decoration: none; font-family: sans-serif;  -moz-border-radius: 5px 5px 0 0; -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px;  }
+#menu a { display: inline-block; font-size: 13px; height: 18px; line-height: 18px; border: 1px solid black; border-bottom: 0 none; background-color: #aaa; color: #242; padding: 0 4px; margin: 0; text-decoration: none; font-family: sans-serif;  -moz-border-radius: 5px 5px 0 0; -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px; margin-right: 2px; }
 #menu a.sel { height: 20px; background-color: #ffe; color: #002; border-bottom-color: #fff; }
 #menu a.new { background-color: #fcc; }
 
-#tw, #tw2 { position: absolute; left: 0px; top: 53px; width: 100%; font-size: small; }
+#tw, #tw2 { position: absolute; left: 0px; top: 54px; width: 100%; font-size: small; }
 #tw2 { background-color: #fec; display: none; min-height: 448px; }
 #tw div { border-bottom: 1px solid #777; }
-#tw div div, #tw2 div div { padding: 2px; border-bottom: 1px solid #999; }
+#tw div div, #tw2c div div { padding: 1px; border-bottom: 1px solid #999; }
 .dir { color: #679; }
 .status { text-decoration: none; color: black; }
 .utils { white-space: nowrap; text-align: right }
@@ -200,13 +200,7 @@ function twAuth(a) {
 <a id="rst" href="javascript:void resetFrm()"><img src="clr.png"></a>
 <div id="loading"><img src="loading.gif"></div></form>
 <!--メニュー-->
-<div id="menu"><nobr id='menu2'>
-<a id="TL" class="sel" href="javascript:void switchTL()">TL</a>
-<a id="reply" href="javascript:void switchReply()">Re</a>
-<a id="user" href="javascript:void switchUser()">user</a>
-<a id="direct" href="javascript:void switchDirect()">D</a>
-<a id="misc" href="javascript:void switchMisc()">+</a>
-</nobr></div>
+<div id="menu"><nobr id='menu2'><a id="TL" class="sel" href="javascript:void switchTL()">TL</a><a id="reply" href="javascript:void switchReply()">Re</a><a id="user" href="javascript:void switchUser()">user</a><a id="direct" href="javascript:void switchDirect()">D</a><a id="misc" href="javascript:void switchMisc()">+</a></nobr></div>
 </div>
 <!--メインタイムライン-->
 <div id="tw"></div>
@@ -430,6 +424,14 @@ function makeUserInfoHTML(user) {
 								user.favourites_count + '<small>favs</small></b>' +
 					'</td></tr></table><a target="twitter" href="http://twitter.com/' + user.screen_name + '">[Twitter]</a> <a href="javascript:switchFav()">[fav]</a> ';
 }
+// 過去の発言取得ボタン(DOM)生成
+function nextButton(id, p) {
+	var ret = document.createElement('div');
+	ret.id = id;
+	ret.onclick = function() { getNext(this); };
+	ret.innerHTML = '▽' + (p ? '(' + p + ')' : '');
+	return ret;
+}
 // favoriteの追加(f=true)/削除(f=false)
 function fav(img, id) {
 	if (img.src.indexOf('throbber') >= 0) return;
@@ -497,7 +499,7 @@ function twShow(tw) {
 	for (var j in tw) callPlugins("gotNewMessage", tw[j]);
 	tw.reverse();
 	if (nr_page == 1) {
-		$("tw").innerHTML += '<div onClick="getNext(this)" id="get_old">▽(2)</div>';
+		$("tw").appendChild(nextButton('get_old', 2));
 		nr_page = 2;
 	}
 	twShowToNode(tw, $("tw"), false, false, true, true);
@@ -507,7 +509,7 @@ function twOld(tw) {
 	var tmp = $("tmp");
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
 	if (twShowToNode(tw, $("tw"), false, true))
-		$("tw").innerHTML += '<div onClick="getNext(this)" id="get_old">▽('+nr_page+')</div>';
+		$("tw").appendChild(nextButton('get_old', nr_page));
 }
 function twShow2(tw) {
 	if (tw.error) return alert(tw.error);
@@ -520,7 +522,7 @@ function twShow2(tw) {
 	var user_info = $("user_info");
 	twShowToNode(tw, $("tw2c"), !!user_info && !fav_mode, cur_page > 1);
 	if (selected_menu.id == "reply" || selected_menu.id == "user" && last_user.indexOf(',') < 0) {
-		$("tw2c").innerHTML += '<div onClick="getNext(this)" id="next">▽</div>';
+		$("tw2c").appendChild(nextButton('next'));
 		get_next_func = getNextFuncCommon;
 	}
 }

@@ -54,8 +54,6 @@ function initRegexp() {
 		if (filter) ptab.filter_flag = true
 		ptab.onclick = function() { switchRegexp(this); return false; };
 		$('menu2').insertBefore(ptab, $('misc'));
-		var space = document.createTextNode(' ');
-		$('menu2').insertBefore(space, $('misc'));
 		pickup_tab_list.push(ptab);
 	}
 }
