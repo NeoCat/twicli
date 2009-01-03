@@ -24,8 +24,8 @@ function switchRegexp(tab) {
 }
 
 // 抽出タブ変更
-function setRegexp() {
-	pickup_regexp = $('pickup_regexp').value;
+function setRegexp(str) {
+	pickup_regexp = str;
 	writeCookie('pickup_regexp', pickup_regexp, 3652);
 	// 抽出タブを除去
 	for (var i = 0; i < pickup_tab_list.length; i++)
@@ -62,7 +62,7 @@ initRegexp();
 registerPlugin({
 	miscTab: function(ele) {
 		var e = document.createElement("p");
-		e.innerHTML = 'Pickup Pattern (TabName:ID:Status) : <br><form onSubmit="setRegexp(); return false;"><textarea cols="30" rows="4" id="pickup_regexp">' + pickup_regexp + '</textarea><br><input type="submit" value="Apply"></form>';
+		e.innerHTML = 'Pickup Pattern <small>(TabName:ID:Status:TLFilter)</small> : <br><form onSubmit="setRegexp($(\'pickup_regexp\').value); return false;"><textarea cols="30" rows="4" id="pickup_regexp">' + pickup_regexp + '</textarea><br><input type="submit" value="Apply"></form>';
 		ele.appendChild(e);
 		ele.appendChild(document.createElement("hr"));
 	},
@@ -79,3 +79,20 @@ registerPlugin({
 		}
 	}
 });
+
+// Popup menu
+function addIDRegexp(id) {
+	setRegexp(id + ':^' + id + '$\n' + pickup_regexp);
+	switchRegexp(pickup_tab_list[0]);
+}
+
+var a = document.createElement("hr");
+$('popup').appendChild(a)
+
+a = document.createElement("a");
+a.target = 'twitter';
+a.id = 'regexp_add_ID';
+a.innerHTML = 'ID抽出タブ追加';
+a.href = '#';
+a.onclick = function() { addIDRegexp(popup_user); return false; }
+$('popup').appendChild(a)
