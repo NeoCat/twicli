@@ -565,6 +565,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 		}
 	}
 	pNode.removeChild(dummy);
+	if (pNode.childNodes.length == 0) return 0;
 	pNode.style.overflow = "hidden";
 	var animation2 = animation && (window.pageYOffset || document.body.scrollTop) < 10;
 	var maxH;
