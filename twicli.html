@@ -593,7 +593,12 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 			twNode.removeChild(last_node);
 		}
 	}
-	if (check_since) since_id = tw[0].id;
+	for (var i = 0; check_since && i < len; i++) {
+		if (tw[i].user.screen_name != myname) {
+			since_id = tw[i].id;
+			break;
+		}
+	}
 	return len
 }
 // 新規twitの出現アニメーション処理
