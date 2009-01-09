@@ -231,6 +231,7 @@ var nr_tw = 0;
 var nr_page = 1;
 var seq = (new Date).getTime();
 var since_id = null;
+var no_since_id = parseInt(readCookie('no_since_id'));  // since_idを使用しない
 var in_reply_to_user = null;
 var users_log = [];
 var users_xds = [];
@@ -374,7 +375,7 @@ function deleteStatus() {
 update = function() {
 	callPlugins("update");
 	update_ele = loadXDomainScript(twitterURL + 'statuses/friends_timeline?seq=' + (seq++) +
-						'&count=' + max_count + '&callback=twShow' + (since_id ? '&since_id='+since_id : ''), update_ele);
+						'&count=' + max_count + '&callback=twShow' + (!no_since_id && since_id ? '&since_id='+since_id : ''), update_ele);
 }
 // twitのHTML表現を生成
 function dateFmt(d) {
@@ -550,7 +551,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 	var dummy = pNode.appendChild(document.createElement('div'));
 	var myname_r = new RegExp("@"+myname+"\\b","i");
 	for (var i = len-1; i >= 0; i--) {
-		if (check_since && since_id && since_id >= tw[i].id || $(twNode.id + "-" + tw[i].id))
+		if ($(twNode.id + "-" + tw[i].id))
 			continue;
 		if (tw[i].user) {
 			var s = document.createElement('div');
@@ -671,7 +672,7 @@ function switchUser(user) {
 	if (users.length == 1) {
 		$("tw2h").innerHTML = "<div id=\"user_info\"></div>";
 		update_ele2 = loadXDomainScript(twitterURL + 'statuses/user_timeline.json?seq=' + (seq++) +
-			'&count=' + max_count_u + '&id=' + user + '&callback=twShow2&suppress_response_codes=true', update_ele2);
+			'&count=' + max_count_u + '&id=' + user + '&callback=twShow2', update_ele2);
 		update_ele_ui = loadXDomainScript(twitterURL + 'users/show/' + user + '.json?seq=' + (seq++) +
 			'&callback=twUserInfo', update_ele_ui);
 	} else {
@@ -704,7 +705,7 @@ function switchMisc() {
 	switchTo("misc");
 	$("tw2h").innerHTML = '<p><a target="twitter" href="index.html"><b>twicli</b></a> : browser-base Twitter client</p><hr>' +
 					'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="go.png"></form></p><hr>' +
-					'<p><a href="javascript:togglePreps()">▼<b>Preferences</b></a><form id="preps" onSubmit="setPreps(this.limit.value, this.maxc.value, this.maxu.value, this.interval.value, this.list.value, this.user_style.value); return false;" style="display: none;">max #msgs in TL: <input name="limit" size="5" value="' + nr_limit + '"><br>#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>update interval: <input name="interval" size="3" value="' + updateInterval + '"> sec<br>Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br><input type="submit" value="Save"></form></p><hr>';
+					'<p><a href="javascript:togglePreps()">▼<b>Preferences</b></a><form id="preps" onSubmit="setPreps(this.limit.value, this.maxc.value, this.maxu.value, this.interval.value, this.no_since_id.checked, this.list.value, this.user_style.value); return false;" style="display: none;">max #msgs in TL: <input name="limit" size="5" value="' + nr_limit + '"><br>#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>update interval: <input name="interval" size="3" value="' + updateInterval + '"> sec<br>no since_id check: <input type="checkbox" name="no_since_id"' + (no_since_id?" checked":"") + '><br>Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br><input type="submit" value="Save"></form></p><hr>';
 	callPlugins("miscTab", $("tw2h"));
 	$("loading").style.display = "block";
 	update_ele2 = loadXDomainScript(twitterURL + 'account/rate_limit_status.json?seq=' + (seq++) +
@@ -713,12 +714,13 @@ function switchMisc() {
 function togglePreps() {
 	$('preps').style.display = $('preps').style.display == 'block' ? 'none' : 'block';
 }
-function setPreps(limit, maxc, maxu, interval, plugin_list, style) {
+function setPreps(limit, maxc, maxu, interval, no_since, plugin_list, style) {
 	writeCookie('ver', 3, 3652);
 	writeCookie('limit', limit, 3652);
 	writeCookie('max_count', maxc, 3652);
 	writeCookie('max_count_u', maxu, 3652);
 	writeCookie('update_interval', interval, 3652);
+	writeCookie('no_since_id', no_since?1:0, 3652);
 	writeCookie('tw_plugins', plugin_list, 3652);
 	writeCookie('user_style', style, 3652);
 	alert("Saved in Cookie. Please reload.");
