@@ -374,7 +374,7 @@ function deleteStatus() {
 // 最新タイムラインを取得
 update = function() {
 	callPlugins("update");
-	update_ele = loadXDomainScript(twitterURL + 'statuses/friends_timeline?seq=' + (seq++) +
+	update_ele = loadXDomainScript(twitterURL + 'statuses/friends_timeline.json?seq=' + (seq++) +
 						'&count=' + max_count + '&callback=twShow' + (!no_since_id && since_id ? '&since_id='+since_id : ''), update_ele);
 }
 // twitのHTML表現を生成
