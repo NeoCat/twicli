@@ -190,8 +190,8 @@ function twAuth(a) {
 </head>
 <body onLoad="init()">
 <div id="control">
-<script type="text/javascript">update = function(){}</script>
-<iframe name="tx" onload="update()"></iframe>
+<script type="text/javascript">update = function(_){}</script>
+<iframe name="tx" onload="update(true)"></iframe>
 <!--発言フォーム-->
 <form name="frm" action="http://twitter.com/statuses/update.xml" method="POST" target="tx">
 <textarea id="fst" name="status" onkeyup="if (!key_press_detected && this.value.indexOf('\n') >= 0) return press(1)" onkeypress="return press(event)"></textarea>
@@ -221,10 +221,10 @@ function twAuth(a) {
 <script type="text/javascript">
 var twitterURL = 'http://twitter.com/';
 var cookieVer = parseInt(readCookie('ver')) || 0;
-var updateInterval = parseInt(readCookie('update_interval')) || 45;
+var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) || 90;
 var pluginstr = (cookieVer>2) && readCookie('tw_plugins') || 'regexp.js\noutputz.js\nsearch.js\nsearch2.js\nfavotter.js';
 var nr_limit = parseInt(readCookie('limit')) || 500;				// 表示する発言数の上限
-var max_count = parseInt(readCookie('max_count')) || 50;
+var max_count = (cookieVer>3) && parseInt(readCookie('max_count')) || 200;
 var max_count_u = parseInt(readCookie('max_count_u')) || 50;
 var plugins = new Array;
 var nr_tw = 0;
@@ -372,10 +372,16 @@ function deleteStatus() {
 	return false;
 }
 // 最新タイムラインを取得
-update = function() {
+update = function(reset_timer) {
 	callPlugins("update");
 	update_ele = loadXDomainScript(twitterURL + 'statuses/friends_timeline.json?seq=' + (seq++) +
-						'&count=' + max_count + '&callback=twShow' + (!no_since_id && since_id ? '&since_id='+since_id : ''), update_ele);
+						'&count=' + (since_id ? max_count : max_count_u) +
+						'&callback=twShow' + (!no_since_id && since_id ? '&since_id='+since_id : ''), update_ele);
+	if (reset_timer) resetUpdateTimer();
+}
+function resetUpdateTimer() {
+	if (update_timer) clearInterval(update_timer);
+	update_timer = setInterval(update, updateInterval*1000);
 }
 // twitのHTML表現を生成
 function dateFmt(d) {
@@ -715,7 +721,7 @@ function togglePreps() {
 	$('preps').style.display = $('preps').style.display == 'block' ? 'none' : 'block';
 }
 function setPreps(limit, maxc, maxu, interval, no_since, plugin_list, style) {
-	writeCookie('ver', 3, 3652);
+	writeCookie('ver', 4, 3652);
 	writeCookie('limit', limit, 3652);
 	writeCookie('max_count', maxc, 3652);
 	writeCookie('max_count_u', maxu, 3652);
@@ -724,16 +730,15 @@ function setPreps(limit, maxc, maxu, interval, no_since, plugin_list, style) {
 	writeCookie('tw_plugins', plugin_list, 3652);
 	writeCookie('user_style', style, 3652);
 	alert("Saved in Cookie. Please reload.");
-	clearInterval(update_timer);
-	update_timer = setInterval(update, (updateInterval=interval)*1000);
+	updateInterval=interval;
+	resetUpdateTimer();
 }
 // 初期化
 function init() {
 	if (myname) $("user").innerHTML = myname; else jumpToLogin();
 	setTimeout(scrollTo, 0, 0, 1);
 	// 初回アップデート
-	setTimeout(update, 0);
-	update_timer = setInterval(update, updateInterval*1000);
+	setTimeout(update, 0, true);
 	// ログインしていなかったときなどに20秒でログインを試みる
 	failover_timeout = setTimeout(jumpToLogin, 20*1000);
 }
