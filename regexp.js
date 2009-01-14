@@ -79,12 +79,17 @@ registerPlugin({
 					s.style.display = "none";
 			}
 		}
-	}
+	},
+	fav: function(id, f, img, img_tl) {
+		var s = $('tw-' + id);
+		if (s && s.tw && f != -1)
+			s.tw.favorited = !!f;
+	},
 });
 
 // Popup menu
-function addIDRegexp(id) {
-	setRegexp(id + ':^' + id + '$\n' + pickup_regexp);
+function addIDRegexp(user, id) {
+	setRegexp(user + ':^' + user + '$:@' + user + '\n' + pickup_regexp);
 	switchRegexp(pickup_tab_list[0]);
 }
 
@@ -96,5 +101,5 @@ a.target = 'twitter';
 a.id = 'regexp_add_ID';
 a.innerHTML = 'ID抽出タブ追加';
 a.href = '#';
-a.onclick = function() { addIDRegexp(popup_user); return false; }
+a.onclick = function() { addIDRegexp(popup_user, popup_id); return false; }
 $('popup').appendChild(a)

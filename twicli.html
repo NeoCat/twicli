@@ -228,7 +228,7 @@ var max_count = (cookieVer>3) && parseInt(readCookie('max_count')) || 200;
 var max_count_u = parseInt(readCookie('max_count_u')) || 50;
 var plugins = new Array;
 var nr_tw = 0;
-var nr_page = 1;
+var nr_page = 0;
 var seq = (new Date).getTime();
 var since_id = null;
 var no_since_id = parseInt(readCookie('no_since_id'));  // since_idを使用しない
@@ -388,10 +388,10 @@ function dateFmt(d) {
 	function d2(dig) { return (dig>9?"":"0") + dig }
 	return (d.getMonth()+1) + "/" + d.getDate() + " " + d.getHours() + ":" + d2(d.getMinutes()) + ":" + d2(d.getSeconds());
 }
-function makeHTML(tw, no_name) {
+function makeHTML(tw, no_name, pid) {
 	var un = tw.user.screen_name;
 	return /*fav*/ '<img align="right" src="http://assets3.twitter.com/images/icon_star_'+(tw.favorited?'full':'empty')+'.gif" ' +
-			'onClick="fav(this,' + tw.id + ')">' +
+			'onClick="fav(this,' + tw.id + ')"' + (pid ? ' id="fav-'+pid+'-'+tw.id+'"' : '') + '>' +
 		 (!no_name ?
 			//ユーザアイコン
 			(tw.user.url ? '<a target="twitter" href="'+tw.user.url+'">' : '') +
@@ -439,14 +439,22 @@ function nextButton(id, p) {
 	ret.innerHTML = '▽' + (p ? '(' + p + ')' : '');
 	return ret;
 }
-// favoriteの追加(f=true)/削除(f=false)
+// favoriteの追加/削除
 function fav(img, id) {
 	if (img.src.indexOf('throbber') >= 0) return;
 	var f = img.src.indexOf('empty') >= 0;
-	img.src = twitterURL + 'images/icon_throbber.gif';
+	setFavIcon(img, id, -1);
 	enqueuePost(twitterURL + 'favourings/' + (f ? 'create' : 'destroy') + '/' + id + '.xml',
-		function(){ img.src = 'http://assets3.twitter.com/images/icon_star_' + (f ? 'full' : 'empty') + '.gif'; },
-		function(){ img.src = 'http://assets3.twitter.com/images/icon_star_' + (!f ? 'full' : 'empty') + '.gif'; });
+		function(){ setFavIcon(img, id, f) }, function(){ setFavIcon(img, id, !f) });
+}
+// favアイコンの設定(f=0: 未fav, f=1:fav済, f=-1:通信中)
+function setFavIcon(img, id, f) {
+	var img_tl = $('fav-tw-' + id);
+	var img_url = (f==-1) ? twitterURL + 'images/icon_throbber.gif' :
+						'http://assets3.twitter.com/images/icon_star_' + (f ? 'full' : 'empty') + '.gif';
+	img.src = img_url;
+	if (img_tl) img_tl.src = img_url;
+	callPlugins("fav", id, f, img, img_tl);
 }
 // followとremove
 function follow(f) {
@@ -505,9 +513,9 @@ function twShow(tw) {
 	tw.reverse();
 	for (var j in tw) callPlugins("gotNewMessage", tw[j]);
 	tw.reverse();
-	if (nr_page == 1) {
-		$("tw").appendChild(nextButton('get_old', 2));
-		nr_page = 2;
+	if (nr_page == 0) {
+		$("tw").appendChild(nextButton('get_old', 1));
+		nr_page = 1;
 	}
 	twShowToNode(tw, $("tw"), false, false, true, true);
 }
@@ -515,8 +523,8 @@ function twOld(tw) {
 	if (tw.error) return alert(tw.error);
 	var tmp = $("tmp");
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
-	if (twShowToNode(tw, $("tw"), false, true))
-		$("tw").appendChild(nextButton('get_old', nr_page));
+	twShowToNode(tw, $("tw"), false, true);
+	$("tw").appendChild(nextButton('get_old', nr_page));
 }
 function twShow2(tw) {
 	if (tw.error) return alert(tw.error);
@@ -562,7 +570,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 		if (tw[i].user) {
 			var s = document.createElement('div');
 			s.id = twNode.id + "-" + tw[i].id;
-			s.innerHTML = makeHTML(tw[i], no_name);
+			s.innerHTML = makeHTML(tw[i], no_name, twNode.id);
 			if (tw[i].d_dir == 1 || tw[i].text.match(myname_r))
 				s.className = "tome";
 			if (tw[i].d_dir == 2 || tw[i].user.screen_name == myname)
