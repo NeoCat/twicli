@@ -3,7 +3,8 @@ var pickup_tab_list = new Array();	// タブ一覧
 
 // 発言(JSON)が指定タブの条件にマッチするか判定
 function execRegexp(tw, tab) {
-	return tw.user.screen_name.match(tab.regexp_id) || tw.text.match(tab.regexp_text);
+	return tab.regexp_id && tw.user.screen_name.match(tab.regexp_id) ||
+			tab.regexp_text && tw.text.match(tab.regexp_text);
 }
 
 // タブ切り替え処理
@@ -37,13 +38,14 @@ function setRegexp(str) {
 
 // 抽出タブ初期化
 function initRegexp() {
-	var list = pickup_regexp.split('\n');
+	var list = pickup_regexp.split(/[\r\n]/);
 	// 抽出タブを生成
 	for (var id = 0; id < list.length; id++) {
-		var tabname = list[id].split(':')[0];
-		var regexp = list[id].split(':')[1];
-		var regexp2 = list[id].split(':')[2];
-		var filter = list[id].split(':')[3];
+		var entry = list[id].split(':');
+		var tabname = entry[0];
+		var regexp = entry[1];
+		var regexp2 = entry[2];
+		var filter = entry[3];
 		if (!tabname) continue;
 		var ptab = document.createElement('a');
 		ptab.id = 'pickup' + id;
