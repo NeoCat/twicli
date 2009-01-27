@@ -224,7 +224,7 @@ var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) || 90;
 var pluginstr = (cookieVer>2) && readCookie('tw_plugins') || 'regexp.js\noutputz.js\nsearch.js\nsearch2.js\nfavotter.js';
 var nr_limit = parseInt(readCookie('limit')) || 500;				// 表示する発言数の上限
-var max_count = (cookieVer>3) && parseInt(readCookie('max_count')) || 200;
+var max_count = (cookieVer>3) && parseInt(readCookie('max_count')) || 50;
 var max_count_u = parseInt(readCookie('max_count_u')) || 50;
 var plugins = new Array;
 var nr_tw = 0;
@@ -375,7 +375,7 @@ function deleteStatus() {
 update = function(reset_timer) {
 	callPlugins("update");
 	update_ele = loadXDomainScript(twitterURL + 'statuses/friends_timeline.json?seq=' + (seq++) +
-						'&count=' + (since_id ? max_count : max_count_u) +
+						'&count=' + (since_id ? 200 : max_count) +
 						'&callback=twShow' + (!no_since_id && since_id ? '&since_id='+since_id : ''), update_ele);
 	if (reset_timer) resetUpdateTimer();
 }
@@ -406,8 +406,10 @@ function makeHTML(tw, no_name, pid) {
 		" <span id=\"text" + tw.id + "\" class=\"status\">" +
 		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a target=\"twitter\" href=\"$&\">$&</a>")
 				.replace(/@([\w-]+)/g, "<a href=\"http://twitter.com/$1\" onClick=\"switchUser('$1'); return false;\" >$&</a>").replace(/\r?\n|\r/g, "<br>") + '</span>' +
-		//日付'クライアント
-		' <span class="utils"><span class="prop">' + dateFmt(new Date(tw.created_at)) + (tw.source ? ' / ' + tw.source : '') + '</span>' +
+		//日付
+		' <span class="utils"><span class="prop"><a target="twitter" href="http://twitter.com/'+un+'/statuses/'+tw.id+'">' + dateFmt(new Date(tw.created_at)) + '</a>' +
+		//クライアント
+		(tw.source ? ' / ' + tw.source : '') + '</span>' +
 		//返信先を設定
 		' <a class="button green" href="javascript:replyTo(\'' + un + "'," + tw.id + ')">↩</a>' +
 		//返信元へのリンク
@@ -650,7 +652,8 @@ function getNextFuncCommon() {
 					'&page=' + (++cur_page) + '&callback=twShow2', update_ele2);
 	else if (selected_menu.id == "reply")
 		update_ele2 = loadXDomainScript(twitterURL + 'statuses/replies.json?seq=' + (seq++) +
-					'&page=' + (++cur_page) + '&callback=twShow2', update_ele2);
+					'&count=' + max_count_u + '&page=' + (++cur_page) +
+					'&callback=twShow2', update_ele2);
 }
 // タイムライン切り替え
 function switchTo(id) {
@@ -674,7 +677,7 @@ function switchReply() {
 	switchTo("reply");
 	$("loading").style.display = "block";
 	update_ele2 = loadXDomainScript(twitterURL + 'statuses/replies.json?seq=' + (seq++) +
-										'&callback=twShow2', update_ele2);
+				'&count=' + max_count_u + '&callback=twShow2', update_ele2);
 }
 function switchUser(user) {
 	if (!user) user = last_user;

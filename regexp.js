@@ -1,10 +1,12 @@
 var pickup_regexp = readCookie('pickup_regexp') || '';
 var pickup_tab_list = new Array();	// タブ一覧
 
-// 発言(JSON)が指定タブの条件にマッチするか判定
-function execRegexp(tw, tab) {
-	return tab.regexp_id && tw.user.screen_name.match(tab.regexp_id) ||
-			tab.regexp_text && tw.text.match(tab.regexp_text);
+// 発言(JSON)が指定条件にマッチするか判定
+function execRegexp(tw, exp) {
+	return	(!exp.id     || tw.user.screen_name.match(exp.id  )) &&
+		(!exp.id_n   ||!tw.user.screen_name.match(exp.id_n)) &&
+		(!exp.text   || tw.text.match(exp.text  )) &&
+		(!exp.text_n ||!tw.text.match(exp.text_n))
 }
 
 // タブ切り替え処理
@@ -17,8 +19,12 @@ function switchRegexp(tab) {
 		var tl2 = tl[i].childNodes;
 		for (var j = 0; j < tl2.length; j++) {
 			var target = tl2[j];
-			if (target.tw && execRegexp(target.tw, tab))
-				pickup.push(target.tw);
+			for (var k = 0; k < tab.pickup.length; k++) {
+				if (target.tw && execRegexp(target.tw, tab.pickup[k])) {
+					pickup.push(target.tw);
+					break;
+				}
+			}
 		}
 	}
 	twShow2(pickup);
@@ -43,20 +49,30 @@ function initRegexp() {
 	for (var id = 0; id < list.length; id++) {
 		var entry = list[id].split(':');
 		var tabname = entry[0];
-		var regexp = entry[1];
-		var regexp2 = entry[2];
+		var regexp = entry[1] ? entry[1].split("/") : [];
+		var regexp2 = entry[2] ? entry[2].split("/") : [];
 		var filter = entry[3];
 		if (!tabname) continue;
-		var ptab = document.createElement('a');
-		ptab.id = 'pickup' + id;
-		ptab.innerHTML = tabname;
-		ptab.href = '#';
-		if (regexp) ptab.regexp_id = new RegExp(regexp);
-		if (regexp2) ptab.regexp_text = new RegExp(regexp2, 'i');
-		if (filter) ptab.filter_flag = true
-		ptab.onclick = function() { switchRegexp(this); return false; };
-		$('menu2').insertBefore(ptab, $('misc'));
-		pickup_tab_list.push(ptab);
+		var ptab = $('pickup-'+tabname);
+		if (!ptab) {
+			ptab = document.createElement('a');
+			ptab.pickup = new Array();
+			ptab.id = 'pickup-' + tabname;
+			ptab.innerHTML = tabname;
+			ptab.href = '#';
+			ptab.onclick = function() { switchRegexp(this); return false; };
+			$('menu2').insertBefore(ptab, $('misc'));
+			pickup_tab_list.push(ptab);
+		}
+		var exps = new Object;
+		try {
+			if (regexp[0]) exps.id = new RegExp(regexp[0]);
+			if (regexp[1]) exps.id_n = new RegExp(regexp[1]);
+			if (regexp2[0]) exps.text = new RegExp(regexp2[0], 'i');
+			if (regexp2[1]) exps.text_n = new RegExp(regexp2[1], 'i');
+		} catch (e) { alert("RegExp Error in " + tabname + " tab :\nline "+(id+1)+" - " + e); }
+		if (filter) exps.filterTL = true;
+		ptab.pickup.push(exps);
 	}
 }
 initRegexp();
@@ -73,10 +89,13 @@ registerPlugin({
 		s.tw = tw; // 抽出に利用するためDOMツリーにJSONを記録
 		// 発言にマッチしたら該当タブに色付け
 		for (var i = 0; i < pickup_tab_list.length; i++) {
-			if (execRegexp(tw, pickup_tab_list[i])) {
-				pickup_tab_list[i].className += ' new';
-				if (pickup_tab_list[i].filter_flag)
-					s.style.display = "none";
+			var tab = pickup_tab_list[i];
+			for (var k = 0; k < tab.pickup.length; k++) {
+				if (execRegexp(tw, tab.pickup[k])) {
+					tab.className += ' new';
+					if (tab.pickup[k].filter_flag)
+						s.style.display = "none";
+				}
 			}
 		}
 	},
@@ -89,7 +108,7 @@ registerPlugin({
 
 // Popup menu
 function addIDRegexp(user, id) {
-	setRegexp(user + ':^' + user + '$:@' + user + '\n' + pickup_regexp);
+	setRegexp(user + ':^' + user + '$\n' + user + '::@' + user + '\n' + pickup_regexp);
 	switchRegexp(pickup_tab_list[0]);
 }
 
