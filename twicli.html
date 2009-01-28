@@ -395,10 +395,10 @@ function makeHTML(tw, no_name, pid) {
 		 (!no_name ?
 			//ユーザアイコン
 			(tw.user.url ? '<a target="twitter" href="'+tw.user.url+'">' : '') +
-			'<img align="left" width="32" height="32" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
+			'<img align="left" width="32" height="32" class="uicon" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
 			//名前
-			"<a href=\"http://twitter.com/" + un + "\" "+ "onClick=\"switchUser('" + un + "');return false\">" + un +
-			 /*プロフィールの名前*/ (tw.user.name!=un ? '('+tw.user.name+')' : '') + '</a>' +
+			'<a href="http://twitter.com/' + un + '" onClick="switchUser(\'' + un + '\');return false"><span class="uid">' + un + '</span>' +
+			 /*プロフィールの名前*/ (tw.user.name!=un ? '<span class="uname">('+tw.user.name+')</span>' : '') + '</a>' +
 			 /* protected? */ (tw.user.protected ? '<img class="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
 			/*ダイレクトメッセージの方向*/ (tw.d_dir == 1 ? '<span class="dir">→</span> ' : tw.d_dir == 2 ? '<span class="dir">←</span> ' : '')
 		: '') +
@@ -407,9 +407,9 @@ function makeHTML(tw, no_name, pid) {
 		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a target=\"twitter\" href=\"$&\">$&</a>")
 				.replace(/@([\w-]+)/g, "<a href=\"http://twitter.com/$1\" onClick=\"switchUser('$1'); return false;\" >$&</a>").replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付
-		' <span class="utils"><span class="prop"><a target="twitter" href="http://twitter.com/'+un+'/statuses/'+tw.id+'">' + dateFmt(new Date(tw.created_at)) + '</a>' +
+		' <span class="utils"><span class="prop"><a class="date" target="twitter" href="http://twitter.com/'+un+'/statuses/'+tw.id+'">' + dateFmt(new Date(tw.created_at)) + '</a>' +
 		//クライアント
-		(tw.source ? ' / ' + tw.source : '') + '</span>' +
+		(tw.source ? ' / <span class="source">' + tw.source + '</span>' : '') + '</span>' +
 		//返信先を設定
 		' <a class="button green" href="javascript:replyTo(\'' + un + "'," + tw.id + ')">↩</a>' +
 		//返信元へのリンク
