@@ -90,14 +90,18 @@ registerPlugin({
 		// 発言にマッチしたら該当タブに色付け
 		for (var i = 0; i < pickup_tab_list.length; i++) {
 			var tab = pickup_tab_list[i];
+			var match = false;
 			for (var k = 0; k < tab.pickup.length; k++) {
 				if (execRegexp(tw, tab.pickup[k])) {
+					match = true;
 					s.className += " match-" + tab.name;
 					tab.className += ' new';
 					if (tab.pickup[k].filter_flag)
 						s.style.display = "none";
 				}
 			}
+			if (match)
+				s.className += " match";
 		}
 	},
 	fav: function(id, f, img, img_tl) {
