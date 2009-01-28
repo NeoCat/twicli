@@ -58,7 +58,7 @@ function initRegexp() {
 			ptab = document.createElement('a');
 			ptab.pickup = new Array();
 			ptab.id = 'pickup-' + tabname;
-			ptab.innerHTML = tabname;
+			ptab.innerHTML = ptab.name = tabname;
 			ptab.href = '#';
 			ptab.onclick = function() { switchRegexp(this); return false; };
 			$('menu2').insertBefore(ptab, $('misc'));
@@ -92,6 +92,7 @@ registerPlugin({
 			var tab = pickup_tab_list[i];
 			for (var k = 0; k < tab.pickup.length; k++) {
 				if (execRegexp(tw, tab.pickup[k])) {
+					s.className += " match-" + tab.name;
 					tab.className += ' new';
 					if (tab.pickup[k].filter_flag)
 						s.style.display = "none";
