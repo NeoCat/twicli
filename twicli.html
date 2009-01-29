@@ -736,8 +736,19 @@ function switchDirect() {
 function switchMisc() {
 	switchTo("misc");
 	$("tw2h").innerHTML = '<p><a target="twitter" href="index.html"><b>twicli</b></a> : browser-base Twitter client</p><hr>' +
-					'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="go.png"></form></p><hr>' +
-					'<p><a href="javascript:togglePreps()">▼<b>Preferences</b></a><form id="preps" onSubmit="setPreps(this.limit.value, this.maxc.value, this.maxu.value, this.interval.value, this.since_check.checked, this.counter.checked, this.list.value, this.user_style.value); return false;" style="display: none;">max #msgs in TL: <input name="limit" size="5" value="' + nr_limit + '"><br>#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>update interval: <input name="interval" size="3" value="' + updateInterval + '"> sec<br>since_id check: <input type="checkbox" name="since_check"' + (no_since_id?"":" checked") + '><br>POST length counter: <input type="checkbox" name="counter"' + (no_counter?"":" checked") + '><br>Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br><input type="submit" value="Save"></form></p><hr>';
+					'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">'+
+					'show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="go.png"></form></p><hr>' +
+					'<p><a href="javascript:togglePreps()">▼<b>Preferences</b></a>' +
+					'<form id="preps" onSubmit="setPreps(this.limit.value, this.maxc.value, this.maxu.value, this.interval.value, this.since_check.checked, this.counter.checked, this.list.value, this.user_style.value); return false;" style="display: none;">' +
+					'max #msgs in TL: <input name="limit" size="5" value="' + nr_limit + '"><br>' +
+					'#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>' +
+					'#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>' +
+					'update interval: <input name="interval" size="3" value="' + updateInterval + '"> sec<br>' +
+					'<input type="checkbox" name="since_check"' + (no_since_id?"":" checked") + '>since_id check<br>' +
+					'<input type="checkbox" name="counter"' + (no_counter?"":" checked") + '>POST length counter<br>' +
+					'Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>' +
+					'user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br>' +
+					'<input type="submit" value="Save"></form></p><hr>';
 	callPlugins("miscTab", $("tw2h"));
 	$("loading").style.display = "block";
 	update_ele2 = loadXDomainScript(twitterURL + 'account/rate_limit_status.json?seq=' + (seq++) +
@@ -749,6 +760,8 @@ function togglePreps() {
 function setPreps(limit, maxc, maxu, interval, since_check, counter, plugin_list, style) {
 	no_since_id = !since_check;
 	no_counter = !counter;
+	updateInterval = interval;
+	resetUpdateTimer();
 	writeCookie('ver', 4, 3652);
 	writeCookie('limit', limit, 3652);
 	writeCookie('max_count', maxc, 3652);
@@ -759,8 +772,6 @@ function setPreps(limit, maxc, maxu, interval, since_check, counter, plugin_list
 	writeCookie('tw_plugins', plugin_list, 3652);
 	writeCookie('user_style', style, 3652);
 	alert("Saved in Cookie. Please reload.");
-	updateInterval=interval;
-	resetUpdateTimer();
 }
 // 初期化
 function init() {
