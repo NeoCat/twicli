@@ -321,8 +321,16 @@ function dispReply(user, id, ele) {
 	user_pick1 = user;
 	var d = $((selected_menu.id == "TL" ? "tw" : "tw2c") + "-" + id);
 	if (!d) {
-		$("loading").style.display = "block";
 		rep_top = cumulativeOffset(ele)[1] + 20;
+		d = selected_menu.id != "TL" && $("tw" + "-" + id);
+		if (d) {
+			$('reps').innerHTML = d.innerHTML;
+			$('rep').style.display = "block";
+			$('rep').style.top = rep_top;
+			user_pick2 = tw.user.screen_name;
+			return;
+		}
+		$("loading").style.display = "block";
 		reply_ele = loadXDomainScript(twitterURL + 'statuses/show/'+id+'.json?callback=dispReply2', reply_ele);
 		return;
 	}
