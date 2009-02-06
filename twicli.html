@@ -9,11 +9,11 @@
 <style type="text/css"><!--
 body { background-image: url(block_bg.png); background-attachment: fixed; margin: 1px; min-height: 500px; }
 img { border: 0 none; }
-hr { margin: 0; padding: 0; }
+hr { margin: 0; padding: 0; height: 1px; }
 iframe { display: none; }
 
 #control { position: fixed; top: 0; left: 0; width: 100%; height: 53px; border-bottom: 1px solid black; background-color: white; z-index: 3; background-color: #eee; }
-#loading { opacity: 0.5; position: absolute; top: 6px; width: 100%; height: 20px; z-index: 4; text-align: center; }
+#loading { opacity: 0.5; filter: alpha(opacity=50); position: absolute; top: 6px; width: 100%; height: 20px; z-index: 4; text-align: center; }
 #fst { position: absolute; left: 1px; top: 1px; width: 94%; height: 30px; font-size: small; }
 #go { text-decoration: none; position: absolute; left: 95%; top: 1px; }
 #rst { text-decoration: none; position: absolute; left: 95%; top: 16px; }
@@ -24,8 +24,11 @@ iframe { display: none; }
 
 #tw, #tw2 { position: absolute; left: 0px; top: 54px; width: 100%; font-size: small; }
 #tw2 { background-color: #fec; display: none; min-height: 448px; }
-#tw div { border-bottom: 1px solid #777; }
-#tw div div, #tw2c div div { padding: 1px; border-bottom: 1px solid #999; }
+#tw > div { border-bottom: 1px solid #777; }
+#tw > div > div, #tw2c > div > div { padding: 1px; border-bottom: 1px solid #999; }
+.dummy { border-bottom: 0; padding: 0; height: 0; clear: both; }
+.uicon { float: left; width: 32px; height: 32px; }
+.fav { float: right; }
 .dir { color: #679; }
 .status { text-decoration: none; color: black; }
 .utils { white-space: nowrap; text-align: right }
@@ -40,15 +43,15 @@ iframe { display: none; }
 #get_old, #next { text-align: center; background-color: #999; color: #fec; cursor: pointer; }
 #rep { display: none; background-color: #fee; position: absolute; width: 90%; left: 4%; top: 200px; border: 4px solid #666; z-index: 2; padding: 2px; font-size: small; }
 #reps { margin-top: 5px; }
-#popup { display: none; background-color: #eee; position: absolute; left: 0; top: 200px; border: 2px solid #666; z-index: 6; font-size: small; }
+#popup { display: none; background-color: #eee; position: absolute; left: 0; top: 200px; border: 2px solid #666; z-index: 6; width: 180px; font-size: small; }
 #popup a { display: block; background-color: #fff; color: black; text-decoration: none; padding: 3px; border-bottom: 1px solid #888; }
 #popup a:hover { background-color: #33f; color: #fff; text-decoration: none; }
 #popup a.row2 { background-color: #eee; }
-#popup_hide { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.2; background-color: black; z-index: 5; }
+#popup_hide { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.2; filter: alpha(opacity=20); background-color: black; z-index: 5; }
 #user_info { margin: 1px; border: 1px solid #888; }
 #user_info td { font-size: small; }
 
-#counter-div { display: none; width: 3em; position: fixed; top: 33px; right: 6%; z-index: 9; opacity: 0.80; }
+#counter-div { display: none; width: 3em; position: fixed; top: 33px; right: 6%; z-index: 9; opacity: 0.80; filter: alpha(opacity=80); }
 #counter-p1 { border-top: solid 9px transparent; width: 0; height: 0; border-right: solid 5px #99f; float: left; margin-left: 8px; }
 #counter-p2 { border-top: solid 9px transparent; width: 0; height: 0; border-left: solid 5px #99f; float: left; }
 #counter { font-family: Georgia; font-size: 11pt; font-weight: bold; font-style: italic; background-color: #99f; color: white; height: 1.1em; text-align: center; padding: 3px 0; clear: left; }
@@ -137,6 +140,12 @@ function postInIFrame(url, done, err) {
 				postQueue.shift();
 				postNext();
 			}, 0);
+		}
+	};
+	if ('v'=='\v') pfr.onreadystatechange = function(){ /* for IE */
+		if (this.readyState == "complete") {
+			pfr.contentWindow.name = pfr.name;
+			onload();
 		}
 	};
 	document.body.appendChild(pfr);
@@ -327,7 +336,7 @@ function dispReply(user, id, ele) {
 			$('reps').innerHTML = d.innerHTML;
 			$('rep').style.display = "block";
 			$('rep').style.top = rep_top;
-			user_pick2 = tw.user.screen_name;
+			user_pick2 = d.screen_name;
 			return;
 		}
 		$("loading").style.display = "block";
@@ -408,17 +417,18 @@ function resetUpdateTimer() {
 }
 // twitのHTML表現を生成
 function dateFmt(d) {
+	d = new Date(typeof(d)=='string' ? d.replace('+','GMT+') : d);
 	function d2(dig) { return (dig>9?"":"0") + dig }
 	return (d.getMonth()+1) + "/" + d.getDate() + " " + d.getHours() + ":" + d2(d.getMinutes()) + ":" + d2(d.getSeconds());
 }
 function makeHTML(tw, no_name, pid) {
 	var un = tw.user.screen_name;
-	return /*fav*/ '<img align="right" src="http://assets3.twitter.com/images/icon_star_'+(tw.favorited?'full':'empty')+'.gif" ' +
+	return /*fav*/ '<img class="fav" src="http://assets3.twitter.com/images/icon_star_'+(tw.favorited?'full':'empty')+'.gif" ' +
 			'onClick="fav(this,' + tw.id + ')"' + (pid ? ' id="fav-'+pid+'-'+tw.id+'"' : '') + '>' +
 		 (!no_name ?
 			//ユーザアイコン
 			(tw.user.url ? '<a target="twitter" href="'+tw.user.url+'">' : '') +
-			'<img align="left" width="32" height="32" class="uicon" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
+			'<img class="uicon" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
 			//名前
 			'<a href="http://twitter.com/' + un + '" onClick="switchUser(\'' + un + '\');return false"><span class="uid">' + un + '</span>' +
 			 /*プロフィールの名前*/ (tw.user.name!=un ? '<span class="uname">('+tw.user.name+')</span>' : '') + '</a>' +
@@ -430,7 +440,7 @@ function makeHTML(tw, no_name, pid) {
 		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, " <a target=\"twitter\" href=\"$&\">$&</a>")
 				.replace(/@([\w-]+)/g, "<a href=\"http://twitter.com/$1\" onClick=\"switchUser('$1'); return false;\" >$&</a>").replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付
-		' <span class="utils"><span class="prop"><a class="date" target="twitter" href="http://twitter.com/'+un+'/statuses/'+tw.id+'">' + dateFmt(new Date(tw.created_at)) + '</a>' +
+		' <span class="utils"><span class="prop"><a class="date" target="twitter" href="http://twitter.com/'+un+'/statuses/'+tw.id+'">' + dateFmt(tw.created_at) + '</a>' +
 		//クライアント
 		(tw.source ? ' / <span class="source">' + tw.source + '</span>' : '') + '</span>' +
 		//返信先を設定
@@ -439,7 +449,7 @@ function makeHTML(tw, no_name, pid) {
 		(tw.in_reply_to_status_id ? ' <a class="button" href="#" onClick="dispReply(\'' + un + '\',' + tw.in_reply_to_status_id + ',this); return false;">☞</a>' : '') +
 		//popupメニュー表示
 		'&nbsp;&nbsp;&nbsp;<a class="button popup" href="#" onClick="popup_menu(\'' + un + "'," + tw.id + ', this); return false;"><small><small>▼</small></small></a>' +
-		'</span><br clear="left">';
+		'</span><div class="dummy"></div>';
 }
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
@@ -530,7 +540,7 @@ function twLimit(lim) {
 	$("loading").style.display = "none";
 	$("tw2c").innerHTML = "<b>Twitter API status:</b><br>" +
 					"hourly limit : " + lim.remaining_hits + " / " + lim.hourly_limit + "<br>" +
-					"reset at : " + dateFmt(new Date(lim.reset_time));
+					"reset at : " + dateFmt(lim.reset_time);
 }
 // 受信twitを表示
 function twShow(tw) {
@@ -596,6 +606,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 			var s = document.createElement('div');
 			s.id = twNode.id + "-" + tw[i].id;
 			s.innerHTML = makeHTML(tw[i], no_name, twNode.id);
+			s.screen_name = tw[i].user.screen_name;
 			if (tw[i].d_dir == 1 || tw[i].text.match(myname_r))
 				s.className = "tome";
 			if (tw[i].d_dir == 2 || tw[i].user.screen_name == myname)
@@ -615,7 +626,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 		twNode.removeChild(pNode);
 		pNode.style.minHeight = 0;
 	}
-	if (after)
+	if (after || !twNode.childNodes[0])
 		twNode.appendChild(pNode);
 	else
 		twNode.insertBefore(pNode, twNode.childNodes[0]);
@@ -648,7 +659,7 @@ function animate(elem, max, start) {
 	if (start+1000 <= t)
 		return elem.style.maxHeight = 'none';
 	elem.style.maxHeight = Math.ceil(max*(1-Math.cos((t-start)/1000*Math.PI))/2);
-	setTimeout(animate, 50, elem, max, start);
+	setTimeout(function(){animate(elem, max, start)}, 50);
 }
 // 次ページ取得
 function getNext(ele) {
@@ -784,9 +795,9 @@ function setPreps(limit, maxc, maxu, interval, since_check, counter, plugin_list
 // 初期化
 function init() {
 	if (myname) $("user").innerHTML = myname; else jumpToLogin();
-	setTimeout(scrollTo, 0, 0, 1);
+	setTimeout(function(){scrollTo(0, 1)}, 0);
 	// 初回アップデート
-	setTimeout(update, 0, true);
+	setTimeout(function(){update(true)}, 0);
 	// ログインしていなかったときなどに20秒でログインを試みる
 	failover_timeout = setTimeout(jumpToLogin, 20*1000);
 }
