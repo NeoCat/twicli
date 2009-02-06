@@ -19,5 +19,5 @@ registerPlugin({
 		if (outputz_key)
 			enqueuePost('http://outputz.com/api/post?uri=' + encodeURIComponent("http://twitter.com/statuses/update.xml") + '&size=' + message.length + '&key=' + outputz_key,
 				function(){}, function(){});
-	},
+	}
 });

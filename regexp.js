@@ -108,7 +108,7 @@ registerPlugin({
 		var s = $('tw-' + id);
 		if (s && s.tw && f != -1)
 			s.tw.favorited = !!f;
-	},
+	}
 });
 
 // Popup menu
