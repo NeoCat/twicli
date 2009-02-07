@@ -21,6 +21,14 @@ img { border: 0; }
 hr { margin: 0; padding: 0; }
 form { margin: 5px; }
 </style>
+<script>
+var myname = null;
+function twAuth(a) {
+	if (a.error) return alert(a.error);
+	myname = a.screen_name;
+}
+</script>
+<script src="http://twitter.com/account/verify_credentials.json?callback=twAuth"></script>
 </head>
 <body onLoad="init()">
 <iframe style="display:none;" name="tx"></iframe>
@@ -142,8 +150,8 @@ function closeRep() {
 }
 // 最新twitを取得
 function update() {
-	update_ele = loadXDomainScript('http://twitter.com/statuses/friends_timeline?seq=' + (seq++) +
-									'&callback=twShow' + (since_id ? '&since_id='+since_id : ''), update_ele);
+	update_ele = loadXDomainScript('http://twitter.com/statuses/friends_timeline.json?seq=' + (seq++) +
+									'&callback=twShow&count=200' + (since_id ? '&since_id='+since_id : ''), update_ele);
 }
 // twitのHTML表現を生成
 function makeHTML(tw) {
@@ -179,10 +187,6 @@ function fav(img, id) {
 	document.favf.action = 'http://twitter.com/favourings/' + (f ? 'create' : 'destroy') + '/' + id + '.xml';
 	document.favf.submit();
 	img.src = 'http://assets3.twitter.com/images/icon_star_' + (f ? 'full' : 'empty') + '.gif';
-}
-// 自分の最新の発言を受信
-function twUser(tw) {
-	myname = tw[0].user.screen_name;
 }
 // 受信twitを表示
 function twShow(tw) {
@@ -233,9 +237,7 @@ function init() {
 	setTimeout(scrollTo, 0, 0, 1);
 	// 初回アップデート
 	setTimeout(update, 0);
-	setInterval(update, 30*1000);
-	// ログインしていなかったときなどに15秒で本家にリダイレクト
-	failover_timeout = setTimeout("location.href='http://twitter.com/home'", 15*1000);
+	setInterval(update, 60*1000);
 }
 
 // ホイールの回転でスクロール (スクロール不可のウィンドウ・フレーム内で有効)
@@ -257,6 +259,5 @@ function wheel(event) {
 if (window.addEventListener) window.addEventListener('DOMMouseScroll', wheel, false);
 window.onmousewheel = document.onmousewheel = wheel;
 </script>
-<script src="http://twitter.com/statuses/user_timeline.json?count=1&callback=twUser"></script>
 </body>
 </html>
