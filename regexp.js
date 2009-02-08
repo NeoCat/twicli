@@ -95,7 +95,8 @@ registerPlugin({
 				if (execRegexp(tw, tab.pickup[k])) {
 					match = true;
 					s.className += " match-" + tab.name;
-					tab.className += ' new';
+					if (tab.className.indexOf(' new') < 0)
+						tab.className += ' new';
 					if (tab.pickup[k].filter_flag)
 						s.style.display = "none";
 				}
