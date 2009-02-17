@@ -204,8 +204,8 @@ function twAuth(a) {
 </head>
 <body onLoad="init()">
 <div id="control">
-<script type="text/javascript">update = function(_){}</script>
-<iframe name="tx" onload="update(true)"></iframe>
+<script type="text/javascript">resetFrm = function(){}; update = function(){};</script>
+<iframe name="tx" onload="resetFrm();update()"></iframe>
 <!--発言フォーム-->
 <form name="frm" action="http://twitter.com/statuses/update.xml" method="POST" target="tx">
 <textarea id="fst" name="status" onkeyup="updateCount(); if (!key_press_detected && this.value.indexOf('\n') >= 0) return press(1)" onkeypress="updateCount(); return press(event)" onfocus="updateCount();" onblur="$('counter-div').style.display='none';"></textarea>
@@ -249,8 +249,9 @@ var nr_tw = 0;
 var nr_page = 0;
 var seq = (new Date).getTime();
 var since_id = null;
-var no_since_id = parseInt(readCookie('no_since_id'));  // since_idを使用しない
-var no_counter = parseInt(readCookie('no_counter'));  // 発言文字数カウンタを無効化
+var no_since_id = parseInt(readCookie('no_since_id') || "0");  // since_idを使用しない
+var no_counter = parseInt(readCookie('no_counter') || "0");  // 発言文字数カウンタを無効化
+var footer = readCookie('footer') || "";  // フッタ文字列
 var in_reply_to_user = null;
 var users_log = [];
 var users_xds = [];
@@ -291,20 +292,21 @@ function press(e) {
 		setReplyId(false);
 	in_reply_to_user = "";
 	callPlugins("post", document.frm.status.value);
+	document.frm.status.value += footer;
 	document.frm.status.select();
-	setTimeout(resetFrm, 10); // twit送信後にフォームをクリア
 	document.frm.submit();
 }
 // 発言文字数カウンタ表示・更新
 function updateCount() {
 	if (no_counter) return;
 	$("counter-div").style.display = "block";
-	$("counter").innerHTML = 140 - $("fst").value.length;
+	$("counter").innerHTML = 140 - footer.length - $("fst").value.length;
 }
 // フォームの初期化
-function resetFrm() {
+resetFrm = function() {
 	document.frm.reset();
 	setReplyId(false);
+	if ($("counter-div").style.display == "block") updateCount();
 }
 // reply先の設定/解除
 function setReplyId(id) {
@@ -405,12 +407,12 @@ function deleteStatus() {
 	return false;
 }
 // 最新タイムラインを取得
-update = function(reset_timer) {
+update = function() {
 	callPlugins("update");
 	update_ele = loadXDomainScript(twitterURL + 'statuses/friends_timeline.json?seq=' + (seq++) +
 						'&count=' + (since_id ? 200 : max_count) +
 						'&callback=twShow' + (!no_since_id && since_id ? '&since_id='+since_id : ''), update_ele);
-	if (reset_timer) resetUpdateTimer();
+	resetUpdateTimer();
 }
 function resetUpdateTimer() {
 	if (update_timer) clearInterval(update_timer);
@@ -759,13 +761,14 @@ function switchMisc() {
 					'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">'+
 					'show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="go.png"></form></p><hr>' +
 					'<p><a href="javascript:togglePreps()">▼<b>Preferences</b></a>' +
-					'<form id="preps" onSubmit="setPreps(this.limit.value, this.maxc.value, this.maxu.value, this.interval.value, this.since_check.checked, this.counter.checked, this.list.value, this.user_style.value); return false;" style="display: none;">' +
+					'<form id="preps" onSubmit="setPreps(this); return false;" style="display: none;">' +
 					'max #msgs in TL: <input name="limit" size="5" value="' + nr_limit + '"><br>' +
 					'#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>' +
 					'#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>' +
 					'update interval: <input name="interval" size="3" value="' + updateInterval + '"> sec<br>' +
 					'<input type="checkbox" name="since_check"' + (no_since_id?"":" checked") + '>since_id check<br>' +
 					'<input type="checkbox" name="counter"' + (no_counter?"":" checked") + '>POST length counter<br>' +
+					'Footer: <input name="footer" size="10" value="' + footer + '"><br>' +
 					'Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>' +
 					'user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br>' +
 					'<input type="submit" value="Save"></form></p><hr>';
@@ -777,28 +780,33 @@ function switchMisc() {
 function togglePreps() {
 	$('preps').style.display = $('preps').style.display == 'block' ? 'none' : 'block';
 }
-function setPreps(limit, maxc, maxu, interval, since_check, counter, plugin_list, style) {
-	no_since_id = !since_check;
-	no_counter = !counter;
-	updateInterval = interval;
+function setPreps(frm) {
+	nr_limit = frm.limit.value;
+	max_count = frm.maxc.value;
+	max_count_u = frm.maxu.value;
+	updateInterval = frm.interval.value;
+	no_since_id = !frm.since_check.checked;
+	no_counter = !frm.counter.checked;
+	footer = frm.footer.value;
 	resetUpdateTimer();
 	writeCookie('ver', 5, 3652);
-	writeCookie('limit', limit, 3652);
-	writeCookie('max_count', maxc, 3652);
-	writeCookie('max_count_u', maxu, 3652);
-	writeCookie('update_interval', interval, 3652);
+	writeCookie('limit', nr_limit, 3652);
+	writeCookie('max_count', max_count, 3652);
+	writeCookie('max_count_u', max_count_u, 3652);
+	writeCookie('update_interval', updateInterval, 3652);
 	writeCookie('no_since_id', no_since_id?1:0, 3652);
 	writeCookie('no_counter', no_counter?1:0, 3652);
-	writeCookie('tw_plugins', " " + plugin_list, 3652);
-	writeCookie('user_style', style, 3652);
-	alert("Saved in Cookie. Please reload.");
+	writeCookie('footer', footer, 3652);
+	writeCookie('tw_plugins', " " + frm.list.value, 3652);
+	writeCookie('user_style', frm.user_style.value, 3652);
+	alert("Saved in Cookie. Please reload to apply plugins and CSS.");
 }
 // 初期化
 function init() {
 	if (myname) $("user").innerHTML = myname; else jumpToLogin();
 	setTimeout(function(){scrollTo(0, 1)}, 0);
 	// 初回アップデート
-	setTimeout(function(){update(true)}, 0);
+	setTimeout(function(){update()}, 0);
 	// ログインしていなかったときなどに20秒でログインを試みる
 	failover_timeout = setTimeout(jumpToLogin, 20*1000);
 }
