@@ -13,6 +13,7 @@ function execRegexp(tw, exp) {
 function switchRegexp(tab) {
 	var pickup = new Array();
 	switchTo(tab.id);
+	$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: red" href="javascript:closeRegexp(\''+tab.name+'\')">[x] remove tab</a></div>';
 	// メインTLから該当する発言を抽出
 	var tl = $('tw').childNodes;
 	for (var i = 0; i < tl.length; i++) {
@@ -40,6 +41,18 @@ function setRegexp(str) {
 	pickup_tab_list = new Array;
 	// 抽出タブ再初期化
 	initRegexp();
+}
+
+// タブを削除
+function closeRegexp(tab) {
+	if (!confirm("タブを閉じてもよろしいですか?")) return;
+	var list = pickup_regexp.split(/[\r\n]/);
+	var list2 = [];
+	for (var id = 0; id < list.length; id++)
+		if (list[id].split(':')[0] != tab)
+			list2.push(list[id]);
+	setRegexp(list2.join("\n"));
+	switchTL();
 }
 
 // 抽出タブ初期化
