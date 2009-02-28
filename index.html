@@ -5,16 +5,26 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>twicli - web browser base Twitter light-weight client</title>
 <style type="text/css"><!--
-body { background-color: #666; }
+body { background-color: #115; margin: 0; padding: 0; }
 li { margin: 4px; }
+h1 { border-bottom: solid 2px red; }
 --></style>
 </head>
 <body>
-<div style="width: 800px; padding: 20px; border: 1px solid #333; margin: 4px; background-color: #fff; font-size: small">
-<img src="screenshot2.png" align="right">
-<h3>twicliとは</h3>
+<div style="width: 800px; padding: 20px; margin: 0; background-color: #fff; font-size: 90%">
+<h1>twicli</h1>
+<div style="float: right">
+  <a href="http://b.hatena.ne.jp/entry/http://www.geocities.jp/twicli/">
+  <img src="http://d.hatena.ne.jp/images/b_entry.gif" width="16" height="12" style="border: none;"
+   alt="このエントリーを含むはてなブックマーク" title="このエントリーを含むはてなブックマーク" /></a>
+<a href="http://b.hatena.ne.jp/entry/http://www.geocities.jp/twicli/">
+ <img src="http://b.hatena.ne.jp/entry/image/http://www.geocities.jp/twicli/"
+ alt="はてなブックマーク - twicli" title="はてなブックマーク - twicli">
+ </a>
+</div>
+<br clear="right"> <img src="screenshot2.png" align="right">
 <p>
-twicliはWebブラウザーベースの軽いTwitterクライアントです。
+twicliはWebブラウザー上で動くTwitterクライアントです。
 <ul>
 <li>Webブラウザ上で動くのでインストール不要です。
 <li>タイムラインを随時、自動的に取得してアニメーション表示していきます。
@@ -22,23 +32,22 @@ twicliはWebブラウザーベースの軽いTwitterクライアントです。
 </ul>
 
 <p>
-ネットカフェで他事しながらTwitterを眺めたいときなどに便利かも。<br>
+ネットカフェで他事しながらTwitterを眺めたいときなどに便利かも。<br><br>
 今のところFirefox, Safari, Operaで動いています。<br>
-iPhone/iPod touchのMobileSafariでもOKです。<br>
-IE7・IE8でも、ステータスバーのプライバシーアイコンをダブルクリックし、手動でTwitter.comのCookieのブロックを解除すれば、一応動作するようです。<br>
+iPhone/iPod touchのSafariでもOKです。<br>
+<small>IE7・IE8でも、ステータスバーのプライバシーアイコンをダブルクリックし、手動でTwitter.comのCookieのブロックを解除すれば、一応動作するようです。</small><br>
 <div style="margin-left: 100px; padding: 10px; text-align: center; color: #00f; background-color: #cfc; border: 2px solid #393; width: 200px; font-size: large;"><a href="javascript:void window.open('http://www.geocities.jp/twicli/twicli.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=no,location=no,resizable=yes')">twicliを起動</a></div>
 <p>
-※タイムラインの更新だけを取得したい場合は軽量なsimpleバージョン(旧バージョン)もあります。
+※タイムラインの更新だけを取得したい場合は軽量なsimpleバージョン<small>(旧バージョン)</small>もあります。
 <div style="margin-left: 100px; padding: 10px; text-align: center; color: #00f; background-color: #cfc; border: 2px solid #393; width: 200px; font-size: large;"><a href="javascript:void window.open('http://www.geocities.jp/twicli/twicli_s.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=no,location=no,resizable=yes')">twicli simpleを起動</a></div>
 
 <h3>使い方</h3>
-Twitter自体の機能の説明は省きます。twicli自体もまあ使ってみたら何とかなる?
+まあ使ってみたら何とかなる?
 <ol>
 <li><b>起動</b>
 <ul>
-<li><a href="http://twitter.com/">Twitter</a>にログインしておく(「次回から入力を省略」ON推奨)
 <li>上のリンク(bookmarklet)をクリック、またはブックマークにD&amp;Dで登録して選択すると、別窓で起動します。
-<li>ログインしていない場合、しばらく待つと本家ログインページが表示されるのでそこでログインしてください。
+<li>認証を求められた場合は、Twitterのアカウント／パスワードを入力してください。
 </ul>
 <li><b>タイムライン表示</b>
 <ul>
@@ -53,7 +62,6 @@ Twitter自体の機能の説明は省きます。twicli自体もまあ使って�
 <li>最上部のフィールドにテキストを入力してenterキーで発言
 <li>「<span style="color:#f29;">↩</span>」をクリックすると「@ユーザ名」を自動入力 & 発言の返信先を設定。
 <li>twit右の「☆」をクリックするとfav追加。「<span style="color:orange">★</span>」を再度クリックでfav解除。
-<li>初回の発言やfav時に認証を求められた場合は、Twitterのアカウント／パスワードを入力してください。
 </ul>
 <li><b>タブ (TL: タイムライン、Re: あなた宛のつぶやきを表示、D: ダイレクトメッセージ)</b>
 <ul>
@@ -63,19 +71,19 @@ Twitter自体の機能の説明は省きます。twicli自体もまあ使って�
 <li><b>ユーザ別タブ (発言中の「@〜」をクリック、または「+」タブでユーザ名を入力)</b>
 <ul>
 <li>プロフィールや過去の発言を表示します(自動更新はしません)。自分の情報も表示できます。
-<li>[Twitter]: 本家Twitterのユーザページへ　[fav]: その人がつけたfavを表示 (自分も可)
+<li>[Twitter]: 本家Twitterのユーザページへ
+<li>[fav]: その人がつけたfavを表示 (自分も可)
 <li>follow/remove: フォローを開始または解除
 <li>[search]: ユーザに関連する発言を<a href="http://search.twitter.com/">公式検索</a>で検索(search.jsプラグイン有効時)
 </ul>
-<li><b>「+」タブ</b>
+<li><b>「+」タブ (オプション設定、プラグインによる拡張機能など)</b>
 <ul>
-<li>オプションの設定や拡張機能が利用できます。
 <li>Preferences: クリックすると各種設定が行えます。
 <ul>
 <li> max #msgs in TL: 表示する最大発言数です。以下より大きい数にしてください。
 <li>#msgs in TL on update: TL更新時に1度に取得する発言数を指定します。
 <li>#msgs in user on update: ユーザ別タブの更新時に取得する発言数を指定します。
-<li>Plugin: <a href="http://d.hatena.ne.jp/NeoCat/20080904">こちら</a>を参照。
+<li>Plugins: <a href="http://d.hatena.ne.jp/NeoCat/20080904">こちら</a>を参照。
 </ul>
 <li>Pickup Pattern: ID/発言内容を元に抽出タブを作れます(regexp.jsプラグイン有効時)。詳しくは<a href="http://d.hatena.ne.jp/NeoCat/20090101">こちら</a>を参照。
 <li>Twitter search: <a href="http://search.twitter.com/">公式検索</a>でキーワードを検索(search.jsプラグイン有効時)
@@ -86,8 +94,9 @@ Twitter自体の機能の説明は省きます。twicli自体もまあ使って�
 なお開発途上なので随時アップデートすることがあります。
 
 <h3>ソース</h3>
-<p><a href="http://coderepos.org/share/browser/websites/twicli/twicli.html">twicli.html</a>が全てです。(HTML+CSS+JavaScript。プラグイン、画像ファイルは別)<br>
-<a href="http://coderepos.org/share/browser/websites/twicli/">CodeRepos</a>にも上げておきます。改造などはご自由に。
+<p><a href="http://coderepos.org/share/browser/websites/twicli/twicli.html">twicli.html</a>が本体(HTML+CSS+JavaScript)。他にプラグイン、画像ファイルが要ります。<br>
+<a href="http://coderepos.org/share/browser/websites/twicli/">CodeRepos</a>にも上げておきます。改造などはご自由に。パッチや勝手にコミット大歓迎です。<br>
+不具合／要望などは私に@を飛ばして頂くと対応するかもしれません。
 
 <p><b>作ってる人</b>: <a href="http://twitter.com/NeoCat">@NeoCat</a> <a href="http://d.hatena.ne.jp/NeoCat/20080819">技術メモ</a>
 </div>
