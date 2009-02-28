@@ -110,7 +110,7 @@ registerPlugin({
 					s.className += " match-" + tab.name;
 					if (tab.className.indexOf(' new') < 0)
 						tab.className += ' new';
-					if (tab.pickup[k].filter_flag)
+					if (tab.pickup[k].filterTL)
 						s.style.display = "none";
 				}
 			}
