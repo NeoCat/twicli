@@ -445,7 +445,7 @@ function makeHTML(tw, no_name, pid) {
 		//日付
 		' <span class="utils"><span class="prop"><a class="date" target="twitter" href="http://twitter.com/'+un+'/statuses/'+tw.id+'">' + dateFmt(tw.created_at) + '</a>' +
 		//クライアント
-		(tw.source ? ' / <span class="source">' + tw.source + '</span>' : '') + '</span>' +
+		(tw.source ? ' / <span class="source">' + tw.source.replace(/<a /,'<a target="twitter"') + '</span>' : '') + '</span>' +
 		//返信先を設定
 		' <a class="button green" href="javascript:replyTo(\'' + un + "'," + tw.id + ')">↩</a>' +
 		//返信元へのリンク
@@ -835,11 +835,13 @@ function wheel(event) {
 	var delta = 0;
 	if (!event) event = window.event;
 	if (event.wheelDelta) {
-		delta = event.wheelDelta/10;
+		delta = event.wheelDelta;
 	} else if (event.detail)
 		delta = -event.detail;
 	if (navigator.userAgent.indexOf("Gecko/") >= 0)
 		delta *= 10;
+	if (navigator.userAgent.indexOf("AppleWebKit/528") >= 0)
+		delta /= 120;
 	if (delta)
 		scrollBy(0, -delta);
 	if (event.preventDefault)

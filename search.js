@@ -13,6 +13,7 @@ function twsSearchShow(res) {
 		a.user = {screen_name:a.from_user,
 						name: a.from_user,
 						profile_image_url: a.profile_image_url};
+		a.source = a.source.replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&").replace(/&quot;/g,'"');
 		return a;
 	});
 	if (tws_page == 1) $('tw2c').innerHTML = '';
