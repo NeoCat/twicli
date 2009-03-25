@@ -230,6 +230,7 @@ function twAuth(a) {
 <a id="popup_link_user" href="" target="twitter">Twitter / User</a>
 <a id="popup_link_status" href="" target="twitter">Twitter / Status</a>
 <a id="popup_status_delete" href="#" onClick="return deleteStatus()">Delete Status</a>
+<a id="popup_status_retweet" href="#" onClick="return retweetStatus()" target="twitter">ReTweet</a>
 </div>
 <!--ポップアップメニュー非表示用-->
 <div id="popup_hide" onClick="popup_hide();"></div>
@@ -380,8 +381,8 @@ function pickup2() {
 // ポップアップメニューを表示
 function popup_menu(user, id, ele) {
 	popup_user = user;
-	popup_id = id
-	callPlugins("popup", $('popup'), user, id);
+	popup_id = id;
+	callPlugins("popup", $('popup'), user, id, ele);
 	$('popup_link_user').href = twitterURL + user;
 	$('popup_link_status').href = twitterURL + user + '/statuses/' + id;
 	$('popup_status_delete').style.display = (user == myname ? "block" : "none");
@@ -397,6 +398,13 @@ function popup_hide() {
 	$('popup').style.display = 'none';
 	$('popup_hide').style.display = 'none';
 	popup_user = popup_id = null;
+}
+// 発言のReTweet
+function retweetStatus() {
+	if (!popup_id) return false;
+	$('fst').value = "RT @"+popup_user+" : " + $('text'+popup_id).innerHTML.replace(/<.*?>/g,'');
+	$('fst').focus(); $('fst').select();
+	return false;
 }
 // 発言の削除
 function deleteStatus() {
