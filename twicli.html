@@ -252,6 +252,7 @@ var nr_tw = 0;
 var nr_page = 0;
 var seq = (new Date).getTime();
 var since_id = null;
+var since_id_reply = null;
 var no_since_id = parseInt(readCookie('no_since_id') || "0");  // since_idを使用しない
 var no_counter = parseInt(readCookie('no_counter') || "0");  // 発言文字数カウンタを無効化
 var footer = readCookie('footer') || "";  // フッタ文字列
@@ -260,7 +261,6 @@ var users_log = [];
 var users_xds = [];
 var update_ele = null;
 var update_ele2 = null;
-var update_ele_ui = null;
 var direct_ele1 = null;
 var direct_ele2 = null;
 var direct1 = null;
@@ -279,6 +279,7 @@ var failover_timeout = false;
 var userinfo_timeout = false;
 var get_next_func;
 var update_timer = null;
+var update_reply_counter = 0;
 var key_press_detected = false;
 
 // enterキーで発言
@@ -422,6 +423,14 @@ update = function() {
 	update_ele = loadXDomainScript(twitterURL + 'statuses/friends_timeline.json?seq=' + (seq++) +
 						'&count=' + (since_id ? 200 : max_count) +
 						'&callback=twShow' + (!no_since_id && since_id ? '&since_id='+since_id : ''), update_ele);
+	if (update_reply_counter-- <= 0) {
+		update_ele2 = loadXDomainScript(twitterURL + 'statuses/replies.json?seq=' + (seq++) +
+						'&count=' + (since_id ? 200 : max_count) +
+						'&callback=twReplies' +
+						(!no_since_id && since_id_reply ? '&since_id='+since_id_reply : ''),
+					update_ele2);
+		update_reply_counter = 4;
+	}
 	resetUpdateTimer();
 }
 function resetUpdateTimer() {
@@ -555,6 +564,17 @@ function twLimit(lim) {
 					"hourly limit : " + lim.remaining_hits + " / " + lim.hourly_limit + "<br>" +
 					"reset at : " + dateFmt(lim.reset_time);
 }
+// 受信repliesを表示
+var first_replies_check = true;
+function twReplies(tw) {
+	if (tw.error) return alert(tw.error);
+	tw.reverse();
+	for (var j in tw) callPlugins("gotNewReplies", tw[j]);
+	tw.reverse();
+	twShowToNode(tw, $("tw"), false, first_replies_check);
+	if (tw.length > 0) since_id_reply = tw[0].id;
+	first_replies_check = false;
+}
 // 受信twitを表示
 function twShow(tw) {
 	if (tw.error) return alert(tw.error);
@@ -588,6 +608,8 @@ function twShow2(tw) {
 		$("tw2c").appendChild(nextButton('next'));
 		get_next_func = getNextFuncCommon;
 	}
+	if (tw[0] && selected_menu.id == "user" && last_user.indexOf(',') < 0)
+		twUserInfo(tw[0].user);
 }
 function twShow3(tw) {
 	if (tw.error) return alert(tw.error);
@@ -737,8 +759,6 @@ function switchUser(user) {
 		$("tw2h").innerHTML = "<div id=\"user_info\"></div>";
 		update_ele2 = loadXDomainScript(twitterURL + 'statuses/user_timeline.json?seq=' + (seq++) +
 			'&count=' + max_count_u + '&id=' + user + '&callback=twShow2', update_ele2);
-		update_ele_ui = loadXDomainScript(twitterURL + 'users/show/' + user + '.json?seq=' + (seq++) +
-			'&callback=twUserInfo', update_ele_ui);
 	} else {
 		users_log = [];
 		for (var i = 0; i < users_xds.length; i++)
