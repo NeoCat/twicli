@@ -403,7 +403,7 @@ function popup_hide() {
 // 発言のReTweet
 function retweetStatus() {
 	if (!popup_id) return false;
-	$('fst').value = "RT @"+popup_user+" : " + $('text'+popup_id).innerHTML.replace(/<.*?>/g,'');
+	$('fst').value = "RT @"+popup_user+": " + $('text'+popup_id).innerHTML.replace(/<.*?>/g,'');
 	$('fst').focus(); $('fst').select();
 	return false;
 }
