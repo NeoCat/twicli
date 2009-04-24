@@ -255,6 +255,7 @@ var since_id = null;
 var since_id_reply = null;
 var no_since_id = parseInt(readCookie('no_since_id') || "0");  // since_idを使用しない
 var no_counter = parseInt(readCookie('no_counter') || "0");  // 発言文字数カウンタを無効化
+var replies_in_tl = parseInt(readCookie('replies_in_tl') || "1"); // フォロー外からのReplyをTLに表示
 var footer = readCookie('footer') || "";  // フッタ文字列
 var in_reply_to_user = null;
 var users_log = [];
@@ -275,8 +276,6 @@ var reply_ele = false;
 var rep_top = 0;
 var popup_top = 0;
 var selected_menu = $("TL");
-var failover_timeout = false;
-var userinfo_timeout = false;
 var get_next_func;
 var update_timer = null;
 var update_reply_counter = 0;
@@ -423,14 +422,6 @@ update = function() {
 	update_ele = loadXDomainScript(twitterURL + 'statuses/friends_timeline.json?seq=' + (seq++) +
 						'&count=' + (since_id ? 200 : max_count) +
 						'&callback=twShow' + (!no_since_id && since_id ? '&since_id='+since_id : ''), update_ele);
-	if (update_reply_counter-- <= 0) {
-		update_ele2 = loadXDomainScript(twitterURL + 'statuses/replies.json?seq=' + (seq++) +
-						'&count=' + (since_id ? 200 : max_count) +
-						'&callback=twReplies' +
-						(!no_since_id && since_id_reply ? '&since_id='+since_id_reply : ''),
-					update_ele2);
-		update_reply_counter = 4;
-	}
 	resetUpdateTimer();
 }
 function resetUpdateTimer() {
@@ -565,27 +556,36 @@ function twLimit(lim) {
 					"reset at : " + dateFmt(lim.reset_time);
 }
 // 受信repliesを表示
-var first_replies_check = true;
 function twReplies(tw) {
 	if (tw.error) return alert(tw.error);
 	tw.reverse();
 	for (var j in tw) callPlugins("gotNewReplies", tw[j]);
 	tw.reverse();
-	twShowToNode(tw, $("tw"), false, first_replies_check);
+	if (replies_in_tl)
+		twShowToNode(tw, $("tw"), false, false, true);
+	if (tw.length > 0 && $("tw").className.indexOf("new") < 0)
+		$("reply").className += " new";
 	if (tw.length > 0) since_id_reply = tw[0].id;
-	first_replies_check = false;
 }
 // 受信twitを表示
 function twShow(tw) {
 	if (tw.error) return alert(tw.error);
 	tw.reverse();
 	for (var j in tw) callPlugins("gotNewMessage", tw[j]);
+	if(!since_id_reply) since_id_reply = tw[0].id;
 	tw.reverse();
 	if (nr_page == 0) {
 		$("tw").appendChild(nextButton('get_old', 1));
 		nr_page = 1;
 	}
 	twShowToNode(tw, $("tw"), false, false, true, true);
+	if (since_id_reply && update_reply_counter-- <= 0) {
+		update_ele2 = loadXDomainScript(twitterURL + 'statuses/replies.json?seq=' + (seq++) +
+						'&count=' + (since_id ? 200 : max_count) +
+						'&callback=twReplies&since_id='+since_id_reply,
+					update_ele2);
+		update_reply_counter = 4;
+	}
 }
 function twOld(tw) {
 	if (tw.error) return alert(tw.error);
@@ -596,10 +596,6 @@ function twOld(tw) {
 }
 function twShow2(tw) {
 	if (tw.error) return alert(tw.error);
-	if (userinfo_timeout) {
-		clearTimeout(userinfo_timeout);
-		userinfo_timeout = false;
-	}
 	var tmp = $("tmp");
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
 	var user_info = $("user_info");
@@ -624,11 +620,6 @@ function twShow3(tw) {
 }
 function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 	$('loading').style.display = 'none';
-	if (failover_timeout) {
-		clearTimeout(failover_timeout);
-		switchTL();
-	}
-	failover_timeout = false;
 	var len = tw.length;
 	if (len == 0) return len;
 	var pNode = document.createElement('div');
@@ -797,6 +788,7 @@ function switchMisc() {
 					'#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>' +
 					'update interval: <input name="interval" size="3" value="' + updateInterval + '"> sec<br>' +
 					'<input type="checkbox" name="since_check"' + (no_since_id?"":" checked") + '>since_id check<br>' +
+					'<input type="checkbox" name="replies_in_tl"' + (replies_in_tl?" checked":"") + '>show not-following replies in TL<br>' +
 					'<input type="checkbox" name="counter"' + (no_counter?"":" checked") + '>POST length counter<br>' +
 					'Footer: <input name="footer" size="10" value="' + footer + '"><br>' +
 					'Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>' +
@@ -817,6 +809,7 @@ function setPreps(frm) {
 	updateInterval = frm.interval.value;
 	no_since_id = !frm.since_check.checked;
 	no_counter = !frm.counter.checked;
+	replies_in_tl = frm.replies_in_tl.checked;
 	footer = frm.footer.value;
 	resetUpdateTimer();
 	writeCookie('ver', 5, 3652);
@@ -826,6 +819,7 @@ function setPreps(frm) {
 	writeCookie('update_interval', updateInterval, 3652);
 	writeCookie('no_since_id', no_since_id?1:0, 3652);
 	writeCookie('no_counter', no_counter?1:0, 3652);
+	writeCookie('replies_in_tl', replies_in_tl?1:0, 3652);
 	writeCookie('footer', footer, 3652);
 	writeCookie('tw_plugins', " " + frm.list.value, 3652);
 	writeCookie('user_style', frm.user_style.value, 3652);
@@ -837,8 +831,6 @@ function init() {
 	setTimeout(function(){scrollTo(0, 1)}, 0);
 	// 初回アップデート
 	setTimeout(function(){update()}, 0);
-	// ログインしていなかったときなどに20秒でログインを試みる
-	failover_timeout = setTimeout(jumpToLogin, 20*1000);
 }
 function jumpToLogin() {
 	switchTo("misc");
