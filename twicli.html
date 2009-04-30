@@ -410,6 +410,7 @@ function popup_hide() {
 // 発言のReTweet
 function retweetStatus() {
 	if (!popup_id) return false;
+	if ($('lock-' + popup_id) && !confirm("This post is protected; Are you sure to RT?")) return false;
 	$('fst').value = "RT @"+popup_user+": " + $('text'+popup_id).innerHTML.replace(/<.*?>/g,'');
 	$('fst').focus(); $('fst').select();
 	return false;
@@ -452,10 +453,10 @@ function makeHTML(tw, no_name, pid) {
 			'<img class="uicon" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
 			//名前
 			'<a href="http://twitter.com/' + un + '" onClick="switchUser(\'' + un + '\');return false"><span class="uid">' + un + '</span>' +
-			 /*プロフィールの名前*/ (tw.user.name!=un ? '<span class="uname">('+tw.user.name+')</span>' : '') + '</a>' +
-			 /* protected? */ (tw.user.protected ? '<img class="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
-			/*ダイレクトメッセージの方向*/ (tw.d_dir == 1 ? '<span class="dir">→</span> ' : tw.d_dir == 2 ? '<span class="dir">←</span> ' : '')
+			 /*プロフィールの名前*/ (tw.user.name!=un ? '<span class="uname">('+tw.user.name+')</span>' : '') + '</a>'
 		: '') +
+		 /* protected? */ (tw.user.protected ? '<img id="lock-' + tw.id + '" class="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
+		/*ダイレクトメッセージの方向*/ (tw.d_dir == 1 ? '<span class="dir">→</span> ' : tw.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text" + tw.id + "\" class=\"status\">" +
 		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+|@([\w-]+)/g, function(_){
