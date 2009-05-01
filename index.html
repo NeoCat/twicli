@@ -22,11 +22,11 @@ h1 { border-bottom: solid 2px red; }
  alt="はてなブックマーク - twicli" title="はてなブックマーク - twicli">
  </a>
 </div>
-<br clear="right"> <img src="screenshot2.png" align="right">
+<br clear="right"> <img width="331" height="478" src="usage1.png" align="right">
 <p>
 twicliはWebブラウザー上で動くTwitterクライアントです。
 <ul>
-<li>Webブラウザ上で動くのでインストール不要です。
+<li>Webブラウザ上で動くのでインストール不要、MacでもWinでもLinuxでも動きます。
 <li>タイムラインを随時、自動的に取得してアニメーション表示していきます。
 <li>専用サーバなどは介さず、クロスドメインJavaScriptで直接Twitterにアクセスします。パスワード等がTwitter以外に送信されることはありません。
 </ul>
@@ -38,65 +38,39 @@ iPhone/iPod touchのSafariでもOKです。<br>
 <small>IE7・IE8でも、ステータスバーのプライバシーアイコンをダブルクリックし、手動でTwitter.comのCookieのブロックを解除すれば、一応動作するようです。</small><br>
 <div style="margin-left: 100px; padding: 10px; text-align: center; color: #00f; background-color: #cfc; border: 2px solid #393; width: 200px; font-size: large;"><a href="javascript:void window.open('http://www.geocities.jp/twicli/twicli.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=no,location=no,resizable=yes')">twicliを起動</a></div>
 <p>
-※タイムラインの更新だけを取得したい場合は軽量なsimpleバージョン<small>(旧バージョン)</small>もあります。
-<div style="margin-left: 100px; padding: 10px; text-align: center; color: #00f; background-color: #cfc; border: 2px solid #393; width: 200px; font-size: large;"><a href="javascript:void window.open('http://www.geocities.jp/twicli/twicli_s.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=no,location=no,resizable=yes')">twicli simpleを起動</a></div>
 
 <h3>使い方</h3>
-まあ使ってみたら何とかなる?
-<ol>
-<li><b>起動</b>
-<ul>
-<li>上のリンク(bookmarklet)をクリック、またはブックマークにD&amp;Dで登録して選択すると、別窓で起動します。
-<li>認証を求められた場合は、Twitterのアカウント／パスワードを入力してください。
-</ul>
-<li><b>タイムライン表示</b>
-<ul>
-<li>タイムラインはホイールでスクロール(最大500件)
-<li>ユーザ名をクリックするとユーザ情報や発言を表示
-<li>ユーザのアイコンをクリックするとプロフィールのWebページへジャンプ(設定されている場合のみ)
-<li>「<span style="color:#f29;">☞</span>」をクリックすると、返信先を次々と辿っていくことができます。一覧に無い場合も返信先をオーバーレイ表示します。
-<li>ユーザのTLの最後に▽が出ている場合、クリックすると過去の発言を取得します。
-</ul>
-<li><b>発言／fav</b>
-<ul>
-<li>最上部のフィールドにテキストを入力してenterキーで発言
-<li>「<span style="color:#f29;">↩</span>」をクリックすると「@ユーザ名」を自動入力 & 発言の返信先を設定。
-<li>twit右の「☆」をクリックするとfav追加。「<span style="color:orange">★</span>」を再度クリックでfav解除。
-</ul>
-<li><b>タブ (TL: タイムライン、Re: あなた宛のつぶやきを表示、D: ダイレクトメッセージ)</b>
-<ul>
-<li>TL以外は自動でアップデートされません。更新するには再度タブをクリックしてください。
-<li>他のタブに切り替えている間もTLは更新されていきます。
-</ul>
-<li><b>ユーザ別タブ (発言中の「@〜」をクリック、または「+」タブでユーザ名を入力)</b>
-<ul>
-<li>プロフィールや過去の発言を表示します(自動更新はしません)。自分の情報も表示できます。
-<li>[Twitter]: 本家Twitterのユーザページへ
-<li>[fav]: その人がつけたfavを表示 (自分も可)
-<li>follow/remove: フォローを開始または解除
-<li>[search]: ユーザに関連する発言を<a href="http://search.twitter.com/">公式検索</a>で検索(search.jsプラグイン有効時)
-</ul>
-<li><b>「+」タブ (オプション設定、プラグインによる拡張機能など)</b>
-<ul>
-<li>Preferences: クリックすると各種設定が行えます。
-<ul>
-<li> max #msgs in TL: 表示する最大発言数です。以下より大きい数にしてください。
-<li>#msgs in TL on update: TL更新時に1度に取得する発言数を指定します。
-<li>#msgs in user on update: ユーザ別タブの更新時に取得する発言数を指定します。
-<li>Plugins: <a href="http://d.hatena.ne.jp/NeoCat/20080904">こちら</a>を参照。
-</ul>
-<li>Pickup Pattern: ID/発言内容を元に抽出タブを作れます(regexp.jsプラグイン有効時)。詳しくは<a href="http://d.hatena.ne.jp/NeoCat/20090101">こちら</a>を参照。
-<li>Twitter search: <a href="http://search.twitter.com/">公式検索</a>でキーワードを検索(search.jsプラグイン有効時)
-<li>Twitter検索: <a href="http://pcod.no-ip.org/yats/">Twitter検索(yats)</a>でキーワードを検索(search2.jsプラグイン有効時)
-</ul>
-</ol>
-<p>
+<p><b>起動</b><br>
+上のリンク(bookmarklet)をクリック、またはブックマークにD&amp;Dで登録して選択すると、別窓で起動します。<br>
+認証を求められたら、Twitterのアカウント／パスワードを入力してください。<br><br>
+あんまり激しくクリックしまくると<b>API制限(100回/1時間)</b>にすぐ引っかかりますので、基本まったりご使用下さい。^^;
+</p>
+
+<p><b>操作方法</b><br>
+<table width="100%"><tr>
+<td width="40"><img onClick="go(-1)" src="left.png" style="cursor:pointer"></td>
+<td align="center"><img id="usage" width="600" height="480" src="usage2.png"></td>
+<td width="40"><img onClick="go(1)" src="right.png" style="cursor:pointer"></td>
+</td></tr></table>
+<script>
+var i = 0;
+function go(d) {
+	i = (i + d + 4) % 4;
+	var usage = document.getElementById("usage");
+	usage.width = [600,600,480,480][i];
+	usage.height = [480,480,480,710][i];
+	usage.src = "usage"+(i+2)+".png";
+}
+</script>
+
+<p><b>抽出プラグインについて</b><br>
+ID/発言内容を元に抽出タブを作れます(regexp.jsプラグイン有効時)。詳しくは<a href="http://d.hatena.ne.jp/NeoCat/20090101">こちら</a>を参照。
+</p>
 なお開発途上なので随時アップデートすることがあります。
 
 <h3>ソース</h3>
 <p><a href="http://coderepos.org/share/browser/websites/twicli/twicli.html">twicli.html</a>が本体(HTML+CSS+JavaScript)。他にプラグイン、画像ファイルが要ります。<br>
-開発は<a href="http://coderepos.org/share/browser/websites/twicli/">CodeRepos</a>上で行っています。<br>
-パッチや勝手にコミット大歓迎です。なお、ライセンスは<a href="LICENSE.txt">MITライセンス</a>です。<br>
+開発は<a href="http://coderepos.org/share/browser/websites/twicli/">CodeRepos</a>上で行っています。パッチや勝手にコミット大歓迎です。なお、ライセンスは<a href="LICENSE.txt">MITライセンス</a>です。<br>
 不具合／要望などは私に@を飛ばして頂くと対応するかもしれません。
 
 <p><b>作ってる人</b>: <a href="http://twitter.com/NeoCat">@NeoCat</a> <a href="http://d.hatena.ne.jp/NeoCat/20080819">技術メモ</a>
