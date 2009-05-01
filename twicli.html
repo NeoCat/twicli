@@ -61,7 +61,7 @@ iframe { display: none; }
 @media screen and (max-device-width: 480px) {
 	#control { height: 57px; }
 	#menu { height: 24px; }
-	#menu a { padding: 0 5px; height: 22px; line-height: 22px; }
+	#menu a { padding: 1px 5px; height: 22px; line-height: 22px; }
 	#menu a.sel { height: 24px; }
 	#tw, #tw2 { top: 58px; }
 }
@@ -615,7 +615,7 @@ function twShow2(tw) {
 		$("tw2c").appendChild(nextButton('next'));
 		get_next_func = getNextFuncCommon;
 	}
-	if (tw[0] && selected_menu.id == "user" && last_user.indexOf(',') < 0)
+	if (tw[0] && selected_menu.id == "user" && last_user.indexOf(',') < 0 && !fav_mode)
 		twUserInfo(tw[0].user);
 }
 function twShow3(tw) {
@@ -838,14 +838,10 @@ function setPreps(frm) {
 }
 // 初期化
 function init() {
-	if (myname) $("user").innerHTML = myname; else jumpToLogin();
+	if (myname) $("user").innerHTML = myname;
 	setTimeout(function(){scrollTo(0, 1)}, 0);
 	// 初回アップデート
 	setTimeout(function(){update()}, 0);
-}
-function jumpToLogin() {
-	switchTo("misc");
-	$("tw2c").innerHTML = '<iframe style="display:block" src="http://twitter.com/home" width="100%" height="400"></iframe>';
 }
 // プラグイン
 function registerPlugin(obj) {
