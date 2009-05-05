@@ -37,6 +37,7 @@ iframe { display: none; }
 .prop, .prop a { color: #999; font-size: x-small; }
 .fromme { background-color: #cfc; }
 .tome { background-color: #ccf; }
+.emp { background-color: #fcc; }
 .button { color: #f29; border: 1px solid #ddd; text-decoration: none; font-size: medium; -webkit-text-size-adjust:140%; }
 .green { color: #195; }
 .popup { padding: 0 4px; color: #888; }
@@ -169,6 +170,17 @@ function cumulativeOffset(ele) {
 		ele = ele.offsetParent;
 	} while (ele);
 	return [left, top];
+}
+// スクロール
+function scrollY() { return document.body.scrollTop || document.documentElement.scrollTop; }
+function scrollToY(y,y0,start) {
+	var t = (new Date).getTime();
+	start = start || t;
+	y0 = y0 || scrollY();
+	if (start+500 <= t)
+		return scrollTo(0,y);
+	scrollTo(0, Math.ceil(y0 + (y-y0)*(1-Math.cos((t-start)/500*Math.PI))/2));
+	setTimeout(function(){scrollToY(y, y0, start)}, 20);
 }
 // Cookie
 function readCookie(key) {
@@ -360,13 +372,12 @@ function dispReply(user, id, ele) {
 	closeRep();
 	var top = cumulativeOffset(d)[1];
 	var h = d.offsetHeight;
-	var sc_top = window.pageYOffset || document.body.scrollTop;
-	var win_h = window.innerHeight;
-	if (top < sc_top) scrollTo(0, top);
-	if (sc_top+win_h < top+h) scrollTo(0, top+h-win_h);
-	var old = d.style.backgroundColor;
-	d.style.backgroundColor = '#fcc';
-	setTimeout(function(){d.style.backgroundColor = old}, 2000);
+	var sc_top = document.body.scrollTop || document.documentElement.scrollTop;
+	var win_h = window.innerHeight || document.documentElement.clientHeight;
+	if (top < sc_top) scrollToY(top);
+	if (sc_top+win_h < top+h) scrollToY(top+h-win_h);
+	d.className += ' emp';
+	setTimeout(function(){d.className = d.className.replace(' emp','')}, 2000);
 }
 // reply先をoverlay表示 (Timelineに無い場合)
 function dispReply2(tw) {
@@ -459,9 +470,9 @@ function makeHTML(tw, no_name, pid) {
 		/*ダイレクトメッセージの方向*/ (tw.d_dir == 1 ? '<span class="dir">→</span> ' : tw.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text" + tw.id + "\" class=\"status\">" +
-		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+|@([\w-]+)/g, function(_){
-				if(_[0]!="@") return "<a target=\"twitter\" href=\""+_+"\">"+_+"</a>";
-				return "<a href=\"http://twitter.com/"+RegExp.$1+"\" onClick=\"switchUser('"+RegExp.$1+"'); return false;\" >"+_+"</a>";
+		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+|@([\w-]+)/g, function(_,id){
+				if(!id) return "<a target=\"twitter\" href=\""+_+"\">"+_+"</a>";
+				return "<a href=\"http://twitter.com/"+id+"\" onClick=\"switchUser('"+id+"'); return false;\" >"+_+"</a>";
 			}).replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付
 		' <span class="utils"><span class="prop"><a class="date" target="twitter" href="http://twitter.com/'+un+'/statuses/'+tw.id+'">' + dateFmt(tw.created_at) + '</a>' +
@@ -655,7 +666,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 	pNode.removeChild(dummy);
 	if (pNode.childNodes.length == 0) return 0;
 	pNode.style.overflow = "hidden";
-	var animation2 = animation && (window.pageYOffset || document.body.scrollTop) < 10;
+	var animation2 = animation && (document.body.scrollTop || document.documentElement.scrollTop) < 10;
 	var maxH;
 	if (animation2) { // get maxH
 		twNode.appendChild(pNode);
@@ -696,7 +707,7 @@ function animate(elem, max, start) {
 	if (start+1000 <= t)
 		return elem.style.maxHeight = 'none';
 	elem.style.maxHeight = Math.ceil(max*(1-Math.cos((t-start)/1000*Math.PI))/2);
-	setTimeout(function(){animate(elem, max, start)}, 50);
+	setTimeout(function(){animate(elem, max, start)}, 20);
 }
 // 次ページ取得
 function getNext(ele) {

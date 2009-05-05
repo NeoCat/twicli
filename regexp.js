@@ -132,7 +132,7 @@ function addIDRegexp(user, id) {
 }
 
 var a = document.createElement("hr");
-$('popup').insertBefore(a,$('popup').children[0])
+$('popup').insertBefore(a,$('popup').childNodes[0])
 
 a = document.createElement("a");
 a.target = 'twitter';
@@ -140,4 +140,4 @@ a.id = 'regexp_add_ID';
 a.innerHTML = 'ID抽出タブ追加';
 a.href = '#';
 a.onclick = function() { addIDRegexp(popup_user, popup_id); return false; }
-$('popup').insertBefore(a,$('popup').children[0])
+$('popup').insertBefore(a,$('popup').childNodes[0])
