@@ -2,30 +2,33 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
 <title>twicli - web browser base Twitter light-weight client</title>
 <style type="text/css"><!--
 body { background-color: #115; margin: 0; padding: 0; }
+.whole { width: 800px; padding: 20px; margin: 0; background-color: #fff; font-size: 90%; }
+.launch { margin-left: 100px; padding: 10px; text-align: center; color: #00f; background-color: #cfc; border: 2px solid #393; width: 200px; font-size: large; }
+.button { cursor:pointer; }
 li { margin: 4px; }
 h1 { border-bottom: solid 2px red; }
+img { border: none; }
 --></style>
+<script type="text/javascript">
+function hatena_bookmark(url) {
+	document.write('<a href="http://b.hatena.ne.jp/entry/'+url+'"><img src="http://d.hatena.ne.jp/images/b_entry.gif" width="16" height="12" alt="このエントリーを含むはてなブックマーク" title="このエントリーを含むはてなブックマーク"><\/a>');
+	document.write('<a href="http://b.hatena.ne.jp/entry/'+url+'"><img src="http://b.hatena.ne.jp/entry/image/'+url+'" alt="はてなブックマーク" title="はてなブックマーク"><\/a>');
+}
+</script>
 </head>
 <body>
-<div style="width: 800px; padding: 20px; margin: 0; background-color: #fff; font-size: 90%">
-<h1>twicli</h1>
-<div>
-  <a href="http://b.hatena.ne.jp/entry/http://www.geocities.jp/twicli/">
-  <img src="http://d.hatena.ne.jp/images/b_entry.gif" width="16" height="12" style="border: none;"
-   alt="このエントリーを含むはてなブックマーク" title="このエントリーを含むはてなブックマーク"></a>
-<a href="http://b.hatena.ne.jp/entry/http://www.geocities.jp/twicli/">
- <img src="http://b.hatena.ne.jp/entry/image/http://www.geocities.jp/twicli/"
- alt="はてなブックマーク - twicli" title="はてなブックマーク - twicli">
- </a>
-</div>
+<div class="whole">
+<h1><img alt="twicli" src="icon.png" width="32" height="32"> twicli</h1>
+<script type="text/javascript">hatena_bookmark("http://www.geocities.jp/twicli/")</script>
 <table><tr><td>
 <p>
 twicliはWebブラウザー上で動くTwitterクライアントです。
 <ul>
-<li>Webブラウザ上で動くのでインストール不要、MacでもWinでもLinuxでも動きます。
+<li>Webブラウザ上さえあればMacでもWinでもLinuxでも動きます。インストールも不要。
 <li>タイムラインを随時、自動的に取得してアニメーション表示していきます。
 <li>専用サーバなどは介さず、クロスドメインJavaScriptで直接Twitterにアクセスします。パスワード等がTwitter以外に送信されることはありません。
 </ul>
@@ -34,8 +37,8 @@ twicliはWebブラウザー上で動くTwitterクライアントです。
 ネットカフェで他事しながらTwitterを眺めたいときなどに便利かも。<br><br>
 今のところFirefox, Safari, Operaで動いています。<br>
 iPhone/iPod touchのSafariでもOKです。<br>
-<small>IE7・IE8でも、ステータスバーのプライバシーアイコンをダブルクリックし、手動でTwitter.comのCookieのブロックを解除すれば、一応動作するようです。</small><br>
-<div style="margin-left: 100px; padding: 10px; text-align: center; color: #00f; background-color: #cfc; border: 2px solid #393; width: 200px; font-size: large;"><a href="javascript:void window.open('http://www.geocities.jp/twicli/twicli.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=no,location=no,resizable=yes')">twicliを起動</a></div>
+<br><small>IE7・IE8でも、ステータスバーのプライバシーアイコンをダブルクリックし、手動でTwitter.comのCookieのブロックを解除すれば、一応動作するようです。</small><br>
+<div class="launch"><a href="javascript:void window.open('http://www.geocities.jp/twicli/twicli.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=no,location=no,resizable=yes')">twicliを起動</a></div>
 </td><td>
 <img alt="screenshot" width="331" height="478" src="usage1.png" align="right">
 </td></tr></table>
@@ -49,9 +52,9 @@ iPhone/iPod touchのSafariでもOKです。<br>
 
 <p><b>操作方法</b><br>
 <table width="100%"><tr>
-<td width="40"><img alt="prev" onClick="go(-1)" src="left.png" style="cursor:pointer"></td>
+<td width="40"><img alt="prev" onClick="go(-1)" src="left.png" class="button"></td>
 <td align="center"><img alt="usage" id="usage" width="600" height="480" src="usage2.png"></td>
-<td width="40"><img alt="next" onClick="go(1)" src="right.png" style="cursor:pointer"></td>
+<td width="40"><img alt="next" onClick="go(1)" src="right.png" class="button"></td>
 </tr></table>
 <script type="text/javascript">
 var i = 0;
@@ -71,16 +74,29 @@ function go(d) {
 <p><b>抽出プラグインについて</b><br>
 ID/発言内容を元に抽出タブを作れます(regexp.jsプラグイン有効時)。詳しくは<a href="http://d.hatena.ne.jp/NeoCat/20090101">こちら</a>を参照。
 </p>
-なお開発途上なので随時アップデートすることがあります。
 
 <h3>ソース</h3>
-<p><a href="http://coderepos.org/share/browser/websites/twicli/twicli.html">twicli.html</a>が本体(HTML+CSS+JavaScript)。他にプラグイン、画像ファイルが要ります。<br>
-開発は<a href="http://coderepos.org/share/browser/websites/twicli/">CodeRepos</a>上で行っています。パッチや勝手にコミット大歓迎です。なお、ライセンスは<a href="LICENSE.txt">MITライセンス</a>です。<br>
-不具合／要望などは私に@を飛ばして頂くと対応するかもしれません。
+開発は<a href="http://coderepos.org/share/browser/websites/twicli/">CodeRepos</a>上で行っています。パッチや勝手にコミット大歓迎です。なお、ライセンスは<a href="LICENSE.txt">MITライセンス</a>です。開発途上なので随時アップデートしていきます。
+<p><a href="http://coderepos.org/share/browser/websites/twicli/twicli.html">twicli.html</a>が本体(HTML+CSS+JavaScript)。他にプラグイン、画像ファイルが要ります。</p>
+<p>不具合／要望などは<a href="http://twitter.com/NeoCat">@NeoCat</a>にreplyして頂くと対応するかもしれません。</p>
 
-<p><b>作ってる人</b>: <a href="http://twitter.com/NeoCat">@NeoCat</a> <a href="http://d.hatena.ne.jp/NeoCat/20080819">技術メモ</a>
+<h3>リンク</h3>
+<ul>
+<li><a href="http://d.hatena.ne.jp/NeoCat/20080819/1219133294">開発メモ</a>
+<script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20080819/1219133294");</script></li>
+<li><a href="http://d.hatena.ne.jp/NeoCat/20080819/1219133294">プラグイン開発メモ</a>
+<script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20080904/1220482528");</script></li>
+<li><a href="http://d.hatena.ne.jp/NeoCat/20081121/1227282584">Outputzプラグインについて</a>
+<script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20081121/1227282584");</script></li>
+<li><a href="http://d.hatena.ne.jp/NeoCat/20090101/1230838882">抽出プラグインについて(1/2)</a>
+<script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20090101/1230838882");</script></li>
+<li><a href="http://d.hatena.ne.jp/NeoCat/20090101/1230913660">抽出プラグインについて(2/2)</a>
+<script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20090101/1230913660");</script></li>
+</ul>
+
+<h3>作ってる人</h3>
+<a href="http://twitter.com/NeoCat">@NeoCat</a>
+
 </div>
-
-<br><br><br>
 </body>
 </html>
