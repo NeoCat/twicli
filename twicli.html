@@ -216,10 +216,12 @@ document.write('<style>' + user_style + '</style>');
 
 // ユーザ認証
 var myname = null;
+var myid = null;
 var last_user = null;
 function twAuth(a) {
 	if (a.error) return alert(a.error);
 	myname = last_user = a.screen_name;
+	myid = a.id;
 }
 </script>
 <script src="http://twitter.com/account/verify_credentials.json?callback=twAuth"></script>
@@ -437,7 +439,7 @@ function deleteStatus() {
 	return false;
 }
 // 最新タイムラインを取得
-update = function() {
+update_inited = function() {
 	callPlugins("update");
 	update_ele = loadXDomainScript(twitterURL + 'statuses/friends_timeline.json?seq=' + (seq++) +
 						'&count=' + (since_id ? 200 : max_count) +
@@ -853,6 +855,7 @@ function init() {
 	if (myname) $("user").innerHTML = myname;
 	setTimeout(function(){scrollTo(0, 1)}, 0);
 	// 初回アップデート
+	update = update_inited; // 初期化前にupdateが発生するのを防止
 	setTimeout(function(){update()}, 0);
 }
 // プラグイン

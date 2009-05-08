@@ -12,7 +12,7 @@ registerPlugin({
 		ele.appendChild(document.createElement("hr"));
 	},
 	newMessageElement: function(ele, tw) {
-		if (followers_ids_list.length && !followers_ids[tw.user.id])
+		if (followers_ids_list.length && myid != tw.user.id && !followers_ids[tw.user.id])
 			for (var i = 0; i  < ele.childNodes.length; i++)
 				if (ele.childNodes[i].className == "status")
 					ele.childNodes[i].style.color = "#008";
@@ -20,7 +20,7 @@ registerPlugin({
 });
 
 function twfcFollwersIDsClear() {
-	followers_ids = [];
+	followers_ids_list = followers_ids = [];
 	var status = document.getElementById("followers_status");
 	if (status) status.innerHTML = "off";
 	writeCookie('followers_ids', "", 3652);
