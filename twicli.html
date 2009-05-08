@@ -262,7 +262,7 @@ function twAuth(a) {
 var twitterURL = 'http://twitter.com/';
 var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) || 90;
-var pluginstr = (cookieVer>4) && readCookie('tw_plugins') || ' regexp.js\noutputz.js\nsearch.js\nsearch2.js\nfavotter.js';
+var pluginstr = (cookieVer>5) && readCookie('tw_plugins') || ' regexp.js\noutputz.js\nsearch.js\nsearch2.js\nfavotter.js\nfollowers.js';
 pluginstr = pluginstr.substr(1);
 var nr_limit = parseInt(readCookie('limit')) || 500;				// 表示する発言数の上限
 var max_count = (cookieVer>3) && parseInt(readCookie('max_count')) || 50;
@@ -581,7 +581,7 @@ function twLimit(lim) {
 function twReplies(tw) {
 	if (tw.error) return alert(tw.error);
 	tw.reverse();
-	for (var j in tw) callPlugins("gotNewReplies", tw[j]);
+	for (var j in tw) callPlugins("gotNewReply", tw[j]);
 	tw.reverse();
 	if (replies_in_tl)
 		twShowToNode(tw, $("tw"), false, false, true);
@@ -835,7 +835,7 @@ function setPreps(frm) {
 	replies_in_tl = frm.replies_in_tl.checked;
 	footer = frm.footer.value;
 	resetUpdateTimer();
-	writeCookie('ver', 5, 3652);
+	writeCookie('ver', 6, 3652);
 	writeCookie('limit', nr_limit, 3652);
 	writeCookie('max_count', max_count, 3652);
 	writeCookie('max_count_u', max_count_u, 3652);
@@ -892,5 +892,6 @@ function wheel(event) {
 if (window.addEventListener) window.addEventListener('DOMMouseScroll', wheel, false);
 window.onmousewheel = document.onmousewheel = wheel;
 </script>
+<script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www."); document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">try { var pageTracker = _gat._getTracker("UA-6677831-1"); pageTracker._trackPageview(); } catch(err) {}</script>
 </body>
 </html>
