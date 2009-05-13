@@ -357,7 +357,7 @@ function replyTo(user, id) {
 function dispReply(user, id, ele) {
 	user_pick1 = user;
 	var d = $((selected_menu.id == "TL" ? "tw" : "tw2c") + "-" + id);
-	if (!d) {
+	if (!d || d.style.display == "none") {
 		rep_top = cumulativeOffset(ele)[1] + 20;
 		d = selected_menu.id != "TL" && $("tw" + "-" + id);
 		if (d) {
