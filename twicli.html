@@ -479,7 +479,7 @@ function makeHTML(tw, no_name, pid) {
 		//日付
 		' <span class="utils"><span class="prop"><a class="date" target="twitter" href="http://twitter.com/'+un+'/statuses/'+tw.id+'">' + dateFmt(tw.created_at) + '</a>' +
 		//クライアント
-		(tw.source ? ' / <span class="source">' + tw.source.replace(/<a /,'<a target="twitter"') + '</span>' : '') + '</span>' +
+		(tw.source ? '<span class="separator"> / </span><span class="source">' + tw.source.replace(/<a /,'<a target="twitter"') + '</span>' : '') + '</span>' +
 		//返信先を設定
 		' <a class="button green" href="javascript:replyTo(\'' + un + "'," + tw.id + ')">↩</a>' +
 		//返信元へのリンク
