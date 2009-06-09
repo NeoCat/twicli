@@ -884,8 +884,8 @@ function wheel(event) {
 		delta = -event.detail;
 	if (navigator.userAgent.indexOf("Gecko/") >= 0)
 		delta *= 10;
-	if (navigator.userAgent.indexOf("AppleWebKit/528") >= 0)
-		delta /= 120;
+	if (navigator.userAgent.indexOf("AppleWebKit/") >= 0)
+		delta /= 10;
 	if (delta)
 		scrollBy(0, -delta);
 	if (event.preventDefault)
