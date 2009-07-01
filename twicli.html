@@ -16,7 +16,7 @@ iframe { display: none; }
 
 #control { position: fixed; top: 0; left: 0; width: 100%; height: 53px; border-bottom: 1px solid black; background-color: white; z-index: 3; background-color: #eee; }
 #loading { opacity: 0.5; filter: alpha(opacity=50); position: absolute; top: 6px; width: 100%; height: 20px; z-index: 4; text-align: center; }
-#fst { position: absolute; left: 1px; top: 1px; width: 94%; height: 30px; font-size: small; }
+#fst { position: absolute; left: 1px; top: 1px; width: 94%; height: 30px; font-size: small; overflow: hidden; }
 #go { text-decoration: none; position: absolute; left: 95%; top: 1px; }
 #rst { text-decoration: none; position: absolute; left: 95%; top: 16px; }
 #menu { position: absolute; left: 0px; top: 33px; height: 20px; }
@@ -60,17 +60,26 @@ iframe { display: none; }
 #counter { font-family: Georgia; font-size: 11pt; font-weight: bold; font-style: italic; background-color: #99f; color: white; height: 1.1em; text-align: center; padding: 3px 0; clear: left; }
 
 @media screen and (max-device-width: 480px) {
-	#control { height: 57px; }
+	#control { padding-bottom: 5px; }
 	#menu { height: 24px; }
 	#menu a { padding: 1px 5px; height: 22px; line-height: 22px; }
 	#menu a.sel { height: 24px; }
-	#tw, #tw2 { top: 58px; }
+	#tw, #tw2 { margin-top: 5px; }
 }
 --></style>
+<style id="fst_css"></style>
 <script type="text/javascript">
 if (navigator.userAgent.indexOf("Opera") >= 0)
 	document.write("<style>#control { height: 58px; } #menu { top: 38px; } #tw, #tw2 { top: 58px; }</style>");
 function $(id) { return document.getElementById(id); }
+function setFstHeight(h) {
+	if (no_resize_fst) return;
+	var exh = (navigator.userAgent.indexOf("Opera") >= 0) ? 1 : 0;
+	$("fst").style.height = h;
+	$("menu").style.top = $("counter-div").style.top = h+3+exh*5;
+	$("control").style.height = h+23+exh*5;
+	$("tw").style.top = $("tw2").style.top = h+24+exh*4;
+}
 // クロスドメインJavaScript呼び出し
 function loadXDomainScript(url, ele) {
 	if (ele && ele.parentNode)
@@ -277,6 +286,7 @@ var since_id = null;
 var since_id_reply = null;
 var no_since_id = parseInt(readCookie('no_since_id') || "0");  // since_idを使用しない
 var no_counter = parseInt(readCookie('no_counter') || "0");  // 発言文字数カウンタを無効化
+var no_resize_fst = parseInt(readCookie('no_resize_fst') || "0");  // フィールドの自動リサイズを無効化
 var replies_in_tl = parseInt(readCookie('replies_in_tl') || "1"); // フォロー外からのReplyをTLに表示
 var footer = readCookie('footer') || "";  // フッタ文字列
 var in_reply_to_user = null;
@@ -323,6 +333,7 @@ function press(e) {
 }
 // 発言文字数カウンタ表示・更新
 function updateCount() {
+	setFstHeight($("fst").value.length ? Math.max($("fst").scrollHeight+2,30) : 30);
 	if (no_counter) return;
 	$("counter-div").style.display = "block";
 	$("counter").innerHTML = 140 - footer.length - $("fst").value.length;
@@ -332,6 +343,7 @@ resetFrm = function() {
 	document.frm.reset();
 	setReplyId(false);
 	if ($("counter-div").style.display == "block") updateCount();
+	setFstHeight(30);
 }
 // reply先の設定/解除
 function setReplyId(id) {
@@ -815,6 +827,7 @@ function switchMisc() {
 					'<input type="checkbox" name="since_check"' + (no_since_id?"":" checked") + '>since_id check<br>' +
 					'<input type="checkbox" name="replies_in_tl"' + (replies_in_tl?" checked":"") + '>show not-following replies in TL<br>' +
 					'<input type="checkbox" name="counter"' + (no_counter?"":" checked") + '>POST length counter<br>' +
+					'<input type="checkbox" name="resize_fst"' + (no_resize_fst?"":" checked") + '>Auto-resize field<br>' +
 					'Footer: <input name="footer" size="10" value="' + footer + '"><br>' +
 					'Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>' +
 					'user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br>' +
@@ -834,6 +847,7 @@ function setPreps(frm) {
 	updateInterval = frm.interval.value;
 	no_since_id = !frm.since_check.checked;
 	no_counter = !frm.counter.checked;
+	no_resize_fst = !frm.resize_fst.checked;
 	replies_in_tl = frm.replies_in_tl.checked;
 	footer = frm.footer.value;
 	resetUpdateTimer();
@@ -844,6 +858,7 @@ function setPreps(frm) {
 	writeCookie('update_interval', updateInterval, 3652);
 	writeCookie('no_since_id', no_since_id?1:0, 3652);
 	writeCookie('no_counter', no_counter?1:0, 3652);
+	writeCookie('no_resize_fst', no_resize_fst?1:0, 3652);
 	writeCookie('replies_in_tl', replies_in_tl?1:0, 3652);
 	writeCookie('footer', footer, 3652);
 	writeCookie('tw_plugins', " " + frm.list.value, 3652);
