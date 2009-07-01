@@ -330,6 +330,7 @@ function press(e) {
 	document.frm.status.value += footer;
 	document.frm.status.select();
 	document.frm.submit();
+	return false;
 }
 // 発言文字数カウンタ表示・更新
 function updateCount() {
