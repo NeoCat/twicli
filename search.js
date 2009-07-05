@@ -1,9 +1,28 @@
 var tws_page = 0;
 function twsSearch(q) {
+	var myid = 'search-' + q;
+	if (!$(myid)) {
+		var tab = document.createElement('a');
+		tab.id = myid;
+		tab.pickup = new Array();
+		tab.innerHTML = tab.name = q;
+		tab.href = '#';
+		tab.onclick = function() { twsSearch(q); return false; };
+		$('menu2').insertBefore(tab, $('misc'));
+	}
+	switchTo(myid);
+
+	$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: red" href="javascript:closeSearchTab(\''+myid+'\')">[x] remove tab</a></div>';
 	tws_page = 0;
 	update_ele2 = loadXDomainScript('http://search.twitter.com/search.json?seq=' + (seq++) +
-							'&q=' + q + '&callback=twsSearchShow', update_ele2);
+							'&q=' + encodeURIComponent(q) + '&callback=twsSearchShow', update_ele2);
 	$("loading").style.display = "block";
+}
+function closeSearchTab(myid) {
+	if (!confirm("タブを閉じてもよろしいですか?")) return;
+	var target = $(myid);
+	target.parentNode.removeChild(target);
+	switchTL();
 }
 function twsSearchShow(res) {
 	var tmp = $("tmp");
@@ -39,5 +58,16 @@ registerPlugin({
 		e.href = "javascript:twsSearch('" + user.screen_name + "')";
 		e.innerHTML = '[search]';
 		ele.appendChild(e);
+	},
+	newMessageElement: function(ele, tw) {
+		var eles = ele.getElementsByTagName("span");
+		for (var i = 0; i < eles.length; i++) {
+			var target = eles[i];
+			if (target.className == "status") {
+				target.innerHTML = target.innerHTML.replace(/(\#[0-9A-Za-z_][0-9A-Za-z_]+)/g,
+									function(_,t){return '<a href="javascript:twsSearch(\''+t+'\')">'+t+'</a>'});
+				break;
+			}
+		}
 	}
 });

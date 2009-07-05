@@ -5,7 +5,7 @@ function twsjSearch(q) {
 	twsj_page = 1;
 	twsj_query = q;
 	update_ele2 = loadXDomainScript('http://pcod.no-ip.org/yats/search?seq=' + (seq++) +
-							'&query=' + q + '&json=twsjSearchShow', update_ele2);
+							'&query=' + encodeURIComponent(q) + '&json=twsjSearchShow', update_ele2);
 	$("loading").style.display = "block";
 }
 function twsjSearchShow(res) {
