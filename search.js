@@ -64,8 +64,10 @@ registerPlugin({
 		for (var i = 0; i < eles.length; i++) {
 			var target = eles[i];
 			if (target.className == "status") {
-				target.innerHTML = target.innerHTML.replace(/(\#[0-9A-Za-z_][0-9A-Za-z_]+)/g,
-									function(_,t){return '<a href="javascript:twsSearch(\''+t+'\')">'+t+'</a>'});
+				target.innerHTML = target.innerHTML.replace(/([\u0001-\/:-@\[-`{-~]|^)(\#[0-9A-Za-z_]{2,})(?=[\u0001-\/:-@\[-`{-~]|$)/g, function(_,d1,t){
+					if (t.match(/^#\d+$/)) return d1+t;
+					return d1+'<a href="javascript:twsSearch(\''+t+'\')">'+t+'</a>';
+				});
 				break;
 			}
 		}
