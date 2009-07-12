@@ -181,11 +181,11 @@ function cumulativeOffset(ele) {
 	return [left, top];
 }
 // スクロール
-function scrollY() { return window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop; }
+function getScrollY() { return window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop; }
 function scrollToY(y,y0,start) {
 	var t = (new Date).getTime();
 	start = start || t;
-	y0 = y0 || scrollY();
+	y0 = y0 || getScrollY();
 	if (start+500 <= t)
 		return scrollTo(0,y);
 	scrollTo(0, Math.ceil(y0 + (y-y0)*(1-Math.cos((t-start)/500*Math.PI))/2));
@@ -410,7 +410,7 @@ function closeRep() {
 }
 // replyからユーザ間のタイムラインを取得
 function pickup2() {
-	switchUser(user_pick1 + "," + user_pick2);
+	//switchUser(user_pick1 + "," + user_pick2);
 }
 // ポップアップメニューを表示
 function popup_menu(user, id, ele) {
@@ -681,9 +681,9 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 	pNode.removeChild(dummy);
 	if (pNode.childNodes.length == 0) return 0;
 	pNode.style.overflow = "hidden";
-	var animation2 = animation && scrollY() < 10;
+	var animation2 = animation && getScrollY() < 10;
 	var maxH;
-	var curY = scrollY();
+	var curY = getScrollY();
 	if (animation2) { // get maxH
 		twNode.appendChild(pNode);
 		maxH = pNode.clientHeight;
