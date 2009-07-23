@@ -191,8 +191,11 @@ function scrollToY(y,y0,start) {
 	scrollTo(0, Math.ceil(y0 + (y-y0)*(1-Math.cos((t-start)/500*Math.PI))/2));
 	setTimeout(function(){scrollToY(y, y0, start)}, 20);
 }
-// Cookie
+// DOM Storage (or Cookie)
+if (!window.localStorage) window.localStorage = window.globalStorage && window.globalStorage[location.hostname];
 function readCookie(key) {
+	if (window.localStorage && window.localStorage["twicli_"+key])
+		return window.localStorage["twicli_"+key];
 	key += "=";
 	var scookie = document.cookie + ";";
 	start = scookie.indexOf(key);
@@ -205,7 +208,10 @@ function readCookie(key) {
 function writeCookie(key, val, days) {
 	var sday = new Date();
 	sday.setTime(sday.getTime() + (days * 1000 * 60 * 60 * 24));
-	document.cookie = key + "=" + escape(val) + ";expires=" + sday.toGMTString();
+	if (window.localStorage)
+		window.localStorage["twicli_"+key] = val;
+	else
+		document.cookie = key + "=" + escape(val) + ";expires=" + sday.toGMTString();
 }
 // Array.mapの再実装(Opera用)
 if (!Array.prototype.map) {
@@ -864,7 +870,7 @@ function setPreps(frm) {
 	writeCookie('footer', footer, 3652);
 	writeCookie('tw_plugins', " " + frm.list.value, 3652);
 	writeCookie('user_style', frm.user_style.value, 3652);
-	alert("Saved in Cookie. Please reload to apply plugins and CSS.");
+	alert("Your settings are saved. Please reload to apply plugins and CSS.");
 }
 // 初期化
 function init() {
