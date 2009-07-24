@@ -195,7 +195,7 @@ function scrollToY(y,y0,start) {
 if (!window.localStorage) window.localStorage = window.globalStorage && window.globalStorage[location.hostname];
 function readCookie(key) {
 	if (window.localStorage && window.localStorage["twicli_"+key])
-		return window.localStorage["twicli_"+key];
+		return String(window.localStorage["twicli_"+key]);
 	key += "=";
 	var scookie = document.cookie + ";";
 	start = scookie.indexOf(key);
