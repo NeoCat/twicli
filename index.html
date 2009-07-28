@@ -11,6 +11,8 @@ body { background-color: #115; margin: 0; padding: 0; }
 .button { cursor:pointer; }
 li { margin: 4px; }
 h1 { border-bottom: solid 2px red; }
+h2 { border-left: solid 1.2em #cf6; padding-left: 4px; }
+h3 { border-left: solid 1.2em #fc0; padding-left: 4px; }
 img { border: none; }
 --></style>
 <script type="text/javascript">
@@ -47,7 +49,7 @@ IE7でも一応動作しますが、一部の表示が乱れます。<br>
 <h3>起動</h3>
 上のリンク(bookmarklet)をクリック、またはブックマークにD&amp;Dで登録して選択すると、別窓で起動します。<br>
 認証を求められたら、Twitterのアカウント／パスワードを入力してください。<br><br>
-あんまり激しくクリックしまくると<b>API制限(100回/1時間)</b>にすぐ引っかかりますので、基本まったりご使用下さい。^^;
+あんまり激しくクリックしまくると<b>API制限(150回/1時間)</b>にすぐ引っかかりますので、基本まったりご使用下さい。^^;
 </p>
 
 <h3>操作方法</h3>
@@ -70,6 +72,14 @@ function go(d) {
 <img alt="usage" src="usage3.png" width="1" height="1">
 <img alt="usage" src="usage4.png" width="1" height="1">
 <img alt="usage" src="usage5.png" width="1" height="1">
+
+<h2>カスタマイズ</h2>
+<h3>user stylesheetについて</h3>
+「+」タブのuser stylesheetにCSSを記述して、見た目のカスタマイズが可能です。例えば：
+<ul>
+<li>ユーザのアイコンを消す → <tt> .uicon { display: none; } </tt>
+<li>発言の行間を広げる　　 → <tt> .status { line-height: 1.5; } </tt>
+</ul>
 
 <h3>プラグインについて</h3>
 「+」タブのPreferencesでプラグイン(JavaScript)を登録することにより、機能拡張ができます。<br>

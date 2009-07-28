@@ -451,7 +451,7 @@ function retweetStatus() {
 function deleteStatus() {
 	if (!popup_id) return false;
 	if (!confirm("Are you sure to delete this message (@"+popup_user+" / "+popup_id+")?")) return false;
-	$("loading").style.display = "display";
+	$("loading").style.display = "block";
 	if ($("text" + popup_id)) $("text" + popup_id).style.textDecoration = "line-through";
 	enqueuePost(twitterURL + 'status/destroy/' + popup_id + '.xml',
 		function(){$("loading").style.display = "none";}, function(){$("loading").style.display = "none";});
@@ -604,9 +604,10 @@ function twReplies(tw) {
 	tw.reverse();
 	for (var j in tw) callPlugins("gotNewReply", tw[j]);
 	tw.reverse();
+	var nr = tw.length;
 	if (replies_in_tl)
-		twShowToNode(tw, $("tw"), false, false, true);
-	if (tw.length > 0 && $("tw").className.indexOf("new") < 0)
+		nr = twShowToNode(tw, $("tw"), false, false, true);
+	if (nr > 0 && $("reply").className.indexOf("new") < 0)
 		$("reply").className += " new";
 	if (tw.length > 0) since_id_reply = tw[0].id;
 }
@@ -664,10 +665,11 @@ function twShow3(tw) {
 function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 	$('loading').style.display = 'none';
 	var len = tw.length;
-	if (len == 0) return len;
+	if (len == 0) return 0;
 	var pNode = document.createElement('div');
 	var dummy = pNode.appendChild(document.createElement('div'));
 	var myname_r = new RegExp("@"+myname+"\\b","i");
+	var nr_show = 0;
 	for (var i = len-1; i >= 0; i--) {
 		if ($(twNode.id + "-" + tw[i].id))
 			continue;
@@ -676,12 +678,16 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 			s.id = twNode.id + "-" + tw[i].id;
 			s.innerHTML = makeHTML(tw[i], no_name, twNode.id);
 			s.screen_name = tw[i].user.screen_name;
-			if (tw[i].d_dir == 1 || tw[i].text.match(myname_r))
+			if (tw[i].d_dir == 1 || tw[i].text.match(myname_r)) {
 				s.className = "tome";
+				if (twNode.id == "tw" && $("reply").className.indexOf("new") < 0)
+					$("reply").className += " new";
+			}
 			if (tw[i].d_dir == 2 || tw[i].user.screen_name == myname)
 				s.className = "fromme";
 			callPlugins("newMessageElement", s, tw[i], twNode.id);
 			pNode.insertBefore(s, pNode.childNodes[0]);
+			nr_show++;
 		}
 	}
 	pNode.removeChild(dummy);
@@ -708,7 +714,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 		scrollTo(0, curY + pNode.clientHeight+1);
 	}
 	if (animation) {
-		nr_tw += len;
+		nr_tw += nr_show;
 		while (nr_tw > nr_limit) {
 			var last_node = twNode.childNodes[twNode.childNodes.length-1];
 			nr_tw -= last_node.childNodes.length;
@@ -721,7 +727,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 			break;
 		}
 	}
-	return len
+	return nr_show;
 }
 // 新規twitの出現アニメーション処理
 function animate(elem, max, start) {
@@ -917,5 +923,6 @@ function wheel(event) {
 if (window.addEventListener) window.addEventListener('DOMMouseScroll', wheel, false);
 window.onmousewheel = document.onmousewheel = wheel;
 </script>
+<script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www."); document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">try { var pageTracker = _gat._getTracker("UA-6677831-1"); pageTracker._trackPageview(); } catch(err) {}</script>
 </body>
 </html>
