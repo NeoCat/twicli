@@ -598,6 +598,12 @@ function twLimit(lim) {
 					"hourly limit : " + lim.remaining_hits + " / " + lim.hourly_limit + "<br>" +
 					"reset at : " + dateFmt(lim.reset_time);
 }
+// 新着reply受信通知
+function noticeNewReply() {
+	if ($("reply").className.indexOf("new") < 0)
+		$("reply").className += " new";
+	callPlugins("noticeNewReply");
+}
 // 受信repliesを表示
 function twReplies(tw) {
 	if (tw.error) return alert(tw.error);
@@ -607,8 +613,7 @@ function twReplies(tw) {
 	var nr = tw.length;
 	if (replies_in_tl)
 		nr = twShowToNode(tw, $("tw"), false, false, true);
-	if (nr > 0 && $("reply").className.indexOf("new") < 0)
-		$("reply").className += " new";
+	if (nr > 0) noticeNewReply();
 	if (tw.length > 0) since_id_reply = tw[0].id;
 }
 // 受信twitを表示
@@ -630,6 +635,7 @@ function twShow(tw) {
 					update_ele2);
 		update_reply_counter = 4;
 	}
+	callPlugins("noticeUpdate", tw);
 }
 function twOld(tw) {
 	if (tw.error) return alert(tw.error);
@@ -681,7 +687,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 			if (tw[i].d_dir == 1 || tw[i].text.match(myname_r)) {
 				s.className = "tome";
 				if (twNode.id == "tw" && $("reply").className.indexOf("new") < 0)
-					$("reply").className += " new";
+					noticeNewReply();
 			}
 			if (tw[i].d_dir == 2 || tw[i].user.screen_name == myname)
 				s.className = "fromme";
