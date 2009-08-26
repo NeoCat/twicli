@@ -485,7 +485,7 @@ function makeHTML(tw, no_name, pid) {
 			'<img class="uicon" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
 			//名前
 			'<a href="http://twitter.com/' + un + '" onClick="switchUser(\'' + un + '\');return false"><span class="uid">' + un + '</span>' +
-			 /*プロフィールの名前*/ (tw.user.name!=un ? '<span class="uname">('+tw.user.name+')</span>' : '') + '</a>'
+			 /*プロフィールの名前*/ (tw.user.name!=un ? '<span class="uname">('+tw.user.name+'&#x202c;)</span>' : '') + '</a>'
 		: '') +
 		 /* protected? */ (tw.user.protected ? '<img id="lock-' + tw.id + '" class="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
 		/*ダイレクトメッセージの方向*/ (tw.d_dir == 1 ? '<span class="dir">→</span> ' : tw.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
@@ -686,7 +686,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 			s.screen_name = tw[i].user.screen_name;
 			if (tw[i].d_dir == 1 || tw[i].text.match(myname_r)) {
 				s.className = "tome";
-				if (twNode.id == "tw" && $("reply").className.indexOf("new") < 0)
+				if (twNode.id == "tw")
 					noticeNewReply();
 			}
 			if (tw[i].d_dir == 2 || tw[i].user.screen_name == myname)
