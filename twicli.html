@@ -206,12 +206,13 @@ function readCookie(key) {
 	return null;
 }
 function writeCookie(key, val, days) {
-	var sday = new Date();
-	sday.setTime(sday.getTime() + (days * 1000 * 60 * 60 * 24));
 	if (window.localStorage)
 		window.localStorage["twicli_"+key] = val;
-	else
+	else {
+		var sday = new Date();
+		sday.setTime(sday.getTime() + (days * 1000 * 60 * 60 * 24));
 		document.cookie = key + "=" + escape(val) + ";expires=" + sday.toGMTString();
+	}
 }
 // Array.mapの再実装(Opera用)
 if (!Array.prototype.map) {
@@ -510,17 +511,18 @@ function makeHTML(tw, no_name, pid) {
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
 	return '<table><tr><td><a target="twitter" href="http://twitter.com/account/profile_image/'+
-					user.screen_name+'"><img align="left" src="' + user.profile_image_url + '"></a></td><td>' +
-					(user.protected ? '<img src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
-					'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b><br>' +
-					(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
-					(user.url ? '<b>URL</b>: <a target="twitter" href="' + user.url + '">' + user.url + '</a><br>' : '') +
-					(user.description ? user.description : '') +
-					'<br><b>' + user.friends_count + '<small>following</small> / ' + 
-								user.followers_count + '<small>followers</small>' +
-					'<br>' + user.statuses_count + '<small>updates</small> / ' +
-								user.favourites_count + '<small>favs</small></b>' +
-					'</td></tr></table><a target="twitter" href="http://twitter.com/' + user.screen_name + '">[Twitter]</a> <a href="javascript:switchFav()">[fav]</a> ';
+			user.screen_name+'"><img align="left" src="' + user.profile_image_url + '"></a></td><td id="profile">' +
+			(user.protected ? '<img src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
+			'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b><br>' +
+			(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
+			(user.url ? '<b>URL</b>: <a target="twitter" href="' + user.url + '">' + user.url + '</a><br>' : '') +
+			(user.description ? user.description : '') +
+			'<br><b>' + user.friends_count + '<small>following</small> / ' + 
+						user.followers_count + '<small>followers</small>' +
+			'<br>' + user.statuses_count + '<small>updates</small> / ' +
+						user.favourites_count + '<small>favs</small></b>' +
+			'</td></tr></table><a target="twitter" href="http://twitter.com/' + user.screen_name + '">[Twitter]</a> '+
+			'<a href="javascript:switchFav()">[fav]</a> ';
 }
 // 過去の発言取得ボタン(DOM)生成
 function nextButton(id, p) {
@@ -555,13 +557,24 @@ function follow(f) {
 // ユーザ情報を表示
 function twUserInfo(user) {
 	if (user.error) return alert(user.error);
-	elem = $('user_info');
+	var elem = $('user_info');
 	elem.innerHTML = makeUserInfoHTML(user);
 	callPlugins("newUserInfoElement", elem, user);
 	if (myname != user.screen_name) {
-		$("user_info").innerHTML += '<input type="button" value="' + (user.following ? 'Remove ' : 'Follow ') + 
-					last_user + '" onClick="follow('+!user.following+')">';
+		update_ele2 = loadXDomainScript(twitterURL + 'friendships/show.json?seq=' + (seq++) +
+					'&source_screen_name=' + myname + '&target_id=' + user.id +
+					'&callback=twRelation', update_ele2);
 	}
+}
+// ユーザ情報にフォロー関係を表示
+function twRelation(rel) {
+	var source = rel.relationship.source;
+	var elem = $("user_info");
+	elem.innerHTML += '<input type="button" value="' + (source.following ? 'Remove ' : 'Follow ') +  last_user +
+					'" onClick="follow('+!source.following+')">';
+	if (source.followed_by)
+		$("profile").innerHTML += "<br><b>" + rel.relationship.target.screen_name + ' is following you!</b>';
+	callPlugins("newUserRelationship", elem, rel);
 }
 // ダイレクトメッセージ一覧の受信
 function twDirect1(tw) {
@@ -868,7 +881,7 @@ function setPreps(frm) {
 	no_counter = !frm.counter.checked;
 	no_resize_fst = !frm.resize_fst.checked;
 	replies_in_tl = frm.replies_in_tl.checked;
-	footer = frm.footer.value;
+	footer = new String(frm.footer.value);
 	resetUpdateTimer();
 	writeCookie('ver', 6, 3652);
 	writeCookie('limit', nr_limit, 3652);
@@ -880,8 +893,9 @@ function setPreps(frm) {
 	writeCookie('no_resize_fst', no_resize_fst?1:0, 3652);
 	writeCookie('replies_in_tl', replies_in_tl?1:0, 3652);
 	writeCookie('footer', footer, 3652);
-	writeCookie('tw_plugins', " " + frm.list.value, 3652);
-	writeCookie('user_style', frm.user_style.value, 3652);
+	writeCookie('tw_plugins', new String(" " + frm.list.value), 3652);
+	writeCookie('user_style', new String(frm.user_style.value), 3652);
+	callPlugins('savePrefs', frm);
 	alert("Your settings are saved. Please reload to apply plugins and CSS.");
 }
 // 初期化

@@ -37,5 +37,8 @@ registerPlugin({
 });
 
 
-for (var i = 0; i < 2; i++)
-	document.write('<div id="plysnd'+i+'"></div>');
+for (var i = 0; i < 2; i++) {
+	var ele = document.createElement("div");
+	ele.id = 'plysnd'+i;
+	document.body.appendChild(ele);
+}
