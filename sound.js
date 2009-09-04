@@ -37,8 +37,10 @@ registerPlugin({
 });
 
 
-for (var i = 0; i < 2; i++) {
-	var ele = document.createElement("div");
-	ele.id = 'plysnd'+i;
-	document.body.appendChild(ele);
-}
+setTimeout(function(){
+	for (var i = 0; i < 2; i++) {
+		var ele = document.createElement("div");
+		ele.id = 'plysnd'+i;
+		document.body.appendChild(ele);
+	}
+}, 0);

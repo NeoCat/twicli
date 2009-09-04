@@ -229,18 +229,7 @@ if (!Array.prototype.map) {
 // user-defined CSS
 var user_style = readCookie('user_style') || "";
 document.write('<style>' + user_style + '</style>');
-
-// ユーザ認証
-var myname = null;
-var myid = null;
-var last_user = null;
-function twAuth(a) {
-	if (a.error) return alert(a.error);
-	myname = last_user = a.screen_name;
-	myid = a.id;
-}
 </script>
-<script src="http://twitter.com/account/verify_credentials.json?callback=twAuth"></script>
 </head>
 <body onLoad="init()">
 <div id="control">
@@ -278,47 +267,69 @@ function twAuth(a) {
 
 <script type="text/javascript">
 var twitterURL = 'http://twitter.com/';
+var myname = null;		// 自ユーザ名
+var myid = null;		// 自ユーザID
+var last_user = null;	// user TLに表示するユーザ名
+// 設定値
 var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) || 60;
 var pluginstr = (cookieVer>5) && readCookie('tw_plugins') || ' regexp.js\noutputz.js\nsearch.js\nsearch2.js\nfavotter.js\nfollowers.js';
 pluginstr = pluginstr.substr(1);
+var plugins = new Array;
 var nr_limit = parseInt(readCookie('limit')) || 500;				// 表示する発言数の上限
 var max_count = (cookieVer>3) && parseInt(readCookie('max_count')) || 50;
 var max_count_u = parseInt(readCookie('max_count_u')) || 50;
-var plugins = new Array;
-var nr_tw = 0;
-var nr_page = 0;
+var no_since_id = parseInt(readCookie('no_since_id') || "0");		// since_idを使用しない
+var no_counter = parseInt(readCookie('no_counter') || "0");			// 発言文字数カウンタを無効化
+var no_resize_fst = parseInt(readCookie('no_resize_fst') || "0");	// フィールドの自動リサイズを無効化
+var replies_in_tl = parseInt(readCookie('replies_in_tl') || "1");	// フォロー外からのReplyをTLに表示
+var footer = readCookie('footer') || ""; 							// フッタ文字列
+// TL管理用
+var nr_tw = 0;					// 現在のTLの発言数
+var cur_page = 1;				// 現在表示中のページ
+var nr_page = 0;				// 次に取得するページ
+var get_next_func = getOldTL;	// 次ページ取得関数
+var since_id = null;			// TLの最終since_id
+var since_id_reply = null;		// Replyの最終since_id
+var in_reply_to_user = null;	// 発言の返信先
+// クロスドメイン通信関連
 var seq = (new Date).getTime();
-var since_id = null;
-var since_id_reply = null;
-var no_since_id = parseInt(readCookie('no_since_id') || "0");  // since_idを使用しない
-var no_counter = parseInt(readCookie('no_counter') || "0");  // 発言文字数カウンタを無効化
-var no_resize_fst = parseInt(readCookie('no_resize_fst') || "0");  // フィールドの自動リサイズを無効化
-var replies_in_tl = parseInt(readCookie('replies_in_tl') || "1"); // フォロー外からのReplyをTLに表示
-var footer = readCookie('footer') || "";  // フッタ文字列
-var in_reply_to_user = null;
 var users_log = [];
 var users_xds = [];
+var auth_ele = null;
 var update_ele = null;
 var update_ele2 = null;
+var reply_ele = null;
 var direct_ele1 = null;
 var direct_ele2 = null;
 var direct1 = null;
 var direct2 = null;
-var user_pick1 = null;
-var user_pick2 = null;
-var popup_user = null;
-var popup_id = null;
-var cur_page = 1;
-var fav_mode = 0;
-var reply_ele = false;
-var rep_top = 0;
-var popup_top = 0;
-var selected_menu = $("TL");
-var get_next_func = getOldTL;
+var delayed_tw = null;
+// UI関連
+var user_pick1 = null;			// [⇔]で表示するユーザ名1
+var user_pick2 = null;			// [⇔]で表示するユーザ名2
+var popup_user = null;			// ポップアップメニューが選択されたユーザ名
+var popup_id = null;			// ポップアップメニューが選択された発言ID
+var fav_mode = 0;				// fav表示中か
+var rep_top = 0;				// replyのオーバーレイ位置
+var popup_top = 0;				// ポップアップメニューの表示位置
+var selected_menu = $("TL");	// 選択中のタブ
 var update_timer = null;
 var update_reply_counter = 0;
 var key_press_detected = false;
+
+//ログイン・自ユーザ名受信
+function twAuth(a) {
+	if (a.error) return alert(a.error);
+	myname = last_user = a.screen_name;
+	myid = a.id;
+	$("user").innerHTML = last_user;
+	if (delayed_tw)
+		twShow(delayed_tw); // ログイン前に受信したTLを遅延評価
+}
+function auth() {
+	auth_ele = loadXDomainScript(twitterURL + "account/verify_credentials.json?callback=twAuth", auth_ele);
+}
 
 // enterキーで発言
 function press(e) {
@@ -460,6 +471,8 @@ function deleteStatus() {
 }
 // 最新タイムラインを取得
 update_inited = function() {
+	if (!myname) auth();
+	if (delayed_tw) return;
 	callPlugins("update");
 	update_ele = loadXDomainScript(twitterURL + 'statuses/friends_timeline.json?seq=' + (seq++) +
 						'&count=' + (since_id ? 200 : max_count) +
@@ -632,6 +645,10 @@ function twReplies(tw) {
 // 受信twitを表示
 function twShow(tw) {
 	if (tw.error) return alert(tw.error);
+	if (!myname) {
+		delayed_tw = tw; // 認証完了後まで評価を遅延
+		return;
+	}
 	tw.reverse();
 	for (var j in tw) callPlugins("gotNewMessage", tw[j]);
 	if(!since_id_reply) since_id_reply = tw[0].id;
@@ -900,7 +917,6 @@ function setPreps(frm) {
 }
 // 初期化
 function init() {
-	if (myname) $("user").innerHTML = myname;
 	setTimeout(function(){scrollTo(0, 1)}, 0);
 	// 初回アップデート
 	update = update_inited; // 初期化前にupdateが発生するのを防止
