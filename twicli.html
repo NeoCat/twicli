@@ -934,9 +934,9 @@ function callPlugins(name) {
 			plugins[i][name].apply(plugins[i], args);
 }
 if (pluginstr) {
-	var list = pluginstr.split("\n");
-	for (var i = 0; i < list.length; i++)
-		document.write('<scr'+'ipt src="'+list[i]+'"></scr'+'ipt>');
+	var st = '<scr'+'ipt type="text/javascript" src="';
+	var ed = '"></scr'+'ipt>';
+	document.write(st + pluginstr.split("\n").join(ed+st) + ed);
 }
 // ホイールの回転でスクロール (スクロール不可のウィンドウ・フレーム内で有効)
 function wheel(event) {
