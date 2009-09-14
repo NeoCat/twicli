@@ -324,11 +324,10 @@ function twAuth(a) {
 	myname = last_user = a.screen_name;
 	myid = a.id;
 	$("user").innerHTML = last_user;
-	if (delayed_tw)
-		twShow(delayed_tw); // ログイン前に受信したTLを遅延評価
+	update();
 }
 function auth() {
-	auth_ele = loadXDomainScript(twitterURL + "account/verify_credentials.json?callback=twAuth", auth_ele);
+	auth_ele = loadXDomainScript(twitterURL + "account/verify_credentials.json?callback=twAuth&seq="+(seq++), auth_ele);
 }
 
 // enterキーで発言
@@ -471,8 +470,7 @@ function deleteStatus() {
 }
 // 最新タイムラインを取得
 update_inited = function() {
-	if (!myname) auth();
-	if (delayed_tw) return;
+	if (!myname) return auth();
 	callPlugins("update");
 	update_ele = loadXDomainScript(twitterURL + 'statuses/friends_timeline.json?seq=' + (seq++) +
 						'&count=' + (since_id ? 200 : max_count) +
@@ -920,7 +918,7 @@ function init() {
 	setTimeout(function(){scrollTo(0, 1)}, 0);
 	// 初回アップデート
 	update = update_inited; // 初期化前にupdateが発生するのを防止
-	setTimeout(function(){update()}, 0);
+	setTimeout(auth, 0);
 }
 // プラグイン
 function registerPlugin(obj) {
