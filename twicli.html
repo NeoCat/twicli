@@ -69,12 +69,10 @@ iframe { display: none; }
 --></style>
 <style id="fst_css"></style>
 <script type="text/javascript">
-if (navigator.userAgent.indexOf("Opera") >= 0)
-	document.write("<style>#control { height: 58px; } #menu { top: 38px; } #tw, #tw2 { top: 58px; }</style>");
 function $(id) { return document.getElementById(id); }
 function setFstHeight(h) {
 	if (no_resize_fst) return;
-	var exh = (navigator.userAgent.indexOf("Opera") >= 0) ? 1 : 0;
+	var exh = 0;
 	$("fst").style.height = h;
 	$("menu").style.top = $("counter-div").style.top = h+3+exh*5;
 	$("control").style.height = h+23+exh*5;
@@ -488,6 +486,18 @@ function dateFmt(d) {
 	function d2(dig) { return (dig>9?"":"0") + dig }
 	return (d.getMonth()+1) + "/" + d.getDate() + " " + d.getHours() + ":" + d2(d.getMinutes()) + ":" + d2(d.getSeconds());
 }
+function insertPDF(str) {
+	var k = 0;
+	for (var i = 0; i < str.length; i++) {
+		if (str[i] == "\u202A" || str[i] == "\u202B" || str[i] == "\u202D" || str[i] == "\u202E")
+			k++;
+		else if (str[i] == "\u202C" && i > 0)
+			k--;
+	}
+	while (k--)
+		str += "\u202C"
+	return str;
+}
 function makeHTML(tw, no_name, pid) {
 	var un = tw.user.screen_name;
 	return /*fav*/ '<img class="fav" src="http://assets3.twitter.com/images/icon_star_'+(tw.favorited?'full':'empty')+'.gif" ' +
@@ -498,7 +508,7 @@ function makeHTML(tw, no_name, pid) {
 			'<img class="uicon" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
 			//名前
 			'<a href="http://twitter.com/' + un + '" onClick="switchUser(\'' + un + '\');return false"><span class="uid">' + un + '</span>' +
-			 /*プロフィールの名前*/ (tw.user.name!=un ? '<span class="uname">('+tw.user.name+'&#x202c;)</span>' : '') + '</a>'
+			 /*プロフィールの名前*/ (tw.user.name!=un ? '<span class="uname">('+insertPDF(tw.user.name)+')</span>' : '') + '</a>'
 		: '') +
 		 /* protected? */ (tw.user.protected ? '<img id="lock-' + tw.id + '" class="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
 		/*ダイレクトメッセージの方向*/ (tw.d_dir == 1 ? '<span class="dir">→</span> ' : tw.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
