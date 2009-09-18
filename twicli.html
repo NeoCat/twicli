@@ -292,6 +292,8 @@ var get_next_func = getOldTL;	// 次ページ取得関数
 var since_id = null;			// TLの最終since_id
 var since_id_reply = null;		// Replyの最終since_id
 var in_reply_to_user = null;	// 発言の返信先
+var tl_oldest_id = null;		// TLの初回id
+var last_replies = [];			// 受信した返信
 // クロスドメイン通信関連
 var seq = (new Date).getTime();
 var users_log = [];
@@ -304,7 +306,6 @@ var direct_ele1 = null;
 var direct_ele2 = null;
 var direct1 = null;
 var direct2 = null;
-var delayed_tw = null;
 // UI関連
 var user_pick1 = null;			// [⇔]で表示するユーザ名1
 var user_pick2 = null;			// [⇔]で表示するユーザ名2
@@ -627,39 +628,54 @@ function noticeNewReply() {
 	if ($("reply").className.indexOf("new") < 0)
 		$("reply").className += " new";
 	callPlugins("noticeNewReply");
+	if (selected_menu.id == "reply")
+		twShow2(last_replies);
+}
+// last_repliesの重複排除・要素数制限
+function cleanupLastReplies() {
+	var rep_ids = [];
+	for (var i = 0; i < last_replies.length; i++) {
+		if (rep_ids[last_replies[i].id]) {
+			last_replies.splice(i--, 1);
+		}
+		rep_ids[last_replies[i].id] = 1;
+	}
+	last_replies.splice(nr_limit);
 }
 // 受信repliesを表示
 function twReplies(tw) {
 	if (tw.error) return alert(tw.error);
+	last_replies = tw.concat(last_replies);
+	cleanupLastReplies();
 	tw.reverse();
 	for (var j in tw) callPlugins("gotNewReply", tw[j]);
 	tw.reverse();
 	var nr = tw.length;
 	if (replies_in_tl)
-		nr = twShowToNode(tw, $("tw"), false, false, true);
-	if (nr > 0) noticeNewReply();
+		nr = twShowToNode(tw, $("tw"), false, false, true, false, true);
+	if (nr > 0)
+		noticeNewReply();
+	else if (selected_menu.id == "reply")
+		twShow2(last_replies);
 	if (tw.length > 0) since_id_reply = tw[0].id;
 }
 // 受信twitを表示
 function twShow(tw) {
 	if (tw.error) return alert(tw.error);
-	if (!myname) {
-		delayed_tw = tw; // 認証完了後まで評価を遅延
-		return;
-	}
 	tw.reverse();
 	for (var j in tw) callPlugins("gotNewMessage", tw[j]);
-	if(!since_id_reply) since_id_reply = tw[0].id;
+	if(!tl_oldest_id && tw.length > 0) tl_oldest_id = tw[0].id;
 	tw.reverse();
 	if (nr_page == 0) {
 		$("tw").appendChild(nextButton('get_old', 1));
 		nr_page = 1;
 	}
 	twShowToNode(tw, $("tw"), false, false, true, true);
-	if (since_id_reply && update_reply_counter-- <= 0) {
+	if (tl_oldest_id && update_reply_counter-- <= 0) {
 		update_ele2 = loadXDomainScript(twitterURL + 'statuses/replies.json?seq=' + (seq++) +
-						'&count=' + (since_id ? 200 : max_count) +
-						'&callback=twReplies&since_id='+since_id_reply,
+						'&count=' + (since_id_reply ? 200 : max_count) +
+						(since_id_reply ? '&since_id='+since_id_reply : '') +
+						'&callback=twReplies',
 					update_ele2);
 		update_reply_counter = 4;
 	}
@@ -696,7 +712,7 @@ function twShow3(tw) {
 		twShow2(tws);
 	}
 }
-function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
+function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore_old) {
 	$('loading').style.display = 'none';
 	var len = tw.length;
 	if (len == 0) return 0;
@@ -704,8 +720,11 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 	var dummy = pNode.appendChild(document.createElement('div'));
 	var myname_r = new RegExp("@"+myname+"\\b","i");
 	var nr_show = 0;
+	var need_cleanup_last_replies = false;
 	for (var i = len-1; i >= 0; i--) {
 		if ($(twNode.id + "-" + tw[i].id))
+			continue;
+		if (ignore_old && tl_oldest_id > tw[i].id)
 			continue;
 		if (tw[i].user) {
 			var s = document.createElement('div');
@@ -714,8 +733,11 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 			s.screen_name = tw[i].user.screen_name;
 			if (tw[i].d_dir == 1 || tw[i].text.match(myname_r)) {
 				s.className = "tome";
-				if (twNode.id == "tw")
+				if (twNode.id == "tw") {
+					last_replies.unshift(tw[i]);
+					need_cleanup_last_replies = true;
 					noticeNewReply();
+				}
 			}
 			if (tw[i].d_dir == 2 || tw[i].user.screen_name == myname)
 				s.className = "fromme";
@@ -761,6 +783,8 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since) {
 			break;
 		}
 	}
+	if (need_cleanup_last_replies)
+		cleanupLastReplies();
 	return nr_show;
 }
 // 新規twitの出現アニメーション処理
@@ -818,10 +842,15 @@ function switchTL() {
 	switchTo("TL");
 }
 function switchReply() {
-	switchTo("reply");
-	$("loading").style.display = "block";
-	update_ele2 = loadXDomainScript(twitterURL + 'statuses/replies.json?seq=' + (seq++) +
-				'&count=' + max_count_u + '&callback=twShow2', update_ele2);
+	if (selected_menu.id == "reply" || last_replies.length == 0) {
+		switchTo("reply");
+		$("loading").style.display = "block";
+		update_ele2 = loadXDomainScript(twitterURL + 'statuses/replies.json?seq=' + (seq++) +
+					'&count=' + max_count_u + '&callback=twReplies', update_ele2);
+	} else {
+		switchTo("reply");
+		twShow2(last_replies);
+	}
 }
 function switchUser(user) {
 	if (!user) user = last_user;
