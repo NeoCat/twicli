@@ -29,7 +29,7 @@ function twfcFollwersIDsRenew() {
 	$("loading").style.display = "block";
 	var status = document.getElementById("followers_status");
 	if (status) status.innerHTML = "loading...";
-	xds.load(twitterURL + 'followers/ids.json', twfcRenew);
+	xds.load(twitterAPI + 'followers/ids.json', twfcRenew);
 }
 function twfcRenew(list) {
 	followers_ids_list = list;
