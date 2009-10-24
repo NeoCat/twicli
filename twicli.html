@@ -234,7 +234,7 @@ document.write('<style>' + user_style + '</style>');
 <script type="text/javascript">resetFrm = function(){}; update = function(){};</script>
 <iframe name="tx" onload="resetFrm();update()"></iframe>
 <!--発言フォーム-->
-<form name="frm" action="http://twitter.com/statuses/update.xml" method="POST" target="tx">
+<form name="frm" action="http://api.twitter.com/1/statuses/update.xml" method="POST" target="tx">
 <textarea id="fst" name="status" onkeyup="updateCount(); if (!key_press_detected && this.value.indexOf('\n') >= 0) return press(1)" onkeypress="updateCount(); return press(event)" onfocus="updateCount();" onblur="$('counter-div').style.display='none';"></textarea>
 <input type="hidden" name="source" value="twicli">
 <a id="go" href="javascript:void press(1)"><img src="go.png"></a>
