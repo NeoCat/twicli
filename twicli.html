@@ -317,6 +317,8 @@ var selected_menu = $("TL");	// 選択中のタブ
 var update_timer = null;
 var update_reply_counter = 0;
 var key_press_detected = false;
+var last_post = null;
+var last_in_reply_to_user = null;
 
 //ログイン・自ユーザ名受信
 function twAuth(a) {
@@ -330,16 +332,22 @@ function auth() {
 	auth_ele = loadXDomainScript(twitterAPI + "account/verify_credentials.json?callback=twAuth&seq="+(seq++), auth_ele);
 }
 
-// enterキーで発言
+// enterキーで発言, "r"入力で再投稿, 空欄でTL更新
 function press(e) {
 	if (e != 1) key_press_detected = true;
 	if (e != 1 && e.keyCode != 13 && e.keyCode != 10 || e.ctrlKey || e.shiftKey) return true;
 	if (!key_press_detected) document.frm.status.value = document.frm.status.value.replace(/\n/g, "");
-	if (document.frm.status.value == '') { // 空欄であればTimeline更新のみ
+	if (document.frm.status.value == '') {
 		$("loading").style.display = "block";
 		update();
 		return false;
 	}
+	if (document.frm.status.value == "r" && last_post) {
+		document.frm.status.value = last_post;
+		in_reply_to_user = last_in_reply_to_user;
+	}
+	last_post = document.frm.status.value;
+	last_in_reply_to_user = in_reply_to_user;
 	if (document.frm.status.value.indexOf("@"+in_reply_to_user) < 0) // @ユーザが含まれているときのみ返信先を指定
 		setReplyId(false);
 	in_reply_to_user = "";
