@@ -475,7 +475,7 @@ function deleteStatus() {
 	if (!confirm("Are you sure to delete this message (@"+popup_user+" / "+popup_id+")?")) return false;
 	$("loading").style.display = "block";
 	if ($("text" + popup_id)) $("text" + popup_id).style.textDecoration = "line-through";
-	enqueuePost(twitterAPI + 'status/destroy/' + popup_id + '.xml',
+	enqueuePost(twitterAPI + 'statuses/destroy/' + popup_id + '.xml',
 		function(){$("loading").style.display = "none";}, function(){$("loading").style.display = "none";});
 	return false;
 }
