@@ -283,6 +283,7 @@ var no_counter = parseInt(readCookie('no_counter') || "0");			// 発言文字数
 var no_resize_fst = parseInt(readCookie('no_resize_fst') || "0");	// フィールドの自動リサイズを無効化
 var replies_in_tl = parseInt(readCookie('replies_in_tl') || "1");	// フォロー外からのReplyをTLに表示
 var footer = readCookie('footer') || ""; 							// フッタ文字列
+var decr_enter = parseInt(readCookie('decr_enter') || "0");			// Shift/Ctrl+Enterで投稿
 // TL管理用
 var nr_tw = 0;					// 現在のTLの発言数
 var cur_page = 1;				// 現在表示中のページ
@@ -335,7 +336,9 @@ function auth() {
 // enterキーで発言, "r"入力で再投稿, 空欄でTL更新
 function press(e) {
 	if (e != 1) key_press_detected = true;
-	if (e != 1 && e.keyCode != 13 && e.keyCode != 10 || e.ctrlKey || e.shiftKey) return true;
+	if (e != 1 && e.keyCode != 13 && e.keyCode != 10 ||
+		!decr_enter && (e.ctrlKey || e.shiftKey) || decr_enter && !(e.ctrlKey || e.shiftKey) )
+			return true;
 	if (!key_press_detected) document.frm.status.value = document.frm.status.value.replace(/\n/g, "");
 	if (document.frm.status.value == '') {
 		$("loading").style.display = "block";
@@ -923,6 +926,7 @@ function switchMisc() {
 					'<input type="checkbox" name="replies_in_tl"' + (replies_in_tl?" checked":"") + '>show not-following replies in TL<br>' +
 					'<input type="checkbox" name="counter"' + (no_counter?"":" checked") + '>POST length counter<br>' +
 					'<input type="checkbox" name="resize_fst"' + (no_resize_fst?"":" checked") + '>Auto-resize field<br>' +
+					'<input type="checkbox" name="decr_enter"' + (decr_enter?" checked":"") + '>Post with ctrl/shift+enter<br>' +
 					'Footer: <input name="footer" size="10" value="' + footer + '"><br>' +
 					'Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>' +
 					'user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br>' +
@@ -945,6 +949,7 @@ function setPreps(frm) {
 	no_resize_fst = !frm.resize_fst.checked;
 	replies_in_tl = frm.replies_in_tl.checked;
 	footer = new String(frm.footer.value);
+	decr_enter = frm.decr_enter.checked;
 	resetUpdateTimer();
 	writeCookie('ver', 6, 3652);
 	writeCookie('limit', nr_limit, 3652);
@@ -956,6 +961,7 @@ function setPreps(frm) {
 	writeCookie('no_resize_fst', no_resize_fst?1:0, 3652);
 	writeCookie('replies_in_tl', replies_in_tl?1:0, 3652);
 	writeCookie('footer', footer, 3652);
+	writeCookie('decr_enter', decr_enter?1:0, 3652);
 	writeCookie('tw_plugins', new String(" " + frm.list.value), 3652);
 	writeCookie('user_style', new String(frm.user_style.value), 3652);
 	callPlugins('savePrefs', frm);
