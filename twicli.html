@@ -336,8 +336,8 @@ function auth() {
 // enterキーで発言, "r"入力で再投稿, 空欄でTL更新
 function press(e) {
 	if (e != 1) key_press_detected = true;
-	if (e != 1 && e.keyCode != 13 && e.keyCode != 10 ||
-		!decr_enter && (e.ctrlKey || e.shiftKey) || decr_enter && !(e.ctrlKey || e.shiftKey) )
+	if (e != 1 && (e.keyCode != 13 && e.keyCode != 10 ||
+		!decr_enter && (e.ctrlKey || e.shiftKey) || decr_enter && !(e.ctrlKey || e.shiftKey)) )
 			return true;
 	if (!key_press_detected) document.frm.status.value = document.frm.status.value.replace(/\n/g, "");
 	if (document.frm.status.value == '') {
