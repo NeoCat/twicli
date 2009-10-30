@@ -4,45 +4,41 @@
 
   var _updateCount = window.updateCount;
   var fst = $('fst');
-  var timer = null;
-  var ele = null;
+  var timer, ele, command, original;
   var remove = function(e){if(e && e.parentNode)e.parentNode.removeChild(e); e = null};
 
   window.replaceText = function(hash){
-    for (var original in hash) if (hash.hasOwnProperty(original)) {
-      var replacement = hash[original];
-      try{
-        var replacement = decodeURI(replacement);
+    var replacement = hash[original];
+    if (replacement) {
+      try{ // unescape percent-encoded UTF-8 characters
+        replacement = decodeURI(replacement);
       }catch(e){}
+    } else {
+      replacement = original;
+    }
 
-      if (fst.value.indexOf(original+';;;') >= 0) {
-        fst.value = fst.value.replace(original+';;;', replacement || original);
-      } else if (fst.value.indexOf(original+'；；；') >= 0) {
-        fst.value = fst.value.replace(original+'；；；', replacement || original);
-      }
+    if (fst.value.indexOf(command) >= 0) {
+      fst.value = fst.value.replace(command, replacement);
     }
+    // cleanup
     remove(ele);
-    if (timer) {
-      clearTimeout(timer);
-      timer = null;
-    }
+    clearTimeout(timer);
+    timer = null;
     _updateCount();
   }
 
   window.updateCount = function(){
     if (!(ele && ele.parentNode) && /((https?:\/\/\S+?)(?:;;;|；；；))/.test(fst.value)) {
-      var command = RegExp.$1;
-      var originalUrl = RegExp.$2;
-      if (originalUrl.indexOf('http://j.mp/') === 0 || originalUrl.indexOf('http://bit.ly/') === 0) {
-        var src = 'http://atsushaa.appspot.com/untiny/get?callback=replaceText&url='+encodeURIComponent(originalUrl);
+      command = RegExp.$1;
+      original = RegExp.$2;
+      if (original.indexOf('http://j.mp/') === 0 || original.indexOf('http://bit.ly/') === 0) {
+        var src = 'http://atsushaa.appspot.com/untiny/get?callback=replaceText&url='+encodeURIComponent(original);
       } else {
-        var src = 'http://atsushaa.appspot.com/shorten/get?callback=replaceText&url='+encodeURIComponent(originalUrl);
+        var src = 'http://atsushaa.appspot.com/shorten/get?callback=replaceText&url='+encodeURIComponent(original);
       }
-      loadXDomainScript(src, ele);
+      ele = loadXDomainScript(src, ele);
       timer = setTimeout(function(){
-        fst.value = fst.value.replace(command, originalUrl);
-        remove(ele);
-        timer = null;
+        window.replaceText({original:null});
       }, wait);
     }
     _updateCount();
