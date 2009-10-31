@@ -19,7 +19,7 @@ function twsSearch(q) {
 	$("loading").style.display = "block";
 }
 function closeSearchTab(myid) {
-	if (!confirm("タブを閉じてもよろしいですか?")) return;
+	if (!confirm("Are you sure to close this tab?")) return;
 	var target = $(myid);
 	target.parentNode.removeChild(target);
 	switchTL();
@@ -56,7 +56,7 @@ registerPlugin({
 	newUserInfoElement: function(ele, user) {
 		var e = document.createElement("a");
 		e.href = "javascript:twsSearch('" + user.screen_name + "')";
-		e.innerHTML = '[search]';
+		e.innerHTML = '[Search]';
 		ele.appendChild(e);
 	},
 	newMessageElement: function(ele, tw) {

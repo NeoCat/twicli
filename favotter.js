@@ -44,19 +44,18 @@ $('popup').appendChild(a)
 a = document.createElement("a");
 a.target = 'twitter';
 a.id = 'favotter_link_user';
-a.innerHTML = 'ふぁぼったー / ふぁぼられ';
+a.innerHTML = 'Favotter / New';
 $('popup').appendChild(a)
 
 a = document.createElement("a");
 a.target = 'twitter';
 a.id = 'favotter_link_status';
-a.innerHTML = 'ふぁぼったー / 発言';
+a.innerHTML = 'Favotter / Status';
 $('popup').appendChild(a)
 
 a = document.createElement("a");
 a.target = 'twitter';
 a.id = 'favotter_link_fav';
-a.innerHTML = 'ふぁぼったー / ふぁぼり';
+a.innerHTML = 'Favotter / fav';
 $('popup').appendChild(a)
-
 
