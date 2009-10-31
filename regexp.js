@@ -99,7 +99,6 @@ registerPlugin({
 	},
 	newMessageElement: function(s, tw, twNodeId) {
 		if (twNodeId != 'tw') return;
-		s.tw = tw; // 抽出に利用するためDOMツリーにJSONを記録
 		// 発言にマッチしたら該当タブに色付け
 		for (var i = 0; i < pickup_tab_list.length; i++) {
 			var tab = pickup_tab_list[i];

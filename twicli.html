@@ -465,7 +465,7 @@ function popup_hide() {
 function retweetStatus() {
 	if (!popup_id) return false;
 	if ($('lock-' + popup_id) && !confirm("This post is protected; Are you sure to RT?")) return false;
-	$('fst').value = "RT @"+popup_user+": " + $('text'+popup_id).innerHTML.replace(/<.*?>/g,'');
+	$('fst').innerHTML = "RT @"+popup_user+": " + $('tw-'+popup_id).tw.text;
 	$('fst').focus(); $('fst').select();
 	return false;
 }
@@ -753,6 +753,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 			s.id = twNode.id + "-" + tw[i].id;
 			s.innerHTML = makeHTML(tw[i], no_name, twNode.id);
 			s.screen_name = tw[i].user.screen_name;
+			s.tw = tw[i]; // DOMツリーにJSONを記録
 			if (tw[i].d_dir == 1 || tw[i].text.match(myname_r)) {
 				s.className = "tome";
 				if (twNode.id == "tw") {
