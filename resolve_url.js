@@ -42,9 +42,8 @@
 
   function setResolver(link) {
     // JSONP with callback window.replaceUrl
-    var script;
     var src = api + '?callback=replaceUrl&url=' + encodeURIComponent(link.href);
-    loadXDomainScript(src, script);
+    var script = loadXDomainScript(src);
 
     // cleanup if JSONP doesn't load in time
     var timer = setTimeout(function(){
