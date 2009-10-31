@@ -311,6 +311,7 @@ var user_pick1 = null;			// [⇔]で表示するユーザ名1
 var user_pick2 = null;			// [⇔]で表示するユーザ名2
 var popup_user = null;			// ポップアップメニューが選択されたユーザ名
 var popup_id = null;			// ポップアップメニューが選択された発言ID
+var popup_ele = null;			// ポップアップメニューが選択された発言ノード
 var fav_mode = 0;				// fav表示中か
 var rep_top = 0;				// replyのオーバーレイ位置
 var popup_top = 0;				// ポップアップメニューの表示位置
@@ -444,6 +445,7 @@ function pickup2() {
 function popup_menu(user, id, ele) {
 	popup_user = user;
 	popup_id = id;
+	popup_ele = ele.parentNode.parentNode;
 	callPlugins("popup", $('popup'), user, id, ele);
 	$('popup_link_user').href = twitterURL + user;
 	$('popup_link_status').href = twitterURL + user + '/statuses/' + id;
@@ -459,13 +461,16 @@ function popup_menu(user, id, ele) {
 function popup_hide() {
 	$('popup').style.display = 'none';
 	$('popup_hide').style.display = 'none';
-	popup_user = popup_id = null;
+	popup_user = popup_id = popup_ele = null;
 }
 // 発言のReTweet
 function retweetStatus() {
 	if (!popup_id) return false;
 	if ($('lock-' + popup_id) && !confirm("This post is protected; Are you sure to RT?")) return false;
-	$('fst').innerHTML = "RT @"+popup_user+": " + $('tw-'+popup_id).tw.text;
+	$('fst').innerHTML = "RT @"+popup_user+": " + popup_ele.tw.text; // 実体参照をデコード
+	var text = $('fst').value;
+	$('fst').innerHTML = '';
+	$('fst').value = text;
 	$('fst').focus(); $('fst').select();
 	return false;
 }
