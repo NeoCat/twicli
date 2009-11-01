@@ -12,7 +12,9 @@
 body { background-image: url(block_bg.png); background-attachment: fixed; margin: 1px; min-height: 500px; }
 img { border: 0 none; }
 hr { margin: 0; padding: 0; }
+hr.spacer { margin: 6px 0 }
 iframe { display: none; }
+form { margin-bottom: 0; }
 
 #control { position: fixed; top: 0; left: 0; width: 100%; height: 53px; border-bottom: 1px solid black; background-color: white; z-index: 3; background-color: #eee; }
 #loading { opacity: 0.5; filter: alpha(opacity=50); position: absolute; top: 6px; width: 100%; height: 20px; z-index: 4; text-align: center; }
@@ -215,7 +217,7 @@ function writeCookie(key, val, days) {
 		document.cookie = key + "=" + escape(val) + ";expires=" + sday.toGMTString();
 	}
 }
-// Array.mapの再実装(Opera用)
+// Array#mapの再実装(Opera用)
 if (!Array.prototype.map) {
 	Array.prototype.map = function(fun) {
 		var len = this.length;
@@ -227,6 +229,14 @@ if (!Array.prototype.map) {
 		return res;
 	};
 }
+// Array#uniqの再実装
+Array.prototype.uniq = function() {
+	for (var i = 0, l = this.length; i < l; i++)
+		for (var j = 0; j < i; j++)
+			if (this[i] === this[j])
+				this.splice(i--, l-- && 1);
+	return this;
+};
 // user-defined CSS
 var user_style = readCookie('user_style') || "";
 document.write('<style>' + user_style + '</style>');
@@ -275,7 +285,7 @@ var last_user = null;	// user TLに表示するユーザ名
 // 設定値
 var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) || 60;
-var pluginstr = (cookieVer>5) && readCookie('tw_plugins') || ' regexp.js\noutputz.js\nsearch.js\nsearch2.js\nfavotter.js\nfollowers.js';
+var pluginstr = (cookieVer>6) && readCookie('tw_plugins') || ' regexp.js\nlists.js\noutputz.js\nsearch.js\nsearch2.js\nfavotter.js\nfollowers.js\nshorten_url.js\nresolve_url.js';
 pluginstr = pluginstr.substr(1);
 var plugins = new Array;
 var nr_limit = parseInt(readCookie('limit')) || 500;				// 表示する発言数の上限
@@ -715,7 +725,7 @@ function twOld(tw) {
 	if (tw.error) return alert(tw.error);
 	var tmp = $("tmp");
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
-	twShowToNode(tw, $("tw"), false, true);
+	twShowToNode(tw, $("tw"), false, true, false, false, false, true);
 	$("tw").appendChild(nextButton('get_old', nr_page));
 }
 function twShow2(tw) {
@@ -742,7 +752,7 @@ function twShow3(tw) {
 		twShow2(tws);
 	}
 }
-function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore_old) {
+function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore_old, ignore_new) {
 	$('loading').style.display = 'none';
 	var len = tw.length;
 	if (len == 0) return 0;
@@ -755,6 +765,8 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 		if ($(twNode.id + "-" + tw[i].id))
 			continue;
 		if (ignore_old && tl_oldest_id > tw[i].id)
+			continue;
+		if (ignore_new && tl_oldest_id < tw[i].id)
 			continue;
 		if (tw[i].user) {
 			var s = document.createElement('div');
@@ -922,10 +934,10 @@ function switchDirect() {
 }
 function switchMisc() {
 	switchTo("misc");
-	$("tw2h").innerHTML = '<p><a target="twitter" href="index.html"><b>twicli</b></a> : A browser-based Twitter client<br><small>Copyright &copy; 2008-2009 NeoCat</small></p><hr>' +
-					'<p><form onSubmit="switchUser($(\'user_id\').value); return false;">'+
-					'show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="go.png"></form></p><hr>' +
-					'<p><a href="javascript:togglePreps()">▼<b>Preferences</b></a>' +
+	$("tw2h").innerHTML = '<br><a target="twitter" href="index.html"><b>twicli</b></a> : A browser-based Twitter client<br><small>Copyright &copy; 2008-2009 NeoCat</small><hr class="spacer">' +
+					'<form onSubmit="switchUser($(\'user_id\').value); return false;">'+
+					'show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="go.png"></form><hr class="spacer">' +
+					'<div id="pref"><a href="javascript:togglePreps()">▼<b>Preferences</b></a>' +
 					'<form id="preps" onSubmit="setPreps(this); return false;" style="display: none;">' +
 					'max #msgs in TL: <input name="limit" size="5" value="' + nr_limit + '"><br>' +
 					'#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>' +
@@ -939,7 +951,7 @@ function switchMisc() {
 					'Footer: <input name="footer" size="10" value="' + footer + '"><br>' +
 					'Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>' +
 					'user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br>' +
-					'<input type="submit" value="Save"></form></p><hr>';
+					'<input type="submit" value="Save"></form></div><hr class="spacer">';
 	callPlugins("miscTab", $("tw2h"));
 	$("loading").style.display = "block";
 	update_ele2 = loadXDomainScript(twitterAPI + 'account/rate_limit_status.json?seq=' + (seq++) +
@@ -960,7 +972,7 @@ function setPreps(frm) {
 	footer = new String(frm.footer.value);
 	decr_enter = frm.decr_enter.checked;
 	resetUpdateTimer();
-	writeCookie('ver', 6, 3652);
+	writeCookie('ver', 7, 3652);
 	writeCookie('limit', nr_limit, 3652);
 	writeCookie('max_count', max_count, 3652);
 	writeCookie('max_count_u', max_count_u, 3652);
@@ -981,6 +993,7 @@ function init() {
 	setTimeout(function(){scrollTo(0, 1)}, 0);
 	// 初回アップデート
 	update = update_inited; // 初期化前にupdateが発生するのを防止
+	callPlugins("init");
 	setTimeout(auth, 0);
 }
 // プラグイン

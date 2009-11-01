@@ -6,10 +6,12 @@ for (var i = 0; i < followers_ids_list.length; i++)
 
 registerPlugin({
 	miscTab: function(ele) {
-		var e = document.createElement("p");
+		var e = document.createElement("div");
 		e.innerHTML = '<form onSubmit="twfcFollwersIDsRenew(); return false;">Color followers: <span id="followers_status">'+(followers_ids_list.length?"on("+followers_ids_list.length+")":"off")+'</span> <input type="submit" value="Renew"><input type="button" onClick="twfcFollwersIDsClear()" value="Off"> <a href="javascript:alert(\'Status Coloring:\\n  follower: black  non-follower: blue\')">[?]</a></form>';
 		ele.appendChild(e);
-		ele.appendChild(document.createElement("hr"));
+		var hr = document.createElement("hr");
+		hr.className = "spacer";
+		ele.appendChild(hr);
 	},
 	newMessageElement: function(ele, tw) {
 		if (followers_ids_list.length && myid != tw.user.id && !followers_ids[tw.user.id])

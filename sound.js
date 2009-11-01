@@ -6,14 +6,13 @@ function setSoundNames(names) {
 
 registerPlugin({
 	miscTab: function(ele) {
-		var e = document.createElement("p");
+		var e = document.createElement("div");
 		e.innerHTML = '<a href="javascript:var s = $(\'sound_pref\').style; s.display = s.display==\'block\'?\'none\':\'block\';void(0)"><b>▼Sound</b></a>' +
 			'<form id="sound_pref" style="display:none" onSubmit="setSoundNames([$(\'sound0\').value,$(\'sound1\').value]); return false;">' +
 			'on TL update: <input type="text" size="15" id="sound0" value="'+sound_name[0]+'"><br>' +
 			'on new Reply: <input type="text" size="15" id="sound1" value="'+sound_name[1]+'"><br>' +
 			'<input type="submit" value="Apply"></form>';
-		ele.appendChild(e);
-		ele.appendChild(document.createElement("hr"));
+		$("pref").appendChild(e);
 	},
 	noticeUpdate: function(tw) {
 		if (tw.length > 0)

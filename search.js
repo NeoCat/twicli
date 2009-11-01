@@ -8,7 +8,7 @@ function twsSearch(q) {
 		tab.innerHTML = tab.name = q;
 		tab.href = '#';
 		tab.onclick = function() { twsSearch(q); return false; };
-		$('menu2').insertBefore(tab, $('misc'));
+		$('menu2').appendChild(tab);
 	}
 	switchTo(myid);
 
@@ -38,7 +38,11 @@ function twsSearchShow(res) {
 	if (tws_page == 1) $('tw2c').innerHTML = '';
 	twShowToNode(result, $("tw2c"), false, tws_page > 1);
 	if (res.next_page) {
-		$("tw2c").innerHTML += '<div onClick="getNext(this)" id="next">▽</div>';
+		var next = document.createElement("div");
+		next.id = "next";
+		next.onclick = function(){getNext(this);};
+		next.innerHTML = "▽";
+		$("tw2c").appendChild(next);
 		get_next_func = function(){
 			update_ele2 = loadXDomainScript('http://search.twitter.com/search.json' + res.next_page +
 								'&seq=' + (seq++) + '&callback=twsSearchShow', update_ele2);
@@ -48,10 +52,12 @@ function twsSearchShow(res) {
 
 registerPlugin({
 	miscTab: function(ele) {
-		var e = document.createElement("p");
+		var e = document.createElement("div");
 		e.innerHTML = '<form onSubmit="twsSearch($(\'search_q\').value); return false;">Twitter search : <input type="text" size="15" id="search_q"><input type="image" src="go.png"></form>';
 		ele.appendChild(e);
-		ele.appendChild(document.createElement("hr"));
+		var hr = document.createElement("hr");
+		hr.className = "spacer";
+		ele.appendChild(hr);
 	},
 	newUserInfoElement: function(ele, user) {
 		var e = document.createElement("a");

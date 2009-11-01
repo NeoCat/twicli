@@ -1,4 +1,5 @@
 var pickup_regexp = readCookie('pickup_regexp') || '';
+var pickup_regexp_ex = ''; // 他プラグインからの検索条件
 var pickup_tab_list = new Array();	// タブ一覧
 
 // 発言(JSON)が指定条件にマッチするか判定
@@ -13,7 +14,8 @@ function execRegexp(tw, exp) {
 function switchRegexp(tab) {
 	var pickup = new Array();
 	switchTo(tab.id);
-	$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: red" href="javascript:closeRegexp(\''+tab.name+'\')">[x] remove tab</a></div>';
+	if (!tab.no_close)
+		$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: red" href="javascript:closeRegexp(\''+tab.name+'\')">[x] remove tab</a></div>';
 	// メインTLから該当する発言を抽出
 	var tl = $('tw').childNodes;
 	for (var i = 0; i < tl.length; i++) {
@@ -57,7 +59,7 @@ function closeRegexp(tab) {
 
 // 抽出タブ初期化
 function initRegexp() {
-	var list = pickup_regexp.split(/[\r\n]/);
+	var list = (pickup_regexp + pickup_regexp_ex).split(/[\r\n]/);
 	// 抽出タブを生成
 	for (var id = 0; id < list.length; id++) {
 		var entry = list[id].split(':');
@@ -65,7 +67,12 @@ function initRegexp() {
 		var regexp = entry[1] ? entry[1].split("/") : [];
 		var regexp2 = entry[2] ? entry[2].split("/") : [];
 		var filter = entry[3];
+		var no_close = false;
 		if (!tabname) continue;
+		if (tabname[0] == "\\") {
+			tabname = tabname.substr(1);
+			no_close = 1;
+		}
 		var ptab = $('pickup-'+tabname);
 		if (!ptab) {
 			ptab = document.createElement('a');
@@ -73,8 +80,9 @@ function initRegexp() {
 			ptab.id = 'pickup-' + tabname;
 			ptab.innerHTML = ptab.name = tabname;
 			ptab.href = '#';
+			ptab.no_close = no_close;
 			ptab.onclick = function() { switchRegexp(this); return false; };
-			$('menu2').insertBefore(ptab, $('misc'));
+			$('menu2').appendChild(ptab);
 			pickup_tab_list.push(ptab);
 		}
 		var exps = new Object;
@@ -92,10 +100,12 @@ initRegexp();
 
 registerPlugin({
 	miscTab: function(ele) {
-		var e = document.createElement("p");
+		var e = document.createElement("div");
 		e.innerHTML = 'Pickup Pattern <small>(TabName:ID:Status:TLFilter)</small> : <br><form onSubmit="setRegexp($(\'pickup_regexp\').value); return false;"><textarea cols="30" rows="4" id="pickup_regexp">' + pickup_regexp + '</textarea><br><input type="submit" value="Apply"></form>';
 		ele.appendChild(e);
-		ele.appendChild(document.createElement("hr"));
+		var hr = document.createElement("hr");
+		hr.className = "spacer";
+		ele.appendChild(hr);
 	},
 	newMessageElement: function(s, tw, twNodeId) {
 		if (twNodeId != 'tw') return;

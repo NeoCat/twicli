@@ -10,10 +10,12 @@ function setOutputzKey(key) {
 
 registerPlugin({
 	miscTab: function(ele) {
-		var e = document.createElement("p");
+		var e = document.createElement("div");
 		e.innerHTML = '<form onSubmit="setOutputzKey($(\'outputz_key\').value); return false;"><a target="outputz" href="http://outputz.com/">Outputz</a> key : <input type="text" size="15" id="outputz_key" value="'+(outputz_key?'(enabled)':'')+'"><input type="image" src="go.png"></form>';
 		ele.appendChild(e);
-		ele.appendChild(document.createElement("hr"));
+		var hr = document.createElement("hr");
+		hr.className = "spacer";
+		ele.appendChild(hr);
 	},
 	post: function(message) {
 		if (outputz_key)

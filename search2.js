@@ -20,8 +20,13 @@ function twsjSearchShow(res) {
 	});
 	if (twsj_page++ == 1) $('tw2c').innerHTML = '';
 	twShowToNode(result, $("tw2c"), false, twsj_page > 1);
-	if (res.length > 0)
-		$("tw2c").innerHTML += '<div onClick="getNext(this)" id="next">▽</div>';
+	if (res.length > 0) {
+		var next = document.createElement("div");
+		next.id = "next";
+		next.onclick = function(){getNext(this);};
+		next.innerHTML = "▽";
+		$("tw2c").appendChild(next);
+	}
 	get_next_func = function(){
 		update_ele2 = loadXDomainScript('http://pcod.no-ip.org/yats/search?page=' + twsj_page +
 							'&query=' + twsj_query + '&seq=' + (seq++) + '&json=twsjSearchShow', update_ele2);
@@ -30,9 +35,11 @@ function twsjSearchShow(res) {
 
 registerPlugin({
 	miscTab: function(ele) {
-		var e = document.createElement("p");
-		e.innerHTML = '<form onSubmit="twsjSearch($(\'searchj_q\').value); return false;">Twitter検索 : <input type="text" size="15" id="searchj_q"><input type="image" src="go.png"></form>';
+		var e = document.createElement("div");
+		e.innerHTML = '<form onSubmit="twsjSearch($(\'searchj_q\').value); return false;"><a target="twitter" href="http://pcod.no-ip.org/yats/">Twitter search (yats)</a>: <input type="text" size="15" id="searchj_q"><input type="image" src="go.png"></form>';
 		ele.appendChild(e);
-		ele.appendChild(document.createElement("hr"));
+		var hr = document.createElement("hr");
+		hr.className = "spacer";
+		ele.appendChild(hr);
 	}
 });
