@@ -2,7 +2,6 @@ var lists_to_get = (readCookie("lists") || "").split("\n");
 var lists_users = {};
 function getListInfo(name) {
 	if (name == "") return;
-	if (typeof window.console == "object") window.console.log("request list:" + name);
 	var del = name.indexOf('/');
 	var user = name.substr(0, del), slug = name.substr(del+1);
 	lists_users[name] = [];
