@@ -42,6 +42,25 @@ function unsubscribeList(name) {
 	writeCookie("lists", lists_to_get.join("\n"), 3652);
 	updateListsList();
 }
+function toggleListsInTL(a, ele) {
+	if (ele.checked) {
+		for (var i = 0; i < lists_to_get.length; i++) {
+			if (lists_to_get[i] == '#'+a) {
+				lists_to_get[i] = a;
+				break;
+			}
+		}
+	} else {
+		for (var i = 0; i < lists_to_get.length; i++) {
+			if (lists_to_get[i] == a) {
+				lists_to_get[i] = '#'+a;
+				break;
+			}
+		}
+	}
+	writeCookie("lists", lists_to_get.join("\n"), 3652);
+	updateListsList();
+}
 
 function twlGetLists(user) {
 	update_ele2 = loadXDomainScript(twitterAPI + user + '/lists/memberships.json?seq=' + (seq++) +
@@ -66,26 +85,6 @@ function twlLists(res) {
 				 a.member_count + ' / ' + a.subscriber_count + ')</div>';
 	}).join("");
 	$("loading").style.display = "none";
-}
-
-function toggleListsInTL(a, ele) {
-	if (ele.checked) {
-		for (var i = 0; i < lists_to_get.length; i++) {
-			if (lists_to_get[i] == '#'+a) {
-				lists_to_get[i] = a;
-				break;
-			}
-		}
-	} else {
-		for (var i = 0; i < lists_to_get.length; i++) {
-			if (lists_to_get[i] == a) {
-				lists_to_get[i] = '#'+a;
-				break;
-			}
-		}
-	}
-	writeCookie("lists", lists_to_get.join("\n"), 3652);
-	updateListsList();
 }
 
 var init_failed = false;
@@ -113,7 +112,7 @@ function updateListsList() {
 		var a = l[0] == '#' ? l.substr(1) : l;
 		var chk = l[0] == '#' ? '' : ' checked';
 		var users = lists_users[a];
-		return a != "" ? "<li>@"+ a +
+		return a != "" ? '<li><a target="twitter" href="' + twitterURL + a + '">@'+ a + '</a>' +
 			' (' + (users ? users.length : "error") + ') ' +
 			'<input onchange="toggleListsInTL(\''+a+'\',this)" type="checkbox" '+
 					'id="chk-lists-'+a.replace('/','-')+'"'+chk+'>'+
