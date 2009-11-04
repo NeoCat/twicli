@@ -59,7 +59,7 @@ function closeRegexp(tab) {
 
 // 抽出タブ初期化
 function initRegexp() {
-	var list = (pickup_regexp + pickup_regexp_ex).split(/[\r\n]/);
+	var list = (pickup_regexp + "\n" + pickup_regexp_ex).split(/[\r\n]/);
 	// 抽出タブを生成
 	for (var id = 0; id < list.length; id++) {
 		var entry = list[id].split(':');

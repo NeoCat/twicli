@@ -190,7 +190,7 @@ function cumulativeOffset(ele) {
 	return [left, top];
 }
 // スクロール
-if (navigator.userAgent.indexOf('iPhone'))
+if (navigator.userAgent.indexOf('iPhone') >= 0)
 	window.scrollBy = function(x,y) { scrollTo(x+window.pageXOffset,y+window.pageYOffset) };
 function getScrollY() { return window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop; }
 function scrollToY(y, total, accum, start) {
