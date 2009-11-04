@@ -10,7 +10,7 @@
 
   window.replaceText = function(hash){
     var replacement = hash[original] || original;
-    cache[replacement] = original;
+    if (hash[original]) cache[replacement] = original;
 
     if (fst.value.indexOf(command) >= 0) {
       fst.value = fst.value.replace(command, replacement);
