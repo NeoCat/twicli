@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="description" content="twicli is a web browser-based Twitter client. No need for installation. Automatically fetches timeline, and show with cool animation.">
 <meta name="copyright" content="&copy; 2008-2009 NeoCat">
 <meta name="description" content="JavaScript-based Twitter Client">
 <meta name="viewport" content="width=280,user-scalable=no">
@@ -27,7 +28,7 @@ form { margin-bottom: 0; }
 #menu a.new { background-color: #fcc; }
 
 #tw, #tw2 { position: absolute; left: 0px; top: 54px; width: 100%; font-size: small; }
-#tw2 { background-color: #fec; display: none; min-height: 448px; }
+#tw2 { background-color: #ffd; display: none; min-height: 448px; }
 #tw > div { border-bottom: 1px solid #777; }
 #tw > div > div, #tw2c > div > div { padding: 1px; border-bottom: 1px solid #999; }
 .dummy { border-bottom: 0; padding: 0; height: 0; clear: both; }
@@ -36,11 +37,11 @@ form { margin-bottom: 0; }
 .fav { float: right; }
 .dir { color: #679; }
 .status { text-decoration: none; color: black; }
-.status a.link { font-size: x-small; background-color: #eee; color: #030; border: solid 1px #9c3; text-decoration: none; }
+.status a.link { font-size: x-small; background-color: #eee; color: #022; border: solid 1px #cec; text-decoration: none; }
 .status a.link:hover { background-color: #ff9; }
 .utils { white-space: nowrap; text-align: right }
 .prop, .prop a { color: #999; font-size: x-small; }
-.fromme { background-color: #cfc; }
+.fromme { background-color: #cfd; }
 .tome { background-color: #ccf; }
 .emp { background-color: #fcc; }
 .button { color: #f29; border: 1px solid #ddd; text-decoration: none; font-size: medium; -webkit-text-size-adjust:140%; }
@@ -369,6 +370,8 @@ function press(e) {
 		update();
 		return false;
 	}
+	if (document.frm.status.value.length > 140)
+		return false;
 	if (document.frm.status.value == "r" && last_post) {
 		document.frm.status.value = last_post;
 		in_reply_to_user = last_in_reply_to_user;
