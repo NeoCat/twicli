@@ -867,13 +867,13 @@ function getNext(ele) {
 }
 function getOldTL() {
 	update_ele2 = loadXDomainScript(twitterAPI + 'statuses/friends_timeline.json?seq=' + (seq++) +
-				'&count=' + max_count + '&page=' + (nr_page++) + '&id=' + last_user +
+				'&count=' + max_count + '&page=' + (nr_page++) +
 				'&callback=twOld', update_ele2);
 }
 function getNextFuncCommon() {
 	if (selected_menu.id == "user" && !fav_mode)
 		update_ele2 = loadXDomainScript(twitterAPI + 'statuses/user_timeline.json?seq=' + (seq++) +
-					'&count=' + max_count_u + '&page=' + (++cur_page) + '&id=' + last_user +
+					'&count=' + max_count_u + '&page=' + (++cur_page) + '&screen_name=' + last_user +
 					'&suppress_response_codes=true&callback=twShow2', update_ele2);
 	else if (selected_menu.id == "user" && fav_mode)
 		update_ele2 = loadXDomainScript(twitterAPI + 'favorites/' + last_user + '.json?seq=' + (seq++) +
@@ -922,13 +922,13 @@ function switchUser(user) {
 	if (users.length == 1) {
 		$("tw2h").innerHTML = "<div id=\"user_info\"></div>";
 		update_ele2 = loadXDomainScript(twitterAPI + 'statuses/user_timeline.json?seq=' + (seq++) +
-			'&count=' + max_count_u + '&id=' + user + '&callback=twShow2', update_ele2);
+			'&count=' + max_count_u + '&screen_name=' + user + '&callback=twShow2', update_ele2);
 	} else {
 		users_log = [];
 		for (var i = 0; i < users_xds.length; i++)
 			xds.abort(users_xds[i]);
 		users_xds = users.map(function(u) {
-			xds.load(twitterAPI + 'statuses/user_timeline.json?id=' + u +
+			xds.load(twitterAPI + 'statuses/user_timeline.json?screen_name=' + u +
 							 '&suppress_response_codes=true&count=' + max_count_u, twShow3);
 		});
 	}
