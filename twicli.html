@@ -721,6 +721,13 @@ function twShow(tw) {
 		$("tw").appendChild(nextButton('get_old', 1));
 		nr_page = 1;
 	}
+
+	// double check since_id
+	if (!no_since_id && since_id)
+		for (var i = 0; i < tw.length; i++)
+			if (tw[i].id <= since_id)
+				tw.splice(i--, 1);
+
 	twShowToNode(tw, $("tw"), false, false, true, true, true);
 	if (tl_oldest_id && update_reply_counter-- <= 0) {
 		update_ele2 = loadXDomainScript(twitterAPI + 'statuses/mentions.json?seq=' + (seq++) +
