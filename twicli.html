@@ -10,7 +10,7 @@
 <link rel="shortcut icon" href="favicon.ico">
 <title>twicli</title>
 <style type="text/css"><!--
-body { background-image: url(block_bg.png); background-attachment: fixed; margin: 1px; min-height: 500px; }
+body { background-image: url(block_bg.png); background-attachment: fixed; margin: 1px; min-height: 500px; color: black; }
 img { border: 0 none; }
 hr { margin: 0; padding: 0; }
 hr.spacer { margin: 6px 0 }
@@ -18,7 +18,7 @@ iframe { display: none; }
 form { margin-bottom: 0; }
 
 #control { position: fixed; top: 0; left: 0; width: 100%; height: 53px; border-bottom: 1px solid black; background-color: white; z-index: 3; background-color: #eee; }
-#loading { opacity: 0.5; filter: alpha(opacity=50); position: absolute; top: 6px; width: 100%; height: 20px; z-index: 4; text-align: center; }
+#loading { opacity: 0.5; filter: alpha(opacity=50); position: absolute; top: 6px; width: 94%; height: 20px; z-index: 4; text-align: center; }
 #fst { position: absolute; left: 1px; top: 1px; width: 94%; height: 30px; font-size: small; overflow: hidden; }
 #go { text-decoration: none; position: absolute; left: 95%; top: 1px; }
 #rst { text-decoration: none; position: absolute; left: 95%; top: 16px; }
@@ -36,7 +36,7 @@ form { margin-bottom: 0; }
 .uicon2 { max-width: 96px; max-height: 96px; }
 .fav { float: right; }
 .dir { color: #679; }
-.status { text-decoration: none; color: black; }
+.status { text-decoration: none; }
 .status a.link { font-size: x-small; background-color: #eee; color: #022; border: solid 1px #cec; text-decoration: none; }
 .status a.link:hover { background-color: #ff9; }
 .utils { white-space: nowrap; text-align: right }
@@ -44,6 +44,7 @@ form { margin-bottom: 0; }
 .fromme { background-color: #cfd; }
 .tome { background-color: #ccf; }
 .emp { background-color: #fcc; }
+.retweeted { color: #555; }
 .button { color: #f29; border: 1px solid #ddd; text-decoration: none; font-size: medium; -webkit-text-size-adjust:140%; }
 .green { color: #195; }
 .popup { padding: 0 4px; color: #888; }
@@ -279,7 +280,8 @@ document.write('<style>' + user_style + '</style>');
 <a id="popup_link_user" href="" target="twitter">Twitter / User</a>
 <a id="popup_link_status" href="" target="twitter">Twitter / Status</a>
 <a id="popup_status_delete" href="#" onClick="return deleteStatus()">Delete Status</a>
-<a id="popup_status_retweet" href="#" onClick="return retweetStatus()" target="twitter">ReTweet</a>
+<a id="popup_status_retweet" href="#" onClick="return retweetStatus()" target="twitter">Retweet</a>
+<a id="popup_status_quote" href="#" onClick="return quoteStatus()" target="twitter">Quote with RT:</a>
 </div>
 <!--ポップアップメニュー非表示用-->
 <div id="popup_hide" onClick="popup_hide();"></div>
@@ -311,7 +313,7 @@ var decr_enter = parseInt(readCookie('decr_enter') || "0");			// Shift/Ctrl+Ente
 // TL管理用
 var nr_tw = 0;					// 現在のTLの発言数
 var cur_page = 1;				// 現在表示中のページ
-var nr_page = 0;				// 次に取得するページ
+var nr_page = max_count == 200 ? 1 : 0;	// 次に取得するページ
 var get_next_func = getOldTL;	// 次ページ取得関数
 var since_id = null;			// TLの最終since_id
 var since_id_reply = null;		// Replyの最終since_id
@@ -342,9 +344,11 @@ var popup_top = 0;				// ポップアップメニューの表示位置
 var selected_menu = $("TL");	// 選択中のタブ
 var update_timer = null;
 var update_reply_counter = 0;
+var update_direct_counter = 0;
 var key_press_detected = false;
 var last_post = null;
 var last_in_reply_to_user = null;
+var last_direct_id = null;
 
 //ログイン・自ユーザ名受信
 function twAuth(a) {
@@ -476,6 +480,8 @@ function popup_menu(user, id, ele) {
 	$('popup_link_user').href = twitterURL + user;
 	$('popup_link_status').href = twitterURL + user + '/statuses/' + id;
 	$('popup_status_delete').style.display = (user == myname ? "block" : "none");
+	$('popup_status_retweet').style.display = (selected_menu.id != "direct" ? "block" : "none");
+	$('popup_status_quote').style.display = (selected_menu.id != "direct" ? "block" : "none");
 	$('popup').style.display = "block";
 	var pos = cumulativeOffset(ele);
 	$('popup').style.left = pos[0] <  $('popup').offsetWidth - ele.offsetWidth ? 0 : pos[0] - $('popup').offsetWidth + ele.offsetWidth;
@@ -492,7 +498,20 @@ function popup_hide() {
 // 発言のReTweet
 function retweetStatus() {
 	if (!popup_id) return false;
-	if ($('lock-' + popup_id) && !confirm("This post is protected; Are you sure to RT?")) return false;
+	if ($('lock-' + popup_id)) {
+		alert("This tweet is protected.");
+		return false;
+	}
+	if (!confirm("Retweet to your followers?")) return false;
+	$("loading").style.display = "block";
+	enqueuePost(twitterAPI + 'statuses/retweet/' + popup_id + '.xml?source=twicli',
+		function(){ $("loading").style.display = "none"; });
+	return false;
+}
+// 発言をRT付きで引用
+function quoteStatus() {
+	if (!popup_id) return false;
+	if ($('lock-' + popup_id) && !confirm("This tweet is protected; Are you sure to retweet?")) return false;
 	$('fst').value = "RT @"+popup_user+": " + charRef(popup_ele.tw.text);
 	$('fst').focus(); $('fst').select();
 	return false;
@@ -500,7 +519,7 @@ function retweetStatus() {
 // 発言の削除
 function deleteStatus() {
 	if (!popup_id) return false;
-	if (!confirm("Are you sure to delete this message (@"+popup_user+" / "+popup_id+")?")) return false;
+	if (!confirm("Are you sure to delete this tweet (@"+popup_user+" / "+popup_id+")?")) return false;
 	$("loading").style.display = "block";
 	if ($("text" + popup_id)) $("text" + popup_id).style.textDecoration = "line-through";
 	enqueuePost(twitterAPI + 'statuses/destroy/' + popup_id + '.xml',
@@ -511,7 +530,7 @@ function deleteStatus() {
 update_inited = function() {
 	if (!myname) return auth();
 	callPlugins("update");
-	update_ele = loadXDomainScript(twitterAPI + 'statuses/friends_timeline.json?seq=' + (seq++) +
+	update_ele = loadXDomainScript(twitterAPI + 'statuses/home_timeline.json?seq=' + (seq++) +
 						'&count=' + (since_id ? 200 : max_count) +
 						'&callback=twShow' + (!no_since_id && since_id ? '&since_id='+since_id : ''), update_ele);
 	resetUpdateTimer();
@@ -667,6 +686,12 @@ function twDirectShow() {
 	twShow2(direct);
 	direct1 = direct2 = false;
 }
+function twDirectCheck(tw) {
+	if (!tw || tw.length == 0) return false;
+	if (last_direct_id && last_direct_id < tw[0].id)
+			$("direct").className += " new";
+	last_direct_id = tw[0].id;
+}
 // API制限情報の受信
 function twLimit(lim) {
 	$("loading").style.display = "none";
@@ -737,6 +762,11 @@ function twShow(tw) {
 					update_ele2);
 		update_reply_counter = 4;
 	}
+	if (tl_oldest_id && update_direct_counter-- <= 0) {
+		direct_ele1 = loadXDomainScript(twitterAPI + 'direct_messages.json?seq=' + (seq++) +
+										'&callback=twDirectCheck', direct_ele1);
+		update_direct_counter = 20;
+	}
 	callPlugins("noticeUpdate", tw);
 }
 function twOld(tw) {
@@ -802,6 +832,8 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 			}
 			if (tw[i].d_dir == 2 || tw[i].user.screen_name == myname)
 				s.className = "fromme";
+			if (tw[i].retweeted_status)
+				s.className += " retweeted";
 			callPlugins("newMessageElement", s, tw[i], twNode.id);
 			pNode.insertBefore(s, pNode.childNodes[0]);
 			nr_show++;
@@ -873,7 +905,7 @@ function getNext(ele) {
 	get_next_func();
 }
 function getOldTL() {
-	update_ele2 = loadXDomainScript(twitterAPI + 'statuses/friends_timeline.json?seq=' + (seq++) +
+	update_ele2 = loadXDomainScript(twitterAPI + 'statuses/home_timeline.json?seq=' + (seq++) +
 				'&count=' + max_count + '&page=' + (nr_page++) +
 				'&callback=twOld', update_ele2);
 }
