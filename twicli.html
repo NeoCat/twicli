@@ -374,8 +374,10 @@ function press(e) {
 		update();
 		return false;
 	}
-	if (document.frm.status.value.length > 140)
+	if (document.frm.status.value.length > 140) {
+		alert("This tweet is too long.");
 		return false;
+	}
 	if (document.frm.status.value == "r" && last_post) {
 		document.frm.status.value = last_post;
 		in_reply_to_user = last_in_reply_to_user;
