@@ -44,6 +44,7 @@ form { margin-bottom: 0; }
 .tome { background-color: #ccf; }
 .emp { background-color: #fcc; }
 .retweeted { color: #555; }
+.non-follower { color: #008; }
 .button { color: #f29; border: 1px solid #ddd; text-decoration: none; font-size: medium; -webkit-text-size-adjust:140%; }
 .green { color: #195; }
 .popup { padding: 0 4px; color: #888; }
@@ -757,7 +758,7 @@ function twShow(tw) {
 	twShowToNode(tw, $("tw"), false, false, true, true, true);
 	if (tl_oldest_id && update_reply_counter-- <= 0) {
 		update_ele2 = loadXDomainScript(twitterAPI + 'statuses/mentions.json?seq=' + (seq++) +
-						'&count=' + (since_id_reply ? 200 : max_count) +
+						'&count=' + (since_id_reply ? 200 : max_count_u) +
 						(since_id_reply ? '&since_id='+since_id_reply : '') +
 						'&callback=twReplies',
 					update_ele2);
@@ -907,7 +908,7 @@ function getNext(ele) {
 }
 function getOldTL() {
 	update_ele2 = loadXDomainScript(twitterAPI + 'statuses/home_timeline.json?seq=' + (seq++) +
-				'&count=' + max_count + '&page=' + (nr_page++) +
+				'&count=200&page=' + (nr_page++) +
 				'&callback=twOld', update_ele2);
 }
 function getNextFuncCommon() {

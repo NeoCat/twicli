@@ -17,7 +17,7 @@ registerPlugin({
 		if (followers_ids_list.length && myid != tw.user.id && !followers_ids[tw.user.id])
 			for (var i = 0; i  < ele.childNodes.length; i++)
 				if (ele.childNodes[i].className == "status")
-					ele.childNodes[i].style.color = "#008";
+					ele.childNodes[i].className += " non-follower";
 	}
 });
 
