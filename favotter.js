@@ -13,9 +13,8 @@ var twFavPlugin = {
 		fele.href = "http://favotter.matope.com/status.php?id=" + tw.id;
 		fele.target = "twitter";
 		if (this.favs[tw.id]) {
-			fele.style.fontSize = "small";
 			fele.style.backgroundColor = "#3fc";
-			fele.innerHTML = '[fav:' + this.favs[tw.id] + '] ';
+			fele.innerHTML = '<small>[fav:' + this.favs[tw.id] + ']</small>';
 		}
 		ele.insertBefore(fele, ele.childNodes[4]);
 	},
