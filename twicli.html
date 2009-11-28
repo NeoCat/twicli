@@ -312,7 +312,7 @@ var decr_enter = parseInt(readCookie('decr_enter') || "0");			// Shift/Ctrl+Ente
 // TL管理用
 var nr_tw = 0;					// 現在のTLの発言数
 var cur_page = 1;				// 現在表示中のページ
-var nr_page = max_count == 200 ? 1 : 0;	// 次に取得するページ
+var nr_page = 0;	// 次に取得するページ
 var get_next_func = getOldTL;	// 次ページ取得関数
 var since_id = null;			// TLの最終since_id
 var since_id_reply = null;		// Replyの最終since_id
@@ -744,8 +744,8 @@ function twShow(tw) {
 	if(!tl_oldest_id && tw.length > 0) tl_oldest_id = tw[0].id;
 	tw.reverse();
 	if (nr_page == 0) {
-		$("tw").appendChild(nextButton('get_old', 1));
-		nr_page = 1;
+		nr_page = max_count == 200 ? 2 : 1;
+		$("tw").appendChild(nextButton('get_old', nr_page));
 	}
 
 	// double check since_id
