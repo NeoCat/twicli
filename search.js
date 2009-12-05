@@ -38,10 +38,7 @@ function twsSearchShow(res) {
 	if (tws_page == 1) $('tw2c').innerHTML = '';
 	twShowToNode(result, $("tw2c"), false, tws_page > 1);
 	if (res.next_page) {
-		var next = document.createElement("div");
-		next.id = "next";
-		next.onclick = function(){getNext(this);};
-		next.innerHTML = "▽";
+		var next = nextButton('next-search');
 		$("tw2c").appendChild(next);
 		get_next_func = function(){
 			update_ele2 = loadXDomainScript('http://search.twitter.com/search.json' + res.next_page +

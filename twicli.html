@@ -509,8 +509,14 @@ function retweetStatus() {
 	}
 	if (!confirm("Retweet to your followers?")) return false;
 	$("loading").style.display = "block";
+	var target_ele = popup_ele;
 	enqueuePost(twitterAPI + 'statuses/retweet/' + popup_id + '.xml?source=twicli',
-		function(){ $("loading").style.display = "none"; });
+		function(){
+			$("loading").style.display = "none";
+			var img = document.createElement("img");
+			img.src = "rt.png";
+			target_ele.insertBefore(img, target_ele.childNodes[target_ele.childNodes.length-1]);
+		});
 	return false;
 }
 // 発言をRT付きで引用
@@ -891,7 +897,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 	if (replies.length) {
 		if (twNode.id == "tw")
 			twReplies(replies, true);
-		else 
+		else if (weak || since_id_reply) // 初回Reply取得時にはnoticeしない
 			noticeNewReply(replies);
 	}
 	return nr_show;
