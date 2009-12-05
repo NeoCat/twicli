@@ -26,10 +26,11 @@ form { margin-bottom: 0; }
 #menu a.sel { height: 20px; background-color: #ffe; color: #002; border-bottom-color: #fff; }
 #menu a.new { background-color: #fcc; }
 
-#tw, #tw2 { position: absolute; left: 0px; top: 54px; width: 100%; font-size: small; }
+.tw { position: absolute; left: 0px; top: 54px; width: 100%; font-size: small; }
+#re { display: none; }
 #tw2 { background-color: #ffd; display: none; min-height: 448px; }
 #tw > div { border-bottom: 1px solid #777; }
-#tw > div > div, #tw2c > div > div { padding: 1px; border-bottom: 1px solid #999; }
+.tw-parent > div > div { padding: 1px; border-bottom: 1px solid #999; }
 .dummy { border-bottom: 0; padding: 0; height: 0; clear: both; }
 .uicon { float: left; width: 32px; height: 32px; }
 .uicon2 { max-width: 96px; max-height: 96px; }
@@ -49,7 +50,7 @@ form { margin-bottom: 0; }
 .popup { padding: 0 4px; color: #888; }
 .lock { position: relative; top: 2px; left: 0; }
 .close { color: red; }
-#get_old, #next { text-align: center; background-color: #999; color: #fec; cursor: pointer; }
+.get-next { text-align: center; background-color: #999; color: #fec; cursor: pointer; }
 #rep { display: none; background-color: #fee; position: absolute; width: 90%; left: 4%; top: 200px; border: 4px solid #666; z-index: 2; padding: 2px; font-size: small; }
 #reps { margin-top: 5px; }
 #popup { display: none; background-color: #eee; position: absolute; left: 0; top: 200px; border: 2px solid #666; z-index: 6; width: 180px; font-size: x-small; }
@@ -70,7 +71,7 @@ form { margin-bottom: 0; }
 	#menu { height: 24px; }
 	#menu a { padding: 1px 5px; height: 22px; line-height: 22px; }
 	#menu a.sel { height: 24px; }
-	#tw, #tw2 { margin-top: 5px; }
+	.tw { margin-top: 5px; }
 }
 --></style>
 <style id="fst_css"></style>
@@ -82,7 +83,7 @@ function setFstHeight(h) {
 	$("fst").style.height = h;
 	$("menu").style.top = $("counter-div").style.top = h+3+exh*5;
 	$("control").style.height = h+23+exh*5;
-	$("tw").style.top = $("tw2").style.top = h+24+exh*4;
+	$("tw").style.top = $("tw2").style.top = $("re").style.top = h+24+exh*4;
 }
 // 文字参照をデコード
 function charRef(s) {
@@ -268,9 +269,11 @@ document.write('<style>' + user_style + '</style>');
 <div id="menu"><nobr id='menu2'><a id="TL" class="sel" href="javascript:void switchTL()">TL</a><a id="reply" href="javascript:void switchReply()">Re</a><a id="user" href="javascript:void switchUser()">user</a><a id="direct" href="javascript:void switchDirect()">D</a><a id="misc" href="javascript:void switchMisc()">+</a></nobr></div>
 </div>
 <!--メインタイムライン-->
-<div id="tw"></div>
-<!--TL以外のタブ-->
-<div id="tw2"><div id="tw2h"></div><div id="tw2c"></div></div>
+<div id="tw" class="tw tw-parent"></div>
+<!--Reply-->
+<div id="re" class="tw tw-parent"></div>
+<!--TL,Re以外のタブ-->
+<div id="tw2" class="tw"><div id="tw2h"></div><div id="tw2c" class="tw-parent"></div></div>
 <!--返信-->
 <div id="rep"><a href="javascript:closeRep()" class="close"><img alt="×" src="clr.png"></a>
 	<a href="javascript:pickup2()" class="close"><img alt="⇔" src="both.png"></a><div id="reps"></div></div>
@@ -300,9 +303,9 @@ var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) ||
 var pluginstr = (cookieVer>6) && readCookie('tw_plugins') || ' regexp.js\nlists.js\noutputz.js\nsearch.js\nsearch2.js\nfavotter.js\nfollowers.js\nshorten_url.js\nresolve_url.js';
 pluginstr = pluginstr.substr(1);
 var plugins = new Array;
-var nr_limit = parseInt(readCookie('limit')) || 500;				// 表示する発言数の上限
-var max_count = (cookieVer>3) && parseInt(readCookie('max_count')) || 50;
-var max_count_u = parseInt(readCookie('max_count_u')) || 50;
+var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 200);
+var max_count_u = Math.min(parseInt(readCookie('max_count_u')) || 50, 200);;
+var nr_limit = Math.max(max_count*2.5, parseInt(readCookie('limit')) || 500);		// 表示する発言数の上限
 var no_since_id = parseInt(readCookie('no_since_id') || "0");		// since_idを使用しない
 var no_counter = parseInt(readCookie('no_counter') || "0");			// 発言文字数カウンタを無効化
 var no_resize_fst = parseInt(readCookie('no_resize_fst') || "0");	// フィールドの自動リサイズを無効化
@@ -312,13 +315,13 @@ var decr_enter = parseInt(readCookie('decr_enter') || "0");			// Shift/Ctrl+Ente
 // TL管理用
 var nr_tw = 0;					// 現在のTLの発言数
 var cur_page = 1;				// 現在表示中のページ
-var nr_page = 0;	// 次に取得するページ
+var nr_page = 0;				// 次に取得するページ
+var nr_page_re = 0;				// 次に取得するページ(reply用)
 var get_next_func = getOldTL;	// 次ページ取得関数
 var since_id = null;			// TLの最終since_id
 var since_id_reply = null;		// Replyの最終since_id
 var in_reply_to_user = null;	// 発言の返信先
 var tl_oldest_id = null;		// TLの最も古いid
-var last_replies = [];			// 受信した返信
 // クロスドメイン通信関連
 var seq = (new Date).getTime();
 var users_log = [];
@@ -327,6 +330,7 @@ var auth_ele = null;
 var update_ele = null;
 var update_ele2 = null;
 var reply_ele = null;
+var reply_ele2 = null;
 var direct_ele1 = null;
 var direct_ele2 = null;
 var direct1 = null;
@@ -611,6 +615,7 @@ function makeUserInfoHTML(user) {
 function nextButton(id, p) {
 	var ret = document.createElement('div');
 	ret.id = id;
+	ret.className = 'get-next';
 	ret.onclick = function() { getNext(this); };
 	ret.innerHTML = '▽' + (p ? '(' + p + ')' : '');
 	return ret;
@@ -701,40 +706,25 @@ function twLimit(lim) {
 					"reset at : " + dateFmt(lim.reset_time);
 }
 // 新着reply受信通知
-function noticeNewReply() {
+function noticeNewReply(replies) {
 	if ($("reply").className.indexOf("new") < 0)
 		$("reply").className += " new";
-	callPlugins("noticeNewReply");
-	if (selected_menu.id == "reply")
-		twShow2(last_replies);
-}
-// last_repliesの重複排除・要素数制限
-function cleanupLastReplies() {
-	var rep_ids = [];
-	for (var i = 0; i < last_replies.length; i++) {
-		if (rep_ids[last_replies[i].id]) {
-			last_replies.splice(i--, 1);
-		}
-		rep_ids[last_replies[i].id] = 1;
-	}
-	last_replies.splice(nr_limit);
+	callPlugins("noticeNewReply", replies);
 }
 // 受信repliesを表示
-function twReplies(tw) {
+function twReplies(tw, fromTL) {
 	if (tw.error) return alert(tw.error);
-	last_replies = tw.concat(last_replies);
-	cleanupLastReplies();
 	tw.reverse();
 	for (var j in tw) callPlugins("gotNewReply", tw[j]);
 	tw.reverse();
-	var nr = tw.length;
-	if (replies_in_tl)
-		nr = twShowToNode(tw, $("tw"), false, false, true, false, true);
-	if (nr > 0)
-		noticeNewReply();
-	else if (selected_menu.id == "reply")
-		twShow2(last_replies);
-	if (tw.length > 0) since_id_reply = tw[0].id;
+	if (nr_page_re == 0) {
+		nr_page_re = 2;
+		$("re").appendChild(nextButton('get_old_re', nr_page_re));
+	}
+	twShowToNode(tw, $("re"), false, false, true, false, false, false, fromTL);
+	if (!fromTL && replies_in_tl)
+		twShowToNode(tw, $("tw"), false, false, true, false, true);
+	if (!fromTL && tw.length > 0) since_id_reply = tw[0].id;
 }
 // 受信twitを表示
 function twShow(tw) {
@@ -756,11 +746,11 @@ function twShow(tw) {
 
 	twShowToNode(tw, $("tw"), false, false, true, true, true);
 	if (tl_oldest_id && update_reply_counter-- <= 0) {
-		update_ele2 = loadXDomainScript(twitterAPI + 'statuses/mentions.json?seq=' + (seq++) +
+		reply_ele2 = loadXDomainScript(twitterAPI + 'statuses/mentions.json?seq=' + (seq++) +
 						'&count=' + (since_id_reply ? 200 : max_count_u) +
 						(since_id_reply ? '&since_id='+since_id_reply : '') +
 						'&callback=twReplies',
-					update_ele2);
+					reply_ele2);
 		update_reply_counter = 4;
 	}
 	if (tl_oldest_id && update_direct_counter-- <= 0) {
@@ -773,9 +763,16 @@ function twShow(tw) {
 function twOld(tw) {
 	if (tw.error) return alert(tw.error);
 	var tmp = $("tmp");
-	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
 	twShowToNode(tw, $("tw"), false, true, false, false, false, true);
+	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
 	$("tw").appendChild(nextButton('get_old', nr_page));
+}
+function twOldReply(tw) {
+	if (tw.error) return alert(tw.error);
+	var tmp = $("tmp");
+	twShowToNode(tw, $("re"), false, true, false, false, false, true);
+	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
+	$("re").appendChild(nextButton('get_old_re', nr_page_re));
 }
 function twShow2(tw) {
 	if (tw.error) return alert(tw.error);
@@ -801,7 +798,7 @@ function twShow3(tw) {
 		twShow2(tws);
 	}
 }
-function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore_old, ignore_new) {
+function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore_old, ignore_new, weak) {
 	$('loading').style.display = 'none';
 	var len = tw.length;
 	if (len == 0) return 0;
@@ -809,10 +806,15 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 	var dummy = pNode.appendChild(document.createElement('div'));
 	var myname_r = new RegExp("@"+myname+"\\b","i");
 	var nr_show = 0;
-	var need_cleanup_last_replies = false;
+	var replies = [];
 	for (var i = len-1; i >= 0; i--) {
-		if ($(twNode.id + "-" + tw[i].id))
-			continue;
+		var duplication = $(twNode.id + "-" + tw[i].id);
+		if (duplication) {
+			if (duplication.weak)
+				duplication.parentNode.removeChild(duplication);
+			else
+				continue;
+		}
 		if (ignore_old && tl_oldest_id > tw[i].id)
 			continue;
 		if (ignore_new && tl_oldest_id < tw[i].id)
@@ -823,12 +825,11 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 			s.innerHTML = makeHTML(tw[i], no_name, twNode.id);
 			s.screen_name = tw[i].user.screen_name;
 			s.tw = tw[i]; // DOMツリーにJSONを記録
+			if (weak) s.weak = true;
 			if (tw[i].d_dir == 1 || tw[i].text.match(myname_r)) {
 				s.className = "tome";
-				if (animation) {
-					last_replies.unshift(tw[i]);
-					need_cleanup_last_replies = true;
-					noticeNewReply();
+				if (animation && !duplication) {
+					replies.push(tw[i]);
 				}
 			}
 			if (tw[i].d_dir == 2 || tw[i].user.screen_name == myname)
@@ -864,17 +865,21 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 	}
 	if (animation) {
 		nr_tw += nr_show;
-		while (nr_tw > nr_limit) {
-			var last_node = twNode.childNodes[twNode.childNodes.length-1];
-			nr_tw -= last_node.childNodes.length;
-			twNode.removeChild(last_node);
-		}
-		tl_oldest_id = 0; // 最大3ブロックスキャンしてoldest更新(repliesの挿入等により必ずしもID順でない)
-		for (var i = 0; i < 3 && i < twNode.childNodes.length; i++) {
-			var target_block = twNode.childNodes[twNode.childNodes.length-i-1].childNodes;
-			for (var j = 0; j < target_block.length; j++)
-				if (target_block[j].tw && (target_block[j].tw.id < tl_oldest_id || !tl_oldest_id))
-					tl_oldest_id = target_block[j].tw.id;
+		if (nr_tw > nr_limit) {
+			while (nr_tw > nr_limit) {
+				var last_node = twNode.childNodes[twNode.childNodes.length-1];
+				nr_tw -= last_node.childNodes.length;
+				twNode.removeChild(last_node);
+			}
+			if (twNode.id == 'TL') {
+				tl_oldest_id = 0; // 最大3ブロックスキャンしてoldest更新(repliesの挿入等により必ずしもID順でない)
+				for (var i = 0; i < 3 && i < twNode.childNodes.length; i++) {
+					var target_block = twNode.childNodes[twNode.childNodes.length-i-1].childNodes;
+					var target_ele = target_block[target_block.length-1];
+					if (target_ele.tw && (target_ele.tw.id < tl_oldest_id || !tl_oldest_id))
+						tl_oldest_id = target_ele.tw.id;
+				}
+			}
 		}
 	}
 	for (var i = 0; check_since && i < len; i++) {
@@ -883,8 +888,12 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 			break;
 		}
 	}
-	if (need_cleanup_last_replies)
-		cleanupLastReplies();
+	if (replies.length) {
+		if (twNode.id == "tw")
+			twReplies(replies, true);
+		else 
+			noticeNewReply(replies);
+	}
 	return nr_show;
 }
 // 新規twitの出現アニメーション処理
@@ -910,6 +919,11 @@ function getOldTL() {
 				'&count=200&page=' + (nr_page++) +
 				'&callback=twOld', update_ele2);
 }
+function getOldReply() {
+	update_ele2 = loadXDomainScript(twitterAPI + 'statuses/mentions.json?seq=' + (seq++) +
+				'&count=' + max_count_u + '&page=' + (nr_page_re++) +
+				'&callback=twOldReply', update_ele2);
+}
 function getNextFuncCommon() {
 	if (selected_menu.id == "user" && !fav_mode)
 		update_ele2 = loadXDomainScript(twitterAPI + 'statuses/user_timeline.json?seq=' + (seq++) +
@@ -918,10 +932,6 @@ function getNextFuncCommon() {
 	else if (selected_menu.id == "user" && fav_mode)
 		update_ele2 = loadXDomainScript(twitterAPI + 'favorites/' + last_user + '.json?seq=' + (seq++) +
 					'&page=' + (++cur_page) + '&callback=twShow2', update_ele2);
-	else if (selected_menu.id == "reply")
-		update_ele2 = loadXDomainScript(twitterAPI + 'statuses/mentions.json?seq=' + (seq++) +
-					'&count=' + max_count_u + '&page=' + (++cur_page) +
-					'&callback=twShow2', update_ele2);
 }
 // タイムライン切り替え
 function switchTo(id) {
@@ -929,9 +939,10 @@ function switchTo(id) {
 	selected_menu = $(id);
 	selected_menu.className = "sel";
 	$("tw").style.display = id=="TL"?"block":"none";
+	$("re").style.display = id=="reply"?"block":"none";
 	$("tw2h").innerHTML = "";
 	$("tw2c").innerHTML = "";
-	$("tw2").style.display = id!="TL"?"block":"none";
+	$("tw2").style.display = id!="TL"&&id!="reply"?"block":"none";
 	$("rep").style.display = "none";
 	scrollTo(0, 1); scrollTo(0, 0);
 	cur_page = 1;
@@ -942,14 +953,14 @@ function switchTL() {
 	switchTo("TL");
 }
 function switchReply() {
-	if (selected_menu.id == "reply" || last_replies.length == 0) {
+	get_next_func = getOldReply;
+	if (selected_menu.id == "reply") {
 		switchTo("reply");
 		$("loading").style.display = "block";
-		update_ele2 = loadXDomainScript(twitterAPI + 'statuses/mentions.json?seq=' + (seq++) +
-					'&count=' + max_count_u + '&callback=twReplies', update_ele2);
+		reply_ele2 = loadXDomainScript(twitterAPI + 'statuses/mentions.json?seq=' + (seq++) +
+					'&count=' + max_count_u + '&callback=twReplies', reply_ele2);
 	} else {
 		switchTo("reply");
-		twShow2(last_replies);
 	}
 }
 function switchUser(user) {
