@@ -301,6 +301,7 @@ var last_user = null;	// user TLに表示するユーザ名
 var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) || 60;
 var pluginstr = (cookieVer>6) && readCookie('tw_plugins') || ' regexp.js\nlists.js\noutputz.js\nsearch.js\nsearch2.js\nfavotter.js\nfollowers.js\nshorten_url.js\nresolve_url.js';
+if (!(cookieVer>7)) pluginstr+="\ntranslate.js";
 pluginstr = pluginstr.substr(1);
 var plugins = new Array;
 var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 200);
@@ -474,7 +475,8 @@ function closeRep() {
 }
 // replyからユーザ間のタイムラインを取得
 function pickup2() {
-	switchUser(user_pick1 + "," + user_pick2);
+	if (user_pick1 && user_pick2)
+		switchUser(user_pick1 + "," + user_pick2);
 }
 // ポップアップメニューを表示
 function popup_menu(user, id, ele) {
@@ -1048,7 +1050,7 @@ function setPreps(frm) {
 	footer = new String(frm.footer.value);
 	decr_enter = frm.decr_enter.checked;
 	resetUpdateTimer();
-	writeCookie('ver', 7, 3652);
+	writeCookie('ver', 8, 3652);
 	writeCookie('limit', nr_limit, 3652);
 	writeCookie('max_count', max_count, 3652);
 	writeCookie('max_count_u', max_count_u, 3652);
