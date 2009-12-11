@@ -698,6 +698,11 @@ function twDirectShow() {
 	twShow2(direct);
 	direct1 = direct2 = false;
 }
+function checkDirect() {
+	direct_ele1 = loadXDomainScript(twitterAPI + 'direct_messages.json?seq=' + (seq++) +
+									'&callback=twDirectCheck', direct_ele1);
+	update_direct_counter = 20;
+}
 function twDirectCheck(tw) {
 	if (!tw || tw.length == 0) return false;
 	if (last_direct_id && last_direct_id < tw[0].id)
@@ -716,6 +721,15 @@ function noticeNewReply(replies) {
 	if ($("reply").className.indexOf("new") < 0)
 		$("reply").className += " new";
 	callPlugins("noticeNewReply", replies);
+}
+// 新着repliesを取得
+function getReplies() {
+		reply_ele2 = loadXDomainScript(twitterAPI + 'statuses/mentions.json?seq=' + (seq++) +
+						'&count=' + (since_id_reply ? 200 : max_count_u) +
+						(since_id_reply ? '&since_id='+since_id_reply : '') +
+						'&callback=twReplies',
+					reply_ele2);
+		update_reply_counter = 4;
 }
 // 受信repliesを表示
 function twReplies(tw, fromTL) {
@@ -751,19 +765,10 @@ function twShow(tw) {
 				tw.splice(i--, 1);
 
 	twShowToNode(tw, $("tw"), false, false, true, true, true);
-	if (tl_oldest_id && update_reply_counter-- <= 0) {
-		reply_ele2 = loadXDomainScript(twitterAPI + 'statuses/mentions.json?seq=' + (seq++) +
-						'&count=' + (since_id_reply ? 200 : max_count_u) +
-						(since_id_reply ? '&since_id='+since_id_reply : '') +
-						'&callback=twReplies',
-					reply_ele2);
-		update_reply_counter = 4;
-	}
-	if (tl_oldest_id && update_direct_counter-- <= 0) {
-		direct_ele1 = loadXDomainScript(twitterAPI + 'direct_messages.json?seq=' + (seq++) +
-										'&callback=twDirectCheck', direct_ele1);
-		update_direct_counter = 20;
-	}
+	if (tl_oldest_id && update_reply_counter-- <= 0)
+		getReplies();
+	if (tl_oldest_id && update_direct_counter-- <= 0)
+		checkDirect();
 	callPlugins("noticeUpdate", tw);
 }
 function twOld(tw) {
@@ -869,7 +874,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 		$('popup').style.top = (popup_top += pNode.clientHeight+1);
 		scrollBy(0, pNode.clientHeight+1);
 	}
-	if (animation) {
+	if (twNode.id == 'tw') {
 		nr_tw += nr_show;
 		if (nr_tw > nr_limit) {
 			while (nr_tw > nr_limit) {
@@ -877,14 +882,12 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 				nr_tw -= last_node.childNodes.length;
 				twNode.removeChild(last_node);
 			}
-			if (twNode.id == 'TL') {
-				tl_oldest_id = 0; // 最大3ブロックスキャンしてoldest更新(repliesの挿入等により必ずしもID順でない)
-				for (var i = 0; i < 3 && i < twNode.childNodes.length; i++) {
-					var target_block = twNode.childNodes[twNode.childNodes.length-i-1].childNodes;
-					var target_ele = target_block[target_block.length-1];
-					if (target_ele.tw && (target_ele.tw.id < tl_oldest_id || !tl_oldest_id))
-						tl_oldest_id = target_ele.tw.id;
-				}
+			tl_oldest_id = 0; // 最大3ブロックスキャンしてoldest更新(repliesの挿入等により必ずしもID順でない)
+			for (var i = 0; i < 3 && i < twNode.childNodes.length; i++) {
+				var target_block = twNode.childNodes[twNode.childNodes.length-i-1].childNodes;
+				var target_ele = target_block[target_block.length-1];
+				if (target_ele.tw && (target_ele.tw.id < tl_oldest_id || !tl_oldest_id))
+					tl_oldest_id = target_ele.tw.id;
 			}
 		}
 	}
@@ -963,8 +966,7 @@ function switchReply() {
 	if (selected_menu.id == "reply") {
 		switchTo("reply");
 		$("loading").style.display = "block";
-		reply_ele2 = loadXDomainScript(twitterAPI + 'statuses/mentions.json?seq=' + (seq++) +
-					'&count=' + max_count_u + '&callback=twReplies', reply_ele2);
+		getReplies();
 	} else {
 		switchTo("reply");
 	}
@@ -1086,26 +1088,6 @@ if (pluginstr) {
 	var ed = '"></scr'+'ipt>';
 	document.write(st + pluginstr.split("\n").join(ed+st) + ed);
 }
-// ホイールの回転でスクロール (スクロール不可のウィンドウ・フレーム内で有効)
-function wheel(event) {
-	var delta = 0;
-	if (!event) event = window.event;
-	if (event.wheelDelta) {
-		delta = event.wheelDelta;
-	} else if (event.detail)
-		delta = -event.detail;
-	if (navigator.userAgent.indexOf("Gecko/") >= 0)
-		delta *= 10;
-	if (navigator.userAgent.indexOf("AppleWebKit/") >= 0)
-		delta /= 10;
-	if (delta)
-		scrollBy(0, -delta);
-	if (event.preventDefault)
-		event.preventDefault();
-	event.returnValue = false;
-}
-if (window.addEventListener) window.addEventListener('DOMMouseScroll', wheel, false);
-window.onmousewheel = document.onmousewheel = wheel;
 </script>
 </body>
 </html>
