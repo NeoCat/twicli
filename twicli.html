@@ -321,7 +321,8 @@ var nr_page_re = 0;				// 次に取得するページ(reply用)
 var get_next_func = getOldTL;	// 次ページ取得関数
 var since_id = null;			// TLの最終since_id
 var since_id_reply = null;		// Replyの最終since_id
-var in_reply_to_user = null;	// 発言の返信先
+var in_reply_to_user = null;	// 発言の返信先ユーザ
+var in_reply_to_status_id = null;// 発言の返信先id
 var tl_oldest_id = null;		// TLの最も古いid
 // クロスドメイン通信関連
 var seq = (new Date).getTime();
@@ -352,6 +353,7 @@ var update_direct_counter = 0;
 var key_press_detected = false;
 var last_post = null;
 var last_in_reply_to_user = null;
+var last_in_reply_to_status_id = null;
 var last_direct_id = null;
 
 //ログイン・自ユーザ名受信
@@ -385,13 +387,15 @@ function press(e) {
 	if (document.frm.status.value == "r" && last_post) {
 		document.frm.status.value = last_post;
 		in_reply_to_user = last_in_reply_to_user;
+		setReplyId(last_in_reply_to_status_id);
 	}
 	last_post = document.frm.status.value;
 	last_in_reply_to_user = in_reply_to_user;
+	last_in_reply_to_status_id = in_reply_to_status_id;
 	if (document.frm.status.value.indexOf("@"+in_reply_to_user) < 0) // @ユーザが含まれているときのみ返信先を指定
 		setReplyId(false);
-	in_reply_to_user = "";
 	callPlugins("post", document.frm.status.value);
+	in_reply_to_user = in_reply_to_status_id = null;
 	document.frm.status.value += footer;
 	document.frm.status.select();
 	document.frm.submit();
@@ -413,6 +417,7 @@ resetFrm = function() {
 }
 // reply先の設定/解除
 function setReplyId(id) {
+	in_reply_to_status_id = id;
 	var repid = $('in_reply_to_status_id');
 	if (repid && repid.parentNode)
 		repid.parentNode.removeChild(repid);
