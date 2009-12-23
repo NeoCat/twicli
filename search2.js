@@ -21,11 +21,7 @@ function twsjSearchShow(res) {
 	if (twsj_page++ == 1) $('tw2c').innerHTML = '';
 	twShowToNode(result, $("tw2c"), false, twsj_page > 1);
 	if (res.length > 0) {
-		var next = document.createElement("div");
-		next.id = "next";
-		next.onclick = function(){getNext(this);};
-		next.innerHTML = "▽";
-		$("tw2c").appendChild(next);
+		$("tw2c").appendChild(nextButton('next-search2'));
 	}
 	get_next_func = function(){
 		update_ele2 = loadXDomainScript('http://pcod.no-ip.org/yats/search?page=' + twsj_page +
