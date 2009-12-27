@@ -66,6 +66,10 @@ form { margin-bottom: 0; }
 #counter-p2 { border-top: solid 9px transparent; width: 0; height: 0; border-left: solid 5px #99f; float: left; }
 #counter { font-family: Georgia; font-size: 11pt; font-weight: bold; font-style: italic; background-color: #99f; color: white; height: 1.1em; text-align: center; padding: 3px 0; clear: left; }
 
+.thumbnail-image { border: solid 2px white; width: 30px; }
+.thumbnail-image:hover { border: solid 2px white; width: auto; }
+.thumbnail-link { border: solid 1px grey; display: block; float: right; }
+
 @media screen and (max-device-width: 480px) {
 	#control { padding-bottom: 5px; }
 	#menu { height: 24px; }
@@ -302,6 +306,7 @@ var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) || 60;
 var pluginstr = (cookieVer>6) && readCookie('tw_plugins') || ' regexp.js\nlists.js\noutputz.js\nsearch.js\nsearch2.js\nfavotter.js\nfollowers.js\nshorten_url.js\nresolve_url.js';
 if (!(cookieVer>7)) pluginstr+="\ntranslate.js\nscroll.js";
+if (!(cookieVer>8)) pluginstr+="\nthumbnail.js";
 pluginstr = pluginstr.substr(1);
 var plugins = new Array;
 var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 200);
@@ -1055,7 +1060,7 @@ function setPreps(frm) {
 	footer = new String(frm.footer.value);
 	decr_enter = frm.decr_enter.checked;
 	resetUpdateTimer();
-	writeCookie('ver', 8, 3652);
+	writeCookie('ver', 9, 3652);
 	writeCookie('limit', nr_limit, 3652);
 	writeCookie('max_count', max_count, 3652);
 	writeCookie('max_count_u', max_count_u, 3652);
