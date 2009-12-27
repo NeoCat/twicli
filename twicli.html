@@ -110,10 +110,10 @@ function XDomainScript() {
 	this.cb_cnt = (new Date).getTime();
 }
 XDomainScript.prototype = {
-	load: function(url, callback) {
+	load: function(url, callback, callback_key) {
 		var id = this.cb_cnt++;
 		var ele = document.createElement("script");
-		ele.src = url + (url.indexOf('?') < 0 ? '?' : '&') + 'callback=xds.cb' + id;
+		ele.src = url + (url.indexOf('?') < 0 ? '?' : '&') + (callback_key ? callback_key : 'callback') + '=xds.cb' + id;
 		ele.type = "text/javascript";
 		this['cbe' + id] = ele;
 		this['cb' + id] = function(){ this.abort(id); callback.apply(this, arguments); };
