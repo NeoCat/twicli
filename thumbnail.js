@@ -26,12 +26,12 @@ registerPlugin({
 						'/' + date + '/' + date + id + '_120.jpg',
 						links[i].href);
 			}
-			else if (links[i].href.match(/^http:\/\/(www\.flickr\.com)\/photos\/[\w-_@]+\/(\d+)/) ||
-					 links[i].href.match(/^http:\/\/(flic\.kr)\/p\/(\w+)/)) {
-				var snipcode = RegExp.$1 == 'flic.kr' ? base58_decode(RegExp.$2) : RegExp.$2;
+			else {
+				var flickr_id = flickrPhotoID(links[i].href);
+				if (!flickr_id) return;
 				var link = links[i].href;
 				xds.load('http://www.flickr.com/services/rest?method=flickr.photos.getInfo'+
-						'&format=json&api_key=9bc57a7248847fd9a80982989e80cfd0&photo_id='+snipcode,
+						'&format=json&api_key=9bc57a7248847fd9a80982989e80cfd0&photo_id='+flickr_id,
 						function(x) {
 							var p = x.photo;
 							if (!p) return;
@@ -41,19 +41,19 @@ registerPlugin({
 						'jsoncallback');
 			}
 		}
-	},
+	}
 });
 
-function base58_decode(snipcode) {
-	var alphabet = '123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ';
-	var num = snipcode.length;
-	var decoded = 0;
-	var multi = 1;
-	for (var i = (num-1) ; i >= 0 ; i--) {
-		decoded = decoded + multi * alphabet.indexOf(snipcode[i]);
-		multi = multi * alphabet.length;
-	}
-	return decoded;
+function flickrPhotoID(url) {
+	if (url.match(/^http:\/\/(?:www\.flickr\.com\/photos\/[\w-_@]+\/(\d+)|flic\.kr\/p\/(\w+)$)/))
+		return RegExp.$2 ? decodeBase58(RegExp.$2) : RegExp.$1;
+}
+function decodeBase58(snipcode) {
+	var base58_letters = '123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ';
+	var ret = 0;
+	for (var i = snipcode.length, m = 1; i; i--, m *= 58)
+		ret += base58_letters.indexOf(snipcode.substr(i-1,1)) * m;
+	return ret;
 }
 
 function addThumbnail(elem, src, link) {
