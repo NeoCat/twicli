@@ -9,6 +9,7 @@ registerPlugin({
 		}
 		var links = status.getElementsByTagName('a');
 		for (var i = 0; i < links.length; i++) {
+			var flickr_id;
 			if (links[i].href.match(/^http:\/\/twitpic\.com\/(\w+)$/)) {
 				var id = RegExp.$1;
 				addThumbnail(elem, 'http://twitpic.com/show/thumb/' + id, links[i].href);
@@ -26,9 +27,7 @@ registerPlugin({
 						'/' + date + '/' + date + id + '_120.jpg',
 						links[i].href);
 			}
-			else {
-				var flickr_id = flickrPhotoID(links[i].href);
-				if (!flickr_id) return;
+			else if (flickr_id = flickrPhotoID(links[i].href)) {
 				var link = links[i].href;
 				xds.load('http://www.flickr.com/services/rest?method=flickr.photos.getInfo'+
 						'&format=json&api_key=9bc57a7248847fd9a80982989e80cfd0&photo_id='+flickr_id,
