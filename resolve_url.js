@@ -36,6 +36,8 @@
         clearTimeout(task.timer);
         remove(task.script);
         queue.splice(n,1);
+        // notify to other plugins
+        callPlugins("replaceUrl", link.parentNode.parentNode, link, longUrl, shortUrl);
       }
     }
   }

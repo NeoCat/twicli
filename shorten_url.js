@@ -1,6 +1,6 @@
 /* assist inline URL shortening in the text area */
 (function(){
-  var wait = 2000; // time to wait before deciding that the server is unreacheable
+  var wait = 5000; // time to wait before deciding that the server is unreacheable
   var _updateCount = window.updateCount;
   var fst = $('fst');
   var timer, ele, command, original;

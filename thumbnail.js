@@ -9,36 +9,41 @@ registerPlugin({
 		}
 		var links = status.getElementsByTagName('a');
 		for (var i = 0; i < links.length; i++) {
-			var flickr_id;
-			if (links[i].href.match(/^http:\/\/twitpic\.com\/(\w+)$/)) {
-				var id = RegExp.$1;
-				addThumbnail(elem, 'http://twitpic.com/show/thumb/' + id, links[i].href);
-			}
-			else if (links[i].href.match(/^http:\/\/movapic\.com\/pic\/(\w+)$/)) {
-				var id = RegExp.$1;
-				addThumbnail(elem, 'http://image.movapic.com/pic/t_' + id + '.jpeg', links[i].href);
-			}
-			else if (links[i].href.match(/^http:\/\/f\.hatena\.ne\.jp\/([\w-_]+)\/(\d{8})(\w+)$/)) {
-				var user = RegExp.$1;
-				var date = RegExp.$2;
-				var id = RegExp.$3;
-				addThumbnail(elem,
-						'http://f.hatena.ne.jp/images/fotolife/' + user[0] + '/' + user +
-						'/' + date + '/' + date + id + '_120.jpg',
-						links[i].href);
-			}
-			else if (flickr_id = flickrPhotoID(links[i].href)) {
-				var link = links[i].href;
-				xds.load('http://www.flickr.com/services/rest?method=flickr.photos.getInfo'+
-						'&format=json&api_key=9bc57a7248847fd9a80982989e80cfd0&photo_id='+flickr_id,
-						function(x) {
-							var p = x.photo;
-							if (!p) return;
-							addThumbnail(elem, 'http://farm'+p.farm+'.static.flickr.com/'+p.server+'/'+
-										p.id+'_'+p.secret+'_s.jpg', link)
-						},
-						'jsoncallback');
-			}
+			this.replaceUrl(elem, links[i], links[i].href);
+		}
+	},
+	replaceUrl: function(elem, link, url) {
+		var flickr_id;
+		if (url.indexOf(twitterURL) == 0 || url.indexOf("javascript:") == 0)
+			return; // skip @... or #...
+		if (url.match(/^http:\/\/twitpic\.com\/(\w+)$/)) {
+			var id = RegExp.$1;
+			addThumbnail(elem, 'http://twitpic.com/show/thumb/' + id, url);
+		}
+		else if (url.match(/^http:\/\/movapic\.com\/pic\/(\w+)$/)) {
+			var id = RegExp.$1;
+			addThumbnail(elem, 'http://image.movapic.com/pic/t_' + id + '.jpeg', url);
+		}
+		else if (url.match(/^http:\/\/f\.hatena\.ne\.jp\/([\w-_]+)\/(\d{8})(\w+)$/)) {
+			var user = RegExp.$1;
+			var date = RegExp.$2;
+			var id = RegExp.$3;
+			addThumbnail(elem,
+					'http://f.hatena.ne.jp/images/fotolife/' + user[0] + '/' + user +
+					'/' + date + '/' + date + id + '_120.jpg',
+					url);
+		}
+		else if (flickr_id = flickrPhotoID(url)) {
+			var link = url;
+			xds.load('http://www.flickr.com/services/rest?method=flickr.photos.getInfo'+
+					'&format=json&api_key=9bc57a7248847fd9a80982989e80cfd0&photo_id='+flickr_id,
+					function(x) {
+						var p = x.photo;
+						if (!p) return;
+						addThumbnail(elem, 'http://farm'+p.farm+'.static.flickr.com/'+p.server+'/'+
+									p.id+'_'+p.secret+'_s.jpg', link)
+					},
+					'jsoncallback');
 		}
 	}
 });
