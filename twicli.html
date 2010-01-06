@@ -657,6 +657,7 @@ function setFavIcon(img, id, f) {
 }
 // followとremove
 function follow(f) {
+	if (!f && !confirm("Are you sure to remove " + last_user + "?")) return;
 	enqueuePost(twitterAPI + 'friendships/' + (f ? 'create' : 'destroy') + '/' + last_user + '.xml', switchUser);
 	$("loading").style.display = "block";
 }

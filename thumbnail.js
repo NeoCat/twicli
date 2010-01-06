@@ -16,7 +16,7 @@ registerPlugin({
 		var flickr_id;
 		if (url.indexOf(twitterURL) == 0 || url.indexOf("javascript:") == 0)
 			return; // skip @... or #...
-		if (url.match(/^http:\/\/twitpic\.com\/(\w+)$/)) {
+		if (url.match(/^http:\/\/twitpic\.com\/(\w+)/)) {
 			var id = RegExp.$1;
 			addThumbnail(elem, 'http://twitpic.com/show/thumb/' + id, url);
 		}
