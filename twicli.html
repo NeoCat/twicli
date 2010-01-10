@@ -413,13 +413,6 @@ function updateCount() {
 	$("counter-div").style.display = "block";
 	$("counter").innerHTML = 140 - footer.length - $("fst").value.length;
 }
-// フォームの初期化
-resetFrm = function() {
-	document.frm.reset();
-	setReplyId(false);
-	if ($("counter-div").style.display == "block") updateCount();
-	setFstHeight(30);
-}
 // reply先の設定/解除
 function setReplyId(id) {
 	in_reply_to_status_id = id;
@@ -1082,6 +1075,12 @@ function init() {
 	setTimeout(function(){scrollTo(0, 1)}, 0);
 	// 初回アップデート
 	update = update_inited; // 初期化前にupdateが発生するのを防止
+	resetFrm = function() { // フォームの初期化を再定義
+		document.frm.status.value = "";
+		setReplyId(false);
+		if ($("counter-div").style.display == "block") updateCount();
+		setFstHeight(30);
+	}
 	callPlugins("init");
 	setTimeout(auth, 0);
 }
