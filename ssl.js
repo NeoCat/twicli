@@ -7,9 +7,8 @@ var origResetFrm;
 if (navigator.userAgent.indexOf("Opera") >= 0) {
 	origResetFrm = resetFrm;
 	resetFrm = function() { // Opera fails to post targetting https frame
-		try { if (document.frames.tx.location.href == "about:blank") return; } catch(e) {
+		try { if (document.frames.tx.location.href == "about:blank") return origResetFrm(); } catch(e) {
 			document.frames.tx.location.href = "about:blank";
-			origResetFrm();
 		}
 	}
 }
