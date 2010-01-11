@@ -397,8 +397,8 @@ function press(e) {
 	last_post = document.frm.status.value;
 	last_in_reply_to_user = in_reply_to_user;
 	last_in_reply_to_status_id = in_reply_to_status_id;
-	if (document.frm.status.value.indexOf("@"+in_reply_to_user) < 0) // @ユーザが含まれているときのみ返信先を指定
-		setReplyId(false);
+	if (document.frm.status.value.substr(0,1) == "." || document.frm.status.value.indexOf("@"+in_reply_to_user) < 0)
+		setReplyId(false); // "."で始まるか"@ユーザ名"が含まれていない時はin_reply_to指定無し
 	callPlugins("post", document.frm.status.value);
 	in_reply_to_user = in_reply_to_status_id = null;
 	document.frm.status.value += footer;
