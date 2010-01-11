@@ -2,10 +2,9 @@ registerPlugin({
 	newMessageElement: function(elem) {
 		var status = null;
 		for(var i = 0; i < elem.childNodes.length; i++) {
-			if (new String(elem.childNodes[i].className).indexOf('status') >= 0) {
-				status = elem.childNodes[i];
+			status = elem.childNodes[i];
+			if (status.className && status.className.indexOf('status') >= 0)
 				break;
-			}
 		}
 		var links = status.getElementsByTagName('a');
 		for (var i = 0; i < links.length; i++) {
@@ -24,7 +23,7 @@ registerPlugin({
 			var id = RegExp.$1;
 			addThumbnail(elem, 'http://image.movapic.com/pic/t_' + id + '.jpeg', url);
 		}
-		else if (url.match(/^http:\/\/f\.hatena\.ne\.jp\/([\w-_]+)\/(\d{8})(\w+)$/)) {
+		else if (url.match(/^http:\/\/f\.hatena\.ne\.jp\/([\w-]+)\/(\d{8})(\w+)$/)) {
 			var user = RegExp.$1;
 			var date = RegExp.$2;
 			var id = RegExp.$3;
@@ -32,6 +31,15 @@ registerPlugin({
 					'http://f.hatena.ne.jp/images/fotolife/' + user[0] + '/' + user +
 					'/' + date + '/' + date + id + '_120.jpg',
 					url);
+		}
+		else if (url.match(/^(http:\/\/[\w-]+\.tumblr\.com\/)post\/(\d+)/)) {
+			var link = url;
+			xds.load(RegExp.$1+'api/read/json?id='+RegExp.$2,
+					function(x) {
+						var p = x.posts[0]['photo-url-75'];
+						if (!p) return;
+						addThumbnail(elem, p, link);
+					});
 		}
 		else if (flickr_id = flickrPhotoID(url)) {
 			var link = url;
@@ -41,7 +49,7 @@ registerPlugin({
 						var p = x.photo;
 						if (!p) return;
 						addThumbnail(elem, 'http://farm'+p.farm+'.static.flickr.com/'+p.server+'/'+
-									p.id+'_'+p.secret+'_s.jpg', link)
+									p.id+'_'+p.secret+'_s.jpg', link);
 					},
 					'jsoncallback');
 		}
@@ -49,7 +57,7 @@ registerPlugin({
 });
 
 function flickrPhotoID(url) {
-	if (url.match(/^http:\/\/(?:www\.flickr\.com\/photos\/[\w-_@]+\/(\d+)|flic\.kr\/p\/(\w+)$)/))
+	if (url.match(/^http:\/\/(?:www\.flickr\.com\/photos\/[\w-@]+\/(\d+)|flic\.kr\/p\/(\w+)$)/))
 		return RegExp.$2 ? decodeBase58(RegExp.$2) : RegExp.$1;
 }
 function decodeBase58(snipcode) {
