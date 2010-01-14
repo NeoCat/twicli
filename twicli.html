@@ -44,8 +44,8 @@ form { margin-bottom: 0; }
 .fromme { background-color: #cfd; }
 .tome { background-color: #ccf; }
 .emp { background-color: #fcc; }
-.retweeted { color: #555; }
 .non-follower { color: #008; }
+.retweeted { color: #555; }
 .button { text-decoration: none; -webkit-text-size-adjust:140%; }
 .popup { padding: 0 4px; color: #888; }
 .lock { position: relative; top: 2px; left: 0; }
@@ -213,8 +213,10 @@ function scrollToY(y, total, accum, start) {
 // DOM Storage (or Cookie)
 if (!window.localStorage) window.localStorage = window.globalStorage && window.globalStorage[location.hostname];
 function readCookie(key) {
-	if (window.localStorage && window.localStorage["twicli_"+key])
-		return String(window.localStorage["twicli_"+key]);
+	try {
+		if (window.localStorage && window.localStorage["twicli_"+key])
+			return String(window.localStorage["twicli_"+key]);
+	} catch(e) { return null; }
 	key += "=";
 	var scookie = document.cookie + ";";
 	start = scookie.indexOf(key);
@@ -226,7 +228,7 @@ function readCookie(key) {
 }
 function writeCookie(key, val, days) {
 	if (window.localStorage)
-		window.localStorage["twicli_"+key] = val;
+		try { window.localStorage["twicli_"+key] = val; } catch(e) {}
 	else {
 		var sday = new Date();
 		sday.setTime(sday.getTime() + (days * 1000 * 60 * 60 * 24));
