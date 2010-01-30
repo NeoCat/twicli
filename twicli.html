@@ -263,7 +263,7 @@ document.write('<style>' + user_style + '</style>');
 <body onLoad="init()">
 <div id="control">
 <script type="text/javascript">resetFrm = function(){}; update = function(){};</script>
-<iframe name="tx" onload="resetFrm();update()"></iframe>
+<iframe name="tx" onload="resetFrm();if (auto_update) update()"></iframe>
 <!--発言フォーム-->
 <form name="frm" action="http://api.twitter.com/1/statuses/update.xml" method="POST" target="tx">
 <textarea id="fst" name="status" onkeyup="updateCount(); if (!key_press_detected && this.value.indexOf('\n') >= 0) return press(1)" onkeypress="updateCount(); return press(event)" onfocus="updateCount();" onblur="$('counter-div').style.display='none';"></textarea>
@@ -314,6 +314,7 @@ var plugins = new Array;
 var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 200);
 var max_count_u = Math.min(parseInt(readCookie('max_count_u')) || 50, 200);;
 var nr_limit = Math.max(max_count*2.5, parseInt(readCookie('limit')) || 500);		// 表示する発言数の上限
+var auto_update = parseInt(readCookie('auto_update') || "1");		// POST後に自動アップデート
 var no_since_id = parseInt(readCookie('no_since_id') || "0");		// since_idを使用しない
 var no_counter = parseInt(readCookie('no_counter') || "0");			// 発言文字数カウンタを無効化
 var no_resize_fst = parseInt(readCookie('no_resize_fst') || "0");	// フィールドの自動リサイズを無効化
@@ -1034,9 +1035,10 @@ function switchMisc() {
 					'#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>' +
 					'#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>' +
 					'update interval: <input name="interval" size="3" value="' + updateInterval + '"> sec<br>' +
+					'<input type="checkbox" name="auto_update"' + (auto_update?" checked":"") + '>Update after post<br>' +
 					'<input type="checkbox" name="since_check"' + (no_since_id?"":" checked") + '>since_id check<br>' +
-					'<input type="checkbox" name="replies_in_tl"' + (replies_in_tl?" checked":"") + '>show not-following replies in TL<br>' +
-					'<input type="checkbox" name="counter"' + (no_counter?"":" checked") + '>POST length counter<br>' +
+					'<input type="checkbox" name="replies_in_tl"' + (replies_in_tl?" checked":"") + '>Show not-following replies in TL<br>' +
+					'<input type="checkbox" name="counter"' + (no_counter?"":" checked") + '>Post length counter<br>' +
 					'<input type="checkbox" name="resize_fst"' + (no_resize_fst?"":" checked") + '>Auto-resize field<br>' +
 					'<input type="checkbox" name="decr_enter"' + (decr_enter?" checked":"") + '>Post with ctrl/shift+enter<br>' +
 					'Footer: <input name="footer" size="10" value="' + footer + '"><br>' +
@@ -1056,6 +1058,7 @@ function setPreps(frm) {
 	max_count = frm.maxc.value;
 	max_count_u = frm.maxu.value;
 	updateInterval = frm.interval.value;
+	auto_update = frm.auto_update.checked;
 	no_since_id = !frm.since_check.checked;
 	no_counter = !frm.counter.checked;
 	no_resize_fst = !frm.resize_fst.checked;
@@ -1068,6 +1071,7 @@ function setPreps(frm) {
 	writeCookie('max_count', max_count, 3652);
 	writeCookie('max_count_u', max_count_u, 3652);
 	writeCookie('update_interval', updateInterval, 3652);
+	writeCookie('auto_update', auto_update?1:0, 3652);
 	writeCookie('no_since_id', no_since_id?1:0, 3652);
 	writeCookie('no_counter', no_counter?1:0, 3652);
 	writeCookie('no_resize_fst', no_resize_fst?1:0, 3652);
