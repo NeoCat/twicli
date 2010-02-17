@@ -586,6 +586,7 @@ function insertPDF(str) {
 }
 function makeHTML(tw, no_name, pid) {
 	var un = tw.user.screen_name;
+	var text = tw.retweeted_status ? "RT @" + tw.retweeted_status.user.screen_name + ":" + tw.retweeted_status.text : tw.text;
 	return /*fav*/ '<img alt="☆" class="fav" src="http://assets3.twitter.com/images/icon_star_'+(tw.favorited?'full':'empty')+'.gif" ' +
 			'onClick="fav(this,' + tw.id + ')"' + (pid ? ' id="fav-'+pid+'-'+tw.id+'"' : '') + '>' +
 		 (!no_name ?
@@ -600,7 +601,7 @@ function makeHTML(tw, no_name, pid) {
 		/*ダイレクトメッセージの方向*/ (tw.d_dir == 1 ? '<span class="dir">→</span> ' : tw.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text" + tw.id + "\" class=\"status\">" +
-		tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+|@([\/\w-]+)/g, function(_,id){
+		text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+|@([\/\w-]+)/g, function(_,id){
 				if (!id) return "<a class=\"link\" target=\"twitter\" href=\""+_+"\">"+_+"</a>";
 				if (id.indexOf('/') > 0) return "<a target=\"twitter\" href=\""+twitterURL+id+"\">"+_+"</a>";
 				return "<a href=\""+twitterURL+id+"\" onClick=\"switchUser('"+id+"'); return false;\" >"+_+"</a>";
