@@ -198,17 +198,20 @@ function cumulativeOffset(ele) {
 // スクロール
 if (navigator.userAgent.indexOf('iPhone') >= 0)
 	window.scrollBy = function(x,y) { scrollTo(x+window.pageXOffset,y+window.pageYOffset) };
+var scroll_adjust = 0;
 function getScrollY() { return window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop; }
-function scrollToY(y, total, accum, start) {
+function scrollToY(y, total, start) {
 	var t = (new Date).getTime();
 	start = start || t;
 	total = total || y - getScrollY();
-	accum = accum || 0;
+	if (start == t) scroll_adjust = 0;
+	y += scroll_adjust;
+	scroll_adjust = 0;
 	if (start+500 <= t)
-		return scrollBy(0, total-accum);
+		return scrollTo(0, y);
 	var pix = Math.ceil(total*(1-Math.cos((t-start)/500*Math.PI))/2);
-	scrollBy(0, pix-accum);
-	setTimeout(function(){scrollToY(y, total, pix, start)}, 20);
+	scrollTo(0, y-total+pix);
+	setTimeout(function(){scrollToY(y, total, start)}, 20);
 }
 // DOM Storage (or Cookie)
 if (!window.localStorage) window.localStorage = window.globalStorage && window.globalStorage[location.hostname];
@@ -890,7 +893,8 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 	else if (animation) {
 		$('rep').style.top = (rep_top += pNode.clientHeight+1);
 		$('popup').style.top = (popup_top += pNode.clientHeight+1);
-		scrollBy(0, pNode.clientHeight+1);
+		scrollTo(0, getScrollY()+pNode.clientHeight+1);
+		scroll_adjust += pNode.clientHeight+1;
 	}
 	if (twNode.id == 'tw') {
 		nr_tw += nr_show;
