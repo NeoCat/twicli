@@ -10,7 +10,7 @@ var twFavPlugin = {
 	newMessageElement: function(ele, tw) {
 		var fele = document.createElement("a");
 		fele.id = "nrFav" + tw.id;
-		fele.href = "http://favotter.matope.com/status.php?id=" + tw.id;
+		fele.href = "http://favotter.net/status.php?id=" + tw.id;
 		fele.target = "twitter";
 		if (this.favs[tw.id]) {
 			fele.style.backgroundColor = "#3fc";
@@ -19,9 +19,9 @@ var twFavPlugin = {
 		ele.insertBefore(fele, ele.childNodes[4]);
 	},
 	popup: function(ele, user, id) {
-		$('favotter_link_user').href = 'http://favotter.matope.com/user.php?user=' + user;
-		$('favotter_link_status').href = 'http://favotter.matope.com/status.php?id=' + id;
-		$('favotter_link_fav').href = 'http://favotter.matope.com/user.php?mode=fav&user=' + user;
+		$('favotter_link_user').href = 'http://favotter.net/user.php?user=' + user;
+		$('favotter_link_status').href = 'http://favotter.net/status.php?id=' + id;
+		$('favotter_link_fav').href = 'http://favotter.net/user.php?mode=fav&user=' + user;
 	}
 };
 registerPlugin(twFavPlugin);
