@@ -104,7 +104,10 @@ function updateListsList() {
 		init_failed = true;
 		alert("lists.js: Initialization failed; regexp.js may not be loaded.");
 	}
+	updateMisc();
+}
 
+function updateMisc() {
 	// update list in misc tab
 	var target_ele = $("lists_list");
 	if (!target_ele) return;
@@ -138,7 +141,7 @@ registerPlugin({
 			'</ul><ul><li><input type="text" size="15" id="newList" value="">' +
 			'<input type="submit" value="Add"></li></ul></form>';
 		$("pref").appendChild(e);
-		updateListsList();
+		updateMisc();
 	},
 	init: function() {
 		lists_to_get.map(getListInfo);
