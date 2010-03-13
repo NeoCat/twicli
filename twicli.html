@@ -357,6 +357,7 @@ var popup_id = null;			// ポップアップメニューが選択された発言
 var popup_ele = null;			// ポップアップメニューが選択された発言ノード
 var fav_mode = 0;				// fav表示中か
 var rep_top = 0;				// replyのオーバーレイ位置
+var rep_trace_id = null;		// replyのオーバーレイに追加する発言ID
 var popup_top = 0;				// ポップアップメニューの表示位置
 var selected_menu = $("TL");	// 選択中のタブ
 var update_timer = null;
@@ -463,6 +464,8 @@ function dispReply(user, id, ele) {
 			return;
 		}
 		$("loading").style.display = "block";
+		if (ele.parentNode.parentNode.parentNode.id == "reps")
+			rep_trace_id = id;
 		reply_ele = loadXDomainScript(twitterAPI + 'statuses/show/'+id+'.json?callback=dispReply2', reply_ele);
 		return;
 	}
@@ -480,15 +483,22 @@ function dispReply(user, id, ele) {
 function dispReply2(tw) {
 	$("loading").style.display = "none";
 	if (tw.error) return alert(tw.error);
-	$('reps').innerHTML = makeHTML(tw);
-	callPlugins("newMessageElement", $('reps'), tw);
+	var el = document.createElement("div");
+	el.innerHTML = makeHTML(tw)
+	callPlugins("newMessageElement", el, tw);
+	if (!rep_trace_id || tw.id != rep_trace_id) {
+		$('reps').innerHTML = '';
+		$('rep').style.top = rep_top;
+	} else
+		$('reps').appendChild(document.createElement('hr'));
+	$('reps').appendChild(el);
 	$('rep').style.display = "block";
-	$('rep').style.top = rep_top;
 	user_pick2 = tw.user.screen_name;
 }
 // replyのoverlay表示を閉じる
 function closeRep() {
 	$('rep').style.display = 'none';
+	reply_trace = null;
 }
 // replyからユーザ間のタイムラインを取得
 function pickup2() {
@@ -974,7 +984,7 @@ function switchTo(id) {
 	$("tw2h").innerHTML = "";
 	$("tw2c").innerHTML = "";
 	$("tw2").style.display = id!="TL"&&id!="reply"?"block":"none";
-	$("rep").style.display = "none";
+	closeRep();
 	scrollTo(0, 1); scrollTo(0, 0);
 	cur_page = 1;
 	fav_mode = 0;
