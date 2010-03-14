@@ -11,7 +11,7 @@ var twFavPlugin = {
 		var fele = document.createElement("a");
 		fele.id = "nrFav" + tw.id;
 		fele.href = "http://favotter.net/status.php?id=" + tw.id;
-		fele.target = "twitter";
+		fele.target = "favotter";
 		if (this.favs[tw.id]) {
 			fele.style.backgroundColor = "#3fc";
 			fele.innerHTML = '<small>[fav:' + this.favs[tw.id] + ']</small>';
@@ -41,19 +41,19 @@ var a = document.createElement("hr");
 $('popup').appendChild(a)
 
 a = document.createElement("a");
-a.target = 'twitter';
+a.target = 'favotter';
 a.id = 'favotter_link_user';
 a.innerHTML = 'Favotter / New';
 $('popup').appendChild(a)
 
 a = document.createElement("a");
-a.target = 'twitter';
+a.target = 'favotter';
 a.id = 'favotter_link_status';
 a.innerHTML = 'Favotter / Status';
 $('popup').appendChild(a)
 
 a = document.createElement("a");
-a.target = 'twitter';
+a.target = 'favotter';
 a.id = 'favotter_link_fav';
 a.innerHTML = 'Favotter / fav';
 $('popup').appendChild(a)

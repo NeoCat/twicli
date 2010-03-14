@@ -292,8 +292,8 @@ var auto_update = 0;
 <a id="popup_link_user" href="" target="twitter">Twitter / User</a>
 <a id="popup_link_status" href="" target="twitter">Twitter / Status</a>
 <a id="popup_status_delete" href="#" onClick="return deleteStatus()">Delete Status</a>
-<a id="popup_status_retweet" href="#" onClick="return retweetStatus()" target="twitter">Retweet</a>
-<a id="popup_status_quote" href="#" onClick="return quoteStatus()" target="twitter">Quote with RT:</a>
+<a id="popup_status_retweet" href="#" onClick="return retweetStatus()">Retweet</a>
+<a id="popup_status_quote" href="#" onClick="return quoteStatus()">Quote with RT:</a>
 </div>
 <!--ポップアップメニュー非表示用-->
 <div id="popup_hide" onClick="popup_hide();"></div>
@@ -610,7 +610,7 @@ function makeHTML(tw, no_name, pid) {
 			'onClick="fav(this,' + tw.id + ')"' + (pid ? ' id="fav-'+pid+'-'+tw.id+'"' : '') + '>' +
 		 (!no_name ?
 			//ユーザアイコン
-			(tw.user.url ? '<a target="twitter" href="'+tw.user.url+'">' : '') +
+			(tw.user.url ? '<a target="_blank" href="'+tw.user.url+'">' : '') +
 			'<img class="uicon" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
 			//名前
 			'<a href="' + twitterURL + un + '" onClick="switchUser(\'' + un + '\');return false"><span class="uid">' + un + '</span>' +
@@ -621,8 +621,8 @@ function makeHTML(tw, no_name, pid) {
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text" + tw.id + "\" class=\"status\">" +
 		text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+|@([\/\w-]+)/g, function(_,id){
-				if (!id) return "<a class=\"link\" target=\"twitter\" href=\""+_+"\">"+_+"</a>";
-				if (id.indexOf('/') > 0) return "<a target=\"twitter\" href=\""+twitterURL+id+"\">"+_+"</a>";
+				if (!id) return "<a class=\"link\" target=\"_blank\" href=\""+_+"\">"+_+"</a>";
+				if (id.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+id+"\">"+_+"</a>";
 				return "<a href=\""+twitterURL+id+"\" onClick=\"switchUser('"+id+"'); return false;\" >"+_+"</a>";
 			}).replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付
