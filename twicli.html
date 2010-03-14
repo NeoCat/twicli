@@ -452,24 +452,28 @@ function replyTo(user, id) {
 // reply先を表示
 function dispReply(user, id, ele) {
 	user_pick1 = user;
-	var d = $((selected_menu.id == "TL" ? "tw" : "tw2c") + "-" + id);
+	var d = $((selected_menu.id == "TL" ? "tw" : selected_menu.id == "reply" ? "re" : "tw2c") + "-" + id) 
+			|| $('reps-' + id);
 	if (!d || d.style.display == "none") {
-		rep_top = cumulativeOffset(ele)[1] + 20;
+		var ele_top = cumulativeOffset(ele)[1] + 20;
 		d = selected_menu.id != "TL" && $("tw" + "-" + id);
 		if (d) {
 			$('reps').innerHTML = d.innerHTML;
 			$('rep').style.display = "block";
-			$('rep').style.top = rep_top;
+			$('rep').style.top = rep_top = ele_top;
 			user_pick2 = d.screen_name;
 			return;
 		}
 		$("loading").style.display = "block";
 		if (ele.parentNode.parentNode.parentNode.id == "reps")
 			rep_trace_id = id;
+		else
+			rep_top = ele_top;
 		reply_ele = loadXDomainScript(twitterAPI + 'statuses/show/'+id+'.json?callback=dispReply2', reply_ele);
 		return;
 	}
-	closeRep();
+	if (d.parentNode.id != 'reps')
+		closeRep();
 	var top = cumulativeOffset(d)[1];
 	var h = d.offsetHeight;
 	var sc_top = document.body.scrollTop || document.documentElement.scrollTop;
@@ -484,6 +488,7 @@ function dispReply2(tw) {
 	$("loading").style.display = "none";
 	if (tw.error) return alert(tw.error);
 	var el = document.createElement("div");
+	el.id = 'reps-'+tw.id;
 	el.innerHTML = makeHTML(tw)
 	callPlugins("newMessageElement", el, tw);
 	if (!rep_trace_id || tw.id != rep_trace_id) {
@@ -498,7 +503,8 @@ function dispReply2(tw) {
 // replyのoverlay表示を閉じる
 function closeRep() {
 	$('rep').style.display = 'none';
-	reply_trace = null;
+	$('reps').innerHTML = '';
+	rep_trace_id = null;
 }
 // replyからユーザ間のタイムラインを取得
 function pickup2() {
