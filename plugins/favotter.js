@@ -5,7 +5,7 @@ var twFavPlugin = {
 	update: function() {
 		if (this.cnt++ < 5) return;
 		this.cnt = 0;
-		this.fav_update = loadXDomainScript('http://www.geocities.jp/twicli/nr_favs.js?seq='+(seq++), this.fav_update);
+		this.fav_update = loadXDomainScript('http://twicli.neocat.jp/nr_favs.js?seq='+(seq++), this.fav_update);
 	},
 	newMessageElement: function(ele, tw) {
 		var fele = document.createElement("a");
