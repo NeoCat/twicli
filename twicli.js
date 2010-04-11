@@ -302,7 +302,7 @@ function auth() {
 
 function logout() {
 	if (!confirm('Are you sure to logout? You need to re-authenticate twicli at next launch.'))
-		return false;
+		return;
 	writeCookie('access_token', '');
 	writeCookie('access_secret', '');
 	location.href = 'oauth/index.html';
