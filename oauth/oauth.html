@@ -1,0 +1,34 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>twicli / OAuth in browser</title>
+<style type="text/css"><!--
+body { background-color: #fff; font-size: 90%; }
+h1 { border-bottom: solid 2px red; }
+--></style>
+<script type="text/javascript" src="twicli_oauth.js"></script>
+</head>
+<body onload="document.request.oauth_callback.value = location.href.replace(/\/[^\/]*$/,'/oauth2.html')">
+<h1><img alt="twicli" src="../images/icon_large.png" width="48" height="48">twicli / OAuth in browser</h1>
+
+<table>
+<tr><th>Step 1:</th><td>Please click "Get Request Token" button.</td>
+<tr><td></td><td>"Get Request Token"ボタンを押して下さい。</td>
+</table>
+
+<iframe style="border: 0" width="100%" height="200" src="requestToken.html"></iframe>
+
+<table>
+<tr><th>Step 2:</th><td>Copy the string above, paste it into the field below, and click "Authorize".</td>
+<tr><td></td><td>表示された文字列をコピーして下のボックスにペーストし、"Authorize"ボタンを押して下さい。</td>
+</table>
+
+
+<form name="request" method="GET" action="https://twitter.com/oauth/authorize" onsubmit="return preAuth(this)">
+	<input name="oauth_token"    type="text"   size="64">
+	<input name="oauth_callback" type="hidden">
+	<input type="submit" value="Authorize">
+</form>
+
+</body>
+</html>

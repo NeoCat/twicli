@@ -121,7 +121,7 @@ function updateMisc() {
 					'id="chk-lists-'+a.replace('/','-')+'"'+chk+'>'+
 			'<label for="chk-lists-'+a.replace('/','-')+'">TL</label>&nbsp;&nbsp;'+
 			' <a class="close" href="javascript:unsubscribeList(\''+a+'\')">'+
-			'<img style="position: relative; top: 2px;" src="clr.png"></a>'+
+			'<img style="position: relative; top: 2px;" src="images/clr.png"></a>'+
 			'</li>' : a
 	}).join("");
 }

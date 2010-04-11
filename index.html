@@ -17,7 +17,7 @@ h3 { border-left: solid 1.2em #fc0; padding-left: 4px; }
 img { border: none; }
 .language_selection { float:left; margin-left:700px;}
 --></style>
-<a class="language_selection" href="index.en.html">English</a>
+<a class="language_selection" href="index_en.html">English</a>
 <script type="text/javascript">
 function hatena_bookmark(url) {
 	document.write('<a href="http://b.hatena.ne.jp/entry/'+url+'"><img src="http://d.hatena.ne.jp/images/b_entry.gif" width="16" height="12" alt="このエントリーを含むはてなブックマーク" title="このエントリーを含むはてなブックマーク"><\/a>');
@@ -27,7 +27,7 @@ function hatena_bookmark(url) {
 </head>
 <body>
 <div class="whole">
-<h1><img alt="twicli" src="icon_large.png" width="48" height="48"> twicli</h1>
+<h1><img alt="twicli" src="images/icon_large.png" width="48" height="48"> twicli</h1>
 <script type="text/javascript">hatena_bookmark("http://www.geocities.jp/twicli/")</script>
 <table><tr><td>
 <p>
@@ -43,9 +43,9 @@ twicliはWebブラウザ上で動くTwitterクライアントです。
 今のところFirefox3以降, Safari4, Chrome, Opera10, IE8で動いています。<br>
 iPhone/iPod touchのSafariでもOKです。<br>
 IE7でも一応動作しますが、一部の表示が乱れます。<br>
-<div class="launch"><a href="javascript:void window.open('http://www.geocities.jp/twicli/twicli.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=yes,location=no,resizable=yes')">twicliを起動</a></div>
+<div class="launch"><a onclick="window.open('twicli.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=yes,location=no,resizable=yes'); return false;" href="javascript:void window.open('http://twicli.neocat.jp/twicli.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=yes,location=no,resizable=yes')">twicliを起動</a></div>
 </td><td>
-<img alt="screenshot" width="331" height="478" src="usage1.png" align="right">
+<img alt="screenshot" width="331" height="478" src="usage/usage1.png" align="right">
 </td></tr></table>
 
 <h2>使い方</h2>
@@ -57,9 +57,9 @@ IE7でも一応動作しますが、一部の表示が乱れます。<br>
 
 <h3>操作方法</h3>
 <table width="100%"><tr>
-<td width="40"><img alt="prev" onClick="go(-1)" src="left.png" class="button"></td>
-<td align="center"><img alt="usage" id="usage" width="600" height="480" src="usage2.png"></td>
-<td width="40"><img alt="next" onClick="go(1)" src="right.png" class="button"></td>
+<td width="40"><img alt="prev" onClick="go(-1)" src="images/left.png" class="button"></td>
+<td align="center"><img alt="usage" id="usage" width="600" height="480" src="usage/usage2.png"></td>
+<td width="40"><img alt="next" onClick="go(1)" src="images/right.png" class="button"></td>
 </tr></table>
 <script type="text/javascript">
 var i = 0;
@@ -68,13 +68,13 @@ function go(d) {
 	var usage = document.getElementById("usage");
 	usage.width = [600,600,480,480][i];
 	usage.height = [480,480,480,710][i];
-	usage.src = "usage"+(i+2)+".png";
+	usage.src = "usage/usage"+(i+2)+".png";
 }
 </script>
-<img alt="usage" src="usage2.png" width="1" height="1">
-<img alt="usage" src="usage3.png" width="1" height="1">
-<img alt="usage" src="usage4.png" width="1" height="1">
-<img alt="usage" src="usage5.png" width="1" height="1">
+<img alt="usage" src="usage/usage2.png" width="1" height="1">
+<img alt="usage" src="usage/usage3.png" width="1" height="1">
+<img alt="usage" src="usage/usage4.png" width="1" height="1">
+<img alt="usage" src="usage/usage5.png" width="1" height="1">
 
 <h2>カスタマイズ</h2>
 <h3>user stylesheetについて</h3>

@@ -50,7 +50,7 @@ function twsSearchShow(res) {
 registerPlugin({
 	miscTab: function(ele) {
 		var e = document.createElement("div");
-		e.innerHTML = '<form onSubmit="twsSearch($(\'search_q\').value); return false;">Twitter search : <input type="text" size="15" id="search_q"><input type="image" src="go.png"></form>';
+		e.innerHTML = '<form onSubmit="twsSearch($(\'search_q\').value); return false;">Twitter search : <input type="text" size="15" id="search_q"><input type="image" src="images/go.png"></form>';
 		ele.appendChild(e);
 		var hr = document.createElement("hr");
 		hr.className = "spacer";

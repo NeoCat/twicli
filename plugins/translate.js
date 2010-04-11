@@ -11,7 +11,7 @@ registerPlugin({
 		e.innerHTML = '<a href="javascript:var s = $(\'translate_pref\').style; s.display = s.display==\'block\'?\'none\':\'block\';void(0)"><b>▼Translate</b></a>' +
 			'<form id="translate_pref" style="display:none" onSubmit="setTranslateLang($(\'translateLang\').value); return false;">' +
 			'translate language: <input type="text" size="15" id="translateLang" value="'+translateLang+'">' +
-			'<input type="image" src="go.png"></form>';
+			'<input type="image" src="images/go.png"></form>';
 		$("pref").appendChild(e);
 	},
 

@@ -1,0 +1,50 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>twicli / OAuth in browser</title>
+<style type="text/css"><!--
+body { background-color: #fff; font-size: 90%; }
+td { font-size: 90%; padding: 15px; }
+th { border: solid 2px #6c6; background-color: #cfc; }
+border: 2px solid #393; width: 200px; font-size: large; }
+.button { cursor:pointer; }
+li { margin: 4px; }
+h1 { border-bottom: solid 2px red; }
+h2 { border-left: solid 1.2em #cf6; padding-left: 4px; }
+h3 { border-left: solid 1.2em #fc0; padding-left: 4px; }
+img { border: none; }
+.language_selection { float:left; margin-left:700px;}
+--></style>
+<script type="text/javascript" src="twicli_oauth.js"></script>
+<script type="text/javascript">
+var win_w = window.innerWidth || document.documentElement.clientHeight;
+if (win_w < 500) resizeBy(500 - win_w, 0);
+</script>
+
+</head>
+<body>
+<h1><img alt="twicli" src="../images/icon_large.png" width="48" height="48">twicli / Login</h1>
+
+Please choose a authentication method.<br>
+認証方法を選んで下さい。
+
+<hr>
+
+<table><tr>
+<th><big><a href="twitter_oauth.cgi">Authenticate via server</a></big></th>
+<td>
+Execute a automatic authentication on the server.<br>
+サーバ上でOAuth認証を行います。
+</td></tr>
+
+<tr>
+<th><big><a href="oauth.html">Authenticate in browser</a></big></th>
+<td>
+Only use the web browser to OAuth (Don't send any auth information to server). Need to copy&paste strings 2 times.<br>
+ブラウザのみを使用してOAuth認証します(サーバに認証情報を送信しません)。文字列をコピー&ペーストする操作が2回必要です。
+</td></tr></table>
+
+<hr>
+
+</body>
+</html>

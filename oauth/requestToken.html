@@ -1,0 +1,26 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>twicli / OAuth in browser</title>
+<script type="text/javascript" src="sha1.js"></script>
+<script type="text/javascript" src="oauth.js"></script>
+<script type="text/javascript" src="consumer.js"></script>
+<script type="text/javascript" src="twicli_oauth.js"></script>
+</head>
+<body onload="document.request.oauth_callback.value = location.href.replace(/\/[^\/]*$/,'/oauth2.html')">
+<form name="request" method="POST" onsubmit="consumer.signForm(this, document.etc)">
+	<input name="oauth_consumer_key"     type="hidden" value="93rRnGZHjH5tMSuvkIMNg">
+	<input name="oauth_signature_method" type="hidden" value="HMAC-SHA1">
+	<input name="oauth_timestamp"        type="hidden">
+	<input name="oauth_nonce"            type="hidden">
+	<input name="oauth_signature"        type="hidden">
+	<input name="oauth_callback"         type="hidden">
+	<input type="submit" value="Get Request Token"><br>
+</form>
+<form name="etc">
+	<input name="URL"                    type="hidden" value="https://twitter.com/oauth/request_token">
+	<input name="consumerSecret"         type="hidden" value="7ypxMreeJuumgiq3ts7QtOqigl5G1sosJFfeaoKGJA">
+	<input name="tokenSecret"            type="hidden" value="">
+</form>
+</body>
+</html>

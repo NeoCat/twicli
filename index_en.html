@@ -21,7 +21,7 @@ img { border: none; }
 <body>
 <a class="language_selection" href="index.html">Japanese</a>
 <div class="whole">
-<h1><img alt="twicli" src="icon_large.png" width="48" height="48"> twicli</h1>
+<h1><img alt="twicli" src="images/icon_large.png" width="48" height="48"> twicli</h1>
 <a href="http://delicious.com/save" onclick="window.open('http://delicious.com/save?v=5&amp;noui&amp;jump=close&amp;url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title), 'delicious','toolbar=no,width=550,height=550'); return false;"><img src="http://static.delicious.com/img/delicious.small.gif" height="12" width="12" alt="Delicious"> Bookmark this on Delicious</a>
 <table><tr><td>
 <p>
@@ -37,23 +37,23 @@ Useful when you are in an Internet cafe, doing something else while viewing Twit
 Works on Firefox, Safari, Opera, IE8 at the moment, as well as
 Safari on iPhone/iPod touch<br>
 Works on IE7 too, but some parts aren't displayed properly.<br>
-<div class="launch"><a href="javascript:void window.open('http://www.geocities.jp/twicli/twicli.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=yes,location=no,resizable=yes')">Launch twicli</a></div>
+<div class="launch"><a onclick="window.open('twicli.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=yes,location=no,resizable=yes')" href="javascript:void window.open('http://twicli.neocat.jp/twicli.html', 'twicli', 'width=280,height=600,menubar=no,toolbar=no,scrollbars=yes,location=no,resizable=yes')">Launch twicli</a></div>
 </td><td>
-<img alt="screenshot" width="331" height="478" src="usage1.png" align="right">
+<img alt="screenshot" width="331" height="478" src="usage/usage1.png" align="right">
 </td></tr></table>
 
 <h2>Usage</h2>
 <h3>Launch</h3>
 Just click the link above, or run it as a bookmarklet.<br>
 If you get asked for authorization, check if the origin is really "twitter.com", then enter your Twitter account/password.<br><br>
-Be careful not to hit <b>API request limit (150 requests per hour)</b> by clicking too much ^^;
+Be careful not to hit <b>API request limit (350 requests per hour)</b> by clicking too much. :-P
 </p>
 
 <h3>How to Use</h3>
 <table width="100%"><tr>
-<td width="40"><img alt="prev" onClick="go(-1)" src="left.png" class="button"></td>
-<td align="center"><img alt="usage" id="usage" width="600" height="480" src="usage2.en.png"></td>
-<td width="40"><img alt="next" onClick="go(1)" src="right.png" class="button"></td>
+<td width="40"><img alt="prev" onClick="go(-1)" src="images/left.png" class="button"></td>
+<td align="center"><img alt="usage" id="usage" width="600" height="480" src="usage/usage2.en.png"></td>
+<td width="40"><img alt="next" onClick="go(1)" src="images/right.png" class="button"></td>
 </tr></table>
 <script type="text/javascript">
 var i = 0;
@@ -62,13 +62,13 @@ function go(d) {
 	var usage = document.getElementById("usage");
 	usage.width = [600,600,480,620][i];
 	usage.height = [480,480,480,710][i];
-	usage.src = "usage"+(i+2)+".en.png";
+	usage.src = "usage/usage"+(i+2)+".en.png";
 }
 </script>
-<img alt="usage" src="usage2.en.png" width="1" height="1">
-<img alt="usage" src="usage3.en.png" width="1" height="1">
-<img alt="usage" src="usage4.en.png" width="1" height="1">
-<img alt="usage" src="usage5.en.png" width="1" height="1">
+<img alt="usage" src="usage/usage2.en.png" width="1" height="1">
+<img alt="usage" src="usage/usage3.en.png" width="1" height="1">
+<img alt="usage" src="usage/usage4.en.png" width="1" height="1">
+<img alt="usage" src="usage/usage5.en.png" width="1" height="1">
 
 <h2>Customize</h2>
 <h3>User Stylesheet</h3>
