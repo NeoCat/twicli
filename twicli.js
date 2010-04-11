@@ -336,10 +336,12 @@ function press(e) {
 	if (st.value.substr(0,1) == "." || st.value.indexOf("@"+in_reply_to_user) < 0)
 		setReplyId(false); // "."で始まるか"@ユーザ名"が含まれていない時はin_reply_to指定無し
 	callPlugins("post", st.value);
-	in_reply_to_user = in_reply_to_status_id = null;
 	st.value += footer;
 	st.select();
-	enqueuePost(twitterAPI + 'statuses/update.xml?status=' + st.value, function(){ resetFrm(); if (auto_update) update() });
+	enqueuePost(twitterAPI + 'statuses/update.xml?status=' + st.value +
+				(in_reply_to_status_id ? "&in_reply_to_status_id=" + in_reply_to_status_id : ""),
+				function(){ resetFrm(); if (auto_update) update() });
+	in_reply_to_user = in_reply_to_status_id = null;
 	return false;
 }
 // フォームリサイズ
@@ -368,16 +370,6 @@ function resetFrm() {
 // reply先の設定/解除
 function setReplyId(id) {
 	in_reply_to_status_id = id;
-	var repid = $('in_reply_to_status_id');
-	if (repid && repid.parentNode)
-		repid.parentNode.removeChild(repid);
-	if (id) {
-		repid = document.createElement('input');
-		repid.type = 'hidden';
-		repid.id = repid.name = 'in_reply_to_status_id';
-		repid.value = id;
-		document.frm.appendChild(repid);
-	}
 }
 // reply先を設定
 function replyTo(user, id) {
