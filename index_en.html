@@ -21,7 +21,7 @@ img { border: none; }
 <body>
 <a class="language_selection" href="index.html">Japanese</a>
 <div class="whole">
-<h1><img alt="twicli" src="images/icon_large.png" width="48" height="48"> twicli</h1>
+<h1><a name="twicli"><img alt="twicli" src="images/icon_large.png" width="48" height="48"> twicli</a></h1>
 <a href="http://delicious.com/save" onclick="window.open('http://delicious.com/save?v=5&amp;noui&amp;jump=close&amp;url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title), 'delicious','toolbar=no,width=550,height=550'); return false;"><img src="http://static.delicious.com/img/delicious.small.gif" height="12" width="12" alt="Delicious"> Bookmark this on Delicious</a>
 <table><tr><td>
 <p>
@@ -42,14 +42,14 @@ Works on IE7 too, but some parts aren't displayed properly.<br>
 <img alt="screenshot" width="331" height="478" src="usage/usage1.png" align="right">
 </td></tr></table>
 
-<h2>Usage</h2>
-<h3>Launch</h3>
+<h2><a name="usage">Usage</a></h2>
+<h3><a name="launch">Launch</a></h3>
 Just click the link above, or run it as a bookmarklet.<br>
 If you get asked for authorization, check if the origin is really "twitter.com", then enter your Twitter account/password.<br><br>
 Be careful not to hit <b>API request limit (350 requests per hour)</b> by clicking too much. :-P
 </p>
 
-<h3>How to Use</h3>
+<h3><a name="howto">How to Use</a></h3>
 <table width="100%"><tr>
 <td width="40"><img alt="prev" onClick="go(-1)" src="images/left.png" class="button"></td>
 <td align="center"><img alt="usage" id="usage" width="600" height="480" src="usage/usage2.en.png"></td>
@@ -70,15 +70,15 @@ function go(d) {
 <img alt="usage" src="usage/usage4.en.png" width="1" height="1">
 <img alt="usage" src="usage/usage5.en.png" width="1" height="1">
 
-<h2>Customize</h2>
-<h3>User Stylesheet</h3>
+<h2><a name="customize">Customize</a></h2>
+<h3><a name="css">User Stylesheet</a></h3>
 You can add your own CSS in "user stylesheet" section of the "+" tab. For example;
 <ul>
 <li>to hide user icons : <tt> .uicon { display: none; } </tt>
 <li>wider lines : <tt> .status { line-height: 1.5; } </tt>
 </ul>
 
-<h3>Plugins</h3>
+<h3><a name="plugins">Plugins</a></h3>
 You can register plugins by setting them at the "Preferences" in the "+" tab.<br>
 Currently, there are plugins below:
 <ul>
@@ -97,7 +97,7 @@ Currently, there are plugins below:
 <li><b>shorten_url.js</b> : Typing a URL in the text area followed by three semicolons (;;;) makes a shortened URL. (created by <a href="http://twitter.com/edvakf">@edvakf</a>)
 </ul>
 
-<h2>FAQ</h2>
+<h2><a name="faq">FAQ</a></h2>
 <ul>
 <li><b>How to hide tweet which contains specified kerwords?</b><blockquote> => Write "-::keyword:1" into "Pickup Pattern" in the "+" tab.</blockquote></li>
 <li><b>My tweets are sometimes lost ...</b><blockquote> => Twitter may be too crowded. Try writing just "r" and hit enter to re-post your previous tweet.</blockquote></li>
@@ -105,12 +105,12 @@ Currently, there are plugins below:
 <li><b>Too much API usage when I tweet frequently ...</b><blockquote> => Disable "Update after post" in "Preferences" in "+" tab to suppress automatic update after tweet is posted.</blockquote></li>
 </ul>
 
-<h2>Source</h2>
+<h2><a name="source">Source</a></h2>
 "twicli" is developed at <a href="http://coderepos.org/share/browser/websites/twicli/">CodeRepos</a> and <a href="http://github.com/NeoCat/twicli/">github</a> under <a href="LICENSE.txt">MIT license</a>.
 <p><a href="http://coderepos.org/share/browser/websites/twicli/twicli.html">twicli.html</a> is the main file (HTML+CSS+JavaScript), others are plugins and images.</p>
 <p>Please report any bugs/wishes to <a href="http://twitter.com/NeoCat">@NeoCat</a>.</p>
 
-<h2>Links <small><small>(all in Japanese)</small></small></h2>
+<h2><a name="link">Links <small><small>(all in Japanese)</small></small></a></h2>
 <ul>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20080819/1219133294">Development Memo</a>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20080819/1219133294">About development of Plugins</a>
@@ -121,7 +121,7 @@ Currently, there are plugins below:
 <li><a href="http://d.hatena.ne.jp/NeoCat/20091101/1257088158">About Lists plugin</a>
 </ul>
 
-<h2>Author</h2>
+<h2><a name="author">Author</a></h2>
 <a href="http://twitter.com/NeoCat">@NeoCat</a>
 
 </div>

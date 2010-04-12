@@ -27,7 +27,7 @@ function hatena_bookmark(url) {
 </head>
 <body>
 <div class="whole">
-<h1><img alt="twicli" src="images/icon_large.png" width="48" height="48"> twicli</h1>
+<h1><a name="twicli"><img alt="twicli" src="images/icon_large.png" width="48" height="48"> twicli</a></h1>
 <script type="text/javascript">hatena_bookmark("http://www.geocities.jp/twicli/")</script>
 <table><tr><td>
 <p>
@@ -48,14 +48,14 @@ IE7でも一応動作しますが、一部の表示が乱れます。<br>
 <img alt="screenshot" width="331" height="478" src="usage/usage1.png" align="right">
 </td></tr></table>
 
-<h2>使い方</h2>
-<h3>起動</h3>
+<h2><a name="howto">使い方</a></h2>
+<h3><a name="launch">起動</a></h3>
 上のリンク(bookmarklet)をクリック、またはブックマークにD&amp;Dで登録して選択すると、別窓で起動します。<br>
 認証を求められたら、"twitter.com"からの要求かを確認した上で、Twitterのアカウント／パスワードを入力してください。<br><br>
 あんまり激しくクリックしまくると<b>API制限(150回/1時間)</b>にすぐ引っかかりますので、基本まったりご使用下さい。^^;
 </p>
 
-<h3>操作方法</h3>
+<h3><a name="usage">操作方法</a></h3>
 <table width="100%"><tr>
 <td width="40"><img alt="prev" onClick="go(-1)" src="images/left.png" class="button"></td>
 <td align="center"><img alt="usage" id="usage" width="600" height="480" src="usage/usage2.png"></td>
@@ -76,7 +76,7 @@ function go(d) {
 <img alt="usage" src="usage/usage4.png" width="1" height="1">
 <img alt="usage" src="usage/usage5.png" width="1" height="1">
 
-<h2>FAQ</h2>
+<h2><a name="faq">FAQ</a></h2>
 <ul>
 <li><b>公式ハッシュタグは?</b><blockquote> → <a href="http://search.twitter.com/search?q=%23twicliJP">#twicliJP</a> です。疑問//不具合/ご要望などなど、なんでもどうぞ。</blockquote></li>
 <li><b>NGワード（指定語句を含む発言を隠す）機能はないの?</b><blockquote> →抽出プラグインでできます。(下記リンク参照)</blockquote></li>
@@ -85,15 +85,15 @@ function go(d) {
 <li><b>ポスト数が多いときにAPI制限に引っかかる</b><blockquote> →「+」タブのPreferencesで"Update after post"の設定を解除して"Save"すると、ポスト後のTL更新を抑止してAPI使用回数を抑えます。</blockquote></li>
 </ul>
 
-<h2>カスタマイズ</h2>
-<h3>user stylesheetについて</h3>
+<h2><a name="customize">カスタマイズ</a></h2>
+<h3><a name="css">user stylesheetについて</a></h3>
 「+」タブのuser stylesheetにCSSを記述して、見た目のカスタマイズが可能です。例えば：
 <ul>
 <li>ユーザのアイコンを消す → <tt> .uicon { display: none; } </tt>
 <li>発言の行間を広げる　　 → <tt> .status { line-height: 1.5; } </tt>
 </ul>
 
-<h3>プラグインについて</h3>
+<h3><a name="plugins">プラグインについて</a></h3>
 「+」タブのPreferencesでプラグイン(JavaScript)を登録することにより、機能拡張ができます。<br>
 以下のプラグインがあります。
 <ul>
@@ -112,12 +112,12 @@ function go(d) {
 <li><b>shorten_url.js</b> : 発言欄で、URLの後に ;;; と打ち込むとURLを短縮します。もう一度打ち込むと元に戻ります。(created by <a href="http://twitter.com/edvakf">@edvakf</a>)
 </ul>
 
-<h2>ソース</h2>
+<h2><a name="source">ソース</a></h2>
 開発は<a href="http://coderepos.org/share/browser/websites/twicli/">CodeRepos</a>か<a href="http://github.com/NeoCat/twicli/">github</a>上で行っています。パッチや勝手にコミット大歓迎です。なお、ライセンスは<a href="LICENSE.txt">MITライセンス</a>です。開発途上なので随時アップデートしていきます。
 <p><a href="http://coderepos.org/share/browser/websites/twicli/twicli.html">twicli.html</a>が本体(HTML+CSS+JavaScript)。他にプラグイン、画像ファイルが要ります。</p>
 <p>不具合／要望などは<a href="http://twitter.com/NeoCat">@NeoCat</a>にreplyして頂くと対応するかもしれません。#twicliJP ハッシュタグでつぶやいてもらってもOKです。</p>
 
-<h2>リンク</h2>
+<h2><a name="link">リンク</a></h2>
 <ul>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20080819/1219133294">開発メモ</a>
 <script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20080819/1219133294");</script></li>
@@ -135,7 +135,7 @@ function go(d) {
 <script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20091101/1257088158");</script></li>
 </ul>
 
-<h2>作ってる人</h2>
+<h2><a name="author">作ってる人</a></h2>
 <a href="http://twitter.com/NeoCat">@NeoCat</a>
 
 </div>
