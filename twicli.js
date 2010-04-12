@@ -28,7 +28,7 @@ function setupOAuthArgs(args) {
 			var el = document.createElement("input");
 			el.type = "hidden";
 			el.name = v[0];
-			el.value = v[1];
+			el.value = decodeURIComponent(v[1]);
 			api_args.appendChild(el);
 		}
 	}
@@ -338,7 +338,7 @@ function press(e) {
 	callPlugins("post", st.value);
 	st.value += footer;
 	st.select();
-	enqueuePost(twitterAPI + 'statuses/update.xml?status=' + st.value +
+	enqueuePost(twitterAPI + 'statuses/update.xml?status=' + encodeURIComponent(st.value) +
 				(in_reply_to_status_id ? "&in_reply_to_status_id=" + in_reply_to_status_id : ""),
 				function(){ resetFrm(); if (auto_update) update() });
 	in_reply_to_user = in_reply_to_status_id = null;
