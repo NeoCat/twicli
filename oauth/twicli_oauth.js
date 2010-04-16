@@ -20,9 +20,15 @@ function writeCookie(key, val) {
 		try { window.localStorage["twicli_"+key] = val; } catch(e) {}
 	else {
 		var sday = new Date();
-		sday.setTime(sday.getTime() + (1000 * 60 * 60 * 24));
+		sday.setTime(sday.getTime() + (1000 * 60 * 60 * 24 * 365));
 		document.cookie = key + "=" + escape(val) + ";path=" + cpath + ";expires=" + sday.toGMTString();
 	}
+}
+function deleteCookie(key) {
+	try { window.localStorage.removeItem("twicli_"+key); } catch(e) {}
+	var sday = new Date();
+	sday.setTime(sday.getTime() - 1);
+	document.cookie = key + "=;path=" + cpath + ";expires=" + sday.toGMTString();
 }
 
 function preAuth(f) {
@@ -43,8 +49,8 @@ function getArg(key) { var v = top.location.search.split(key+'='); return v[1] &
 function fillRequst(f1, f2) {
 	f1.oauth_token.value = readCookie('request_token');
 	f2.tokenSecret.value = readCookie('request_secret');
-	writeCookie('request_token', '');
-	writeCookie('request_secret', '');
+	deleteCookie('request_token');
+	deleteCookie('request_secret');
 	if (getArg('oauth_token') != f1.oauth_token.value) {
 		alert("Authentication failed." + "\n" + getArg('oauth_token') +"\n"+ f1.oauth_token.value);
 		top.location.href = "index.html";
