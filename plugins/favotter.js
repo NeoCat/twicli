@@ -12,8 +12,8 @@ var twFavPlugin = {
 		fele.id = "nrFav" + tw.id;
 		fele.href = "http://favotter.net/status.php?id=" + tw.id;
 		fele.target = "favotter";
+		fele.style.backgroundColor = "#3fc";
 		if (this.favs[tw.id]) {
-			fele.style.backgroundColor = "#3fc";
 			fele.innerHTML = '<small>[fav:' + this.favs[tw.id] + ']</small>';
 		}
 		ele.insertBefore(fele, ele.childNodes[4]);
@@ -31,7 +31,7 @@ function favEntries(favs) {
 	for (x in favs) {
 		var target = $('nrFav'+x);
 		if (target)
-			target.innerHTML = '[fav:' + favs[x] + '] '
+			target.innerHTML = '<small>[fav:' + favs[x] + ']</small>';
 	}
 }
 
