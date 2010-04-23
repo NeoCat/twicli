@@ -92,9 +92,9 @@ function postNext() {
 }
 var postSeq = 0;
 function postInIFrame(url, done, err) {
-	var frm = document.request;
+	var frm = url.indexOf(twitterAPI) == 0 ? document.request : document.post;
 	frm.action = setupOAuthURL(url, true);
-	frm.target = "pfr" + postSeq;
+	frm.target = "pfr" + (++postSeq);
 	var pfr = document.createElement("iframe"); // formのtargetとなるiframeを生成
 	pfr.name = "pfr" + postSeq;
 	pfr.src = "about:blank";
