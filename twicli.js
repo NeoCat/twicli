@@ -103,7 +103,7 @@ function postInIFrame(url, done, err) {
 	if (err) {  // 10秒で正常終了しなければエラーとみなす
 		errTimer = setTimeout(function(){
 			err();
-			pfr.parentNode.removeChild(pfr);
+			pfr.parentNode && pfr.parentNode.removeChild(pfr);
 			postQueue.shift();
 			postNext();
 		}, 100000);
@@ -116,7 +116,7 @@ function postInIFrame(url, done, err) {
 			clearTimeout(errTimer);
 			done();
 			setTimeout(function(){
-				pfr.parentNode.removeChild(pfr);
+				pfr.parentNode && pfr.parentNode.removeChild(pfr);
 				postQueue.shift();
 				postNext();
 			}, 0);
