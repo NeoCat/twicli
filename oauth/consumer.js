@@ -14,7 +14,7 @@ function signForm(form, etc) {
         if (input.name != null && input.name != "" && input.value != null
             && (!(input.type == "checkbox" || input.type == "radio") || input.checked))
         {
-            message.parameters.push([input.name, input.value]);
+            message.parameters.push([input.name, input.value.replace(/\r?\n/g,"\r\n")]);
         }
     }
     OAuth.setTimestampAndNonce(message);
