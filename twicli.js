@@ -1006,6 +1006,12 @@ function togglePreps() {
 	$('preps').style.display = $('preps').style.display == 'block' ? 'none' : 'block';
 }
 function setPreps(frm) {
+	var ps = frm.list.value.split("\n");
+	for (var i = 0; i < ps.length; i++)
+		if (ps[i].indexOf("/") >= 0)
+			if (!confirm("An external plugin is specified. This plugin can fully access to your account.\nAre you sure to load this?\n\n" + ps[i]))
+				return;
+	
 	nr_limit = frm.limit.value;
 	max_count = frm.maxc.value;
 	max_count_u = frm.maxu.value;
@@ -1062,13 +1068,7 @@ function loadPlugins() {
 		var ps = pluginstr.split("\n");
 		var pss = "";
 		for (var i = 0; i < ps.length; i++) {
-			var ext = false;
-			if (ps[i].indexOf("/") >= 0) {
-				if (!confirm("External plugin is about to be loaded.\nAre you sure to load this?\n\n" + ps[i]))
-					continue;
-				ext = true;
-			}
-			pss += '<scr'+'ipt type="text/javascript" src="' + (ext ? '' : 'plugins/') + ps[i] + '"></scr'+'ipt>';
+			pss += '<scr'+'ipt type="text/javascript" src="' + (ps[i].indexOf("/") >= 0 ? '' : 'plugins/') + ps[i] + '"></scr'+'ipt>';
 		}
 		document.write(pss);
 	}
