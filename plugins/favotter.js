@@ -1,11 +1,9 @@
 var twFavPlugin = {
-	cnt: 9,
 	fav_update: null,
 	favs: [],
-	update: function() {
-		if (this.cnt++ < 5) return;
-		this.cnt = 0;
+	updateFavs: function() {
 		this.fav_update = loadXDomainScript('http://twicli.neocat.jp/nr_favs.js?seq='+(seq++), this.fav_update);
+		setTimeout(this.updateFavs, 15*60*1000);
 	},
 	newMessageElement: function(ele, tw) {
 		var fele = document.createElement("a");
@@ -25,6 +23,7 @@ var twFavPlugin = {
 	}
 };
 registerPlugin(twFavPlugin);
+twFavPlugin.updateFavs();
 
 function favEntries(favs) {
 	twFavPlugin.favs = favs;
