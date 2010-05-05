@@ -206,7 +206,6 @@ Array.prototype.uniq = function() {
 // user-defined CSS
 var user_style = readCookie('user_style') || "";
 document.write('<style>' + user_style + '</style>');
-var auto_update = 0;
 
 
 // twicli用変数
@@ -227,7 +226,7 @@ var plugins = new Array;
 var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 200);
 var max_count_u = Math.min(parseInt(readCookie('max_count_u')) || 50, 200);;
 var nr_limit = Math.max(max_count*2.5, parseInt(readCookie('limit')) || 500);		// 表示する発言数の上限
-auto_update = parseInt(readCookie('auto_update') || "1");		// POST後に自動アップデート
+var auto_update = parseInt(readCookie('auto_update') || "1");		// POST後に自動アップデート
 var no_since_id = parseInt(readCookie('no_since_id') || "0");		// since_idを使用しない
 var no_counter = parseInt(readCookie('no_counter') || "0");			// 発言文字数カウンタを無効化
 var no_resize_fst = parseInt(readCookie('no_resize_fst') || "0");	// フィールドの自動リサイズを無効化
@@ -923,6 +922,7 @@ function switchTo(id) {
 	scrollTo(0, 1); scrollTo(0, 0);
 	cur_page = 1;
 	fav_mode = 0;
+	callPlugins("switchTo", selected_menu);
 }
 function switchTL() {
 	get_next_func = getOldTL;
