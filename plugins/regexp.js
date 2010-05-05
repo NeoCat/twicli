@@ -4,10 +4,11 @@ var pickup_tab_list = new Array();	// タブ一覧
 
 // 発言(JSON)が指定条件にマッチするか判定
 function execRegexp(tw, exp) {
+	var source = "\nfrom " + tw.source.replace(/<.*?>/g,'');
 	return	(!exp.id     || tw.user.screen_name.match(exp.id  )) &&
 		(!exp.id_n   ||!tw.user.screen_name.match(exp.id_n)) &&
-		(!exp.text   || tw.text.match(exp.text  )) &&
-		(!exp.text_n ||!tw.text.match(exp.text_n))
+		(!exp.text   || (tw.text+source).match(exp.text  )) &&
+		(!exp.text_n ||!(tw.text+source).match(exp.text_n))
 }
 
 // タブ切り替え処理
