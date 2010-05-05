@@ -60,7 +60,7 @@ registerPlugin({
 			var id = RegExp.$1;
 			addThumbnail(elem, 'http://i.ytimg.com/vi/' + id + '/default.jpg', url);
 		}
-		else if (url.match(/^http:\/\/(?:www\.nicovideo\.jp\/watch|nico.ms)\/[a-z][a-z](\d+)$/)) {
+		else if (url.match(/^http:\/\/(?:www\.nicovideo\.jp\/watch|nico\.ms)\/[a-z][a-z](\d+)$/)) {
 			var id = RegExp.$1;
 			var host = parseInt(id)%4 + 1;
 			addThumbnail(elem, 'http://tn-skr' + host + '.smilevideo.jp/smile?i=' + id, url);
