@@ -701,7 +701,7 @@ function getReplies() {
 function twReplies(tw, fromTL) {
 	if (tw.error) return alert(tw.error);
 	tw.reverse();
-	for (var j in tw) callPlugins("gotNewReply", tw[j]);
+	for (var j in tw) if (tw[j].user) callPlugins("gotNewReply", tw[j]);
 	tw.reverse();
 	if (nr_page_re == 0) {
 		nr_page_re = 2;
@@ -716,7 +716,7 @@ function twReplies(tw, fromTL) {
 function twShow(tw) {
 	if (tw.error) return alert(tw.error);
 	tw.reverse();
-	for (var j in tw) callPlugins("gotNewMessage", tw[j]);
+	for (var j in tw) if (tw[j].user) callPlugins("gotNewMessage", tw[j]);
 	if(!tl_oldest_id && tw.length > 0) tl_oldest_id = tw[0].id;
 	tw.reverse();
 	if (nr_page == 0) {
@@ -1061,7 +1061,11 @@ function callPlugins(name) {
 	args.shift();
 	for (var i in plugins)
 		if (typeof plugins[i][name] == "function")
-			plugins[i][name].apply(plugins[i], args);
+			try {
+				plugins[i][name].apply(plugins[i], args);
+			} catch (e) {
+				alert("Plugin error: " + e);
+			}
 }
 function loadPlugins() {
 	if (pluginstr) {
