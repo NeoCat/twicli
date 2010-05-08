@@ -1,8 +1,10 @@
 // DOM Storage (or Cookie)
 if (!window.localStorage) window.localStorage = window.globalStorage && window.globalStorage[location.hostname];
+var use_local_storage = true;
+try { sessionStorage /* check DOM storage is accessible */ } catch(e) { use_local_storage = false; }
 function readCookie(key) {
 	try {
-		if (window.localStorage && window.localStorage["twicli_"+key])
+		if (use_local_storage && window.localStorage && window.localStorage["twicli_"+key])
 			return String(window.localStorage["twicli_"+key]);
 	} catch(e) { return null; }
 	key += "=";
@@ -16,7 +18,7 @@ function readCookie(key) {
 }
 var cpath = location.pathname.replace(/\/oauth\/[^\/]+$/,'/');
 function writeCookie(key, val) {
-	if (window.localStorage)
+	if (use_local_storage && window.localStorage)
 		try { window.localStorage["twicli_"+key] = val; } catch(e) { alert("DOM storage write error!\n" + e); }
 	else {
 		var sday = new Date();
@@ -25,7 +27,7 @@ function writeCookie(key, val) {
 	}
 }
 function deleteCookie(key) {
-	try { window.localStorage.removeItem("twicli_"+key); } catch(e) {}
+	try { delete window.localStorage["twicli_"+key]; } catch(e) {}
 	var sday = new Date();
 	sday.setTime(sday.getTime() - 1);
 	document.cookie = key + "=;path=" + cpath + ";expires=" + sday.toGMTString();
