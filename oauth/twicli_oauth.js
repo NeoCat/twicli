@@ -46,7 +46,7 @@ function preAuth(f) {
 	return true;
 }
 
-function getArg(key) { var v = top.location.search.split(key+'='); return v[1] && v[1].split('&')[0]; }
+function getArg(key) { var v = location.search.split(key+'='); return v[1] && v[1].split('&')[0]; }
 
 function fillRequst(f1, f2) {
 	f1.oauth_token.value = readCookie('request_token');
