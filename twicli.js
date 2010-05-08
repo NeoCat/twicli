@@ -159,9 +159,11 @@ function scrollToY(y, total, start) {
 	setTimeout(function(){scrollToY(y, total, start)}, 20);
 }
 // DOM Storage (or Cookie)
-if (!window.localStorage) window.localStorage = window.globalStorage && window.globalStorage[location.hostname];
 var use_local_storage = true;
-try { sessionStorage /* check DOM storage is accessible */ } catch(e) { use_local_storage = false; }
+try {
+	sessionStorage; /* check DOM storage is accessible */
+	if (!window.localStorage) window.localStorage = window.globalStorage && window.globalStorage[location.hostname];
+} catch(e) { use_local_storage = false; }
 function readCookie(key) {
 	try {
 		if (use_local_storage && window.localStorage && window.localStorage["twicli_"+key])
