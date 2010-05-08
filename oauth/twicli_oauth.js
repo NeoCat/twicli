@@ -17,7 +17,7 @@ function readCookie(key) {
 var cpath = location.pathname.replace(/\/oauth\/[^\/]+$/,'/');
 function writeCookie(key, val) {
 	if (window.localStorage)
-		try { window.localStorage["twicli_"+key] = val; } catch(e) {}
+		try { window.localStorage["twicli_"+key] = val; } catch(e) { alert("DOM storage write error!\n" + e); }
 	else {
 		var sday = new Date();
 		sday.setTime(sday.getTime() + (1000 * 60 * 60 * 24 * 365));
