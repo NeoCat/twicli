@@ -88,7 +88,8 @@ registerPlugin({
 	},
 	newUserInfoElement: function(ele, user) {
 		var e = document.createElement("a");
-		e.href = "javascript:twsSearch('" + user.screen_name + "')";
+		e.href = 'http://search.twitter.com/search?q=' + user.screen_name;
+		e.onclick = function() { return twsSearch(user.screen_name); };
 		e.innerHTML = '[Search]';
 		ele.appendChild(e);
 	},
