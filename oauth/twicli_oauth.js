@@ -1,7 +1,7 @@
 // DOM Storage (or Cookie)
 var use_local_storage = true;
 try {
-	sessionStorage; /* check DOM storage is accessible */
+	window.sessionStorage; /* check DOM storage is accessible */
 	if (!window.localStorage) window.localStorage = window.globalStorage && window.globalStorage[location.hostname];
 } catch(e) { use_local_storage = false; }
 function readCookie(key) {
