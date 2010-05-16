@@ -1,6 +1,7 @@
 var twFavPlugin = {
 	fav_update: null,
 	favs: [],
+	init: function() { this.updateFavs(); },
 	updateFavs: function() {
 		twFavPlugin.fav_update = loadXDomainScript('http://twicli.neocat.jp/nr_favs.js?seq='+(seq++), twFavPlugin.fav_update);
 		setTimeout(twFavPlugin.updateFavs, 15*60*1000);
@@ -23,7 +24,6 @@ var twFavPlugin = {
 	}
 };
 registerPlugin(twFavPlugin);
-twFavPlugin.updateFavs();
 
 function favEntries(favs) {
 	twFavPlugin.favs = favs;

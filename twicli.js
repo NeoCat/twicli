@@ -187,6 +187,13 @@ function writeCookie(key, val, days) {
 		document.cookie = key + "=" + escape(val) + ";expires=" + sday.toGMTString();
 	}
 }
+function deleteCookie(key) {
+	try { delete window.localStorage["twicli_"+key]; } catch(e) {}
+	var sday = new Date();
+	sday.setTime(sday.getTime() - 1);
+	document.cookie = key + "=;expires=" + sday.toGMTString();
+}
+
 // Array#mapの再実装(Opera用)
 if (!Array.prototype.map) {
 	Array.prototype.map = function(fun) {
@@ -294,20 +301,32 @@ function twAuth(a) {
 		}
 		return;
 	}
-	myname = last_user = a.screen_name;
-	myid = a.id;
-	$("user").innerHTML = last_user;
-	update();
+	if (!myname || myname != a.screen_name) {
+		myname = last_user = a.screen_name;
+		myid = a.id;
+		writeCookie('access_user', myname+'|'+myid, 3652);
+		$("user").innerHTML = last_user;
+		update();
+	}
 }
 function auth() {
+	var name = readCookie('access_user');
+	if (name) {
+		name = name.split('|');
+		myname = last_user = name[0];
+		myid = name[1];
+		$("user").innerHTML = last_user;
+		update();
+	}
 	auth_ele = loadXDomainScript(twitterAPI + "account/verify_credentials.json?callback=twAuth", auth_ele);
 }
 
 function logout() {
 	if (!confirm('Are you sure to logout? You need to re-authenticate twicli at next launch.'))
 		return;
-	writeCookie('access_token', '');
-	writeCookie('access_secret', '');
+	deleteCookie('access_token');
+	deleteCookie('access_secret');
+	deleteCookie('access_user');
 	location.href = 'oauth/index.html';
 }
 
