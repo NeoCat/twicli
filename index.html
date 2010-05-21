@@ -51,8 +51,8 @@ IE7でも一応動作しますが、一部の表示が乱れます。<br>
 <h2><a name="howto">使い方</a></h2>
 <h3><a name="launch">起動</a></h3>
 上のリンク(bookmarklet)をクリック、またはブックマークにD&amp;Dで登録して選択すると、別窓で起動します。<br>
-認証を求められたら、"twitter.com"からの要求かを確認した上で、Twitterのアカウント／パスワードを入力してください。<br><br>
-あんまり激しくクリックしまくると<b>API制限(150回/1時間)</b>にすぐ引っかかりますので、基本まったりご使用下さい。^^;
+初回アクセス時や、+タブのLog outをクリックした場合は、認証を求められます。ブラウザ上、もしくはサーバ経由で認証(OAuth)を行って下さい。<br><br>
+あんまり激しくクリックしまくるとAPI制限(350回/1時間)に引っかかりますので、基本まったりご使用下さい。^^;
 </p>
 
 <h3><a name="usage">操作方法</a></h3>
@@ -105,7 +105,7 @@ function go(d) {
 <li><b>favotter.js</b> : <a href="http://favotter.matope.com/">ふぁぼったー</a>の最新2000件のふぁぼられ数を<span style="background-color:#6fc; color:#00c;">[fav:3]</span>のようにTLやユーザの発言に追加表示します。
 <li><b>followers.js</b> : follower以外<small> (いわゆる片想い) </small>の発言を青色で表示します。「+」タブのColor Followers→Renewボタンを押して最新のfollower一覧を取得する必要があります(デフォルトは無効)。
 <li><b>sound.js</b> <span style="font-size: small; color: red">[非標準]</span> : TLやReplyの新着時にサウンドを鳴らします。デフォルトでは入っていませんので、使用するにはPreferences＞Pluginsに追加してください。
-<li><b>ssl.js</b> <span style="font-size: small; color: red">[非標準]</span> : TL取得や発言時にSSLで通信を暗号化します。デフォルトでは入っていませんので、使用するにはPreferences＞Pluginsに追加してください。
+<li><b>ssl.js</b> : TL取得や発言時にSSLで通信を暗号化します。
 <li><b>translate.js</b> : ▼から"translate"を選ぶと、「+」タブ>Translateで指定した言語に発言を翻訳します。
 <li><b>thumbnail.js</b> : 写真投稿サービスのURLを含む発言にサムネールをつけます。現在<a href="http://twitpic.com/">twitpic</a>, <a href="http://movapic.com/">携帯百景</a>, <a href="http://f.hatena.ne.jp/">HatenaFotolife</a>, <a href="http://tumblr.com/">Tumblr</a>, <a href="http://yfrog.com/">Yfrog</a>, <a href="http://www.flickr.com/">Flickr</a>に対応しています。
 <li><b>resolve_url.js</b> : タイムライン上の短縮URLを短縮前のURLに変換します。(created by <a href="http://twitter.com/edvakf">@edvakf</a>)
