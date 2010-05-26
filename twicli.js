@@ -722,6 +722,13 @@ function getReplies() {
 // 受信repliesを表示
 function twReplies(tw, fromTL) {
 	if (tw.error) return alert(tw.error);
+
+	// double check since_id
+	if (!fromTL && since_id_reply)
+		for (var i = 0; i < tw.length; i++)
+			if (tw[i].id <= since_id_reply)
+				tw.splice(i--, 1);
+
 	tw.reverse();
 	for (var j in tw) if (tw[j].user) callPlugins("gotNewReply", tw[j]);
 	tw.reverse();
@@ -737,6 +744,13 @@ function twReplies(tw, fromTL) {
 // 受信twitを表示
 function twShow(tw) {
 	if (tw.error) return alert(tw.error);
+
+	// double check since_id
+	if (!no_since_id && since_id)
+		for (var i = 0; i < tw.length; i++)
+			if (tw[i].id <= since_id)
+				tw.splice(i--, 1);
+
 	tw.reverse();
 	for (var j in tw) if (tw[j].user) callPlugins("gotNewMessage", tw[j]);
 	if(!tl_oldest_id && tw.length > 0) tl_oldest_id = tw[0].id;
@@ -745,12 +759,6 @@ function twShow(tw) {
 		nr_page = max_count == 200 ? 2 : 1;
 		$("tw").appendChild(nextButton('get_old', nr_page));
 	}
-
-	// double check since_id
-	if (!no_since_id && since_id)
-		for (var i = 0; i < tw.length; i++)
-			if (tw[i].id <= since_id)
-				tw.splice(i--, 1);
 
 	twShowToNode(tw, $("tw"), false, false, true, true, true);
 	if (tl_oldest_id && update_reply_counter-- <= 0)
