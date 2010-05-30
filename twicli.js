@@ -180,7 +180,12 @@ function readCookie(key) {
 }
 function writeCookie(key, val, days) {
 	if (use_local_storage && window.localStorage)
-		try { window.localStorage["twicli_"+key] = val; } catch(e) { alert("DOM storage write error!\n" + e); }
+		try {
+			deleteCookie(key); // to avoid exception on iPad
+			window.localStorage["twicli_"+key] = val;
+		} catch(e) {
+			alert("DOM storage write error!\n" + e);
+		}
 	else {
 		var sday = new Date();
 		sday.setTime(sday.getTime() + (days * 1000 * 60 * 60 * 24));
