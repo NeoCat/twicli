@@ -22,7 +22,7 @@ registerPlugin({
 		this.playSound(1);
 	},
 	playSound: function(n) {
-		var fname = sound_name[n];
+		var fname = sound_name[n].replace(/\s+$/,'');
 		if (fname == "") return false;
 		if (fname.indexOf('/') < 0) fname = "sounds/"+fname;
 		var htmlToPlay = '<object type="audio/mpeg" data="'+fname+'" id="ply1-'+n+'" width="0" height="0" classid="clsid:6BF52A52-394A-11d3-B153-00C04F79FAA6"><param name="uiMode" value="none"><param name="url" value="'+fname+'"><param name="AutoStart" value="true"><object type="audio/mpeg" data="'+fname+'" id="ply2-'+n+'" width="0" height="0" classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" autoplay="true"><param name="src" value="'+fname+'"><param name="autoplay" value="true"><embed src="'+fname+'" id="ply3-'+n+'" width="0" height="0" autostart="true" autoplay="true"></object></object>';

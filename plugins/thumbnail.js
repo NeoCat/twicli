@@ -85,6 +85,8 @@ function addThumbnail(elem, src, link) {
 	var thm = document.createElement('img');
 	thm.src = src;
 	thm.className = 'thumbnail-image';
+	thm.ontouchstart = function(){ thm.style.width = 'auto'; };
+	thm.ontouchend   = function(){ thm.style.width = '30px'; };
 	var a = document.createElement('a');
 	a.href = link;
 	a.target = 'twitter';
