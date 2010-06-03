@@ -900,8 +900,11 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 		}
 	}
 	if (replies.length) {
-		if (twNode.id == "tw")
+		if (twNode.id == "tw") {
+			replies.reverse();
 			twReplies(replies, true);
+			replies.reverse();
+		}
 		else if (weak || since_id_reply) // 初回Reply取得時にはnoticeしない
 			noticeNewReply(replies);
 	}
