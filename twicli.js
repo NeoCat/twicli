@@ -765,12 +765,12 @@ function twShow(tw) {
 		$("tw").appendChild(nextButton('get_old', nr_page));
 	}
 
-	twShowToNode(tw, $("tw"), false, false, true, true, true);
+	var nr_shown = twShowToNode(tw, $("tw"), false, false, true, true, true);
 	if (tl_oldest_id && update_reply_counter-- <= 0)
 		getReplies();
 	if (tl_oldest_id && update_direct_counter-- <= 0)
 		checkDirect();
-	callPlugins("noticeUpdate", tw);
+	callPlugins("noticeUpdate", tw, nr_shown);
 }
 function twOld(tw) {
 	if (tw.error) return alert(tw.error);

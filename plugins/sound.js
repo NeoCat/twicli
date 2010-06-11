@@ -14,8 +14,8 @@ registerPlugin({
 			'<input type="submit" value="Apply"></form>';
 		$("pref").appendChild(e);
 	},
-	noticeUpdate: function(tw) {
-		if (tw.length > 0)
+	noticeUpdate: function(tw, nr) {
+		if (nr > 0)
 			this.playSound(0);
 	},
 	noticeNewReply: function() {
