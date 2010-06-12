@@ -237,6 +237,7 @@ var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) ||
 var pluginstr = (cookieVer>6) && readCookie('tw_plugins') || ' ssl.js\nregexp.js\nlists.js\noutputz.js\nsearch.js\nsearch2.js\nfavotter.js\nfollowers.js\nshorten_url.js\nresolve_url.js';
 if (!(cookieVer>7)) pluginstr+="\ntranslate.js\nscroll.js";
 if (!(cookieVer>8)) pluginstr+="\nthumbnail.js";
+if (!(cookieVer>9)) pluginstr=" worldcup-2010.js\n" + pluginstr.substr(1);
 pluginstr = pluginstr.substr(1);
 var plugins = new Array;
 var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 200);
@@ -1063,7 +1064,7 @@ function setPreps(frm) {
 	footer = new String(frm.footer.value);
 	decr_enter = frm.decr_enter.checked;
 	resetUpdateTimer();
-	writeCookie('ver', 9, 3652);
+	writeCookie('ver', 10, 3652);
 	writeCookie('limit', nr_limit, 3652);
 	writeCookie('max_count', max_count, 3652);
 	writeCookie('max_count_u', max_count_u, 3652);
