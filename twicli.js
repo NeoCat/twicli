@@ -280,7 +280,7 @@ var user_pick2 = null;			// [⇔]で表示するユーザ名2
 var popup_user = null;			// ポップアップメニューが選択されたユーザ名
 var popup_id = null;			// ポップアップメニューが選択された発言ID
 var popup_ele = null;			// ポップアップメニューが選択された発言ノード
-var fav_mode = 0;				// fav表示中か
+var fav_mode = 0;				// Userタブで 1: fav表示中  2: following表示中  3: followers表示中
 var rep_top = 0;				// replyのオーバーレイ位置
 var rep_trace_id = null;		// replyのオーバーレイに追加する発言ID
 var popup_top = 0;				// ポップアップメニューの表示位置
@@ -334,6 +334,11 @@ function logout() {
 	deleteCookie('access_secret');
 	deleteCookie('access_user');
 	location.href = 'oauth/index.html';
+}
+
+function error(str) {
+	$('loading').style.display = 'none';
+	alert(str);
 }
 
 // enterキーで発言, "r"入力で再投稿, 空欄でTL更新
@@ -443,7 +448,7 @@ function dispReply(user, id, ele) {
 // reply先をoverlay表示 (Timelineに無い場合)
 function dispReply2(tw) {
 	$("loading").style.display = "none";
-	if (tw.error) return alert(tw.error);
+	if (tw.error) return error(tw.error);
 	var el = document.createElement("div");
 	el.id = 'reps-'+tw.id;
 	el.innerHTML = makeHTML(tw)
@@ -496,7 +501,7 @@ function popup_hide() {
 function retweetStatus() {
 	if (!popup_id) return false;
 	if ($('lock-' + popup_id)) {
-		alert("This tweet is protected.");
+		error("This tweet is protected.");
 		return false;
 	}
 	if (!confirm("Retweet to your followers?")) return false;
@@ -603,12 +608,11 @@ function makeUserInfoHTML(user) {
 			(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
 			(user.url ? '<b>URL</b>: <a target="_blank" href="' + user.url + '">' + user.url + '</a><br>' : '') +
 			(user.description ? user.description : '') +
-			'<br><b>' + user.friends_count + '<small>following</small> / ' + 
-						user.followers_count + '<small>followers</small>' +
-			'<br>' + user.statuses_count + '<small>updates</small> / ' +
-						user.favourites_count + '<small>favs</small></b>' +
-			'</td></tr></table><a target="twitter" href="' + twitterURL + user.screen_name + '">[Twitter]</a> '+
-			'<a href="javascript:switchFav()">[Fav]</a> ';
+			'<br><b><a href="javascript:switchFollowing()">' + user.friends_count + '<small>following</small></a> / ' + 
+						'<a href="javascript:switchFollower()">' + user.followers_count + '<small>followers</small></a>' +
+			'<br><a href="javascript:switchStatus()">' + user.statuses_count + '<small>updates</small></a> / ' +
+						'<a href="javascript:switchFav()">' + user.favourites_count + '<small>favs</small></a></b>' +
+			'</td></tr></table><a target="twitter" href="' + twitterURL + user.screen_name + '">[Twitter]</a> '
 }
 // 過去の発言取得ボタン(DOM)生成
 function nextButton(id, p) {
@@ -644,7 +648,7 @@ function follow(f) {
 }
 // ユーザ情報を表示
 function twUserInfo(user) {
-	if (user.error) return alert(user.error);
+	if (user.error) return error(user.error);
 	var elem = $('user_info');
 	elem.innerHTML = makeUserInfoHTML(user);
 	callPlugins("newUserInfoElement", elem, user);
@@ -666,13 +670,13 @@ function twRelation(rel) {
 }
 // ダイレクトメッセージ一覧の受信
 function twDirect1(tw) {
-	if (tw.error) return alert(tw.error);
+	if (tw.error) return error(tw.error);
 	direct1 = tw;
 	if (direct2)
 		twDirectShow();
 }
 function twDirect2(tw) {
-	if (tw.error) return alert(tw.error);
+	if (tw.error) return error(tw.error);
 	direct2 = tw;
 	if (direct1)
 		twDirectShow();
@@ -727,7 +731,7 @@ function getReplies() {
 }
 // 受信repliesを表示
 function twReplies(tw, fromTL) {
-	if (tw.error) return alert(tw.error);
+	if (tw.error) return error(tw.error);
 
 	// double check since_id
 	if (!fromTL && since_id_reply)
@@ -749,7 +753,7 @@ function twReplies(tw, fromTL) {
 }
 // 受信twitを表示
 function twShow(tw) {
-	if (tw.error) return alert(tw.error);
+	if (tw.error) return error(tw.error);
 
 	// double check since_id
 	if (!no_since_id && since_id)
@@ -774,21 +778,21 @@ function twShow(tw) {
 	callPlugins("noticeUpdate", tw, nr_shown);
 }
 function twOld(tw) {
-	if (tw.error) return alert(tw.error);
+	if (tw.error) return error(tw.error);
 	var tmp = $("tmp");
 	twShowToNode(tw, $("tw"), false, true, false, false, false, true);
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
 	$("tw").appendChild(nextButton('get_old', nr_page));
 }
 function twOldReply(tw) {
-	if (tw.error) return alert(tw.error);
+	if (tw.error) return error(tw.error);
 	var tmp = $("tmp");
 	twShowToNode(tw, $("re"), false, true, false, false, false, true);
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
 	$("re").appendChild(nextButton('get_old_re', nr_page_re));
 }
 function twShow2(tw) {
-	if (tw.error) return alert(tw.error);
+	if (tw.error) return error(tw.error);
 	var tmp = $("tmp");
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
 	var user_info = $("user_info");
@@ -801,7 +805,7 @@ function twShow2(tw) {
 		twUserInfo(tw[0].user);
 }
 function twShow3(tw) {
-	if (tw.error) return alert(tw.error);
+	if (tw.error) return error(tw.error);
 	users_log.push(tw);
 	if (users_log.length == last_user.split(',').length) {
 		var tws = [];
@@ -809,6 +813,27 @@ function twShow3(tw) {
 			tws = tws.concat(users_log[i]);
 		tws = tws.sort(function(a,b){return b.id - a.id});
 		twShow2(tws);
+	}
+}
+function twUsers(tw) {
+	if (tw.error) return error(tw.error);
+	var tmp = $("tmp");
+	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
+	var tw2 = tw.users.map(function(x){
+		if (!x.status) x.status = {'text':'', id:0, 'created_at':x.created_at};
+		x.status.user = x;
+		return x.status;
+	});
+	twShowToNode(tw2, $("tw2c"), false, cur_page > 1);
+	if (tw.next_cursor) {
+		$("tw2c").appendChild(nextButton('next'));
+		get_next_func = function() {
+			cur_page++;
+			update_ele2 = loadXDomainScript(twitterAPI +
+					(fav_mode == 2 ? 'statuses/friends.json' : 'statuses/followers.json') +
+					'?screen_name=' + last_user + '&cursor=' + tw.next_cursor +
+					'&callback=twUsers', update_ele2);
+		};
 	}
 }
 function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore_old, ignore_new, weak) {
@@ -999,6 +1024,14 @@ function switchUser(user) {
 		});
 	}
 }
+function switchStatus() {
+	$("loading").style.display = "block";
+	cur_page = 1;
+	fav_mode = 0;
+	$("tw2c").innerHTML = "";
+		update_ele2 = loadXDomainScript(twitterAPI + 'statuses/user_timeline.json' +
+			'?count=' + max_count_u + '&screen_name=' + last_user + '&callback=twShow2', update_ele2);
+}
 function switchFav() {
 	$("loading").style.display = "block";
 	cur_page = 1;
@@ -1006,6 +1039,22 @@ function switchFav() {
 	$("tw2c").innerHTML = "";
 	update_ele2 = loadXDomainScript(twitterAPI + 'favorites/' + last_user + '.json' +
 										'?callback=twShow2', update_ele2);
+}
+function switchFollowing() {
+	$("loading").style.display = "block";
+	cur_page = 1;
+	fav_mode = 2;
+	$("tw2c").innerHTML = "";
+	update_ele2 = loadXDomainScript(twitterAPI + 'statuses/friends.json' +
+			'?screen_name=' + last_user + '&cursor=-1&callback=twUsers', update_ele2);
+}
+function switchFollower() {
+	$("loading").style.display = "block";
+	cur_page = 1;
+	fav_mode = 3;
+	$("tw2c").innerHTML = "";
+	update_ele2 = loadXDomainScript(twitterAPI + 'statuses/followers.json' +
+			'?screen_name=' + last_user + '&cursor=-1&callback=twUsers', update_ele2);
 }
 function switchDirect() {
 	switchTo("direct");
