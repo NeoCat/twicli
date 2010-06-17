@@ -32,6 +32,7 @@ function switchRegexp(tab) {
 		}
 	}
 	twShow2(pickup);
+	callPlugins("regexp_switched", tab);
 }
 
 // 抽出タブ変更
@@ -60,7 +61,7 @@ function closeRegexp(tab) {
 
 // 抽出タブ初期化
 function initRegexp() {
-	var list = (pickup_regexp + "\n" + pickup_regexp_ex).split(/[\r\n]/);
+	var list = (pickup_regexp + "\n" + pickup_regexp_ex).split(/[\r\n]+/);
 	// 抽出タブを生成
 	for (var id = 0; id < list.length; id++) {
 		var entry = list[id].split(':');
@@ -74,6 +75,9 @@ function initRegexp() {
 			tabname = tabname.substr(1);
 			no_close = 1;
 		}
+		var infp = tabname.split('\\');
+		tabname = infp[0];
+		var info = infp[1];
 		var ptab = $('pickup-'+tabname);
 		if (!ptab) {
 			ptab = document.createElement('a');
@@ -82,6 +86,7 @@ function initRegexp() {
 			ptab.innerHTML = ptab.name = tabname;
 			ptab.href = '#';
 			ptab.no_close = no_close;
+			ptab.info = info;
 			ptab.onclick = function() { switchRegexp(this); return false; };
 			$('menu2').appendChild(ptab);
 			pickup_tab_list.push(ptab);

@@ -1029,7 +1029,7 @@ function switchStatus() {
 	cur_page = 1;
 	fav_mode = 0;
 	$("tw2c").innerHTML = "";
-		update_ele2 = loadXDomainScript(twitterAPI + 'statuses/user_timeline.json' +
+	update_ele2 = loadXDomainScript(twitterAPI + 'statuses/user_timeline.json' +
 			'?count=' + max_count_u + '&screen_name=' + last_user + '&callback=twShow2', update_ele2);
 }
 function switchFav() {
