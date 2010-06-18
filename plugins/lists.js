@@ -12,6 +12,7 @@ function twlGetListInfo(name) {
 	$("loading").style.display = "block";
 	xds.load(twitterAPI + user + '/' + slug + '/members.json',
 		function twlListMember (info) {
+			if (info.error) return alert(info.error);
 			lists_users[name] = lists_users[name].concat(info.users.map(function(u){ delete u.status; return u; }));
 			if (info.next_cursor) {
 				$("loading").style.display = "block";
@@ -178,6 +179,6 @@ registerPlugin({
 	regexp_switched: function(tab) {
 		if (!tab.info || tab.info.indexOf('list#') != 0) return;
 		var a = tab.info.substr(5);
-		$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: green" href="javascript:twlGetListStatus(\''+a+'\')">get all tweets</a></div>';
+		$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: green" href="javascript:void(twlGetListStatus(\''+a+'\'))">get all tweets</a></div>';
 	}
 });
