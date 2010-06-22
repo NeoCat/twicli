@@ -567,7 +567,7 @@ function insertPDF(str) {
 }
 function makeHTML(tw, no_name, pid) {
 	var un = tw.user.screen_name;
-	var text = tw.retweeted_status ? "RT @" + tw.retweeted_status.user.screen_name + ":" + tw.retweeted_status.text : tw.text;
+	var text = tw.retweeted_status && tw.retweeted_status.user ? "RT @" + tw.retweeted_status.user.screen_name + ":" + tw.retweeted_status.text : tw.text;
 	return /*fav*/ '<img alt="☆" class="fav" src="http://assets3.twitter.com/images/icon_star_'+(tw.favorited?'full':'empty')+'.gif" ' +
 			'onClick="fav(this,' + tw.id + ')"' + (pid ? ' id="fav-'+pid+'-'+tw.id+'"' : '') + '>' +
 		 (!no_name ?
