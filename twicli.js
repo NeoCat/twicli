@@ -164,6 +164,7 @@ try {
 	window.sessionStorage; /* check DOM storage is accessible */
 	if (!window.localStorage) window.localStorage = window.globalStorage && window.globalStorage[location.hostname];
 } catch(e) { use_local_storage = false; }
+if (location.search.indexOf("cookie=1") >= 0) use_local_storage = false;
 function readCookie(key) {
 	try {
 		if (use_local_storage && window.localStorage && window.localStorage["twicli_"+key])
@@ -545,7 +546,7 @@ function update() {
 }
 function resetUpdateTimer() {
 	if (update_timer) clearInterval(update_timer);
-	update_timer = setInterval(update, updateInterval*1000);
+	update_timer = setInterval(update, Math.max(parseInt(updateInterval||5)*1000, 5000));
 }
 // twitのHTML表現を生成
 function dateFmt(d) {
@@ -582,7 +583,7 @@ function makeHTML(tw, no_name, pid) {
 		/*ダイレクトメッセージの方向*/ (tw.d_dir == 1 ? '<span class="dir">→</span> ' : tw.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text" + tw.id + "\" class=\"status\">" +
-		text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+|@([\/\w-]+)/g, function(_,id){
+		text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+|[@＠]([\/\w-]+)/g, function(_,id){
 				if (!id) return "<a class=\"link\" target=\"_blank\" href=\""+_+"\">"+_+"</a>";
 				if (id.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+id+"\">"+_+"</a>";
 				return "<a href=\""+twitterURL+id+"\" onClick=\"switchUser('"+id+"'); return false;\" >"+_+"</a>";
@@ -842,7 +843,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 	if (len == 0) return 0;
 	var pNode = document.createElement('div');
 	var dummy = pNode.appendChild(document.createElement('div'));
-	var myname_r = new RegExp("@"+myname+"\\b","i");
+	var myname_r = new RegExp("[@＠]"+myname+"\\b","i");
 	var nr_show = 0;
 	var replies = [];
 	for (var i = len-1; i >= 0; i--) {
