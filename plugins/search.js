@@ -97,10 +97,10 @@ registerPlugin({
 		for (var i = 0; i < eles.length; i++) {
 			var target = eles[i];
 			if (target.className == "status") {
-				target.innerHTML = target.innerHTML.replace(/<a .*?>.*?<\/a>|([^0-9A-Za-z]|^)([#＃][0-9A-Za-z_]{2,})(?=[\u0001-\/:-@\[-`{-~]|$)/gi, function(_,d1,t){
+				target.innerHTML = target.innerHTML.replace(/<a .*?>.*?<\/a>|(\W|_|^)([#＃])(\w{2,})(?=\W|$)/gi, function(_,d1,m,t){
 					if (_.substr(0,1) == '<') return _; // skip link
-					if (t.match(/^[#＃]\d+$/)) return d1+t;
-					return d1+'<a href="http://search.twitter.com/search?q=' + encodeURIComponent(t) +'" onclick="return twsSearch(\''+t+'\')">'+t+'</a>';
+					if (t.match(/^[#＃]\d+$/)) return _;
+					return d1+'<a href="http://search.twitter.com/search?q=' + encodeURIComponent(t) +'" onclick="return twsSearch(\'#'+t+'\')">'+m+t+'</a>';
 				});
 				break;
 			}
