@@ -325,7 +325,7 @@ function auth() {
 		$("user").innerHTML = last_user;
 		update();
 	}
-	auth_ele = loadXDomainScript(twitterAPI + "account/verify_credentials.json?callback=twAuth", auth_ele);
+	auth_ele = loadXDomainScript(twitterAPI + "account/verify_credentials.json?suppress_response_codes=true&callback=twAuth", auth_ele);
 }
 
 function logout() {
@@ -432,7 +432,7 @@ function dispReply(user, id, ele) {
 			rep_trace_id = id;
 		else
 			rep_top = ele_top;
-		reply_ele = loadXDomainScript(twitterAPI + 'statuses/show/'+id+'.json?callback=dispReply2', reply_ele);
+		reply_ele = loadXDomainScript(twitterAPI + 'statuses/show/'+id+'.json?suppress_response_codes=true&callback=dispReply2', reply_ele);
 		return;
 	}
 	if (d.parentNode.id != 'reps')
@@ -541,7 +541,7 @@ function update() {
 	callPlugins("update");
 	update_ele = loadXDomainScript(twitterAPI + 'statuses/home_timeline.json' +
 						'?count=' + (since_id ? 200 : max_count) +
-						'&callback=twShow' + (!no_since_id && since_id ? '&since_id='+since_id : ''), update_ele);
+						'&suppress_response_codes=true&callback=twShow' + (!no_since_id && since_id ? '&since_id='+since_id : ''), update_ele);
 	resetUpdateTimer();
 }
 function resetUpdateTimer() {
@@ -656,7 +656,7 @@ function twUserInfo(user) {
 	if (myname != user.screen_name) {
 		update_ele2 = loadXDomainScript(twitterAPI + 'friendships/show.json' +
 					'?source_screen_name=' + myname + '&target_id=' + user.id +
-					'&callback=twRelation', update_ele2);
+					'&suppress_response_codes=true&callback=twRelation', update_ele2);
 	}
 }
 // ユーザ情報にフォロー関係を表示
@@ -699,7 +699,7 @@ function twDirectShow() {
 }
 function checkDirect() {
 	direct_ele1 = loadXDomainScript(twitterAPI + 'direct_messages.json' +
-									'?callback=twDirectCheck', direct_ele1);
+									'?suppress_response_codes=true&callback=twDirectCheck', direct_ele1);
 	update_direct_counter = 20;
 }
 function twDirectCheck(tw) {
@@ -726,7 +726,7 @@ function getReplies() {
 		reply_ele2 = loadXDomainScript(twitterAPI + 'statuses/mentions.json' +
 						'?count=' + (since_id_reply ? 200 : max_count_u) +
 						(since_id_reply ? '&since_id='+since_id_reply : '') +
-						'&callback=twReplies',
+						'&suppress_response_codes=true&callback=twReplies',
 					reply_ele2);
 		update_reply_counter = 4;
 }
@@ -833,7 +833,7 @@ function twUsers(tw) {
 			update_ele2 = loadXDomainScript(twitterAPI +
 					(fav_mode == 2 ? 'statuses/friends.json' : 'statuses/followers.json') +
 					'?screen_name=' + last_user + '&cursor=' + tw.next_cursor +
-					'&callback=twUsers', update_ele2);
+					'&suppress_response_codes=true&callback=twUsers', update_ele2);
 		};
 	}
 }
@@ -958,21 +958,21 @@ function getNext(ele) {
 function getOldTL() {
 	update_ele2 = loadXDomainScript(twitterAPI + 'statuses/home_timeline.json' +
 				'?count=200&page=' + (nr_page++) +
-				'&callback=twOld', update_ele2);
+				'&suppress_response_codes=true&callback=twOld', update_ele2);
 }
 function getOldReply() {
 	update_ele2 = loadXDomainScript(twitterAPI + 'statuses/mentions.json' +
 				'?count=' + max_count_u + '&page=' + (nr_page_re++) +
-				'&callback=twOldReply', update_ele2);
+				'&suppress_response_codes=true&callback=twOldReply', update_ele2);
 }
 function getNextFuncCommon() {
 	if (selected_menu.id == "user" && !fav_mode)
 		update_ele2 = loadXDomainScript(twitterAPI + 'statuses/user_timeline.json' +
 					'?count=' + max_count_u + '&page=' + (++cur_page) + '&screen_name=' + last_user +
-					'&suppress_response_codes=true&callback=twShow2', update_ele2);
+					'&include_rts=true&suppress_response_codes=true&callback=twShow2', update_ele2);
 	else if (selected_menu.id == "user" && fav_mode)
 		update_ele2 = loadXDomainScript(twitterAPI + 'favorites/' + last_user + '.json' +
-					'?page=' + (++cur_page) + '&callback=twShow2', update_ele2);
+					'?page=' + (++cur_page) + '&suppress_response_codes=true&callback=twShow2', update_ele2);
 }
 // タイムライン切り替え
 function switchTo(id) {
@@ -1014,14 +1014,15 @@ function switchUser(user) {
 	if (users.length == 1) {
 		$("tw2h").innerHTML = "<div id=\"user_info\"></div>";
 		update_ele2 = loadXDomainScript(twitterAPI + 'statuses/user_timeline.json' +
-			'?count=' + max_count_u + '&screen_name=' + user + '&callback=twShow2', update_ele2);
+			'?count=' + max_count_u + '&screen_name=' + user + 
+			'&include_rts=true&suppress_response_codes=true&callback=twShow2', update_ele2);
 	} else {
 		users_log = [];
 		for (var i = 0; i < users_xds.length; i++)
 			xds.abort(users_xds[i]);
 		users_xds = users.map(function(u) {
 			xds.load(twitterAPI + 'statuses/user_timeline.json?screen_name=' + u +
-							 '&suppress_response_codes=true&count=' + max_count_u, twShow3);
+							 '&include_rts=true&suppress_response_codes=true&count=' + max_count_u, twShow3);
 		});
 	}
 }
@@ -1031,7 +1032,8 @@ function switchStatus() {
 	fav_mode = 0;
 	$("tw2c").innerHTML = "";
 	update_ele2 = loadXDomainScript(twitterAPI + 'statuses/user_timeline.json' +
-			'?count=' + max_count_u + '&screen_name=' + last_user + '&callback=twShow2', update_ele2);
+		'?count=' + max_count_u + '&screen_name=' + last_user + 
+		'&include_rts=true&suppress_response_codes=true&callback=twShow2', update_ele2);
 }
 function switchFav() {
 	$("loading").style.display = "block";
@@ -1039,7 +1041,7 @@ function switchFav() {
 	fav_mode = 1;
 	$("tw2c").innerHTML = "";
 	update_ele2 = loadXDomainScript(twitterAPI + 'favorites/' + last_user + '.json' +
-										'?callback=twShow2', update_ele2);
+										'?suppress_response_codes=true&callback=twShow2', update_ele2);
 }
 function switchFollowing() {
 	$("loading").style.display = "block";
@@ -1047,7 +1049,7 @@ function switchFollowing() {
 	fav_mode = 2;
 	$("tw2c").innerHTML = "";
 	update_ele2 = loadXDomainScript(twitterAPI + 'statuses/friends.json' +
-			'?screen_name=' + last_user + '&cursor=-1&callback=twUsers', update_ele2);
+			'?screen_name=' + last_user + '&cursor=-1&suppress_response_codes=true&callback=twUsers', update_ele2);
 }
 function switchFollower() {
 	$("loading").style.display = "block";
@@ -1055,15 +1057,15 @@ function switchFollower() {
 	fav_mode = 3;
 	$("tw2c").innerHTML = "";
 	update_ele2 = loadXDomainScript(twitterAPI + 'statuses/followers.json' +
-			'?screen_name=' + last_user + '&cursor=-1&callback=twUsers', update_ele2);
+			'?screen_name=' + last_user + '&cursor=-1&suppress_response_codes=true&callback=twUsers', update_ele2);
 }
 function switchDirect() {
 	switchTo("direct");
 	$("loading").style.display = "block";
 	direct_ele1 = loadXDomainScript(twitterAPI + 'direct_messages.json' +
-										'?callback=twDirect1', direct_ele1);
+										'?suppress_response_codes=true&callback=twDirect1', direct_ele1);
 	direct_ele2 = loadXDomainScript(twitterAPI + 'direct_messages/sent.json' +
-										'?callback=twDirect2', direct_ele2);
+										'?suppress_response_codes=true&callback=twDirect2', direct_ele2);
 }
 function switchMisc() {
 	switchTo("misc");
