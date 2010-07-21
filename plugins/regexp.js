@@ -4,7 +4,7 @@ var pickup_tab_list = new Array();	// タブ一覧
 
 // 発言(JSON)が指定条件にマッチするか判定
 function execRegexp(tw, exp) {
-	var source = "\nfrom " + tw.source.replace(/<.*?>/g,'');
+	var source = "\nvia " + tw.source.replace(/<.*?>/g,'');
 	return	(!exp.id     || tw.user.screen_name.match(exp.id  )) &&
 		(!exp.id_n   ||!tw.user.screen_name.match(exp.id_n)) &&
 		(!exp.text   || (tw.text+source).match(exp.text  )) &&

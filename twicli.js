@@ -238,7 +238,9 @@ var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) ||
 var pluginstr = (cookieVer>6) && readCookie('tw_plugins') || ' ssl.js\nregexp.js\nlists.js\noutputz.js\nsearch.js\nsearch2.js\nfavotter.js\nfollowers.js\nshorten_url.js\nresolve_url.js';
 if (!(cookieVer>7)) pluginstr+="\ntranslate.js\nscroll.js";
 if (!(cookieVer>8)) pluginstr+="\nthumbnail.js";
-if (!(cookieVer>9)) pluginstr=" worldcup-2010.js\n" + pluginstr.substr(1);
+//if (!(cookieVer>9)) pluginstr=" worldcup-2010.js\n" + pluginstr.substr(1);
+if (!(cookieVer>10)) pluginstr = pluginstr.replace(/worldcup-2010.js\n/,'');
+if (!(cookieVer>10)) pluginstr+="\ngeomap.js";
 pluginstr = pluginstr.substr(1);
 var plugins = new Array;
 var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 200);
@@ -592,6 +594,8 @@ function makeHTML(tw, no_name, pid) {
 		' <span class="utils"><span class="prop"><a class="date" target="twitter" href="'+twitterURL+un+'/statuses/'+tw.id+'">' + dateFmt(tw.created_at) + '</a>' +
 		//クライアント
 		(tw.source ? '<span class="separator"> / </span><span class="source">' + tw.source.replace(/<a /,'<a target="twitter"') + '</span>' : '') + '</span>' +
+		//Geolocation
+		(tw.geo && tw.geo.type == 'Point' ? '<a class="button geomap" id="geomap-' + tw.id + '" target="_blank" href="http://maps.google.com?q=' + tw.geo.coordinates.join(',') + '"><img src="images/marker.png" alt="geolocation" title="' + tw.geo.coordinates.join(',') + '"></a>' : '') +
 		//返信先を設定
 		' <a class="button" href="javascript:replyTo(\'' + un + "'," + tw.id + ')"><img src="images/reply.png" alt="↩" width="14" height="14"></a>' +
 		//返信元へのリンク
@@ -1116,7 +1120,7 @@ function setPreps(frm) {
 	footer = new String(frm.footer.value);
 	decr_enter = frm.decr_enter.checked;
 	resetUpdateTimer();
-	writeCookie('ver', 10, 3652);
+	writeCookie('ver', 11, 3652);
 	writeCookie('limit', nr_limit, 3652);
 	writeCookie('max_count', max_count, 3652);
 	writeCookie('max_count_u', max_count_u, 3652);
