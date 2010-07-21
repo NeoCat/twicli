@@ -79,8 +79,8 @@ function go(d) {
 <h2><a name="faq">FAQ</a></h2>
 <ul>
 <li><b>公式ハッシュタグは?</b><blockquote> → <a href="http://search.twitter.com/search?q=%23twicliJP">#twicliJP</a> です。疑問//不具合/ご要望などなど、なんでもどうぞ。</blockquote></li>
-<li><b>NGワード（指定語句を含む発言を隠す）機能はないの?</b><blockquote> →抽出プラグインでできます。(下記リンク参照)</blockquote></li>
-<li><b>たまにポストに失敗するみたいなんだけど…</b><blockquote> → Twitterの過負荷で鯨が出ているのかもしれません。「r」とだけ書いてポストすると、一つ前の発言を再送できます。</blockquote></li>
+<li><b>NGワード（指定語句を含むtweetを隠す）機能はないの?</b><blockquote> →抽出プラグインでできます。(下記リンク参照)</blockquote></li>
+<li><b>たまにポストに失敗するみたいなんだけど…</b><blockquote> → Twitterの過負荷で鯨が出ているのかもしれません。「r」とだけ書いてポストすると、一つ前のtweetを再送できます。</blockquote></li>
 <li><b>見た目がしょぼいんだけど…</b><blockquote> → 表示できる情報量を増やすため詰め込みぎみなのと、NeoCatの怠慢です…。ブラウザのフォント設定などによっても見た目が変わってしまいます。twicli用のuser stylesheetを公開して下さっている方がいらっしゃるので、参考にしてみてください。改善案もお待ちしてます。</blockquote></li>
 <li><b>ポスト数が多いときにAPI制限に引っかかる</b><blockquote> →「+」タブのPreferencesで"Update after post"の設定を解除して"Save"すると、ポスト後のTL更新を抑止してAPI使用回数を抑えます。</blockquote></li>
 </ul>
@@ -90,27 +90,27 @@ function go(d) {
 「+」タブのuser stylesheetにCSSを記述して、見た目のカスタマイズが可能です。例えば：
 <ul>
 <li>ユーザのアイコンを消す → <tt> .uicon { display: none; } </tt>
-<li>発言の行間を広げる　　 → <tt> .status { line-height: 1.5; } </tt>
+<li>tweetの行間を広げる　　 → <tt> .status { line-height: 1.5; } </tt>
 </ul>
 
 <h3><a name="plugins">プラグインについて</a></h3>
 「+」タブのPreferencesでプラグイン(JavaScript)を登録することにより、機能拡張ができます。<br>
 以下のプラグインがあります。
 <ul>
-<li><b>regexp.js</b> : 特定のIDやキーワードを含む発言を抽出するタブを追加します。詳しくは<a href="http://d.hatena.ne.jp/NeoCat/20090101">こちら</a>。
+<li><b>regexp.js</b> : 特定のIDやキーワードを含むtweetを抽出するタブを追加します。詳しくは<a href="http://d.hatena.ne.jp/NeoCat/20090101">こちら</a>。
 <li><b>lists.js</b> : フォローしているListsのうち、指定されたものをタブとして表示します。詳しくは<a href="http://d.hatena.ne.jp/NeoCat/20091101/1257088158">こちら</a>。
-<li><b>outputz.js</b> : 発言した文字数を<a href="http://outputz.com/">Outputz</a>に送信します。
+<li><b>outputz.js</b> : tweetした文字数を<a href="http://outputz.com/">Outputz</a>に送信します。
 <li><b>search.js</b> : <a href="http://search.twitter.com/">Twitter Search</a>でのキーワード検索を「+」タブに追加します。
 <li><b>search2.js</b> : <a href="http://pcod.no-ip.org/yats/">twitter検索</a>での検索機能を「+」タブに追加します。
-<li><b>favotter.js</b> : <a href="http://favotter.matope.com/">ふぁぼったー</a>の最新2000件のふぁぼられ数を<span style="background-color:#6fc; color:#00c;">[fav:3]</span>のようにTLやユーザの発言に追加表示します。
-<li><b>followers.js</b> : follower以外<small> (いわゆる片想い) </small>の発言を青色で表示します。「+」タブのColor Followers→Renewボタンを押して最新のfollower一覧を取得する必要があります(デフォルトは無効)。
+<li><b>favotter.js</b> : <a href="http://favotter.matope.com/">ふぁぼったー</a>の最新2000件のふぁぼられ数を<span style="background-color:#6fc; color:#00c;">[fav:3]</span>のようにTLやユーザのtweetに追加表示します。
+<li><b>followers.js</b> : follower以外<small> (いわゆる片想い) </small>のtweetを青色で表示します。「+」タブのColor Followers→Renewボタンを押して最新のfollower一覧を取得する必要があります(デフォルトは無効)。
 <li><b>sound.js</b> <span style="font-size: small; color: red">[非標準]</span> : TLやReplyの新着時にサウンドを鳴らします。デフォルトでは入っていませんので、使用するにはPreferences＞Pluginsに追加してください。
-<li><b>ssl.js</b> : TL取得や発言時にSSLで通信を暗号化します。
-<li><b>translate.js</b> : ▼から"translate"を選ぶと、「+」タブ>Translateで指定した言語に発言を翻訳します。
-<li><b>thumbnail.js</b> : 写真投稿サービスのURLを含む発言にサムネールをつけます。現在<a href="http://twitpic.com/">twitpic</a>, <a href="http://movapic.com/">携帯百景</a>, <a href="http://f.hatena.ne.jp/">HatenaFotolife</a>, <a href="http://tumblr.com/">Tumblr</a>, <a href="http://yfrog.com/">Yfrog</a>, <a href="http://www.flickr.com/">Flickr</a>に対応しています。
+<li><b>ssl.js</b> : TL取得やtweet時にSSLで通信を暗号化します。
+<li><b>translate.js</b> : ▼から"translate"を選ぶと、「+」タブ>Translateで指定した言語にtweetを翻訳します。
+<li><b>thumbnail.js</b> : 写真投稿サービスのURLを含むtweetにサムネールをつけます。現在<a href="http://twitpic.com/">twitpic</a>, <a href="http://movapic.com/">携帯百景</a>, <a href="http://f.hatena.ne.jp/">HatenaFotolife</a>, <a href="http://tumblr.com/">Tumblr</a>, <a href="http://yfrog.com/">Yfrog</a>, <a href="http://www.flickr.com/">Flickr</a>に対応しています。
 <li><b>resolve_url.js</b> : タイムライン上の短縮URLを短縮前のURLに変換します。(created by <a href="http://twitter.com/edvakf">@edvakf</a>)
 <li><b>shorten_url.js</b> : 発言欄で、URLの後に ;;; と打ち込むとURLを短縮します。もう一度打ち込むと元に戻ります。(created by <a href="http://twitter.com/edvakf">@edvakf</a>)
-<li><b>worldcup-2010.js</b> : ワールドカップにちなんで<a href="http://search.twitter.com/search?q=jpn">#jpn</a>などの国別ハッシュタグに応じて国旗アイコン<img src="http://twitter.com/images/worldcup/16/jpn.png" alt="Japan" style="vertical-align:middle">を表示します。(created by <a href="http://d.hatena.ne.jp/scientre/20100611/twicli_worldcup">@21f</a>)
+<li><b>geomap.js</b> : GeoLocationが付加されたtweetで、マーカ(<img src="images/marker.png">)をクリックした際にGoogle Mapをインライン表示します。詳しくは<a href="http://d.hatena.ne.jp/NeoCat/20100722/1279741190">こちら</a>。
 </ul>
 
 <h2><a name="source">ソース</a></h2>
@@ -134,6 +134,8 @@ function go(d) {
 <script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20090824/1251125679");</script></li>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20091101/1257088158">listsプラグインについて</a>
 <script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20091101/1257088158");</script></li>
+<li><a href="http://d.hatena.ne.jp/NeoCat/20100722/1279741190">geomapプラグインについて</a>
+<script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20100722/1279741190");</script></li>
 </ul>
 
 <h2><a name="author">作ってる人</a></h2>
