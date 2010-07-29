@@ -253,6 +253,7 @@ var no_resize_fst = parseInt(readCookie('no_resize_fst') || "0");	// フィー�
 var replies_in_tl = parseInt(readCookie('replies_in_tl') || "1");	// フォロー外からのReplyをTLに表示
 var footer = readCookie('footer') || ""; 							// フッタ文字列
 var decr_enter = parseInt(readCookie('decr_enter') || "0");			// Shift/Ctrl+Enterで投稿
+var no_geotag = parseInt(readCookie('no_geotag') || "0");			// GeoTaggingを無効化
 // TL管理用
 var nr_tw = 0;					// 現在のTLの発言数
 var cur_page = 1;				// 現在表示中のページ
@@ -287,6 +288,7 @@ var fav_mode = 0;				// Userタブで 1: fav表示中  2: following表示中  3:
 var rep_top = 0;				// replyのオーバーレイ位置
 var rep_trace_id = null;		// replyのオーバーレイに追加する発言ID
 var popup_top = 0;				// ポップアップメニューの表示位置
+var min_fst_height = 30;		// 発言欄の最小の高さ
 var selected_menu;				// 選択中のタブ
 var update_timer = null;
 var update_reply_counter = 0;
@@ -296,6 +298,8 @@ var last_post = null;
 var last_in_reply_to_user = null;
 var last_in_reply_to_status_id = null;
 var last_direct_id = null;
+var geo = null;
+var geowatch = null;
 
 //ログイン・自ユーザ名受信
 var access_token = readCookie('access_token');
@@ -316,6 +320,10 @@ function twAuth(a) {
 		writeCookie('access_user', myname+'|'+myid, 3652);
 		$("user").innerHTML = last_user;
 		update();
+	}
+	if (!no_geotag && a.geo_enabled && navigator.geolocation) {
+		$("option").innerHTML += '<div id="geotag"><a href="javascript:toggleGeoTag()"><img align="left" id="geotag-img" src="images/earth_off.png">GeoTagging <span id="geotag-st">OFF</span></a><small id="geotag-info"></small></div>';
+		setFstHeight(min_fst_height, true);
 	}
 }
 function auth() {
@@ -375,23 +383,49 @@ function press(e) {
 	st.value += footer;
 	st.select();
 	enqueuePost(twitterAPI + 'statuses/update.xml?status=' + encodeURIComponent(st.value) +
+				(geo ?  "&display_coordinates=true&lat=" + geo.coords.latitude +
+						"&long=" + geo.coords.longitude : "") +
 				(in_reply_to_status_id ? "&in_reply_to_status_id=" + in_reply_to_status_id : ""),
 				function(){ resetFrm(); if (auto_update) update() });
 	in_reply_to_user = in_reply_to_status_id = null;
 	return false;
 }
+// GeoTag
+function toggleGeoTag() {
+	if (!geowatch) {
+		geowatch = navigator.geolocation.watchPosition(function(g){
+			geo = g;
+			var maplink = typeof(display_map) == 'function';
+			$("geotag-info").innerHTML = " : " + (maplink ? '<a href="javascript:display_map([geo.coords.latitude, geo.coords.longitude], $(\'geotag-info\'))">' : '') + g.coords.latitude + ", " + g.coords.longitude + " (" + g.coords.accuracy + "m)" + (maplink ? '</a>' : '');
+			setFstHeight(null, true);
+		});
+		$("geotag-img").src = "images/earth.png";
+		$("geotag-st").innerHTML = "ON";
+		$("geotag-info").innerHTML = " : -";
+	} else {
+		navigator.geolocation.clearWatch(geowatch);
+		geo = geowatch = null;
+		$("geotag-img").src = "images/earth_off.png";
+		$("geotag-st").innerHTML = "OFF";
+		$("geotag-info").innerHTML = "";
+		setFstHeight(null, true);
+	}
+}
 // フォームリサイズ
-function setFstHeight(h) {
-	if (no_resize_fst) return;
-	var exh = 0;
+function setFstHeight(h, force) {
+	if (!h)
+		h = $("fst").value.length ? Math.max($("fst").scrollHeight+2,min_fst_height) : min_fst_height;
+	if (no_resize_fst && !force) return;
+	var exh = 0, opt = $("option").clientHeight;
 	$("fst").style.height = h;
-	$("menu").style.top = $("counter-div").style.top = h+3+exh*5;
-	$("control").style.height = h+23+exh*5;
-	$("tw").style.top = $("tw2").style.top = $("re").style.top = h+24+exh*4;
+	$("option").style.top = h + 2;
+	$("menu").style.top = $("counter-div").style.top = h+3+exh*5 + opt;
+	$("control").style.height = h+23+exh*5 + opt;
+	$("tw").style.top = $("tw2").style.top = $("re").style.top = h+24+exh*4 + opt;
 }
 // 発言文字数カウンタ表示・更新
 function updateCount() {
-	setFstHeight($("fst").value.length ? Math.max($("fst").scrollHeight+2,30) : 30);
+	setFstHeight();
 	if (no_counter) return;
 	$("counter-div").style.display = "block";
 	$("counter").innerHTML = 140 - footer.length - $("fst").value.length;
@@ -401,7 +435,7 @@ function resetFrm() {
 	document.frm.reset();
 	setReplyId(false);
 	if ($("counter-div").style.display == "block") updateCount();
-	setFstHeight(30);
+	setFstHeight(min_fst_height);
 }
 // reply先の設定/解除
 function setReplyId(id) {
@@ -570,8 +604,10 @@ function insertPDF(str) {
 }
 function makeHTML(tw, no_name, pid) {
 	var un = tw.user.screen_name;
-	var text = tw.retweeted_status && tw.retweeted_status.user ? "RT @" + tw.retweeted_status.user.screen_name + ":" + tw.retweeted_status.text : tw.text;
-	return /*fav*/ '<img alt="☆" class="fav" src="http://assets3.twitter.com/images/icon_star_'+(tw.favorited?'full':'empty')+'.gif" ' +
+	var rt = tw.retweeted_status;
+	var rs = tw.retweeted_status || tw;
+	var text = rt && rt.user ? "RT @" + rt.user.screen_name + ":" + rt.text : tw.text;
+	return /*fav*/ '<img alt="☆" class="fav" src="http://assets3.twitter.com/images/icon_star_'+(rs.favorited?'full':'empty')+'.gif" ' +
 			'onClick="fav(this,' + tw.id + ')"' + (pid ? ' id="fav-'+pid+'-'+tw.id+'"' : '') + '>' +
 		 (!no_name ?
 			//ユーザアイコン
@@ -595,7 +631,7 @@ function makeHTML(tw, no_name, pid) {
 		//クライアント
 		(tw.source ? '<span class="separator"> / </span><span class="source">' + tw.source.replace(/<a /,'<a target="twitter"') + '</span>' : '') + '</span>' +
 		//Geolocation
-		(tw.geo && tw.geo.type == 'Point' ? '<a class="button geomap" id="geomap-' + tw.id + '" target="_blank" href="http://maps.google.com?q=' + tw.geo.coordinates.join(',') + '"><img src="images/marker.png" alt="geolocation" title="' + tw.geo.coordinates.join(',') + '"></a>' : '') +
+		(rs.geo && rs.geo.type == 'Point' ? '<a class="button geomap" id="geomap-' + tw.id + '" target="_blank" href="http://maps.google.com?q=' + rs.geo.coordinates.join(',') + '"><img src="images/marker.png" alt="geolocation" title="' + rs.geo.coordinates.join(',') + '"></a>' : '') +
 		//返信先を設定
 		' <a class="button" href="javascript:replyTo(\'' + un + "'," + tw.id + ')"><img src="images/reply.png" alt="↩" width="14" height="14"></a>' +
 		//返信元へのリンク
@@ -1089,6 +1125,7 @@ function switchMisc() {
 					'<input type="checkbox" name="counter"' + (no_counter?"":" checked") + '>Post length counter<br>' +
 					'<input type="checkbox" name="resize_fst"' + (no_resize_fst?"":" checked") + '>Auto-resize field<br>' +
 					'<input type="checkbox" name="decr_enter"' + (decr_enter?" checked":"") + '>Post with ctrl/shift+enter<br>' +
+					'<input type="checkbox" name="geotag"' + (no_geotag?"":" checked") + '>Enable GeoTagging<br>' +
 					'Footer: <input name="footer" size="10" value="' + footer + '"><br>' +
 					'Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>' +
 					'user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br>' +
@@ -1119,6 +1156,7 @@ function setPreps(frm) {
 	replies_in_tl = frm.replies_in_tl.checked;
 	footer = new String(frm.footer.value);
 	decr_enter = frm.decr_enter.checked;
+	no_geotag = !frm.geotag.checked;
 	resetUpdateTimer();
 	writeCookie('ver', 11, 3652);
 	writeCookie('limit', nr_limit, 3652);
@@ -1132,6 +1170,7 @@ function setPreps(frm) {
 	writeCookie('replies_in_tl', replies_in_tl?1:0, 3652);
 	writeCookie('footer', footer, 3652);
 	writeCookie('decr_enter', decr_enter?1:0, 3652);
+	writeCookie('no_geotag', no_geotag?1:0, 3652);
 	writeCookie('tw_plugins', new String(" " + frm.list.value), 3652);
 	writeCookie('user_style', new String(frm.user_style.value), 3652);
 	callPlugins('savePrefs', frm);

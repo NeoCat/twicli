@@ -18,24 +18,29 @@ registerPlugin({
 		
 		var plugin = this;
 		geomap.onclick = function() {
-			rep_top = cumulativeOffset(geomap)[1] + 20;
-			$('reps').innerHTML = '<div id="map_canvas" style="width: 100%; height: 250px;">';
-			$('rep').style.display = "block";
-			plugin.make_geo_map(tw.geo.coordinates);
-			$('rep').style.top = rep_top;
-			user_pick1 = user_pick2 = null;
+			display_map(tw.geo.coordinates, geomap);
 			return false;
 		};
 	},
-	make_geo_map: function(coordinates) {
-		var latlng = new google.maps.LatLng(coordinates[0], coordinates[1]);
-		var map = new google.maps.Map(document.getElementById("map_canvas"),
-			{zoom: 10, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP});
-		var marker = new google.maps.Marker({position: latlng, map: map});
-		google.maps.event.addListener(marker, 'click', function(event) {
-			window.open('http://maps.google.com?q='+coordinates.join(","));
-		});
-	},
 });
+
+function display_map(coordinates, elem) {
+	rep_top = Math.max(cumulativeOffset(elem)[1] + 20, $("control").offsetHeight);
+	$('reps').innerHTML = '<div id="map_canvas" style="width: 100%; height: 250px;">';
+	$('rep').style.display = "block";
+	make_geo_map(coordinates);
+	$('rep').style.top = rep_top;
+	user_pick1 = user_pick2 = null;
+}
+
+function make_geo_map(coordinates) {
+	var latlng = new google.maps.LatLng(coordinates[0], coordinates[1]);
+	var map = new google.maps.Map(document.getElementById("map_canvas"),
+		{zoom: 10, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP});
+	var marker = new google.maps.Marker({position: latlng, map: map});
+	google.maps.event.addListener(marker, 'click', function(event) {
+		window.open('http://maps.google.com?q='+coordinates.join(","));
+	});
+}
 
 document.write('<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>');

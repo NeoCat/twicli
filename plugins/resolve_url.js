@@ -32,6 +32,7 @@
         } else if (link.innerText === shortUrl) {
           link.innerText = truncated;
         }
+        link.className += ' resolved';
         // cleanup
         clearTimeout(task.timer);
         remove(task.script);
