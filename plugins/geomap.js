@@ -1,6 +1,7 @@
 registerPlugin({
 	newMessageElement: function(elem, tw) {
-		if (!tw.geo || tw.geo.type != 'Point') return;
+		var rs = tw.retweeted_status || tw;
+		if (!rs.geo || rs.geo.type != 'Point') return;
 		
 		var geomap = null; // find "geomap" in elem
 		for (var i = 0; i < elem.childNodes.length; i++) {
@@ -18,7 +19,7 @@ registerPlugin({
 		
 		var plugin = this;
 		geomap.onclick = function() {
-			display_map(tw.geo.coordinates, geomap);
+			display_map(rs.geo.coordinates, geomap);
 			return false;
 		};
 	},
