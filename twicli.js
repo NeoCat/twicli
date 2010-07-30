@@ -383,8 +383,8 @@ function press(e) {
 	st.value += footer;
 	st.select();
 	enqueuePost(twitterAPI + 'statuses/update.xml?status=' + encodeURIComponent(st.value) +
-				(geo ?  "&display_coordinates=true&lat=" + geo.coords.latitude +
-						"&long=" + geo.coords.longitude : "") +
+				(geo && geo.coords ?  "&display_coordinates=true&lat=" + geo.coords.latitude +
+										"&long=" + geo.coords.longitude : "") +
 				(in_reply_to_status_id ? "&in_reply_to_status_id=" + in_reply_to_status_id : ""),
 				function(){ resetFrm(); if (auto_update) update() });
 	in_reply_to_user = in_reply_to_status_id = null;
