@@ -56,6 +56,14 @@ registerPlugin({
 					},
 					'jsoncallback');
 		}
+		else if (url.match(/^(http:\/\/tweetphoto.com\/\d+)/)) {
+			var link = url;
+			xds.load('http://TweetPhotoAPI.com/api/TPAPI.svc/jsonp/metadatafromurl?url='+RegExp.$1,
+					function(x) {
+						if (!x.ThumbnailUrl) return;
+						addThumbnail(elem, x.ThumbnailUrl, link);
+					});
+		}
 		else if (url.match(/^http:\/\/(?:www\.youtube\.com\/watch\?.*v=|youtu\.be\/)([\w-]+)/)) {
 			var id = RegExp.$1;
 			addThumbnail(elem, 'http://i.ytimg.com/vi/' + id + '/default.jpg', url);
