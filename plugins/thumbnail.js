@@ -64,6 +64,9 @@ registerPlugin({
 						addThumbnail(elem, x.ThumbnailUrl, link);
 					});
 		}
+		else if (url.match(/^(http:\/\/gyazo.com\/\w+\.png)/)) {
+			addThumbnail(elem, 'http://gyazo-thumbnail.appspot.com/thumbnail?url='+url, link);
+		}
 		else if (url.match(/^http:\/\/(?:www\.youtube\.com\/watch\?.*v=|youtu\.be\/)([\w-]+)/)) {
 			var id = RegExp.$1;
 			addThumbnail(elem, 'http://i.ytimg.com/vi/' + id + '/default.jpg', url);
