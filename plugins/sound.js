@@ -1,4 +1,11 @@
-var sound_name = (readCookie('sound_fname') || "2.mp3,4.mp3").split(",");
+var twsd_html5 = twsd_mp3 = true;
+try {
+	twsd_audio = new Audio("");
+	if (!twsd_audio.canPlayType("audio/mpeg")) twsd_mp3 = false;
+} catch(e) {
+	twsd_html5 = false;
+}
+var sound_name = (readCookie('sound_fname') || (twsd_mp3 ? "2.mp3,4.mp3" : "2.ogg,4.ogg")).split(",");
 function setSoundNames(names) {
 	sound_name = names;
 	writeCookie('sound_fname', names.join(","), 3652);
@@ -25,7 +32,18 @@ registerPlugin({
 		var fname = sound_name[n].replace(/\s+$/,'');
 		if (fname == "") return false;
 		if (fname.indexOf('/') < 0) fname = "sounds/"+fname;
-		var htmlToPlay = '<object type="audio/mpeg" data="'+fname+'" id="ply1-'+n+'" width="0" height="0" classid="clsid:6BF52A52-394A-11d3-B153-00C04F79FAA6"><param name="uiMode" value="none"><param name="url" value="'+fname+'"><param name="AutoStart" value="true"><object type="audio/mpeg" data="'+fname+'" id="ply2-'+n+'" width="0" height="0" classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" autoplay="true"><param name="src" value="'+fname+'"><param name="autoplay" value="true"><embed src="'+fname+'" id="ply3-'+n+'" width="0" height="0" autostart="true" autoplay="true"></object></object>';
+		var htmlToPlay = twsd_html5 ?
+			'<audio id="ply0-'+n+'" autobuffer="autobuffer" src="'+fname+'"></audio>' :
+			'<object type="audio/mpeg" data="'+fname+'" id="ply1-'+n+'" width="0" height="0" classid="clsid:6BF52A52-394A-11d3-B153-00C04F79FAA6"><param name="uiMode" value="none"><param name="url" value="'+fname+'"><param name="AutoStart" value="true"><object type="audio/mpeg" data="'+fname+'" id="ply2-'+n+'" width="0" height="0" classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" autoplay="true"><param name="src" value="'+fname+'"><param name="autoplay" value="true"><embed src="'+fname+'" id="ply3-'+n+'" width="0" height="0" autostart="true" autoplay="true"></object></object>';
+		if (twsd_html5) {
+			var target = document.getElementById('ply0-'+n);
+			if (!target) {
+				document.getElementById('plysnd'+n).innerHTML = htmlToPlay;
+				target = document.getElementById('ply0-'+n);
+			}
+			target.play();
+			return;
+		}
 		var target = document.getElementById('ply1-'+n) || document.getElementById('ply2-'+n) || document.getElementById('ply3-'+n);
 		if (target && typeof(target.Play) == "function")
 			target.Play();
