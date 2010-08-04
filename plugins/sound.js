@@ -6,6 +6,7 @@ try {
 	twsd_html5 = false;
 }
 var sound_name = (readCookie('sound_fname') || (twsd_mp3 ? "2.mp3,4.mp3" : "2.ogg,4.ogg")).split(",");
+if (twsd_html5 && !twsd_mp3 && sound_name.join(',').indexOf('.mp3') >= 0) twsd_html5 = false;
 function setSoundNames(names) {
 	sound_name = names;
 	writeCookie('sound_fname', names.join(","), 3652);

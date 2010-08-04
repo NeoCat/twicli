@@ -3,17 +3,25 @@ var tws_nr = 0;
 var tws_rpp = 50; /* results per page */
 var tws_update_timer = null;
 var tws_list = (readCookie('twicli_search_list') || "").split(/\r?\n/);
-function twsSearch(q, no_switch) {
-	var myid = 'search-' + q;
+function twsSearch(qn, no_switch) {
+	var myid = 'search-' + qn;
+	var colon = qn.indexOf(':');
+	var name = qn;
+	var q = qn;
+	if (colon > 0) {
+		name = qn.substr(0, colon);
+		q = qn.substr(colon+1);
+	}
 	if (!$(myid)) {
 		var tab = document.createElement('a');
 		tab.id = myid;
+		tab.tws_qn = qn;
 		tab.pickup = new Array();
-		tab.innerHTML = tab.name = q;
+		tab.innerHTML = tab.name = name;
 		tab.href = '#';
-		tab.onclick = function() { twsSearch(q); return false; };
+		tab.onclick = function() { twsSearch(qn); return false; };
 		$('menu2').appendChild(tab);
-		tws_list.push(q);
+		tws_list.push(qn);
 		writeCookie('twicli_search_list', tws_list.join("\n"), 3652);
 	}
 	if (no_switch) return;
@@ -39,7 +47,7 @@ function closeSearchTab(myid) {
 	var target = $(myid);
 	target.parentNode.removeChild(target);
 	for (var i = 0; i < tws_list.length; i++)
-		if (target.name == tws_list[i])
+		if (target.tws_qn == tws_list[i])
 			tws_list.splice(i--, 1);
 	writeCookie('twicli_search_list', tws_list.join("\n"), 3652);
 	switchTL();
