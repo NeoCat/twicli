@@ -12,7 +12,12 @@ function twlGetListInfo(name) {
 	$("loading").style.display = "block";
 	xds.load(twitterAPI + user + '/' + slug + '/members.json',
 		function twlListMember (info) {
-			if (info.error) return alert(info.error);
+			if (info.error) {
+				alert(info.error);
+				twlUnsubscribeList(name);
+				$("loading").style.display = "none";
+				return;
+			}
 			lists_users[name] = lists_users[name].concat(info.users.map(function(u){ delete u.status; return u; }));
 			if (info.next_cursor) {
 				$("loading").style.display = "block";
