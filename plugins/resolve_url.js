@@ -1,6 +1,6 @@
 /* replace short URLs with original URLs */
 (function(){
-  var re = /^http:\/\/(tinyurl\.com|bit\.ly|is\.gd|u\.nu|icio\.us|tr\.im|cli\.gs|twurl\.nl|url\.ie|j\.mp|ow\.ly|ff\.im|digg\.com|tumblr\.com|goo\.gl|htn\.to)\//;
+  var re = /^http:\/\/(t\.co|tinyurl\.com|bit\.ly|is\.gd|u\.nu|icio\.us|tr\.im|cli\.gs|twurl\.nl|url\.ie|j\.mp|ow\.ly|ff\.im|digg\.com|tumblr\.com|goo\.gl|htn\.to)\//;
   var api = 'http://atsushaa.appspot.com/untiny/get'
   var queue = [];
   var wait = 10000;
