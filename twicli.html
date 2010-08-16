@@ -264,7 +264,7 @@ document.write('<style>' + user_style + '</style>');
 var auto_update = 0;
 </script>
 </head>
-<body onLoad="init()">
+<body onLoad="deprecated_notice()">
 <div id="control">
 <script type="text/javascript">resetFrm = function(){}; update = function(){};</script>
 <iframe name="tx" onload="resetFrm();if (auto_update) update()"></iframe>
@@ -1105,8 +1105,14 @@ function setPreps(frm) {
 	callPlugins('savePrefs', frm);
 	alert("Your settings are saved. Please reload to apply plugins and CSS.");
 }
+
+function deprecated_notice() {
+	$("tw").innerHTML = "<big><b><p>このバージョンのtwicli (BASIC認証版)は、2010/8/30以降、廃止予定です。</p><p>以後は<a href=\"index.html\">トップページ</a>を参考に、OAuth版への移行をお願いします。</p></big></b> ... 10秒後に起動します。 ...";
+	setTimeout(init, 10000);
+}
 // 初期化
 function init() {
+	$("tw").innerHTML = "";
 	setTimeout(function(){scrollTo(0, 1)}, 0);
 	// 初回アップデート
 	update = update_inited; // 初期化前にupdateが発生するのを防止
