@@ -792,7 +792,7 @@ function twReplies(tw, fromTL) {
 		twShowToNode(tw, $("tw"), false, false, true, false, true);
 	if (!fromTL && tw.length > 0) since_id_reply = tw[0].id;
 }
-// 受信twitを表示
+// 受信tweetを表示
 function twShow(tw) {
 	if (tw.error) return error(tw.error);
 
@@ -804,7 +804,8 @@ function twShow(tw) {
 
 	tw.reverse();
 	for (var j in tw) if (tw[j] && tw[j].user) callPlugins("gotNewMessage", tw[j]);
-	if(!tl_oldest_id && tw.length > 0) tl_oldest_id = tw[0].id;
+	if(!tl_oldest_id && tw.length > 0)
+		for (var j in tw) if (tw[j] && tw[j].user) { tl_oldest_id = tw[j].id; break; }
 	tw.reverse();
 	if (nr_page == 0) {
 		nr_page = max_count == 200 ? 2 : 1;
