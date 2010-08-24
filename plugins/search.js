@@ -17,7 +17,8 @@ function twsSearch(qn, no_switch) {
 		tab.id = myid;
 		tab.tws_qn = qn;
 		tab.pickup = new Array();
-		tab.innerHTML = tab.name = name;
+		tab.name = name;
+		tab.appendChild(document.createTextNode(name));
 		tab.href = '#';
 		tab.onclick = function() { twsSearch(qn); return false; };
 		$('menu2').appendChild(tab);
@@ -28,7 +29,8 @@ function twsSearch(qn, no_switch) {
 	switchTo(myid);
 	tws_update_timer = setInterval(function(){twsSearchUpdate(q)}, 1000*Math.max(updateInterval, 30));
 
-	$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: red" href="javascript:closeSearchTab(\''+twsHtmlEncode(myid)+'\')">[x] remove tab</a></div>';
+	$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: red" id="tws-closetab" href="#">[x] remove tab</a></div>';
+	$('tws-closetab').onclick = function(){ closeSearchTab(myid); return false; };
 	tws_page = 0;
 	update_ele2 = loadXDomainScript('http://search.twitter.com/search.json?seq=' + (seq++) +
 							'&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp +
@@ -86,15 +88,6 @@ function twsSearchShow(res, update) {
 								'&callback=twsSearchShow', update_ele2);
 		}
 	}
-}
-function twsHtmlEncode(value) {
-	return value ? value.replace(/\\/g,"\\\\")
-						.replace(/&/g,"&amp;")
-						.replace(/</g,"&lt;")
-						.replace(/>/g,"&gt;")
-						.replace(/"/g,"\\&quot;")
-						.replace(/'/g,"\\&apos;")
-				:value;
 }
 
 registerPlugin({
