@@ -28,7 +28,7 @@ function twsSearch(qn, no_switch) {
 	switchTo(myid);
 	tws_update_timer = setInterval(function(){twsSearchUpdate(q)}, 1000*Math.max(updateInterval, 30));
 
-	$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: red" href="javascript:closeSearchTab(\''+myid+'\')">[x] remove tab</a></div>';
+	$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: red" href="javascript:closeSearchTab(\''+twsHtmlEncode(myid)+'\')">[x] remove tab</a></div>';
 	tws_page = 0;
 	update_ele2 = loadXDomainScript('http://search.twitter.com/search.json?seq=' + (seq++) +
 							'&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp +
@@ -86,6 +86,15 @@ function twsSearchShow(res, update) {
 								'&callback=twsSearchShow', update_ele2);
 		}
 	}
+}
+function twsHtmlEncode(value) {
+	return value ? value.replace(/\\/g,"\\\\")
+						.replace(/</g,"&lt;")
+						.replace(/>/g,"&gt;")
+						.replace(/&/g,"&amp;")
+						.replace(/"/g,"\\&quot;")
+						.replace(/'/g,"\\&apos;")
+				:value;
 }
 
 registerPlugin({
