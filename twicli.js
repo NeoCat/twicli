@@ -781,7 +781,7 @@ function twReplies(tw, fromTL) {
 				tw.splice(i--, 1);
 
 	tw.reverse();
-	for (var j in tw) if (tw[j].user) callPlugins("gotNewReply", tw[j]);
+	for (var j in tw) if (tw[j] && tw[j].user) callPlugins("gotNewReply", tw[j]);
 	tw.reverse();
 	if (nr_page_re == 0) {
 		nr_page_re = 2;
@@ -803,7 +803,7 @@ function twShow(tw) {
 				tw.splice(i--, 1);
 
 	tw.reverse();
-	for (var j in tw) if (tw[j].user) callPlugins("gotNewMessage", tw[j]);
+	for (var j in tw) if (tw[j] && tw[j].user) callPlugins("gotNewMessage", tw[j]);
 	if(!tl_oldest_id && tw.length > 0) tl_oldest_id = tw[0].id;
 	tw.reverse();
 	if (nr_page == 0) {
@@ -887,6 +887,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 	var nr_show = 0;
 	var replies = [];
 	for (var i = len-1; i >= 0; i--) {
+		if (!tw[i]) continue;
 		var duplication = $(twNode.id + "-" + tw[i].id);
 		if (duplication) {
 			if (duplication.weak)
