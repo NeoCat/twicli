@@ -799,7 +799,7 @@ function twShow(tw) {
 	// double check since_id
 	if (!no_since_id && since_id)
 		for (var i = 0; i < tw.length; i++)
-			if (tw[i].id <= since_id)
+			if (tw[i] && tw[i].id <= since_id)
 				tw.splice(i--, 1);
 
 	tw.reverse();
