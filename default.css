@@ -26,7 +26,7 @@ form { margin-bottom: 0; }
 .uicon2 { max-width: 96px; max-height: 96px; }
 .fav { float: right; }
 .dir { color: #679; }
-.status { text-decoration: none; display: inline-block; }
+.status { text-decoration: none; }
 .status a.link { font-size: x-small; background-color: #eee; color: #022; border: solid 1px #cec; text-decoration: none; }
 .status a.resolved { background-color: #eef; }
 .status a.link:hover { background-color: #ff9; }
