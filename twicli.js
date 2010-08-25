@@ -416,7 +416,7 @@ function setFstHeight(h, force) {
 	if (!h)
 		h = $("fst").value.length ? Math.max($("fst").scrollHeight+2,min_fst_height) : min_fst_height;
 	if (no_resize_fst && !force) return;
-	var exh = document.all ? 1 : 0, opt = $("option").clientHeight;
+	var exh = (navigator.userAgent.indexOf("MSIE 8") >= 0 ? 1 : 0), opt = $("option").clientHeight;
 	$("fst").style.height = h;
 	$("option").style.top = h + 2;
 	$("menu").style.top = $("counter-div").style.top = h+3+exh*5 + opt;

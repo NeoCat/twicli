@@ -30,7 +30,7 @@ form { margin-bottom: 0; }
 .status a.link { font-size: x-small; background-color: #eee; color: #022; border: solid 1px #cec; text-decoration: none; }
 .status a.resolved { background-color: #eef; }
 .status a.link:hover { background-color: #ff9; }
-.utils { white-space: nowrap; text-align: right }
+.utils { text-align: right; display: inline-block; }
 .prop, .prop a { color: #999; font-size: x-small; }
 .fromme { background-color: #cfd; }
 .tome { background-color: #ccf; }
