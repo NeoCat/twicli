@@ -416,7 +416,7 @@ function setFstHeight(h, force) {
 	if (!h)
 		h = $("fst").value.length ? Math.max($("fst").scrollHeight+2,min_fst_height) : min_fst_height;
 	if (no_resize_fst && !force) return;
-	var exh = 0, opt = $("option").clientHeight;
+	var exh = document.all ? 1 : 0, opt = $("option").clientHeight;
 	$("fst").style.height = h;
 	$("option").style.top = h + 2;
 	$("menu").style.top = $("counter-div").style.top = h+3+exh*5 + opt;
@@ -1185,6 +1185,7 @@ function init() {
 	document.request.oauth_token.value = access_token;
 	document.etc.tokenSecret.value = access_secret;
 	document.etc.consumerSecret.value = "7ypxMreeJuumgiq3ts7QtOqigl5G1sosJFfeaoKGJA";
+	setFstHeight(min_fst_height, true);
 	// 初回アップデート
 	callPlugins("init");
 	setTimeout(auth, 0);
