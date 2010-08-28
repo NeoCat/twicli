@@ -449,28 +449,36 @@ function replyTo(user, id) {
 	document.frm.status.select();
 }
 // reply先を表示
-function dispReply(user, id, ele) {
+function dispReply(user, id, ele, cascade) {
 	user_pick1 = user;
-	var d = $((selected_menu.id == "TL" ? "tw" : selected_menu.id == "reply" ? "re" : "tw2c") + "-" + id) 
-			|| $('reps-' + id);
-	if (!d || d.style.display == "none") {
+	var e = !cascade && (window.event || arguments.callee.caller.arguments[0]);
+	var shiftkey = e && (e.shiftKey || e.modifiers & 4);
+	var td = $((selected_menu.id == "TL" ? "tw" : selected_menu.id == "reply" ? "re" : "tw2c") + "-" + id);
+	if (td && td.style.display == "none") td = null;
+	var rd = $('reps-' + id);
+	// 通常　　  → 反転表示 (rdあり) or オーバーレイ表示
+	// shiftキー → 反転表示 (td優先) or オーバーレイ表示(td/rdなし)
+	var d = shiftkey ? td || rd : rd || td;
+	if (!shiftkey && !rd || shiftkey && !d || cascade) {
+		// オーバーレイ表示
 		var ele_top = cumulativeOffset(ele)[1] + 20;
-		d = selected_menu.id != "TL" && $("tw" + "-" + id);
-		if (d) {
-			$('reps').innerHTML = d.innerHTML;
-			$('rep').style.display = "block";
-			$('rep').style.top = rep_top = ele_top;
-			user_pick2 = d.screen_name;
-			return;
-		}
-		$("loading").style.display = "block";
-		if (ele.parentNode.parentNode.parentNode.id == "reps")
+		if (ele.parentNode.parentNode.parentNode.id == "reps" || cascade)
 			rep_trace_id = id;
 		else
 			rep_top = ele_top;
+		d = d || selected_menu.id != "TL" && $("tw" + "-" + id);
+		if (d && d.tw) {
+			dispReply2(d.tw);
+			if (d.tw.in_reply_to_status_id)
+				dispReply(user, d.tw.in_reply_to_status_id, ele, true);
+			return;
+		}
+		if (cascade) return;
+		$("loading").style.display = "block";
 		reply_ele = loadXDomainScript(twitterAPI + 'statuses/show/'+id+'.json?suppress_response_codes=true&callback=dispReply2', reply_ele);
 		return;
 	}
+	// 反転表示
 	if (d.parentNode.id != 'reps')
 		closeRep();
 	var top = cumulativeOffset(d)[1];
@@ -486,6 +494,8 @@ function dispReply(user, id, ele) {
 function dispReply2(tw) {
 	$("loading").style.display = "none";
 	if (tw.error) return error(tw.error);
+	if ($('rep').style.display == 'block' && $('reps-'+tw.id)) // already displayed
+		return;
 	var el = document.createElement("div");
 	el.id = 'reps-'+tw.id;
 	el.innerHTML = makeHTML(tw)
