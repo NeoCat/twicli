@@ -964,10 +964,11 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 	if (animation2)
 		animate(pNode, maxH, (new Date).getTime());
 	else if (animation) {
-		$('rep').style.top = (rep_top += pNode.clientHeight+1);
-		$('popup').style.top = (popup_top += pNode.clientHeight+1);
-		scrollTo(0, getScrollY()+pNode.clientHeight+1);
-		scroll_adjust += pNode.clientHeight+1;
+		var ch = pNode.clientHeight + parseInt(pNode.style.borderBottomWidth || 0);
+		$('rep').style.top = (rep_top += ch);
+		$('popup').style.top = (popup_top += ch);
+		scrollTo(0, getScrollY()+ch);
+		scroll_adjust += ch;
 	}
 	if (twNode.id == 'tw') {
 		nr_tw += nr_show;
