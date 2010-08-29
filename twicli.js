@@ -35,6 +35,7 @@ function setupOAuthArgs(args) {
 }
 function setupOAuthURL(url, post) {
 	if (url.indexOf(twitterAPI) != 0) return url;
+	if (!post && ratelimit_reset_time && new Date < ratelimit_reset_time) return false;
 	url = url.split("?");
 	setupOAuthArgs(url[1]);
 	document.request.method = post ? 'POST' : 'GET';
@@ -45,6 +46,7 @@ function setupOAuthURL(url, post) {
 // クロスドメインJavaScript呼び出し(Twitter APIはOAuth認証)
 function loadXDomainScript(url, ele) {
 	url = setupOAuthURL(url);
+	if (!url) return ele;
 	if (ele && ele.parentNode)
 		ele.parentNode.removeChild(ele);
 	ele = document.createElement("script");
@@ -300,6 +302,7 @@ var last_in_reply_to_status_id = null;
 var last_direct_id = null;
 var geo = null;
 var geowatch = null;
+var ratelimit_reset_time = null;
 
 //ログイン・自ユーザ名受信
 var access_token = readCookie('access_token');
@@ -348,6 +351,13 @@ function logout() {
 }
 
 function error(str) {
+	if (str.indexOf('Rate limit exceeded.') == 0) {
+		if (ratelimit_reset_time && new Date < ratelimit_reset_time)
+			return;
+		else
+			update_ele2 = loadXDomainScript(twitterAPI + 'account/rate_limit_status.json' +
+											'?id=' + myname + '&callback=twLimit2', update_ele2);
+	}
 	$('loading').style.display = 'none';
 	alert(str);
 }
@@ -753,6 +763,7 @@ function checkDirect() {
 	update_direct_counter = 20;
 }
 function twDirectCheck(tw) {
+	if (tw.error) return error(tw.error);
 	if (!tw || tw.length == 0) return false;
 	if (last_direct_id && last_direct_id < tw[0].id)
 			$("direct").className += " new";
@@ -764,6 +775,9 @@ function twLimit(lim) {
 	$("tw2c").innerHTML = "<b>Twitter API status:</b><br>" +
 					"hourly limit : " + lim.remaining_hits + " / " + lim.hourly_limit + "<br>" +
 					"reset at : " + dateFmt(lim.reset_time);
+}
+function twLimit2(lim) {
+	ratelimit_reset_time = new Date(lim.reset_time.replace('+','GMT+'));;
 }
 // 新着reply受信通知
 function noticeNewReply(replies) {
@@ -1144,7 +1158,11 @@ function switchMisc() {
 					'<input type="submit" value="Save"></form></div><hr class="spacer">';
 	callPlugins("miscTab", $("tw2h"));
 	$("loading").style.display = "block";
-	update_ele2 = loadXDomainScript(twitterAPI + 'account/rate_limit_status.json' +
+	if (ratelimit_reset_time && new Date < ratelimit_reset_time)
+		$("tw2c").innerHTML = "<b>Twitter API status:</b><br>" +
+					"hourly limit : 0<br>reset at : " + dateFmt(ratelimit_reset_time);
+	else
+		update_ele2 = loadXDomainScript(twitterAPI + 'account/rate_limit_status.json' +
 										'?id=' + myname + '&callback=twLimit', update_ele2);
 }
 function togglePreps() {
