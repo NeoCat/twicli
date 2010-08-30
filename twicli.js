@@ -663,13 +663,13 @@ function makeHTML(tw, no_name, pid) {
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
 	return '<table><tr><td><a target="twitter" href="' + twitterURL + 'account/profile_image/'+
-			user.screen_name+'"><img class="uicon2" src="' + user.profile_image_url + '"></a></td><td id="profile">' +
+			user.screen_name+'"><img class="uicon2" src="' + user.profile_image_url + '"></a></td><td id="profile"><div>' +
 			(user.protected ? '<img alt="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
-			'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b><br>' +
-			(user.location ? '<b>Location</b>: ' + user.location + '<br>' : '') +
-			(user.url ? '<b>URL</b>: <a target="_blank" href="' + user.url + '">' + user.url + '</a><br>' : '') +
-			(user.description ? user.description : '') +
-			'<br><b><a href="javascript:switchFollowing()">' + user.friends_count + '<small>following</small></a> / ' + 
+			'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b></div>' +
+			(user.location ? '<div><b>Location</b>: ' + user.location + '</div>' : '') +
+			(user.url ? '<div><b>URL</b>: <a target="_blank" href="' + user.url + '">' + user.url + '</a></div>' : '') +
+			'<div>' + (user.description ? user.description : '<br>') +
+			'</div><b><a href="javascript:switchFollowing()">' + user.friends_count + '<small>following</small></a> / ' + 
 						'<a href="javascript:switchFollower()">' + user.followers_count + '<small>followers</small></a>' +
 			'<br><a href="javascript:switchStatus()">' + user.statuses_count + '<small>updates</small></a> / ' +
 						'<a href="javascript:switchFav()">' + user.favourites_count + '<small>favs</small></a></b>' +
