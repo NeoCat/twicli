@@ -24,7 +24,7 @@ h1 { border-bottom: solid 2px red; }
 </table>
 
 
-<form name="request" method="GET" action="https://twitter.com/oauth/authorize" onsubmit="return preAuth(this)">
+<form name="request" method="GET" action="https://api.twitter.com/oauth/authorize" onsubmit="return preAuth(this)">
 	<input name="oauth_token"    type="text"   size="64">
 	<input name="oauth_callback" type="hidden">
 	<input type="submit" value="Authorize">

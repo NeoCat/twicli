@@ -22,7 +22,7 @@ registerPlugin({
 			display_map(rs.geo.coordinates, geomap);
 			return false;
 		};
-	},
+	}
 });
 
 function display_map(coordinates, elem) {
