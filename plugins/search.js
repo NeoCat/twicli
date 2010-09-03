@@ -22,10 +22,10 @@ function twsSearch(qn, no_switch) {
 		tab.href = '#';
 		tab.onclick = function() { twsSearch(qn); return false; };
 		$('menu2').appendChild(tab);
+		if (no_switch) return;
 		tws_list.push(qn);
 		writeCookie('twicli_search_list', tws_list.join("\n"), 3652);
 	}
-	if (no_switch) return;
 	switchTo(myid);
 	tws_update_timer = setInterval(function(){twsSearchUpdate(q)}, 1000*Math.max(updateInterval, 30));
 
