@@ -3,6 +3,8 @@ var tws_nr = 0;
 var tws_rpp = 50; /* results per page */
 var tws_update_timer = null;
 var tws_list = (readCookie('twicli_search_list') || "").split(/\r?\n/);
+tws_list.uniq();
+writeCookie('twicli_search_list', tws_list.join("\n"), 3652);
 function twsSearch(qn, no_switch) {
 	var myid = 'search-' + qn;
 	var colon = qn.indexOf(':');
@@ -24,6 +26,7 @@ function twsSearch(qn, no_switch) {
 		$('menu2').appendChild(tab);
 		if (no_switch) return;
 		tws_list.push(qn);
+		tws_list.uniq();
 		writeCookie('twicli_search_list', tws_list.join("\n"), 3652);
 	}
 	switchTo(myid);
