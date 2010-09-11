@@ -858,10 +858,15 @@ function twOldReply(tw) {
 	$("re").appendChild(nextButton('get_old_re', nr_page_re));
 }
 function twShow2(tw) {
+	var user_info = $("user_info");
+	if (tw.error && tw.error == "Not authorized" && !!user_info && !fav_mode) {
+		update_ele2 = loadXDomainScript(twitterAPI + 'users/show.json?screen_name=' + last_user +
+			'&suppress_response_codes=true&callback=twUserInfo', update_ele2);
+		return;
+	}
 	if (tw.error) return error(tw.error);
 	var tmp = $("tmp");
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
-	var user_info = $("user_info");
 	twShowToNode(tw, $("tw2c"), !!user_info && !fav_mode, cur_page > 1);
 	if (selected_menu.id == "reply" || selected_menu.id == "user" && last_user.indexOf(',') < 0) {
 		$("tw2c").appendChild(nextButton('next'));
