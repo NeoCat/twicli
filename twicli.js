@@ -604,6 +604,8 @@ function resetUpdateTimer() {
 	if (update_timer) clearInterval(update_timer);
 	update_timer = setInterval(update, Math.max(parseInt(updateInterval||5)*1000, 5000));
 }
+// 外部リンクを開く際のフック
+function link(a) { return true; }
 // twitのHTML表現を生成
 function dateFmt(d) {
 	d = new Date(typeof(d)=='string' ? d.replace('+','GMT+') : d);
@@ -631,7 +633,7 @@ function makeHTML(tw, no_name, pid) {
 			'onClick="fav(this,' + tw.id + ')"' + (pid ? ' id="fav-'+pid+'-'+tw.id+'"' : '') + '>' +
 		 (!no_name ?
 			//ユーザアイコン
-			(tw.user.url ? '<a target="_blank" href="'+tw.user.url+'">' : '') +
+			(tw.user.url ? '<a target="_blank" href="'+tw.user.url+'" onclick="return link(this);">' : '') +
 			'<img class="uicon" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
 			//名前
 			'<a href="' + twitterURL + un + '" onClick="switchUser(\'' + un + '\');return false"><span class="uid">' + un + '</span>' +
@@ -642,8 +644,8 @@ function makeHTML(tw, no_name, pid) {
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text" + tw.id + "\" class=\"status\">" +
 		text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+|[@＠]([\/\w-]+)/g, function(_,id){
-				if (!id) return "<a class=\"link\" target=\"_blank\" href=\""+_+"\">"+_+"</a>";
-				if (id.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+id+"\">"+_+"</a>";
+				if (!id) return "<a class=\"link\" target=\"_blank\" href=\""+_+"\" onclick=\"return link(this);\">"+_+"</a>";
+				if (id.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+id+"\" onclick=\"return link(this);\">"+_+"</a>";
 				return "<a href=\""+twitterURL+id+"\" onClick=\"switchUser('"+id+"'); return false;\" >"+_+"</a>";
 			}).replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付
@@ -651,7 +653,7 @@ function makeHTML(tw, no_name, pid) {
 		//クライアント
 		(tw.source ? '<span class="separator"> / </span><span class="source">' + tw.source.replace(/<a /,'<a target="twitter"') + '</span>' : '') + '</span>' +
 		//Geolocation
-		(rs.geo && rs.geo.type == 'Point' ? '<a class="button geomap" id="geomap-' + tw.id + '" target="_blank" href="http://maps.google.com?q=' + rs.geo.coordinates.join(',') + '"><img src="images/marker.png" alt="geolocation" title="' + rs.geo.coordinates.join(',') + '"></a>' : '') +
+		(rs.geo && rs.geo.type == 'Point' ? '<a class="button geomap" id="geomap-' + tw.id + '" target="_blank" href="http://maps.google.com?q=' + rs.geo.coordinates.join(',') + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.geo.coordinates.join(',') + '"></a>' : '') +
 		//返信先を設定
 		' <a class="button" href="javascript:replyTo(\'' + un + "'," + tw.id + ')"><img src="images/reply.png" alt="↩" width="14" height="14"></a>' +
 		//返信元へのリンク
@@ -667,7 +669,7 @@ function makeUserInfoHTML(user) {
 			(user.protected ? '<img alt="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
 			'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b></div>' +
 			(user.location ? '<div><b>Location</b>: ' + user.location + '</div>' : '') +
-			(user.url ? '<div><b>URL</b>: <a target="_blank" href="' + user.url + '">' + user.url + '</a></div>' : '') +
+			(user.url ? '<div><b>URL</b>: <a target="_blank" href="' + user.url + '" onclick="return link(this);">' + user.url + '</a></div>' : '') +
 			'<div>' + (user.description ? user.description : '<br>') +
 			'</div><b><a href="javascript:switchFollowing()">' + user.friends_count + '<small>following</small></a> / ' + 
 						'<a href="javascript:switchFollower()">' + user.followers_count + '<small>followers</small></a>' +
