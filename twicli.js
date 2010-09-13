@@ -517,7 +517,7 @@ function dispReply2(tw) {
 	$('rep').style.display = "block";
 	user_pick2 = tw.user.screen_name;
 	if (tw.in_reply_to_status_id) {
-		var d = $("tw-" + tw.in_reply_to_status_id) || $("reply-" + tw.in_reply_to_status_id) || $("tw2c-" + tw.in_reply_to_status_id);
+		var d = $("tw-" + tw.in_reply_to_status_id) || $("re-" + tw.in_reply_to_status_id) || $("tw2c-" + tw.in_reply_to_status_id);
 		if (d)
 			dispReply(tw.user.screen_name, tw.in_reply_to_status_id, $('reps') /* この引数は使われない */, true);
 	}
