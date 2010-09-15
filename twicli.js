@@ -476,7 +476,7 @@ function dispReply(user, id, ele, cascade) {
 			rep_trace_id = id;
 		else
 			rep_top = ele_top;
-		d = d || selected_menu.id != "TL" && $("tw" + "-" + id);
+		d = d || $("tw-" + id) || $("re-" + id) || $("tw2c-" + id);
 		if (d && d.tw) {
 			dispReply2(d.tw);
 			return;
@@ -506,7 +506,8 @@ function dispReply2(tw) {
 		return;
 	var el = document.createElement("div");
 	el.id = 'reps-'+tw.id;
-	el.innerHTML = makeHTML(tw)
+	el.innerHTML = makeHTML(tw);
+	el.tw = tw;
 	callPlugins("newMessageElement", el, tw);
 	if (!rep_trace_id || tw.id != rep_trace_id) {
 		$('reps').innerHTML = '';
