@@ -16,6 +16,7 @@ h2 { border-left: solid 1.2em #cf6; padding-left: 4px; }
 h3 { border-left: solid 1.2em #fc0; padding-left: 4px; }
 img { border: none; }
 .language_selection { float:left; margin-left:700px;}
+pre { background-color: #ddf; border: 1px solid #66f; }
 --></style>
 <a class="language_selection" href="index_en.html">English</a>
 <script type="text/javascript">
@@ -82,7 +83,10 @@ function go(d) {
 <li><b>NGワード（指定語句を含むtweetを隠す）機能はないの?</b><blockquote> →抽出プラグインでできます。(下記リンク参照)</blockquote></li>
 <li><b>Enterで送信だと誤爆が増える…</b><blockquote> → 「+」タブのPreferencesで"Post with ctrl/shift+enter"を有効にしてSaveすると、Shift+EnterまたはCtrl+Enterでないと送信されなくなります。</blockquote></li>
 <li><b>たまにtweetに失敗するみたいなんだけど…</b><blockquote> → Twitterの過負荷で鯨が出ているのかもしれません。「r」とだけ書いてEnterキーを押すと、一つ前のtweetを再送できます。</blockquote></li>
-<li><b>見た目がしょぼいんだけど…</b><blockquote> → 表示できる情報量を増やすため詰め込みぎみなのと、NeoCatの怠慢です…。ブラウザのフォント設定などによっても見た目が変わってしまいます。twicli用のuser stylesheetを公開して下さっている方がいらっしゃるので、参考にしてみてください。改善案もお待ちしてます。</blockquote></li>
+<li><b>見た目がしょぼいんだけど…</b><blockquote> → 標準では表示できる情報量を増やすため詰め込みぎです。
+「+」タブのPreferencesでCSSを使ってuser stylesheetで見た目をカスタマイズ可能です。例えば
+<pre>@import url(styles/round.css);</pre>
+と記述すると、角丸／影付きの外観に変更できます。他にもtwicli用のuser stylesheetを公開して下さっている方がいらっしゃるので、参考にしてみてください。改善案もお待ちしてます。</blockquote></li>
 <li><b>tweet数が多いときにAPI制限に引っかかる</b><blockquote> →「+」タブのPreferencesで"Update after post"の設定を解除して"Save"すると、tweet後のTL更新を抑止してAPI使用回数を抑えます。</blockquote></li>
 <li><a href="http://github.com/NeoCat/twicli/wiki">twicli wiki</a>も参考にして下さい。</li>
 </ul>

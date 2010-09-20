@@ -16,6 +16,7 @@ h2 { border-left: solid 1.2em #cf6; padding-left: 4px; }
 h3 { border-left: solid 1.2em #fc0; padding-left: 4px; }
 img { border: none; }
 .language_selection { float:left; margin-left:700px;}
+pre { background-color: #ddf; border: 1px solid #66f; }
 --></style>
 </head>
 <body>
@@ -74,7 +75,9 @@ function go(d) {
 <ul>
 <li><b>How to hide tweet which contains specified kerwords?</b><blockquote> => Write "-::keyword:1" into "Pickup Pattern" in the "+" tab.</blockquote></li>
 <li><b>My tweets are sometimes lost ...</b><blockquote> => Twitter may be too crowded. Try writing just "r" and hit enter to re-post your previous tweet.</blockquote></li>
-<li><b>Appearance of this page is poor ...</b><blockquote> => Because of displaying many posts at once, and my laziness .... There are some guys publishing stylesheets for twicli. Your proposal is also appreciated. :-)</blockquote></li>
+<li><b>Appearance is poor ...</b><blockquote> => Default appearance isn't decorated at all to display many tweets at once. Try adding CSS below to 'user stylesheet' in Preferences in '+' tab for corner-rounded and shadowed tweets display.
+<pre>@import url(styles/round.css);</pre>
+There are some guys publishing more stylesheets for twicli. Your proposal is also appreciated. :-)</blockquote></li>
 <li><b>Too much API usage when I tweet frequently ...</b><blockquote> => Disable "Update after post" in "Preferences" in "+" tab to suppress automatic update after tweet is posted.</blockquote></li>
 <li>You can find more information in <a href="http://github.com/NeoCat/twicli/wiki">twicli wiki</a>.</li>
 </ul>
