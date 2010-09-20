@@ -1,4 +1,4 @@
-body { background-image: url(images/block_bg.png); background-attachment: fixed; margin: 1px; min-height: 500px; color: black; }
+body { background-image: url(../images/block_bg.png); background-attachment: fixed; margin: 1px; min-height: 500px; color: black; }
 img { border: 0 none; }
 hr { margin: 0; padding: 0; }
 hr.spacer { margin: 6px 0 }
