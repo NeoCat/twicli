@@ -1,0 +1,52 @@
+/* twicli CSS addon - Round */
+
+.uicon {
+	width: 48px;
+	height: 48px;
+}
+.utils {
+	display: block;
+}
+
+.tw-parent {
+	background-color: #888;
+}
+body, #tw2 { background-color: #eee; }
+
+.tw-parent > hr {
+	display: none;
+}
+
+.tw-parent > div > div {
+	margin: 2px 5px 5px 5px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	background-color: #eee; !important;
+	background: -moz-linear-gradient(top, #eee, #ccc);
+	background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc));
+	box-shadow: 3px 3px 4px rgba(0,0,0,0.5), 0 0 4px rgba(255,255,255,0.8) inset;
+	-moz-box-shadow: 3px 3px 4px rgba(0,0,0,0.5), 0 0 4px rgba(255,255,255,0.8) inset;
+	-webkit-box-shadow: 3px 3px 4px rgba(0,0,0,0.5), 0 0 4px rgba(255,255,255,0.8) inset;
+}
+
+.tw-parent > div > div.tome {
+	background-color: #eef; !important;
+	background: -moz-linear-gradient(top, #eef, #ccf);
+	background: -webkit-gradient(linear, left top, left bottom, from(#eef), to(#ccf));
+}
+
+.tw-parent > div > div.fromme {
+	background-color: #efe; !important;
+	background: -moz-linear-gradient(top, #efe, #cfc);
+	background: -webkit-gradient(linear, left top, left bottom, from(#efe), to(#cfc));
+}
+
+#rep {
+	border: 0;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	box-shadow: 4px 4px 10px rgba(0,0,0,0.5), 0 0 10px rgba(255,255,255,1.0) inset;
+	-moz-box-shadow: 4px 4px 10px rgba(0,0,0,0.5), 0 0 10px rgba(255,255,255,1.0) inset;
+	-webkit-box-shadow: 4px 4px 10px rgba(0,0,0,0.5), 0 0 10px rgba(255,255,255,1.0) inset;
+}

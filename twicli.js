@@ -476,11 +476,9 @@ function dispReply(user, id, ele, cascade) {
 			rep_trace_id = id;
 		else
 			rep_top = ele_top;
-		d = d || selected_menu.id != "TL" && $("tw" + "-" + id);
+		d = d || $("tw-" + id) || $("re-" + id) || $("tw2c-" + id);
 		if (d && d.tw) {
 			dispReply2(d.tw);
-			if (d.tw.in_reply_to_status_id)
-				dispReply(user, d.tw.in_reply_to_status_id, ele, true);
 			return;
 		}
 		if (cascade) return;
@@ -508,7 +506,8 @@ function dispReply2(tw) {
 		return;
 	var el = document.createElement("div");
 	el.id = 'reps-'+tw.id;
-	el.innerHTML = makeHTML(tw)
+	el.innerHTML = makeHTML(tw);
+	el.tw = tw;
 	callPlugins("newMessageElement", el, tw);
 	if (!rep_trace_id || tw.id != rep_trace_id) {
 		$('reps').innerHTML = '';
@@ -518,6 +517,11 @@ function dispReply2(tw) {
 	$('reps').appendChild(el);
 	$('rep').style.display = "block";
 	user_pick2 = tw.user.screen_name;
+	if (tw.in_reply_to_status_id) {
+		var d = $("tw-" + tw.in_reply_to_status_id) || $("re-" + tw.in_reply_to_status_id) || $("tw2c-" + tw.in_reply_to_status_id);
+		if (d)
+			dispReply(tw.user.screen_name, tw.in_reply_to_status_id, $('reps') /* この引数は使われない */, true);
+	}
 }
 // replyのoverlay表示を閉じる
 function closeRep() {
@@ -604,6 +608,8 @@ function resetUpdateTimer() {
 	if (update_timer) clearInterval(update_timer);
 	update_timer = setInterval(update, Math.max(parseInt(updateInterval||5)*1000, 5000));
 }
+// 外部リンクを開く際のフック
+function link(a) { return true; }
 // twitのHTML表現を生成
 function dateFmt(d) {
 	d = new Date(typeof(d)=='string' ? d.replace('+','GMT+') : d);
@@ -631,7 +637,7 @@ function makeHTML(tw, no_name, pid) {
 			'onClick="fav(this,' + tw.id + ')"' + (pid ? ' id="fav-'+pid+'-'+tw.id+'"' : '') + '>' +
 		 (!no_name ?
 			//ユーザアイコン
-			(tw.user.url ? '<a target="_blank" href="'+tw.user.url+'">' : '') +
+			(tw.user.url ? '<a target="_blank" href="'+tw.user.url+'" onclick="return link(this);">' : '') +
 			'<img class="uicon" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
 			//名前
 			'<a href="' + twitterURL + un + '" onClick="switchUser(\'' + un + '\');return false"><span class="uid">' + un + '</span>' +
@@ -642,8 +648,8 @@ function makeHTML(tw, no_name, pid) {
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text" + tw.id + "\" class=\"status\">" +
 		text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+|[@＠]([\/\w-]+)/g, function(_,id){
-				if (!id) return "<a class=\"link\" target=\"_blank\" href=\""+_+"\">"+_+"</a>";
-				if (id.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+id+"\">"+_+"</a>";
+				if (!id) return "<a class=\"link\" target=\"_blank\" href=\""+_+"\" onclick=\"return link(this);\">"+_+"</a>";
+				if (id.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+id+"\" onclick=\"return link(this);\">"+_+"</a>";
 				return "<a href=\""+twitterURL+id+"\" onClick=\"switchUser('"+id+"'); return false;\" >"+_+"</a>";
 			}).replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付
@@ -651,7 +657,7 @@ function makeHTML(tw, no_name, pid) {
 		//クライアント
 		(tw.source ? '<span class="separator"> / </span><span class="source">' + tw.source.replace(/<a /,'<a target="twitter"') + '</span>' : '') + '</span>' +
 		//Geolocation
-		(rs.geo && rs.geo.type == 'Point' ? '<a class="button geomap" id="geomap-' + tw.id + '" target="_blank" href="http://maps.google.com?q=' + rs.geo.coordinates.join(',') + '"><img src="images/marker.png" alt="geolocation" title="' + rs.geo.coordinates.join(',') + '"></a>' : '') +
+		(rs.geo && rs.geo.type == 'Point' ? '<a class="button geomap" id="geomap-' + tw.id + '" target="_blank" href="http://maps.google.com?q=' + rs.geo.coordinates.join(',') + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.geo.coordinates.join(',') + '"></a>' : '') +
 		//返信先を設定
 		' <a class="button" href="javascript:replyTo(\'' + un + "'," + tw.id + ')"><img src="images/reply.png" alt="↩" width="14" height="14"></a>' +
 		//返信元へのリンク
@@ -667,7 +673,7 @@ function makeUserInfoHTML(user) {
 			(user.protected ? '<img alt="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
 			'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b></div>' +
 			(user.location ? '<div><b>Location</b>: ' + user.location + '</div>' : '') +
-			(user.url ? '<div><b>URL</b>: <a target="_blank" href="' + user.url + '">' + user.url + '</a></div>' : '') +
+			(user.url ? '<div><b>URL</b>: <a target="_blank" href="' + user.url + '" onclick="return link(this);">' + user.url + '</a></div>' : '') +
 			'<div>' + (user.description ? user.description : '<br>') +
 			'</div><b><a href="javascript:switchFollowing()">' + user.friends_count + '<small>following</small></a> / ' + 
 						'<a href="javascript:switchFollower()">' + user.followers_count + '<small>followers</small></a>' +
@@ -858,10 +864,15 @@ function twOldReply(tw) {
 	$("re").appendChild(nextButton('get_old_re', nr_page_re));
 }
 function twShow2(tw) {
+	var user_info = $("user_info");
+	if (tw.error && tw.error == "Not authorized" && !!user_info && !fav_mode) {
+		update_ele2 = loadXDomainScript(twitterAPI + 'users/show.json?screen_name=' + last_user +
+			'&suppress_response_codes=true&callback=twUserInfo', update_ele2);
+		return;
+	}
 	if (tw.error) return error(tw.error);
 	var tmp = $("tmp");
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
-	var user_info = $("user_info");
 	twShowToNode(tw, $("tw2c"), !!user_info && !fav_mode, cur_page > 1);
 	if (selected_menu.id == "reply" || selected_menu.id == "user" && last_user.indexOf(',') < 0) {
 		$("tw2c").appendChild(nextButton('next'));

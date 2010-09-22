@@ -16,6 +16,7 @@ h2 { border-left: solid 1.2em #cf6; padding-left: 4px; }
 h3 { border-left: solid 1.2em #fc0; padding-left: 4px; }
 img { border: none; }
 .language_selection { float:left; margin-left:700px;}
+pre { background-color: #ddf; border: 1px solid #66f; }
 --></style>
 </head>
 <body>
@@ -70,7 +71,19 @@ function go(d) {
 <img alt="usage" src="usage/usage4.en.png" width="1" height="1">
 <img alt="usage" src="usage/usage5.en.png" width="1" height="1">
 
+<h2><a name="faq">FAQ</a></h2>
+<ul>
+<li><b>How to hide tweet which contains specified kerwords?</b><blockquote> => Write "-::keyword:1" into "Pickup Pattern" in the "+" tab.</blockquote></li>
+<li><b>My tweets are sometimes lost ...</b><blockquote> => Twitter may be too crowded. Try writing just "r" and hit enter to re-post your previous tweet.</blockquote></li>
+<li><b>Appearance is poor ...</b><blockquote> => Default appearance isn't decorated at all to display many tweets at once. Try adding CSS below to 'user stylesheet' in Preferences in '+' tab for corner-rounded and shadowed tweets display.
+<pre>@import url(styles/round.css);</pre>
+There are some guys publishing more stylesheets for twicli. Your proposal is also appreciated. :-)</blockquote></li>
+<li><b>Too much API usage when I tweet frequently ...</b><blockquote> => Disable "Update after post" in "Preferences" in "+" tab to suppress automatic update after tweet is posted.</blockquote></li>
+<li>You can find more information in <a href="http://github.com/NeoCat/twicli/wiki">twicli wiki</a>.</li>
+</ul>
+
 <h2><a name="customize">Customize</a></h2>
+There are also some information about customizing twicli in <a href="http://github.com/NeoCat/twicli/wiki">twicli wiki</a>.
 <h3><a name="css">User Stylesheet</a></h3>
 You can add your own CSS in "user stylesheet" section of the "+" tab. For example;
 <ul>
@@ -89,21 +102,15 @@ Currently, there are plugins below:
 <li><b>search2.js</b> : Add keyword search by <a href="http://pcod.no-ip.org/yats/">twitter search(yats)</a> to the "+" tab.
 <li><b>favotter.js</b> : Indicate latest popular favorited tweets like <span style="background-color:#6fc; color:#00c;">[fav:3]</span>. Thanks to <a href="http://favotter.matope.com/">Favotter</a>.
 <li><b>followers.js</b> : Colorize tweets of users that you don't follow in blue. To use this, you need to fetch the list of followers by clicking the "Renew" button at the "Color followers" section.
-<li><b>sound.js</b> : Play sound when updating timeline/reply. Not registedred as default.
 <li><b>ssl.js</b> : Use SSL to get timeline and to tweet.
 <li><b>translate.js</b> : Choose "translate" from ▼, then the tweet is translated into the language specified in "+" tab > Translate. (Specify "en" for English.)
 <li><b>thumbnail.js</b> : Add thumbnails to the URL of some photo sharing services. Currently supports <a href="http://twitpic.com/">twitpic</a>, <a href="http://movapic.com/">movapic</a>, <a href="http://f.hatena.ne.jp/">HatenaFotolife</a>, <a href="http://tumblr.com/">Tumblr</a>, <a href="http://yfrog.com/">Yfrog</a>, and <a href="http://www.flickr.com/">Flickr</a>.
 <li><b>resolve_url.js</b> : Replace short URLs with the originals in the timeline. (created by <a href="http://twitter.com/edvakf">@edvakf</a>)
 <li><b>shorten_url.js</b> : Typing a URL in the text area followed by three semicolons (;;;) makes a shortened URL. (created by <a href="http://twitter.com/edvakf">@edvakf</a>)
 <li><b>geomap.js</b> : Display inline Google Map by clicking the marker (<img src="images/marker.png">) of tweets with GeoLocation.
-</ul>
-
-<h2><a name="faq">FAQ</a></h2>
-<ul>
-<li><b>How to hide tweet which contains specified kerwords?</b><blockquote> => Write "-::keyword:1" into "Pickup Pattern" in the "+" tab.</blockquote></li>
-<li><b>My tweets are sometimes lost ...</b><blockquote> => Twitter may be too crowded. Try writing just "r" and hit enter to re-post your previous tweet.</blockquote></li>
-<li><b>Appearance of this page is poor ...</b><blockquote> => Because of displaying many posts at once, and my laziness .... There are some guys publishing stylesheets for twicli. Your proposal is also appreciated. :-)</blockquote></li>
-<li><b>Too much API usage when I tweet frequently ...</b><blockquote> => Disable "Update after post" in "Preferences" in "+" tab to suppress automatic update after tweet is posted.</blockquote></li>
+<li><b>tweet_url_reply.js</b> <small>[non-default]</small>: Add a button (<img src="images/inrep.png">) to get the content to URL of a tweet. (created by <a href="http://twitter.com/edvakf">@edvakf</a>)
+<li><b>reply_favicon.js</b> <small>[non-default]</small>: Change favicon(not supported by IE and Safari) and the title when 'Re' is updated。(created by <a href="http://twitter.com/edvakf">@edvakf</a>)
+<li><b>sound.js</b> <small>[non-default]</small>: Play sound when 'TL'/'Re' is updated.
 </ul>
 
 <h2><a name="source">Source</a></h2>
@@ -113,6 +120,7 @@ Currently, there are plugins below:
 
 <h2><a name="link">Links <small><small>(all in Japanese)</small></small></a></h2>
 <ul>
+<li><a href="http://github.com/NeoCat/twicli/wiki">twicli wiki</a>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20080819/1219133294">Development Memo</a>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20080819/1219133294">About development of Plugins</a>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20081121/1227282584">About Outputz plugin</a>
