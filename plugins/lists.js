@@ -1,5 +1,7 @@
 var last_list = ['',''];
 var twl_page = 0;
+var twl_nr = 0;
+var twl_update_timer = null;
 var lists_to_get = readCookie("lists");
 lists_to_get = lists_to_get ? lists_to_get.split("\n") : [];
 var lists_users = {};
@@ -101,24 +103,45 @@ function twlGetListStatus(list) {
 	twl_page = 0;
 	if (selected_menu.id == "user") fav_mode = 9;
 	$("tw2c").innerHTML = "";
+	twl_update_timer = setInterval(function(){twlGetListStatusUpdate(list)}, 1000*Math.max(updateInterval, 30));
 	update_ele2 = loadXDomainScript(twitterAPI + last_list[0] + '/lists/' + last_list[1] +
 							'/statuses.json?seq=' + (seq++) + '&per_page=' + max_count_u +
 							'&callback=twlShowListStatus', update_ele2);
 	return false;
 }
-function twlShowListStatus(tw) {
+function twlGetListStatusUpdate(list) {
+	last_list = list.split("/");
+	$("loading").style.display = "block";
+	if (selected_menu.id == "user") fav_mode = 9;
+	update_ele2 = loadXDomainScript(twitterAPI + last_list[0] + '/lists/' + last_list[1] +
+							'/statuses.json?seq=' + (seq++) + '&per_page=' + max_count_u +
+							'&callback=twlShowListStatus2', update_ele2);
+}
+function twlShowListStatus2(tw) {
+	twlShowListStatus(tw, true);
+	var twNode = $('tw2c');
+	while (twl_nr > nr_limit) {
+		var last_node = twNode.childNodes[twNode.childNodes.length-1];
+		twl_nr -= last_node.childNodes.length;
+		twNode.removeChild(last_node);
+	}
+}
+function twlShowListStatus(tw, update) {
 	var tmp = $("tmp");
 	if (tmp) tmp.parentNode.removeChild(tmp);
-	if (++twl_page == 1) {
+	if (!update && ++twl_page == 1) {
 		$('tw2c').innerHTML = '';
+		twl_nr = 0;
 	}
-	twShowToNode(tw, $("tw2c"), false, twl_page > 1);
+	twl_nr += twShowToNode(tw, $("tw2c"), false, !update && twl_page > 1, update);
+	if (!update) {
 	var next = nextButton('next-list');
 	$("tw2c").appendChild(next);
 	get_next_func = function(){
 	update_ele2 = loadXDomainScript(twitterAPI + last_list[0] + '/lists/' + last_list[1] +
 							'/statuses.json?seq=' + (seq++) + '&per_page=' + max_count_u +
 							'&max_id=' + tw[tw.length-1].id + '&callback=twlShowListStatus', update_ele2);
+	}
 	}
 }
 
@@ -162,6 +185,11 @@ function twlUpdateMisc() {
 }
 
 registerPlugin({
+	switchTo: function(m) {
+		if (!twl_update_timer) return;
+		clearInterval(twl_update_timer);
+		twl_update_timer = null;
+	},
 	newUserInfoElement: function(ele, user) {
 		var e = document.createElement("a");
 		e.href = "javascript:twlGetLists('" + user.screen_name + "')";
