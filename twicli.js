@@ -257,7 +257,6 @@ var footer = readCookie('footer') || ""; 							// フッタ文字列
 var decr_enter = parseInt(readCookie('decr_enter') || "0");			// Shift/Ctrl+Enterで投稿
 var no_geotag = parseInt(readCookie('no_geotag') || "0");			// GeoTaggingを無効化
 // TL管理用
-var nr_tw = 0;					// 現在のTLの発言数
 var cur_page = 1;				// 現在表示中のページ
 var nr_page = 0;				// 次に取得するページ
 var nr_page_re = 0;				// 次に取得するページ(reply用)
@@ -266,7 +265,6 @@ var since_id = null;			// TLの最終since_id
 var since_id_reply = null;		// Replyの最終since_id
 var in_reply_to_user = null;	// 発言の返信先ユーザ
 var in_reply_to_status_id = null;// 発言の返信先id
-var tl_oldest_id = null;		// TLの最も古いid
 // クロスドメイン通信関連
 var seq = (new Date).getTime();
 var users_log = [];
@@ -817,7 +815,7 @@ function twReplies(tw, fromTL) {
 		nr_page_re = 2;
 		$("re").appendChild(nextButton('get_old_re', nr_page_re));
 	}
-	twShowToNode(tw, $("re"), false, false, true, false, false, false, fromTL);
+	twShowToNode(tw, $("re"), false, false, true, false, true, false, fromTL);
 	if (!fromTL && replies_in_tl)
 		twShowToNode(tw, $("tw"), false, false, true, false, true);
 	if (!fromTL && tw.length > 0) since_id_reply = tw[0].id;
@@ -834,8 +832,6 @@ function twShow(tw) {
 
 	tw.reverse();
 	for (var j in tw) if (tw[j] && tw[j].user) callPlugins("gotNewMessage", tw[j]);
-	if(!tl_oldest_id && tw.length > 0)
-		for (var j in tw) if (tw[j] && tw[j].user) { tl_oldest_id = tw[j].id; break; }
 	tw.reverse();
 	if (nr_page == 0) {
 		nr_page = max_count == 200 ? 2 : 1;
@@ -843,9 +839,9 @@ function twShow(tw) {
 	}
 
 	var nr_shown = twShowToNode(tw, $("tw"), false, false, true, true, true);
-	if (tl_oldest_id && update_reply_counter-- <= 0)
+	if ($("tw").oldest_id && update_reply_counter-- <= 0)
 		getReplies();
-	if (tl_oldest_id && update_direct_counter-- <= 0)
+	if (update_direct_counter-- <= 0)
 		checkDirect();
 	callPlugins("noticeUpdate", tw, nr_shown);
 }
@@ -913,7 +909,7 @@ function twUsers(tw) {
 		};
 	}
 }
-function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore_old, ignore_new, weak) {
+function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignore_old, ignore_new, weak) {
 	$('loading').style.display = 'none';
 	var len = tw.length;
 	if (len == 0) return 0;
@@ -924,27 +920,27 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 	var replies = [];
 	for (var i = len-1; i >= 0; i--) {
 		if (!tw[i]) continue;
-		var duplication = $(twNode.id + "-" + tw[i].id);
+		var duplication = $(tw_node.id + "-" + tw[i].id);
 		if (duplication) {
 			if (duplication.weak)
 				duplication.parentNode.removeChild(duplication);
 			else
 				continue;
 		}
-		if (ignore_old && tl_oldest_id > tw[i].id)
+		if (ignore_old && tw_node.oldest_id && tw_node.oldest_id > tw[i].id)
 			continue;
-		if (ignore_new && tl_oldest_id < tw[i].id)
+		if (ignore_new && tw_node.oldest_id && tw_node.oldest_id < tw[i].id)
 			continue;
 		if (tw[i].user) {
 			var s = document.createElement('div');
-			s.id = twNode.id + "-" + tw[i].id;
-			s.innerHTML = makeHTML(tw[i], no_name, twNode.id);
+			s.id = tw_node.id + "-" + tw[i].id;
+			s.innerHTML = makeHTML(tw[i], no_name, tw_node.id);
 			s.screen_name = tw[i].user.screen_name;
 			s.tw = tw[i]; // DOMツリーにJSONを記録
 			if (weak) s.weak = true;
 			if (tw[i].d_dir == 1 || tw[i].text.match(myname_r)) {
 				s.className = "tome";
-				if (animation && !duplication) {
+				if ((tw_node.id == "tw" || tw_node.id == "re") && !duplication) {
 					replies.push(tw[i]);
 				}
 			}
@@ -952,7 +948,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 				s.className = "fromme";
 			if (tw[i].retweeted_status)
 				s.className += " retweeted";
-			callPlugins("newMessageElement", s, tw[i], twNode.id);
+			callPlugins("newMessageElement", s, tw[i], tw_node.id);
 			pNode.insertBefore(s, pNode.childNodes[0]);
 			nr_show++;
 		}
@@ -963,15 +959,15 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 	var animation2 = animation && getScrollY() < 10;
 	var maxH;
 	if (animation2) { // get maxH
-		twNode.appendChild(pNode);
+		tw_node.appendChild(pNode);
 		maxH = pNode.clientHeight;
-		twNode.removeChild(pNode);
+		tw_node.removeChild(pNode);
 		pNode.style.minHeight = 0;
 	}
-	if (after || !twNode.childNodes[0])
-		twNode.appendChild(pNode);
+	if (after || !tw_node.childNodes[0])
+		tw_node.appendChild(pNode);
 	else
-		twNode.insertBefore(pNode, twNode.childNodes[0]);
+		tw_node.insertBefore(pNode, tw_node.childNodes[0]);
 	if (animation2)
 		animate(pNode, maxH, (new Date).getTime());
 	else if (animation) {
@@ -981,22 +977,29 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 		scrollTo(0, getScrollY()+ch);
 		scroll_adjust += ch;
 	}
-	if (twNode.id == 'tw') {
-		nr_tw += nr_show;
-		if (nr_tw > nr_limit) {
-			while (nr_tw > nr_limit) {
-				var last_node = twNode.childNodes[twNode.childNodes.length-1];
-				nr_tw -= last_node.childNodes.length;
-				twNode.removeChild(last_node);
-			}
-			tl_oldest_id = 0; // 最大3ブロックスキャンしてoldest更新(repliesの挿入等により必ずしもID順でない)
-			for (var i = 0; i < 3 && i < twNode.childNodes.length; i++) {
-				var target_block = twNode.childNodes[twNode.childNodes.length-i-1].childNodes;
-				var target_ele = target_block[target_block.length-1];
-				if (target_ele.tw && (target_ele.tw.id < tl_oldest_id || !tl_oldest_id))
-					tl_oldest_id = target_ele.tw.id;
+	tw_node.nr_tw = (tw_node.nr_tw || 0) + nr_show;
+	if(!tw_node.oldest_id && !weak) { // oldest_id設定
+		for (var j = tw.length - 1; j >= 0; j--) {
+			if (tw[j] && tw[j].user) {
+				tw_node.oldest_id = tw[j].id;
+				break;
 			}
 		}
+	}
+	if (animation && tw_node.nr_tw > nr_limit) {
+		while (tw_node.nr_tw > nr_limit) {
+			var last_node = tw_node.childNodes[tw_node.childNodes.length-1];
+			tw_node.nr_tw -= last_node.childNodes.length;
+			tw_node.removeChild(last_node);
+		}
+		var tl_oldest_id = 0; // 削除に伴いoldest_id更新
+		for (var i = 0; i < 3 && i < tw_node.childNodes.length; i++) { // 最大3要素スキャン
+			var target_block = tw_node.childNodes[tw_node.childNodes.length-i-1].childNodes;
+			var target_ele = target_block[target_block.length-1];
+			if (!target_ele.weak && target_ele.tw && (target_ele.tw.id < tl_oldest_id || !tl_oldest_id))
+				tl_oldest_id = target_ele.tw.id;
+		}
+		tw_node.oldest_id = tl_oldest_id;
 	}
 	for (var i = 0; check_since && i < len; i++) {
 		if (tw[i].user.screen_name != myname) {
@@ -1005,7 +1008,7 @@ function twShowToNode(tw, twNode, no_name, after, animation, check_since, ignore
 		}
 	}
 	if (replies.length) {
-		if (twNode.id == "tw") {
+		if (tw_node.id == "tw") {
 			replies.reverse();
 			twReplies(replies, true);
 			replies.reverse();
@@ -1062,6 +1065,8 @@ function switchTo(id) {
 	$("tw2h").innerHTML = "";
 	$("tw2c").innerHTML = "";
 	$("tw2").style.display = id!="TL"&&id!="reply"?"block":"none";
+	$("tw2c").nr_tw = 0;
+	$("tw2c").oldest_id = undefined;
 	closeRep();
 	scrollTo(0, 1); scrollTo(0, 0);
 	cur_page = 1;

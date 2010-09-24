@@ -12,7 +12,7 @@ function __map(obj,fun) {
 
 registerPlugin({
 	noticeNewReply: function(replies) {
-		twicli_debug_log.push([since_id, since_id_reply, tl_oldest_id, nr_tw, replies.map(function(x){return x.id})]);
+		twicli_debug_log.push([since_id, since_id_reply, $("tw").oldest_id, $("tw").nr_tw, replies.map(function(x){return x.id})]);
 	},
 	miscTab: function() {
 		var e = document.createElement("div");

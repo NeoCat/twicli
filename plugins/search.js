@@ -1,5 +1,4 @@
 var tws_page = 0;
-var tws_nr = 0;
 var tws_rpp = 50; /* results per page */
 var tws_update_timer = null;
 var tws_list = (readCookie('twicli_search_list') || "").split(/\r?\n/);
@@ -60,11 +59,6 @@ function closeSearchTab(myid) {
 function twsSearchShow2(res) {
 	twsSearchShow(res, true);
 	var twNode = $('tw2c');
-	while (tws_nr > nr_limit) {
-		var last_node = twNode.childNodes[twNode.childNodes.length-1];
-		tws_nr -= last_node.childNodes.length;
-		twNode.removeChild(last_node);
-	}
 }
 function twsSearchShow(res, update) {
 	var tmp = $("tmp");
@@ -79,9 +73,8 @@ function twsSearchShow(res, update) {
 	});
 	if (!update && tws_page == 1) {
 		$('tw2c').innerHTML = '';
-		tws_nr = 0;
 	}
-	tws_nr += twShowToNode(result, $("tw2c"), false, !update && tws_page > 1, update);
+	twShowToNode(result, $("tw2c"), false, !update && tws_page > 1, update, false, update);
 	if (!update && res.next_page) {
 		var next = nextButton('next-search');
 		$("tw2c").appendChild(next);
