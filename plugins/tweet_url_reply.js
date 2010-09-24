@@ -1,5 +1,5 @@
 (function() {
-  var re = /^https?:\/\/twitter\.com\/(\w+)\/status(?:es)?\/(\d+)/;
+  var re = /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)/;
 
   function tweetUrlReply(elem) {
     var links = elem.getElementsByTagName('a');
