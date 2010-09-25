@@ -1,6 +1,5 @@
 var last_list = ['',''];
 var twl_page = 0;
-var twl_nr = 0;
 var twl_update_timer = null;
 var lists_to_get = readCookie("lists");
 lists_to_get = lists_to_get ? lists_to_get.split("\n") : [];
@@ -120,20 +119,14 @@ function twlGetListStatusUpdate(list) {
 function twlShowListStatus2(tw) {
 	twlShowListStatus(tw, true);
 	var twNode = $('tw2c');
-	while (twl_nr > nr_limit) {
-		var last_node = twNode.childNodes[twNode.childNodes.length-1];
-		twl_nr -= last_node.childNodes.length;
-		twNode.removeChild(last_node);
-	}
 }
 function twlShowListStatus(tw, update) {
 	var tmp = $("tmp");
 	if (tmp) tmp.parentNode.removeChild(tmp);
 	if (!update && ++twl_page == 1) {
 		$('tw2c').innerHTML = '';
-		twl_nr = 0;
 	}
-	twl_nr += twShowToNode(tw, $("tw2c"), false, !update && twl_page > 1, update);
+	twShowToNode(tw, $("tw2c"), false, !update && twl_page > 1, update, false, update);
 	if (!update) {
 	var next = nextButton('next-list');
 	$("tw2c").appendChild(next);
