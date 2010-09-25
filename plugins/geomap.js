@@ -37,7 +37,7 @@ function display_map(coordinates, elem) {
 function make_geo_map(coordinates) {
 	var latlng = new google.maps.LatLng(coordinates[0], coordinates[1]);
 	var map = new google.maps.Map(document.getElementById("map_canvas"),
-		{zoom: 10, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP});
+		{zoom: 13, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP});
 	var marker = new google.maps.Marker({position: latlng, map: map});
 	google.maps.event.addListener(marker, 'click', function(event) {
 		window.open('http://maps.google.com?q='+coordinates.join(","));
