@@ -41,7 +41,7 @@
 }());
 
 function dispEmbedSrc(url, link) {
-	var rep_top = Math.max(cumulativeOffset(link)[1] + 20, $("control").offsetHeight);
+	rep_top = Math.max(cumulativeOffset(link)[1] + 20, $("control").offsetHeight);
 
 	$('rep').style.display = "block";
 	$('reps').innerHTML = '<iframe id="embedsrc" src="' + url
