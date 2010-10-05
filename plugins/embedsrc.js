@@ -43,16 +43,9 @@
 function dispEmbedSrc(url, link) {
 	var rep_top = Math.max(cumulativeOffset(link)[1] + 20, $("control").offsetHeight);
 
-	var iframe = $('embedsrc');
-	if (iframe) iframe.parentNode.removeChild(iframe);
-
-	iframe = document.createElement("iframe");
-	iframe.id = "embedsrc";
-	iframe.src = url;
-	iframe.style.width = "100%";
-	iframe.style.display = "block";
-	$('reps').appendChild(iframe);
 	$('rep').style.display = "block";
+	$('reps').innerHTML = '<iframe id="embedsrc" src="' + url
+		+ '" style="width:100%; height: 250px; display:block">'
 	$('rep').style.top = rep_top;
 	user_pick1 = user_pick2 = null;
 }
