@@ -12,6 +12,7 @@
 					break;
 			}
 			var links = status.getElementsByTagName('a');
+			var url;
 			for (var i = 0; i < links.length; i++) {
 				url = links[i].href;
 				this.replaceUrl(null, links[i], url, url);
@@ -21,29 +22,26 @@
 			var div, a;
 			for (var i = 0; i < res.length; i++) {
 				if (res[i].search.test(lng)) {
-					if (link) {
-						var div = document.createElement('div');
-						var a = document.createElement('a');
-						a.class = "button";
-						a.href = "#";
-						a.onclick = function(){
-							dispEmbedSrc(lng.replace(res[i].search, res[i].replace), link);
-							return false;
-						};
-						a.innerHTML = '<img src="images/inrep.png" alt="☞" width="14" height="14">';
-						div.appendChild(a);
-						link.parentNode.insertBefore(div.firstChild, link.nextSibling);
-					}
+					a = document.createElement('a');
+					a.class = "button";
+					a.href = "#";
+					a.onclick = function(){
+						dispEmbedSrc(lng.replace(res[i].search, res[i].replace), link);
+						return false;
+					};
+					a.innerHTML = '<img src="images/inrep.png" alt="☞" width="14" height="14">';
+					div = document.createElement('div');
+					div.appendChild(a);
+					link.parentNode.insertBefore(div.firstChild, link.nextSibling);
+					break;
 				}
-				break;
 			}
 		}
 	});
-
 }());
 
-function dispEmbedSrc(url, elem) {
-	var rep_top = Math.max(cumulativeOffset(elem)[1] + 20, $("control").offsetHeight);
+function dispEmbedSrc(url, link) {
+	var rep_top = Math.max(cumulativeOffset(link)[1] + 20, $("control").offsetHeight);
 
 	var iframe = $('embedsrc');
 	if (iframe) iframe.parentNode.removeChild(iframe);
@@ -51,9 +49,9 @@ function dispEmbedSrc(url, elem) {
 	iframe = document.createElement("iframe");
 	iframe.id = "embedsrc";
 	iframe.src = url;
-	$('reps').appendChild(iframe);
 	iframe.style.width = "100%";
 	iframe.style.display = "block";
+	$('reps').appendChild(iframe);
 	$('rep').style.display = "block";
 	$('rep').style.top = rep_top;
 	user_pick1 = user_pick2 = null;
