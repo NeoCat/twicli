@@ -313,7 +313,7 @@ if (location.search.match(/[?&]status=(.*?)(?:&|$)/)) {
 	location.href = "twicli.html";
 }
 setTimeout(function(){
-	if ($("fst").value = readCookie('twicli_onload')) {
+	if ($("fst").value = readCookie('twicli_onload') || '') {
 		deleteCookie('twicli_onload');
 		$("fst").focus(); $("fst").select();
 	}
