@@ -309,15 +309,15 @@ if (!access_token || !access_secret) location.href = 'oauth/index.html';
 
 //URL(?status=〜)から発言入力
 if (location.search.match(/[?&]status=(.*?)(?:&|$)/)) {
-	writeCookie('twicli_onload', decodeURI(RegExp.$1));
+	writeCookie('twicli_onload', decodeURIComponent(RegExp.$1));
 	location.href = "twicli.html";
+} else {
+	setTimeout(function(){
+		if ($("fst").value = readCookie('twicli_onload') || '') {
+			deleteCookie('twicli_onload');
+		}
+	}, 0);
 }
-setTimeout(function(){
-	if ($("fst").value = readCookie('twicli_onload') || '') {
-		deleteCookie('twicli_onload');
-		$("fst").focus(); $("fst").select();
-	}
-}, 0);
 
 function twAuth(a) {
 	if (a.error) {
