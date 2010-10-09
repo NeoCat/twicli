@@ -307,6 +307,18 @@ var access_token = readCookie('access_token');
 var access_secret = readCookie('access_secret');
 if (!access_token || !access_secret) location.href = 'oauth/index.html';
 
+//URL(?status=〜)から発言入力
+if (location.search.match(/[?&]status=(.*?)(?:&|$)/)) {
+	writeCookie('twicli_onload', decodeURI(RegExp.$1));
+	location.href = "twicli.html";
+}
+setTimeout(function(){
+	if ($("fst").value = readCookie('twicli_onload')) {
+		deleteCookie('twicli_onload');
+		$("fst").focus(); $("fst").select();
+	}
+}, 0);
+
 function twAuth(a) {
 	if (a.error) {
 		alert(a.error);
