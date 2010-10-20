@@ -14,6 +14,9 @@
 
 			footer = " " + sel[0].id.slice("search-".length);
 			if(footerSetting.length > 0) footer +=" " + footerSetting;
+		},
+		savePrefs: function(frm) {
+			footerSetting = footer;
 		}
 	});
 }());
