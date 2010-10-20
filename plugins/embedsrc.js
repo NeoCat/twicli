@@ -1,6 +1,6 @@
 (function(){
 	var res = [
-		{search: /^(https?:\/\/gist\.github\.com\/\d+)$/, replace: "$1.pibb"}
+		{search: /^(https?:\/\/gist\.github\.com\/\d+)(\.txt)?$/, replace: "$1.pibb"}
 	];
 
 	registerPlugin({
