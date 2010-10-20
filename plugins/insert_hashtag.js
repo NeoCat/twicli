@@ -1,15 +1,19 @@
 (function(){
+	var footerSetting = footer;
+
 	registerPlugin({
-		post: function(st) {
+		switchTo: function(m) {
 			var sel = document.getElementsByClassName("sel");
 
-			if(sel.length < 1 || sel[0].id.indexOf("search-#") != 0) return;
+			if(sel.length < 1) return;
 
-			var stv = document.frm.status.value;
-			stv += " " + sel[0].id.slice("search-".length);
-			if(stv.length > 140) return;
+			if(sel[0].id.indexOf("search-#") != 0) {
+				footer = footerSetting;
+				return;
+			}
 
-			document.frm.status.value = stv;
+			footer = " " + sel[0].id.slice("search-".length);
+			if(footerSetting.length > 0) footer +=" " + footerSetting;
 		}
 	});
 }());
