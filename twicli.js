@@ -464,7 +464,9 @@ function setReplyId(id) {
 // reply先を設定
 function replyTo(user, id) {
 	in_reply_to_user = user;
-	document.frm.status.value = (selected_menu.id == "direct" ? "d " : "@") + user + " " + document.frm.status.value;
+	var head = (selected_menu.id == "direct" ? "d " : "@") + user + " ";
+	if (document.frm.status.value.indexOf(head) !== 0) // 連続押しガード
+		document.frm.status.value = head + document.frm.status.value;
 	setReplyId(id);
 	document.frm.status.select();
 }
