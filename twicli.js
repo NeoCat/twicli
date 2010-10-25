@@ -322,7 +322,7 @@ if (location.search.match(/[?&]status=(.*?)(?:&|$)/)) {
 function twAuth(a) {
 	if (a.error) {
 		alert(a.error);
-		if (a.error == "Incorrect signature" || a.error == "Could not authenticate you.") {
+		if (a.error == "Incorrect signature" || a.error == "Could not authenticate with OAuth.") {
 			location.href = 'oauth/index.html';
 		}
 		return;
