@@ -8,12 +8,13 @@ var twFavPlugin = {
 	},
 	newMessageElement: function(ele, tw) {
 		var fele = document.createElement("a");
-		fele.id = "nrFav" + tw.id;
-		fele.href = "http://favotter.net/status.php?id=" + tw.id;
+		var id = tw.id_str || (""+tw.id);
+		fele.id = "nrFav" + id;
+		fele.href = "http://favotter.net/status.php?id=" + id;
 		fele.target = "favotter";
 		fele.style.backgroundColor = "#3fc";
-		if (this.favs[tw.id]) {
-			fele.innerHTML = '<small>[fav:' + this.favs[tw.id] + ']</small>';
+		if (this.favs[id]) {
+			fele.innerHTML = '<small>[fav:' + this.favs[id] + ']</small>';
 		}
 		ele.insertBefore(fele, ele.childNodes[4]);
 	},

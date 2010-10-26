@@ -514,14 +514,15 @@ function dispReply(user, id, ele, cascade) {
 function dispReply2(tw) {
 	$("loading").style.display = "none";
 	if (tw.error) return error(tw.error);
-	if ($('rep').style.display == 'block' && $('reps-'+tw.id)) // already displayed
+	var id = tw.id_str || tw.id;
+	if ($('rep').style.display == 'block' && $('reps-'+id)) // already displayed
 		return;
 	var el = document.createElement("div");
-	el.id = 'reps-'+tw.id;
+	el.id = 'reps-'+id;
 	el.innerHTML = makeHTML(tw);
 	el.tw = tw;
 	callPlugins("newMessageElement", el, tw);
-	if (!rep_trace_id || tw.id != rep_trace_id) {
+	if (!rep_trace_id || id != rep_trace_id) {
 		$('reps').innerHTML = '';
 		$('rep').style.top = rep_top;
 	} else
@@ -529,10 +530,11 @@ function dispReply2(tw) {
 	$('reps').appendChild(el);
 	$('rep').style.display = "block";
 	user_pick2 = tw.user.screen_name;
-	if (tw.in_reply_to_status_id) {
-		var d = $("tw-" + tw.in_reply_to_status_id) || $("re-" + tw.in_reply_to_status_id) || $("tw2c-" + tw.in_reply_to_status_id);
+	var in_reply_to = tw.in_reply_to_status_id_str || tw.in_reply_to_status_id;
+	if (in_reply_to) {
+		var d = $("tw-" + in_reply_to) || $("re-" + in_reply_to) || $("tw2c-" + in_reply_to);
 		if (d)
-			dispReply(tw.user.screen_name, tw.in_reply_to_status_id, $('reps') /* この引数は使われない */, true);
+			dispReply(tw.user.screen_name, in_reply_to, $('reps') /* この引数は使われない */, true);
 	}
 }
 // replyのoverlay表示を閉じる
@@ -645,8 +647,10 @@ function makeHTML(tw, no_name, pid) {
 	var rt = tw.retweeted_status;
 	var rs = tw.retweeted_status || tw;
 	var text = rt && rt.user ? "RT @" + rt.user.screen_name + ":" + rt.text : tw.text;
+	var id = tw.id_str || tw.id;
+	var in_reply_to = tw.in_reply_to_status_id_str || tw.in_reply_to_status_id;
 	return /*fav*/ '<img alt="☆" class="fav" src="http://assets3.twitter.com/images/icon_star_'+(rs.favorited?'full':'empty')+'.gif" ' +
-			'onClick="fav(this,' + tw.id + ')"' + (pid ? ' id="fav-'+pid+'-'+tw.id+'"' : '') + '>' +
+			'onClick="fav(this,\'' + id + '\')"' + (pid ? ' id="fav-'+pid+'-'+id+'"' : '') + '>' +
 		 (!no_name ?
 			//ユーザアイコン
 			(tw.user.url ? '<a target="_blank" href="'+tw.user.url+'" onclick="return link(this);">' : '') +
@@ -655,27 +659,27 @@ function makeHTML(tw, no_name, pid) {
 			'<a href="' + twitterURL + un + '" onClick="switchUser(\'' + un + '\');return false"><span class="uid">' + un + '</span>' +
 			 /*プロフィールの名前*/ (tw.user.name!=un ? '<span class="uname">('+insertPDF(tw.user.name)+')</span>' : '') + '</a>'
 		: '') +
-		 /* protected? */ (tw.user.protected ? '<img alt="lock" id="lock-' + tw.id + '" class="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
+		 /* protected? */ (tw.user.protected ? '<img alt="lock" id="lock-' + id + '" class="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
 		/*ダイレクトメッセージの方向*/ (tw.d_dir == 1 ? '<span class="dir">→</span> ' : tw.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
-		" <span id=\"text" + tw.id + "\" class=\"status\">" +
-		text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+|[@＠]([\/\w-]+)/g, function(_,id){
-				if (!id) return "<a class=\"link\" target=\"_blank\" href=\""+_+"\" onclick=\"return link(this);\">"+_+"</a>";
-				if (id.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+id+"\" onclick=\"return link(this);\">"+_+"</a>";
-				return "<a href=\""+twitterURL+id+"\" onClick=\"switchUser('"+id+"'); return false;\" >"+_+"</a>";
+		" <span id=\"text" + id + "\" class=\"status\">" +
+		text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+|[@＠]([\/\w-]+)/g, function(_,u){
+				if (!u) return "<a class=\"link\" target=\"_blank\" href=\""+_+"\" onclick=\"return link(this);\">"+_+"</a>";
+				if (u.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+u+"\" onclick=\"return link(this);\">"+_+"</a>";
+				return "<a href=\""+twitterURL+u+"\" onClick=\"switchUser('"+u+"'); return false;\" >"+_+"</a>";
 			}).replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付
-		' <span class="utils"><span class="prop"><a class="date" target="twitter" href="'+twitterURL+un+'/statuses/'+tw.id+'">' + dateFmt(tw.created_at) + '</a>' +
+		' <span class="utils"><span class="prop"><a class="date" target="twitter" href="'+twitterURL+un+'/statuses/'+id+'">' + dateFmt(tw.created_at) + '</a>' +
 		//クライアント
 		(tw.source ? '<span class="separator"> / </span><span class="source">' + tw.source.replace(/<a /,'<a target="twitter"') + '</span>' : '') + '</span>' +
 		//Geolocation
-		(rs.geo && rs.geo.type == 'Point' ? '<a class="button geomap" id="geomap-' + tw.id + '" target="_blank" href="http://maps.google.com?q=' + rs.geo.coordinates.join(',') + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.geo.coordinates.join(',') + '"></a>' : '') +
+		(rs.geo && rs.geo.type == 'Point' ? '<a class="button geomap" id="geomap-' + id + '" target="_blank" href="http://maps.google.com?q=' + rs.geo.coordinates.join(',') + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.geo.coordinates.join(',') + '"></a>' : '') +
 		//返信先を設定
-		' <a class="button" href="javascript:replyTo(\'' + un + "'," + tw.id + ')"><img src="images/reply.png" alt="↩" width="14" height="14"></a>' +
+		' <a class="button" href="javascript:replyTo(\'' + un + "','" + id + '\')"><img src="images/reply.png" alt="↩" width="14" height="14"></a>' +
 		//返信元へのリンク
-		(tw.in_reply_to_status_id ? ' <a class="button" href="#" onClick="dispReply(\'' + un + '\',' + tw.in_reply_to_status_id + ',this); return false;"><img src="images/inrep.png" alt="☞" width="14" height="14"></a>' : '') +
+		(in_reply_to ? ' <a class="button" href="#" onClick="dispReply(\'' + un + '\',\'' + in_reply_to + '\',this); return false;"><img src="images/inrep.png" alt="☞" width="14" height="14"></a>' : '') +
 		//popupメニュー表示
-		'&nbsp;&nbsp;&nbsp;<a class="button popup" href="#" onClick="popup_menu(\'' + un + "'," + tw.id + ', this); return false;"><small><small>▼</small></small></a>' +
+		'&nbsp;&nbsp;&nbsp;<a class="button popup" href="#" onClick="popup_menu(\'' + un + "','" + id + '\', this); return false;"><small><small>▼</small></small></a>' +
 		'</span><div class="dummy"></div>';
 }
 // ユーザ情報のHTML表現を生成
@@ -783,9 +787,10 @@ function checkDirect() {
 function twDirectCheck(tw) {
 	if (tw.error) return error(tw.error);
 	if (!tw || tw.length == 0) return false;
-	if (last_direct_id && last_direct_id < tw[0].id)
+	var id = tw[0].id_str || tw[0].id;
+	if (last_direct_id && last_direct_id != id)
 			$("direct").className += " new";
-	last_direct_id = tw[0].id;
+	last_direct_id = id;
 }
 // API制限情報の受信
 function twLimit(lim) {
@@ -816,12 +821,6 @@ function getReplies() {
 function twReplies(tw, fromTL) {
 	if (tw.error) return error(tw.error);
 
-	// double check since_id
-	if (!fromTL && since_id_reply)
-		for (var i = 0; i < tw.length; i++)
-			if (tw[i].id <= since_id_reply)
-				tw.splice(i--, 1);
-
 	tw.reverse();
 	for (var j in tw) if (tw[j] && tw[j].user) callPlugins("gotNewReply", tw[j]);
 	tw.reverse();
@@ -832,17 +831,11 @@ function twReplies(tw, fromTL) {
 	twShowToNode(tw, $("re"), false, false, true, false, true, false, fromTL);
 	if (!fromTL && replies_in_tl)
 		twShowToNode(tw, $("tw"), false, false, true, false, true);
-	if (!fromTL && tw.length > 0) since_id_reply = tw[0].id;
+	if (!fromTL && tw.length > 0) since_id_reply = tw[0].id_str || tw[0].id;
 }
 // 受信tweetを表示
 function twShow(tw) {
 	if (tw.error) return error(tw.error);
-
-	// double check since_id
-	if (!no_since_id && since_id)
-		for (var i = 0; i < tw.length; i++)
-			if (tw[i] && tw[i].id <= since_id)
-				tw.splice(i--, 1);
 
 	tw.reverse();
 	for (var j in tw) if (tw[j] && tw[j].user) callPlugins("gotNewMessage", tw[j]);
@@ -934,7 +927,8 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 	var replies = [];
 	for (var i = len-1; i >= 0; i--) {
 		if (!tw[i]) continue;
-		var duplication = $(tw_node.id + "-" + tw[i].id);
+		var id = tw[i].id;
+		var duplication = $(tw_node.id + "-" + id);
 		if (duplication) {
 			if (duplication.weak)
 				duplication.parentNode.removeChild(duplication);
@@ -947,7 +941,7 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 			continue;
 		if (tw[i].user) {
 			var s = document.createElement('div');
-			s.id = tw_node.id + "-" + tw[i].id;
+			s.id = tw_node.id + "-" + id;
 			s.innerHTML = makeHTML(tw[i], no_name, tw_node.id);
 			s.screen_name = tw[i].user.screen_name;
 			s.tw = tw[i]; // DOMツリーにJSONを記録
@@ -1017,7 +1011,7 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 	}
 	for (var i = 0; check_since && i < len; i++) {
 		if (tw[i].user.screen_name != myname) {
-			since_id = tw[i].id;
+			since_id = tw[i].id_str || tw[i].id;
 			break;
 		}
 	}
