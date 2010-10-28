@@ -556,7 +556,7 @@ function popup_menu(user, id, ele) {
 	callPlugins("popup", $('popup'), user, id, ele);
 	$('popup_link_user').href = twitterURL + user;
 	$('popup_link_status').href = twitterURL + user + '/statuses/' + id;
-	$('popup_status_delete').style.display = (user == myname ? "block" : "none");
+	$('popup_status_delete').style.display = (selected_menu.id || user == myname ? "block" : "none");
 	$('popup_status_retweet').style.display = (selected_menu.id != "direct" ? "block" : "none");
 	$('popup_status_quote').style.display = (selected_menu.id != "direct" ? "block" : "none");
 	$('popup').style.display = "block";
@@ -605,7 +605,7 @@ function deleteStatus() {
 	if (!confirm("Are you sure to delete this tweet (@"+popup_user+" / "+popup_id+")?")) return false;
 	$("loading").style.display = "block";
 	if ($("text" + popup_id)) $("text" + popup_id).style.textDecoration = "line-through";
-	enqueuePost(twitterAPI + 'statuses/destroy/' + popup_id + '.xml',
+	enqueuePost(twitterAPI + (selected_menu.id == 'direct'?'direct_messages':'statuses') + '/destroy/' + popup_id + '.xml',
 		function(){$("loading").style.display = "none";}, function(){$("loading").style.display = "none";});
 	return false;
 }
@@ -669,7 +669,7 @@ function makeHTML(tw, no_name, pid) {
 				return "<a href=\""+twitterURL+u+"\" onClick=\"switchUser('"+u+"'); return false;\" >"+_+"</a>";
 			}).replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//日付
-		' <span class="utils"><span class="prop"><a class="date" target="twitter" href="'+twitterURL+un+'/statuses/'+id+'">' + dateFmt(tw.created_at) + '</a>' +
+		' <span class="utils"><span class="prop"><a class="date" target="twitter" href="'+twitterURL+(tw.d_dir ? '#!/messages' : un+'/statuses/'+id)+'">' + dateFmt(tw.created_at) + '</a>' +
 		//クライアント
 		(tw.source ? '<span class="separator"> / </span><span class="source">' + tw.source.replace(/<a /,'<a target="twitter"') + '</span>' : '') + '</span>' +
 		//Geolocation
