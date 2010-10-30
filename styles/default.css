@@ -11,9 +11,9 @@ form { margin-bottom: 0; }
 #go { text-decoration: none; position: absolute; left: 95%; top: 1px; }
 #rst { text-decoration: none; position: absolute; left: 95%; top: 16px; }
 #option { position: absolute; left: 1px; top: 32px; width: 99%; font-size: small; }
-#menu { position: absolute; left: 0px; top: 33px; height: 20px; }
-#menu a { display: inline-block; font-size: 12px; height: 18px; line-height: 18px; border: 1px solid black; border-bottom: 0 none; background-color: #aaa; color: #242; padding: 0 4px; margin: 0; text-decoration: none; font-family: sans-serif; -moz-border-radius: 5px 5px 0 0; -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px; border-radius: 5px 5px 0 0; margin-right: 2px; }
-#menu a.sel { height: 20px; background-color: #ffe; color: #002; border-bottom-color: #fff; }
+#menu { position: absolute; left: 0px; top: 33px; }
+#menu a { display: inline-block; font-size: 12px; height: 18px; line-height: 18px; border: 1px solid black; border-bottom: 0 none; background-color: #aaa; color: #242; padding: 0 4px; margin: 0; margin-bottom: 2px; text-decoration: none; font-family: sans-serif; -moz-border-radius: 5px 5px 0 0; -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px; border-radius: 5px 5px 0 0; margin-right: 2px; }
+#menu a.sel { height: 20px; margin-bottom: 0; background-color: #ffe; color: #002; border-bottom-color: #fff; }
 #menu a.new { background-color: #fcc; }
 
 .tw { position: absolute; left: 0px; top: 54px; width: 100%; font-size: small; }

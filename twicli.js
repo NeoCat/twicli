@@ -440,9 +440,11 @@ function setFstHeight(h, force) {
 	$("fst").style.height = h;
 	$("option").style.top = h + 2;
 	$("menu").style.top = $("counter-div").style.top = h+3+exh*5 + opt;
-	$("control").style.height = h+23+exh*5 + opt;
-	$("tw").style.top = $("tw2").style.top = $("re").style.top = h+24+exh*4 + opt;
+	var mh = $("menu").clientHeight;
+	$("control").style.height = h+mh+2+exh*5 + opt;
+	$("tw").style.top = $("tw2").style.top = $("re").style.top = h+mh+3+exh*4 + opt;
 }
+window.onresize = function(){ setFstHeight(null, true); }
 // 発言文字数カウンタ表示・更新
 function updateCount() {
 	setFstHeight();
@@ -1024,6 +1026,7 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 		else if (weak || since_id_reply) // 初回Reply取得時にはnoticeしない
 			noticeNewReply(replies);
 	}
+	if (nr_show > 0) setFstHeight(null, true);
 	return nr_show;
 }
 // 新規twitの出現アニメーション処理
@@ -1080,6 +1083,7 @@ function switchTo(id) {
 	cur_page = 1;
 	fav_mode = 0;
 	callPlugins("switchTo", selected_menu);
+	setTimeout(function(){ setFstHeight(null, true); }, 0);
 }
 function switchTL() {
 	get_next_func = getOldTL;
