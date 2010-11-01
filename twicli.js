@@ -440,7 +440,7 @@ function setFstHeight(h, force) {
 	$("fst").style.height = h;
 	$("option").style.top = h + 2;
 	$("menu").style.top = $("counter-div").style.top = h+3+exh*5 + opt;
-	var mh = $("menu").clientHeight;
+	var mh = Math.max($("menu").clientHeight, $("menu2").clientHeight);
 	$("control").style.height = h+mh+2+exh*5 + opt;
 	$("tw").style.top = $("tw2").style.top = $("re").style.top = h+mh+3+exh*4 + opt;
 }

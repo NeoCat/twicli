@@ -62,9 +62,8 @@ form { margin-bottom: 0; }
 .thumbnail-link { border: solid 1px grey; display: block; float: right; }
 
 @media screen and (max-device-width: 480px) {
-	#control { padding-bottom: 5px; }
-	#menu { height: 24px; }
 	#menu a { padding: 1px 5px; height: 22px; line-height: 22px; }
 	#menu a.sel { height: 24px; }
-	.tw { margin-top: 5px; }
+	#control { height: 59px; }
+	.tw { top: 59px; }
 }
