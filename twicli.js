@@ -558,7 +558,7 @@ function popup_menu(user, id, ele) {
 	callPlugins("popup", $('popup'), user, id, ele);
 	$('popup_link_user').href = twitterURL + user;
 	$('popup_link_status').href = twitterURL + user + '/statuses/' + id;
-	$('popup_status_delete').style.display = (selected_menu.id || user == myname ? "block" : "none");
+	$('popup_status_delete').style.display = (selected_menu.id == "direct" || user == myname ? "block" : "none");
 	$('popup_status_retweet').style.display = (selected_menu.id != "direct" ? "block" : "none");
 	$('popup_status_quote').style.display = (selected_menu.id != "direct" ? "block" : "none");
 	$('popup').style.display = "block";
