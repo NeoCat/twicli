@@ -444,7 +444,8 @@ function setFstHeight(h, force) {
 	$("control").style.height = h+mh+2+exh*5 + opt;
 	$("tw").style.top = $("tw2").style.top = $("re").style.top = h+mh+3+exh*4 + opt;
 }
-window.onresize = function(){ setFstHeight(null, true); }
+if (navigator.userAgent.indexOf('iPhone') < 0)
+	window.onresize = function(){ setFstHeight(null, true); }
 // 発言文字数カウンタ表示・更新
 function updateCount() {
 	setFstHeight();
