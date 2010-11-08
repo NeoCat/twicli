@@ -14,6 +14,8 @@ registerPlugin({
 		ele.appendChild(hr);
 	},
 	newMessageElement: function(ele, tw) {
+		if (!display_as_rt && tw.retweeted_status)
+			tw = tw.retweeted_status;
 		if (followers_ids_list.length && myid != tw.user.id && !followers_ids[tw.user.id])
 			for (var i = 0; i  < ele.childNodes.length; i++)
 				if (ele.childNodes[i].className == "status")

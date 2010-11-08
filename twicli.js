@@ -253,6 +253,7 @@ var no_since_id = parseInt(readCookie('no_since_id') || "0");		// since_idを使
 var no_counter = parseInt(readCookie('no_counter') || "0");			// 発言文字数カウンタを無効化
 var no_resize_fst = parseInt(readCookie('no_resize_fst') || "0");	// フィールドの自動リサイズを無効化
 var replies_in_tl = parseInt(readCookie('replies_in_tl') || "1");	// フォロー外からのReplyをTLに表示
+var display_as_rt = parseInt(readCookie('display_as_rt') || "0");	// Retweetを"RT @〜: …"形式で表示
 var footer = readCookie('footer') || ""; 							// フッタ文字列
 var decr_enter = parseInt(readCookie('decr_enter') || "0");			// Shift/Ctrl+Enterで投稿
 var no_geotag = parseInt(readCookie('no_geotag') || "0");			// GeoTaggingを無効化
@@ -646,24 +647,27 @@ function insertPDF(str) {
 	return str;
 }
 function makeHTML(tw, no_name, pid) {
-	var un = tw.user.screen_name;
 	var rt = tw.retweeted_status;
 	var rs = tw.retweeted_status || tw;
-	var text = rt && rt.user ? "RT @" + rt.user.screen_name + ":" + rt.text : tw.text;
+	var t = display_as_rt ? tw : rs;
+	var text = t.text;
+	var un = t.user.screen_name;
+	if (display_as_rt)
+		text = rt && rt.user ? "RT @" + rt.user.screen_name + ":" + rt.text : tw.text;
 	var id = tw.id_str || tw.id;
-	var in_reply_to = tw.in_reply_to_status_id_str || tw.in_reply_to_status_id;
+	var in_reply_to = t.in_reply_to_status_id_str || t.in_reply_to_status_id;
 	return /*fav*/ '<img alt="☆" class="fav" src="http://assets3.twitter.com/images/icon_star_'+(rs.favorited?'full':'empty')+'.gif" ' +
 			'onClick="fav(this,\'' + id + '\')"' + (pid ? ' id="fav-'+pid+'-'+id+'"' : '') + '>' +
-		 (!no_name ?
+		 (!no_name || (!display_as_rt && rt) ?
 			//ユーザアイコン
-			(tw.user.url ? '<a target="_blank" href="'+tw.user.url+'" onclick="return link(this);">' : '') +
-			'<img class="uicon" src="' + tw.user.profile_image_url + '">' + (tw.user.url ? '</a>' : '') +
+			(t.user.url ? '<a target="_blank" href="'+t.user.url+'" onclick="return link(this);">' : '') +
+			'<img class="uicon" src="' + t.user.profile_image_url + '">' + (t.user.url ? '</a>' : '') +
 			//名前
 			'<a href="' + twitterURL + un + '" onClick="switchUser(\'' + un + '\');return false"><span class="uid">' + un + '</span>' +
-			 /*プロフィールの名前*/ (tw.user.name!=un ? '<span class="uname">('+insertPDF(tw.user.name)+')</span>' : '') + '</a>'
+			 /*プロフィールの名前*/ (t.user.name!=un ? '<span class="uname">('+insertPDF(t.user.name)+')</span>' : '') + '</a>'
 		: '') +
-		 /* protected? */ (tw.user.protected ? '<img alt="lock" id="lock-' + id + '" class="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
-		/*ダイレクトメッセージの方向*/ (tw.d_dir == 1 ? '<span class="dir">→</span> ' : tw.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
+		 /* protected? */ (t.user.protected ? '<img alt="lock" id="lock-' + id + '" class="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
+		/*ダイレクトメッセージの方向*/ (t.d_dir == 1 ? '<span class="dir">→</span> ' : t.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text" + id + "\" class=\"status\">" +
 		text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+|[@＠]([\/\w-]+)/g, function(_,u){
@@ -671,10 +675,13 @@ function makeHTML(tw, no_name, pid) {
 				if (u.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+u+"\" onclick=\"return link(this);\">"+_+"</a>";
 				return "<a href=\""+twitterURL+u+"\" onClick=\"switchUser('"+u+"'); return false;\" >"+_+"</a>";
 			}).replace(/\r?\n|\r/g, "<br>") + '</span>' +
+		//Retweet情報
+		' <span class="utils">' +
+		(!display_as_rt && rt ? "<img src=\"images/rt.png\" alt=\"RT\">by <a href=\""+twitterURL+tw.user.screen_name+"\" onclick=\"switchUser('" + tw.user.screen_name + "');return false\">" + tw.user.screen_name + "</a> " :'') +
 		//日付
-		' <span class="utils"><span class="prop"><a class="date" target="twitter" href="'+twitterURL+(tw.d_dir ? '#!/messages' : un+'/statuses/'+id)+'">' + dateFmt(tw.created_at) + '</a>' +
+		'<span class="prop"><a class="date" target="twitter" href="'+twitterURL+(t.d_dir ? '#!/messages' : un+'/statuses/'+id)+'">' + dateFmt(t.created_at) + '</a>' +
 		//クライアント
-		(tw.source ? '<span class="separator"> / </span><span class="source">' + tw.source.replace(/<a /,'<a target="twitter"') + '</span>' : '') + '</span>' +
+		(t.source ? '<span class="separator"> / </span><span class="source">' + t.source.replace(/<a /,'<a target="twitter"') + '</span>' : '') + '</span>' +
 		//Geolocation
 		(rs.geo && rs.geo.type == 'Point' ? '<a class="button geomap" id="geomap-' + id + '" target="_blank" href="http://maps.google.com?q=' + rs.geo.coordinates.join(',') + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.geo.coordinates.join(',') + '"></a>' : '') +
 		//返信先を設定
@@ -955,7 +962,7 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 					replies.push(tw[i]);
 				}
 			}
-			if (tw[i].d_dir == 2 || tw[i].user.screen_name == myname)
+			if (tw[i].d_dir == 2 || (tw[i].retweeted_status || tw[i]).user.screen_name == myname)
 				s.className = "fromme";
 			if (tw[i].retweeted_status)
 				s.className += " retweeted";
@@ -1178,6 +1185,7 @@ function switchMisc() {
 					'<input type="checkbox" name="auto_update"' + (auto_update?" checked":"") + '>Update after post<br>' +
 					'<input type="checkbox" name="since_check"' + (no_since_id?"":" checked") + '>since_id check<br>' +
 					'<input type="checkbox" name="replies_in_tl"' + (replies_in_tl?" checked":"") + '>Show not-following replies in TL<br>' +
+					'<input type="checkbox" name="display_as_rt"' + (display_as_rt?" checked":"") + '>Show retweets in "RT:" form<br>' +
 					'<input type="checkbox" name="counter"' + (no_counter?"":" checked") + '>Post length counter<br>' +
 					'<input type="checkbox" name="resize_fst"' + (no_resize_fst?"":" checked") + '>Auto-resize field<br>' +
 					'<input type="checkbox" name="decr_enter"' + (decr_enter?" checked":"") + '>Post with ctrl/shift+enter<br>' +
@@ -1214,6 +1222,7 @@ function setPreps(frm) {
 	no_counter = !frm.counter.checked;
 	no_resize_fst = !frm.resize_fst.checked;
 	replies_in_tl = frm.replies_in_tl.checked;
+	display_as_rt = frm.display_as_rt.checked;
 	footer = new String(frm.footer.value);
 	decr_enter = frm.decr_enter.checked;
 	no_geotag = !frm.geotag.checked;
@@ -1228,6 +1237,7 @@ function setPreps(frm) {
 	writeCookie('no_counter', no_counter?1:0, 3652);
 	writeCookie('no_resize_fst', no_resize_fst?1:0, 3652);
 	writeCookie('replies_in_tl', replies_in_tl?1:0, 3652);
+	writeCookie('display_as_rt', display_as_rt?1:0, 3652);
 	writeCookie('footer', footer, 3652);
 	writeCookie('decr_enter', decr_enter?1:0, 3652);
 	writeCookie('no_geotag', no_geotag?1:0, 3652);

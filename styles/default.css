@@ -37,6 +37,7 @@ form { margin-bottom: 0; }
 .emp { background-color: #fcc; }
 .non-follower { color: #008; }
 .retweeted { color: #555; }
+.retweeted .non-follower { color: #55a; }
 .button { text-decoration: none; -webkit-text-size-adjust:140%; }
 .popup { padding: 0 4px; color: #888; }
 .lock { position: relative; top: 2px; left: 0; }
