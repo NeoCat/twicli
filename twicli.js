@@ -649,10 +649,10 @@ function insertPDF(str) {
 function makeHTML(tw, no_name, pid) {
 	var rt = tw.retweeted_status;
 	var rs = tw.retweeted_status || tw;
-	var t = display_as_rt ? tw : rs;
+	var t = (display_as_rt || fav_mode == 2 || fav_mode == 3) ? tw : rs;
 	var text = t.text;
 	var un = t.user.screen_name;
-	if (display_as_rt)
+	if (display_as_rt || fav_mode == 2 || fav_mode == 3)
 		text = rt && rt.user ? "RT @" + rt.user.screen_name + ":" + rt.text : tw.text;
 	var id = tw.id_str || tw.id;
 	var in_reply_to = t.in_reply_to_status_id_str || t.in_reply_to_status_id;
@@ -962,7 +962,8 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 					replies.push(tw[i]);
 				}
 			}
-			if (tw[i].d_dir == 2 || (tw[i].retweeted_status || tw[i]).user.screen_name == myname)
+			var user = tw[i].retweeted_status && tw[i].retweeted_status.user || tw[i].user;
+			if (tw[i].d_dir == 2 || user.screen_name == myname)
 				s.className = "fromme";
 			if (tw[i].retweeted_status)
 				s.className += " retweeted";
