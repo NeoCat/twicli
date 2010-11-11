@@ -655,6 +655,7 @@ function makeHTML(tw, no_name, pid) {
 	if (display_as_rt || fav_mode == 2 || fav_mode == 3)
 		text = rt && rt.user ? "RT @" + rt.user.screen_name + ":" + rt.text : tw.text;
 	var id = tw.id_str || tw.id;
+	var id2 = t.id_str || t.id;
 	var in_reply_to = t.in_reply_to_status_id_str || t.in_reply_to_status_id;
 	return /*fav*/ '<img alt="☆" class="fav" src="http://assets3.twitter.com/images/icon_star_'+(rs.favorited?'full':'empty')+'.gif" ' +
 			'onClick="fav(this,\'' + id + '\')"' + (pid ? ' id="fav-'+pid+'-'+id+'"' : '') + '>' +
@@ -679,17 +680,17 @@ function makeHTML(tw, no_name, pid) {
 		' <span class="utils">' +
 		(!display_as_rt && rt ? "<img src=\"images/rt.png\" alt=\"RT\">by <a href=\""+twitterURL+tw.user.screen_name+"\" onclick=\"switchUser('" + tw.user.screen_name + "');return false\">" + tw.user.screen_name + "</a> " :'') +
 		//日付
-		'<span class="prop"><a class="date" target="twitter" href="'+twitterURL+(t.d_dir ? '#!/messages' : un+'/statuses/'+id)+'">' + dateFmt(t.created_at) + '</a>' +
+		'<span class="prop"><a class="date" target="twitter" href="'+twitterURL+(t.d_dir ? '#!/messages' : un+'/statuses/'+id2)+'">' + dateFmt(t.created_at) + '</a>' +
 		//クライアント
 		(t.source ? '<span class="separator"> / </span><span class="source">' + t.source.replace(/<a /,'<a target="twitter"') + '</span>' : '') + '</span>' +
 		//Geolocation
 		(rs.geo && rs.geo.type == 'Point' ? '<a class="button geomap" id="geomap-' + id + '" target="_blank" href="http://maps.google.com?q=' + rs.geo.coordinates.join(',') + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.geo.coordinates.join(',') + '"></a>' : '') +
 		//返信先を設定
-		' <a class="button" href="javascript:replyTo(\'' + un + "','" + id + '\')"><img src="images/reply.png" alt="↩" width="14" height="14"></a>' +
+		' <a class="button" href="javascript:replyTo(\'' + un + "','" + id2 + '\')"><img src="images/reply.png" alt="↩" width="14" height="14"></a>' +
 		//返信元へのリンク
 		(in_reply_to ? ' <a class="button" href="#" onClick="dispReply(\'' + un + '\',\'' + in_reply_to + '\',this); return false;"><img src="images/inrep.png" alt="☞" width="14" height="14"></a>' : '') +
 		//popupメニュー表示
-		'&nbsp;&nbsp;&nbsp;<a class="button popup" href="#" onClick="popup_menu(\'' + un + "','" + id + '\', this); return false;"><small><small>▼</small></small></a>' +
+		'&nbsp;&nbsp;&nbsp;<a class="button popup" href="#" onClick="popup_menu(\'' + un + "','" + id2 + '\', this); return false;"><small><small>▼</small></small></a>' +
 		'</span><div class="dummy"></div>';
 }
 // ユーザ情報のHTML表現を生成
