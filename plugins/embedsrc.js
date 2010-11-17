@@ -23,7 +23,7 @@
 			for (var i = 0; i < res.length; i++) {
 				if (res[i].search.test(lng)) {
 					a = document.createElement('a');
-					a.class = "button";
+					a.className = "button";
 					a.href = "#";
 					a.onclick = function(){
 						dispEmbedSrc(lng.replace(res[i].search, res[i].replace), link);
