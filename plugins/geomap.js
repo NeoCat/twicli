@@ -40,7 +40,8 @@ function make_geo_map(coordinates) {
 		{zoom: 13, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP});
 	var marker = new google.maps.Marker({position: latlng, map: map});
 
-	if(mapAccCircleOption.radius = coordinates.pop()) {
+	if (coordinates[2]) {
+		mapAccCircleOption.radius = coordinates.pop();
 		var accCircle = new google.maps.Circle(mapAccCircleOption);
 		accCircle.setCenter(latlng);
 		accCircle.setMap(map);
@@ -58,26 +59,5 @@ var mapAccCircleOption = {
 	strokeOpacity:  0.7,
 	strokeWeight:   4
 };
-
-function toggleGeoTag() {
-	if (!geowatch) {
-		geowatch = navigator.geolocation.watchPosition(function(g){
-			geo = g;
-			var maplink = typeof(display_map) == 'function';
-			$("geotag-info").innerHTML = " : " + (maplink ? '<a href="javascript:display_map([geo.coords.latitude, geo.coords.longitude, geo.coords.accuracy], $(\'geotag-info\'))">' : '') + g.coords.latitude + ", " + g.coords.longitude + " (" + g.coords.accuracy + "m)" + (maplink ? '</a>' : '');
-			setFstHeight(null, true);
-		});
-		$("geotag-img").src = "images/earth.png";
-		$("geotag-st").innerHTML = "ON";
-		$("geotag-info").innerHTML = " : -";
-	} else {
-		navigator.geolocation.clearWatch(geowatch);
-		geo = geowatch = null;
-		$("geotag-img").src = "images/earth_off.png";
-		$("geotag-st").innerHTML = "OFF";
-		$("geotag-info").innerHTML = "";
-		setFstHeight(null, true);
-	}
-}
 
 document.write('<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>');

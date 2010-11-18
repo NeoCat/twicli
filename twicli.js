@@ -417,7 +417,7 @@ function toggleGeoTag() {
 		geowatch = navigator.geolocation.watchPosition(function(g){
 			geo = g;
 			var maplink = typeof(display_map) == 'function';
-			$("geotag-info").innerHTML = " : " + (maplink ? '<a href="javascript:display_map([geo.coords.latitude, geo.coords.longitude], $(\'geotag-info\'))">' : '') + g.coords.latitude + ", " + g.coords.longitude + " (" + g.coords.accuracy + "m)" + (maplink ? '</a>' : '');
+			$("geotag-info").innerHTML = " : " + (maplink ? '<a href="javascript:display_map([geo.coords.latitude, geo.coords.longitude, geo.coords.accuracy], $(\'geotag-info\'))">' : '') + g.coords.latitude + ", " + g.coords.longitude + " (" + g.coords.accuracy + "m)" + (maplink ? '</a>' : '');
 			setFstHeight(null, true);
 		});
 		$("geotag-img").src = "images/earth.png";
