@@ -42,6 +42,41 @@ function make_geo_map(coordinates) {
 	google.maps.event.addListener(marker, 'click', function(event) {
 		window.open('http://maps.google.com?q='+coordinates.join(","));
 	});
+
+	if(mapAccCircleOption.radius = coordinates[2]) {
+		var accCircle = new google.maps.Circle(mapAccCircleOption);
+		accCircle.setCenter(latlng);
+		accCircle.setMap(map);
+	}
+}
+
+var mapAccCircleOption = {
+	fillColor:      '#f37171',
+	fillOpacity:    0.3,
+	strokeColor:    '#f37171',
+	strokeOpacity:  0.7,
+	strokeWeight:   4
+};
+
+function toggleGeoTag() {
+	if (!geowatch) {
+		geowatch = navigator.geolocation.watchPosition(function(g){
+			geo = g;
+			var maplink = typeof(display_map) == 'function';
+			$("geotag-info").innerHTML = " : " + (maplink ? '<a href="javascript:display_map([geo.coords.latitude, geo.coords.longitude, geo.coords.accuracy], $(\'geotag-info\'))">' : '') + g.coords.latitude + ", " + g.coords.longitude + " (" + g.coords.accuracy + "m)" + (maplink ? '</a>' : '');
+			setFstHeight(null, true);
+		});
+		$("geotag-img").src = "images/earth.png";
+		$("geotag-st").innerHTML = "ON";
+		$("geotag-info").innerHTML = " : -";
+	} else {
+		navigator.geolocation.clearWatch(geowatch);
+		geo = geowatch = null;
+		$("geotag-img").src = "images/earth_off.png";
+		$("geotag-st").innerHTML = "OFF";
+		$("geotag-info").innerHTML = "";
+		setFstHeight(null, true);
+	}
 }
 
 document.write('<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>');
