@@ -39,15 +39,16 @@ function make_geo_map(coordinates) {
 	var map = new google.maps.Map(document.getElementById("map_canvas"),
 		{zoom: 13, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP});
 	var marker = new google.maps.Marker({position: latlng, map: map});
-	google.maps.event.addListener(marker, 'click', function(event) {
-		window.open('http://maps.google.com?q='+coordinates.join(","));
-	});
 
-	if(mapAccCircleOption.radius = coordinates[2]) {
+	if(mapAccCircleOption.radius = coordinates.pop()) {
 		var accCircle = new google.maps.Circle(mapAccCircleOption);
 		accCircle.setCenter(latlng);
 		accCircle.setMap(map);
 	}
+
+	google.maps.event.addListener(marker, 'click', function(event) {
+		window.open('http://maps.google.com?q='+coordinates.join(","));
+	});
 }
 
 var mapAccCircleOption = {
