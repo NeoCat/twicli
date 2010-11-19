@@ -599,7 +599,8 @@ function retweetStatus() {
 function quoteStatus() {
 	if (!popup_id) return false;
 	if ($('lock-' + popup_id) && !confirm("This tweet is protected; Are you sure to retweet?")) return false;
-	$('fst').value = "RT @"+popup_user+": " + charRef(popup_ele.tw.text);
+	var tw = !display_as_rt && popup_ele.tw.retweeted_status || popup_ele.tw;
+	$('fst').value = "RT @"+popup_user+": " + charRef(tw.text);
 	$('fst').focus(); $('fst').select();
 	return false;
 }
