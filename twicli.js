@@ -658,7 +658,7 @@ function makeHTML(tw, no_name, pid) {
 	var id = tw.id_str || tw.id;
 	var id2 = t.id_str || t.id;
 	var in_reply_to = t.in_reply_to_status_id_str || t.in_reply_to_status_id;
-	return /*fav*/ '<img alt="☆" class="fav" src="http://assets3.twitter.com/images/icon_star_'+(rs.favorited?'full':'empty')+'.gif" ' +
+	return /*fav*/ '<img alt="☆" class="fav" src="http://assets3.twitter.com/images/icon_star_'+(!rt&&rs.favorited?'full':'empty')+'.gif" ' +
 			'onClick="fav(this,\'' + id + '\')"' + (pid ? ' id="fav-'+pid+'-'+id+'"' : '') + '>' +
 		 (!no_name || (!display_as_rt && rt) ?
 			//ユーザアイコン
