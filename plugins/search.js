@@ -1,4 +1,6 @@
 langResources['Twitter search'] =	['Twitter検索'];
+langResources['remove tab'] =	['タブを閉じる'];
+langResources['Are you sure to close this tab?'] =	['このタブを閉じてもよろしいですか?'];
 
 
 var tws_page = 0;
@@ -34,7 +36,7 @@ function twsSearch(qn, no_switch) {
 	switchTo(myid);
 	tws_update_timer = setInterval(function(){twsSearchUpdate(q)}, 1000*Math.max(updateInterval, 30));
 
-	$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: red" id="tws-closetab" href="#">[x] remove tab</a></div>';
+	$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: red" id="tws-closetab" href="#">[x] '+_('remove tab')+'</a></div>';
 	$('tws-closetab').onclick = function(){ closeSearchTab(myid); return false; };
 	tws_page = 0;
 	update_ele2 = loadXDomainScript('http://search.twitter.com/search.json?seq=' + (seq++) +
@@ -50,7 +52,7 @@ function twsSearchUpdate(q) {
 	$("loading").style.display = "block";
 }
 function closeSearchTab(myid) {
-	if (!confirm("Are you sure to close this tab?")) return;
+	if (!confirm(_('Are you sure to close this tab?'))) return;
 	var target = $(myid);
 	target.parentNode.removeChild(target);
 	for (var i = 0; i < tws_list.length; i++)
