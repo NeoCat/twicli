@@ -75,9 +75,7 @@ function go(d) {
 <ul>
 <li><b>How to hide tweet which contains specified kerwords?</b><blockquote> => Write "-::keyword:1" into "Pickup Pattern" in the "+" tab.</blockquote></li>
 <li><b>My tweets are sometimes lost ...</b><blockquote> => Twitter may be too crowded. Try writing just "r" and hit enter to re-post your previous tweet.</blockquote></li>
-<li><b>Appearance is poor ...</b><blockquote> => Default appearance isn't decorated at all to display many tweets at once. Try adding CSS below to 'user stylesheet' in Preferences in '+' tab for corner-rounded and shadowed tweets display.
-<pre>@import url(styles/round.css);</pre>
-There are some guys publishing more stylesheets for twicli. Your proposal is also appreciated. :-)</blockquote></li>
+<li><b>Appearance is poor ...</b><blockquote> => Default appearance isn't decorated at all to display many tweets at once. You can customize twicli's appearance using CSS. Please refer <a href="#customize">"Customize" section</a> below.</blockquote></li>
 <li><b>Too much API usage when I tweet frequently ...</b><blockquote> => Disable "Update after post" in "Preferences" in "+" tab to suppress automatic update after tweet is posted.</blockquote></li>
 <li>You can find more information in <a href="http://github.com/NeoCat/twicli/wiki">twicli wiki</a>.</li>
 </ul>
@@ -87,9 +85,11 @@ There are also some information about customizing twicli in <a href="http://gith
 <h3><a name="css">User Stylesheet</a></h3>
 You can add your own CSS in "user stylesheet" section of the "+" tab. For example;
 <ul>
+<li>to apply corner-rounded and shadowed appearance : <tt> @import url(styles/round.css); </tt>
 <li>to hide user icons : <tt> .uicon { display: none; } </tt>
 <li>wider lines : <tt> .status { line-height: 1.5; } </tt>
 </ul>
+There are some guys publishing more stylesheets for twicli
 
 <h3><a name="plugins">Plugins</a></h3>
 You can register plugins by setting them at the "Preferences" in the "+" tab.<br>
@@ -116,8 +116,7 @@ Currently, there are plugins below:
 
 <h2><a name="source">Source</a></h2>
 "twicli" is developed at <a href="http://coderepos.org/share/browser/websites/twicli/">CodeRepos</a> and <a href="http://github.com/NeoCat/twicli/">github</a> under <a href="LICENSE.txt">MIT license</a>.
-<p><a href="http://coderepos.org/share/browser/websites/twicli/twicli.html">twicli.html</a> is the main file (HTML+CSS+JavaScript), others are plugins and images.</p>
-<p>Please report any bugs/wishes to <a href="http://twitter.com/NeoCat">@NeoCat</a>.</p>
+<p>Please report any bugs/wishes to <a href="http://twitter.com/NeoCat">@NeoCat</a>. Your patches are also appriciated.</p>
 
 <h2><a name="link">Links <small><small>(all in Japanese)</small></small></a></h2>
 <ul>
