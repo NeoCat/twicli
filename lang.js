@@ -41,5 +41,5 @@ var langResources = {
 	'This tweet is protected; Are you sure to retweet?': ['このツイートはプロテクトされています。本当にRTしますか?'],
 	'Are you sure to delete this tweet?': ['このツイートを削除してもよろしいですか?'],
 	'Are you sure to remove $1?': ['本当に $1 をリムーブしますか?'],
-	'An external plugin is specified. This plugin can fully access to your account.\nAre you sure to load this?': ['外部プラグインが指定されています。このプラグインはあなたのアカウントに自由にアクセス可能になります。本当にロードしてもよろしいですか?'],
+	'An external plugin is specified. This plugin can fully access to your account.\nAre you sure to load this?': ['外部プラグインが指定されています。このプラグインはあなたのアカウントに自由にアクセス可能になります。本当にロードしてもよろしいですか?']
 };
