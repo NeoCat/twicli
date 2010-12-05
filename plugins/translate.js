@@ -1,16 +1,21 @@
+langResources['Translate'] =	['翻訳'];
+langResources['translate language'] =	['翻訳先の言語'];
+langResources['Choose "translate" from ▼ to translate the tweet.'] =	['翻訳するにはツイートの▼メニューから"翻訳"を選んで下さい。'];
+
+
 var translateLang = readCookie("lang") || "ja";
 function setTranslateLang(lang) {
 	translateLang = lang;
 	writeCookie("lang", lang, 3652);
-	alert("Choose \"translate\" from ▼ to translate tweet into " + lang + ".");
+	alert(_('Choose "translate" from ▼ to translate the tweet.'));
 }
 
 registerPlugin({
 	miscTab: function(ele) {
 		var e = document.createElement("div");
-		e.innerHTML = '<a href="javascript:var s = $(\'translate_pref\').style; s.display = s.display==\'block\'?\'none\':\'block\';void(0)"><b>▼Translate</b></a>' +
+		e.innerHTML = '<a href="javascript:var s = $(\'translate_pref\').style; s.display = s.display==\'block\'?\'none\':\'block\';void(0)"><b>▼'+_('Translate')+'</b></a>' +
 			'<form id="translate_pref" style="display:none" onSubmit="setTranslateLang($(\'translateLang\').value); return false;">' +
-			'translate language: <input type="text" size="15" id="translateLang" value="'+translateLang+'">' +
+			_('translate language')+': <input type="text" size="15" id="translateLang" value="'+translateLang+'">' +
 			'<input type="image" src="images/go.png"></form>';
 		$("pref").appendChild(e);
 	},
@@ -48,5 +53,5 @@ $('popup').appendChild(a)
 
 a = document.createElement('a');
 a.id = 'translate_status';
-a.innerHTML = 'Translate';
+a.innerHTML = _('Translate');
 $('popup').appendChild(a)

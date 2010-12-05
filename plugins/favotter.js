@@ -1,3 +1,7 @@
+langResources['Favotter / new'] =	['ふぁぼったー / 新着'];
+langResources['Favotter / tweet'] =	['ふぁぼったー / ツイート'];
+langResources['Favotter / fav'] =	['ふぁぼったー / ふぁぼり'];
+
 var twFavPlugin = {
 	fav_update: null,
 	favs: [],
@@ -8,12 +12,13 @@ var twFavPlugin = {
 	},
 	newMessageElement: function(ele, tw) {
 		var fele = document.createElement("a");
-		fele.id = "nrFav" + tw.id;
-		fele.href = "http://favotter.net/status.php?id=" + tw.id;
+		var id = tw.id_str || (""+tw.id);
+		fele.id = "nrFav" + id;
+		fele.href = "http://favotter.net/status.php?id=" + id;
 		fele.target = "favotter";
 		fele.style.backgroundColor = "#3fc";
-		if (this.favs[tw.id]) {
-			fele.innerHTML = '<small>[fav:' + this.favs[tw.id] + ']</small>';
+		if (this.favs[id]) {
+			fele.innerHTML = '<small>[fav:' + this.favs[id] + ']</small>';
 		}
 		ele.insertBefore(fele, ele.childNodes[4]);
 	},
@@ -42,18 +47,18 @@ $('popup').appendChild(a)
 a = document.createElement("a");
 a.target = 'favotter';
 a.id = 'favotter_link_user';
-a.innerHTML = 'Favotter / New';
+a.innerHTML = _('Favotter / new');
 $('popup').appendChild(a)
 
 a = document.createElement("a");
 a.target = 'favotter';
 a.id = 'favotter_link_status';
-a.innerHTML = 'Favotter / Status';
+a.innerHTML = _('Favotter / tweet');
 $('popup').appendChild(a)
 
 a = document.createElement("a");
 a.target = 'favotter';
 a.id = 'favotter_link_fav';
-a.innerHTML = 'Favotter / fav';
+a.innerHTML = _('Favotter / fav');
 $('popup').appendChild(a)
 

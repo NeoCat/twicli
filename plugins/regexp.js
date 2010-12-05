@@ -1,3 +1,11 @@
+langResources['remove tab'] =	['タブを閉じる'];
+langResources['Are you sure to close this tab?'] =	['このタブを閉じてもよろしいですか?'];
+langResources['Pickup Pattern'] =	['抽出条件'];
+langResources['(TabName:ID:Tweet:TLFilter)'] =	['(タブ名:ユーザID:ツイート:TL非表示)'];
+langResources['Apply'] =	['適用'];
+langResources['Pickup this user'] =	['このユーザを抽出'];
+
+
 var pickup_regexp = readCookie('pickup_regexp') || '';
 var pickup_regexp_ex = ''; // 他プラグインからの検索条件
 var pickup_tab_list = new Array();	// タブ一覧
@@ -16,7 +24,7 @@ function switchRegexp(tab) {
 	var pickup = new Array();
 	switchTo(tab.id);
 	if (!tab.no_close)
-		$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: red" href="javascript:closeRegexp(\''+tab.name+'\')">[x] remove tab</a></div>';
+		$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: red" href="javascript:closeRegexp(\''+tab.name+'\')">[x] '+_('remove tab')+'</a></div>';
 	// メインTLから該当する発言を抽出
 	var tl = $('tw').childNodes;
 	for (var i = 0; i < tl.length; i++) {
@@ -49,7 +57,7 @@ function setRegexp(str) {
 
 // タブを削除
 function closeRegexp(tab) {
-	if (!confirm("Are you sure to close this tab?")) return;
+	if (!confirm(_('Are you sure to close this tab?'))) return;
 	var list = pickup_regexp.split(/[\r\n]/);
 	var list2 = [];
 	for (var id = 0; id < list.length; id++)
@@ -107,7 +115,7 @@ initRegexp();
 registerPlugin({
 	miscTab: function(ele) {
 		var e = document.createElement("div");
-		e.innerHTML = 'Pickup Pattern <small>(TabName:ID:Status:TLFilter)</small> : <br><form onSubmit="setRegexp($(\'pickup_regexp\').value); return false;"><textarea cols="30" rows="4" id="pickup_regexp">' + pickup_regexp + '</textarea><br><input type="submit" value="Apply"></form>';
+		e.innerHTML = _('Pickup Pattern')+' <small>'+_('(TabName:ID:Tweet:TLFilter)')+'</small> : <br><form onSubmit="setRegexp($(\'pickup_regexp\').value); return false;"><textarea cols="30" rows="4" id="pickup_regexp">' + pickup_regexp + '</textarea><br><input type="submit" value="'+_('Apply')+'"></form>';
 		ele.appendChild(e);
 		var hr = document.createElement("hr");
 		hr.className = "spacer";
@@ -152,7 +160,7 @@ $('popup').insertBefore(a,$('popup').childNodes[0])
 a = document.createElement("a");
 a.target = 'twitter';
 a.id = 'regexp_add_ID';
-a.innerHTML = 'Pickup this user';
+a.innerHTML = _('Pickup this user');
 a.href = '#';
 a.onclick = function() { addIDRegexp(popup_user, popup_id); return false; }
 $('popup').insertBefore(a,$('popup').childNodes[0])
