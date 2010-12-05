@@ -350,7 +350,7 @@ function twAuth(a) {
 		update();
 	}
 	if (!no_geotag && a.geo_enabled && navigator.geolocation) {
-		$("option").innerHTML += '<div id="geotag"><a href="javascript:toggleGeoTag()"><img align="left" id="geotag-img" src="images/earth_off.png">GeoTagging <span id="geotag-st">OFF</span></a><small id="geotag-info"></small></div>';
+		$("option").innerHTML += '<div id="geotag"><a href="javascript:toggleGeoTag()"><img align="left" id="geotag-img" src="images/earth_off.png">'+_('GeoTagging')+' <span id="geotag-st">OFF</span></a><small id="geotag-info"></small></div>';
 		setFstHeight(min_fst_height, true);
 	}
 }
@@ -779,10 +779,10 @@ function twUserInfo(user) {
 function twRelation(rel) {
 	var source = rel.relationship.source;
 	var elem = $("user_info");
-	elem.innerHTML += '<input type="button" value="' + (source.following ? 'Remove ' : 'Follow ') +  last_user +
+	elem.innerHTML += '<input type="button" value="' + _(source.following ? 'Remove $1' : 'Follow $1', last_user) +
 					'" onClick="follow('+!source.following+')">';
 	if (source.followed_by)
-		$("profile").innerHTML += "<br><b>" + rel.relationship.target.screen_name + ' is following you!</b>';
+		$("profile").innerHTML += "<br><b>" + _('$1 is following you!', rel.relationship.target.screen_name)+'</b>';
 	callPlugins("newUserRelationship", elem, rel);
 }
 // ダイレクトメッセージ一覧の受信
