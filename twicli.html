@@ -13,6 +13,7 @@
 <script type="text/javascript" src="oauth/sha1.js"></script>
 <script type="text/javascript" src="oauth/oauth.js"></script>
 <script type="text/javascript" src="oauth/consumer.js"></script>
+<script type="text/javascript" src="lang.js"></script>
 <script type="text/javascript" src="twicli.js"></script>
 </head>
 <body onLoad="init()">
@@ -43,7 +44,7 @@
 <!--オプション-->
 <div id="option"></div>
 <!--メニュー-->
-<div id="menu"><div id='menu2'><a id="TL" class="sel" href="javascript:void switchTL()">TL</a><a id="reply" href="javascript:void switchReply()">Re</a><a id="user" href="javascript:void switchUser()">user</a><a id="direct" href="javascript:void switchDirect()">D</a><a id="misc" href="javascript:void switchMisc()">+</a></div></div>
+<div id="menu"><div id='menu2'><a id="TL" class="sel" href="javascript:void switchTL()">TL</a><a id="reply" href="javascript:void switchReply()">@</a><a id="user" href="javascript:void switchUser()">user</a><a id="direct" href="javascript:void switchDirect()">D</a><a id="misc" href="javascript:void switchMisc()">+</a></div></div>
 </div>
 <!--メインタイムライン-->
 <div id="tw" class="tw tw-parent"></div>
@@ -56,11 +57,11 @@
 	<a href="javascript:pickup2()" class="close"><img alt="⇔" src="images/both.png"></a><div id="reps"></div></div>
 <!--ポップアップメニュー-->
 <div id="popup" onClick="popup_hide()">
-<a id="popup_link_user" href="" target="twitter">Twitter / User</a>
-<a id="popup_link_status" href="" target="twitter">Twitter / Status</a>
-<a id="popup_status_delete" href="#" onClick="return deleteStatus()">Delete Status</a>
+<a id="popup_status_delete" href="#" onClick="return deleteStatus()">Delete tweet</a>
 <a id="popup_status_retweet" href="#" onClick="return retweetStatus()">Retweet</a>
 <a id="popup_status_quote" href="#" onClick="return quoteStatus()">Quote with RT:</a>
+<a id="popup_link_user" href="" target="twitter">Twitter / user</a>
+<a id="popup_link_status" href="" target="twitter">Twitter / tweet</a>
 </div>
 <!--ポップアップメニュー非表示用-->
 <div id="popup_hide" onClick="popup_hide();"></div>

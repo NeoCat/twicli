@@ -1,3 +1,6 @@
+langResources['Twitter search'] =	['Twitter検索'];
+
+
 var tws_page = 0;
 var tws_rpp = 50; /* results per page */
 var tws_update_timer = null;
@@ -94,7 +97,7 @@ registerPlugin({
 	},
 	miscTab: function(ele) {
 		var e = document.createElement("div");
-		e.innerHTML = '<form onSubmit="return twsSearch($(\'search_q\').value);">Twitter search : <input type="text" size="15" id="search_q"><input type="image" src="images/go.png"></form>';
+		e.innerHTML = '<form onSubmit="return twsSearch($(\'search_q\').value);"><a href="http://search.twitter.com/" target="_blank">'+_('Twitter search')+'</a> : <input type="text" size="15" id="search_q"><input type="image" src="images/go.png"></form>';
 		ele.appendChild(e);
 		var hr = document.createElement("hr");
 		hr.className = "spacer";

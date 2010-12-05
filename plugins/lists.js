@@ -1,3 +1,11 @@
+langResources['Add'] =	['追加'];
+langResources['get all tweets'] =	['全ツイートを取得'];
+langResources['Please specify a list like "@user/list".'] =	['リストを"@user/list"の形式で指定して下さい。'];
+langResources['Lists'] =	['リスト'];
+langResources['subscribing lists by twicli'] =	['twicliで購読中のリスト'];
+langResources['Initialization failed; regexp.js may not be loaded.'] =	['初期化に失敗しました。regexp.jsがロードされていないようです。'];
+
+
 var last_list = ['',''];
 var twl_page = 0;
 var lists_to_get = readCookie("lists");
@@ -31,7 +39,7 @@ function twlGetListInfo(name) {
 
 function twlSubscribeList(name) {
 	if (name.indexOf('/') < 0)
-		return alert('Please specify a list like "@user/list"');
+		return alert(_('Please specify a list like "@user/list".'));
 	if (name[0] == "@") name = name.substr(1);
 	for (var i = 0; i < lists_to_get.length; i++) // avoid duplication
 		if (lists_to_get[i] == name || lists_to_get[i] == '#'+name)
@@ -137,7 +145,7 @@ function twlUpdateListsList() {
 		setRegexp(pickup_regexp);
 	} else if (!init_failed) {
 		init_failed = true;
-		alert("lists.js: Initialization failed; regexp.js may not be loaded.");
+		alert('lists.js: '+_('Initialization failed; regexp.js may not be loaded.'));
 	}
 	twlUpdateMisc();
 }
@@ -170,11 +178,11 @@ registerPlugin({
 	},
 	miscTab: function(ele) {
 		var e = document.createElement("div");
-		e.innerHTML = '<a href="javascript:var s = $(\'lists_pref\').style; s.display = s.display==\'block\'?\'none\':\'block\';void(0)"><b>▼Lists</b></a>' +
+		e.innerHTML = '<a href="javascript:var s = $(\'lists_pref\').style; s.display = s.display==\'block\'?\'none\':\'block\';void(0)"><b>▼'+_('Lists')+'</b></a>' +
 			'<form id="lists_pref" style="display:none" onSubmit="twlSubscribeList($(\'newList\').value); return false;">' +
-			'subscribing lists by twicli:<ul id="lists_list">' +
+			_('subscribing lists by twicli')+':<ul id="lists_list">' +
 			'</ul><ul><li><input type="text" size="15" id="newList" value="">' +
-			'<input type="submit" value="Add"></li></ul></form>';
+			'<input type="submit" value="'+_('Add')+'"></li></ul></form>';
 		$("pref").appendChild(e);
 		twlUpdateMisc();
 	},
@@ -184,6 +192,6 @@ registerPlugin({
 	regexp_switched: function(tab) {
 		if (!tab.info || tab.info.indexOf('list#') != 0) return;
 		var a = tab.info.substr(5);
-		$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: green" href="javascript:void(twlGetListStatus(\''+a+'\'))">get all tweets</a></div>';
+		$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: green" href="javascript:void(twlGetListStatus(\''+a+'\'))">'+_('get all tweets')+'</a></div>';
 	}
 });

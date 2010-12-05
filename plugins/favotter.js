@@ -1,3 +1,7 @@
+langResources['Favotter / new'] =	['ふぁぼったー / 新着'];
+langResources['Favotter / tweet'] =	['ふぁぼったー / ツイート'];
+langResources['Favotter / fav'] =	['ふぁぼったー / ふぁぼり'];
+
 var twFavPlugin = {
 	fav_update: null,
 	favs: [],
@@ -43,18 +47,18 @@ $('popup').appendChild(a)
 a = document.createElement("a");
 a.target = 'favotter';
 a.id = 'favotter_link_user';
-a.innerHTML = 'Favotter / New';
+a.innerHTML = _('Favotter / new');
 $('popup').appendChild(a)
 
 a = document.createElement("a");
 a.target = 'favotter';
 a.id = 'favotter_link_status';
-a.innerHTML = 'Favotter / Status';
+a.innerHTML = _('Favotter / tweet');
 $('popup').appendChild(a)
 
 a = document.createElement("a");
 a.target = 'favotter';
 a.id = 'favotter_link_fav';
-a.innerHTML = 'Favotter / fav';
+a.innerHTML = _('Favotter / fav');
 $('popup').appendChild(a)
 

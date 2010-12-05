@@ -7,6 +7,20 @@ function charRef(s) {
 	ele.innerHTML = s;
 	return ele.firstChild.nodeValue;
 }
+// 言語リソースをルックアップ
+var browserLang = navigator.browserLanguage || navigator.language || navigator.userLanguage;
+browserLang = browserLang ? browserLang.split('-')[0] : 'en';
+var lang;
+for (lang = 0; lang < langList.length; lang++)
+	if (langList[lang] == browserLang) break;
+function _(key) {
+	if (!langResources[key])
+		alert("no langResource\n\n"+key);
+	else
+		key = langResources[key][lang] || key;
+	var args = arguments;
+	return key.replace(/\$(\d+)/, function(x,n){ return args[parseInt(n)] });
+}
 // フォームをシリアライズ
 function serializeForm(f) {
 	var url = '';
@@ -353,7 +367,7 @@ function auth() {
 }
 
 function logout() {
-	if (!confirm('Are you sure to logout? You need to re-authenticate twicli at next launch.'))
+	if (!confirm(_('Are you sure to logout? You need to re-authenticate twicli at next launch.')))
 		return;
 	deleteCookie('access_token');
 	deleteCookie('access_secret');
@@ -387,7 +401,7 @@ function press(e) {
 		return false;
 	}
 	if (st.value.length + footer.length > 140) {
-		alert("This tweet is too long.");
+		alert(_("This tweet is too long."));
 		return false;
 	}
 	if (st.value == "r" && last_post) {
@@ -552,6 +566,13 @@ function pickup2() {
 	if (user_pick1 && user_pick2)
 		switchUser(user_pick1 + "," + user_pick2);
 }
+// ポップアップメニューの初期化
+function popup_init() {
+	var popup_id_list = ['popup_link_user', 'popup_link_status', 'popup_status_delete',
+						'popup_status_retweet', 'popup_status_quote'];
+	for (var x = 0; x < popup_id_list.length; x++)
+		$(popup_id_list[x]).innerHTML = _($(popup_id_list[x]).innerHTML);
+}
 // ポップアップメニューを表示
 function popup_menu(user, id, ele) {
 	popup_user = user;
@@ -583,7 +604,7 @@ function retweetStatus() {
 		error("This tweet is protected.");
 		return false;
 	}
-	if (!confirm("Retweet to your followers?")) return false;
+	if (!confirm(_("Retweet to your followers?"))) return false;
 	$("loading").style.display = "block";
 	var target_ele = popup_ele;
 	enqueuePost(twitterAPI + 'statuses/retweet/' + popup_id + '.xml',
@@ -598,7 +619,7 @@ function retweetStatus() {
 // 発言をRT付きで引用
 function quoteStatus() {
 	if (!popup_id) return false;
-	if ($('lock-' + popup_id) && !confirm("This tweet is protected; Are you sure to retweet?")) return false;
+	if ($('lock-' + popup_id) && !confirm(_("This tweet is protected; Are you sure to retweet?"))) return false;
 	var tw = !display_as_rt && popup_ele.tw.retweeted_status || popup_ele.tw;
 	$('fst').value = "RT @"+popup_user+": " + charRef(tw.text);
 	$('fst').focus(); $('fst').select();
@@ -607,7 +628,7 @@ function quoteStatus() {
 // 発言の削除
 function deleteStatus() {
 	if (!popup_id) return false;
-	if (!confirm("Are you sure to delete this tweet (@"+popup_user+" / "+popup_id+")?")) return false;
+	if (!confirm(_('Are you sure to delete this tweet?')+" (@"+popup_user+" / "+popup_id+")")) return false;
 	$("loading").style.display = "block";
 	if ($("text" + popup_id)) $("text" + popup_id).style.textDecoration = "line-through";
 	enqueuePost(twitterAPI + (selected_menu.id == 'direct'?'direct_messages':'statuses') + '/destroy/' + popup_id + '.xml',
@@ -700,13 +721,13 @@ function makeUserInfoHTML(user) {
 			user.screen_name+'"><img class="uicon2" src="' + user.profile_image_url + '"></a></td><td id="profile"><div>' +
 			(user.protected ? '<img alt="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
 			'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b></div>' +
-			(user.location ? '<div><b>Location</b>: ' + user.location + '</div>' : '') +
-			(user.url ? '<div><b>URL</b>: <a target="_blank" href="' + user.url + '" onclick="return link(this);">' + user.url + '</a></div>' : '') +
+			(user.location ? '<div><b>'+_('Location')+'</b>: ' + user.location + '</div>' : '') +
+			(user.url ? '<div><b>'+_('URL')+'</b>: <a target="_blank" href="' + user.url + '" onclick="return link(this);">' + user.url + '</a></div>' : '') +
 			'<div>' + (user.description ? user.description : '<br>') +
-			'</div><b><a href="javascript:switchFollowing()">' + user.friends_count + '<small>following</small></a> / ' + 
-						'<a href="javascript:switchFollower()">' + user.followers_count + '<small>followers</small></a>' +
-			'<br><a href="javascript:switchStatus()">' + user.statuses_count + '<small>updates</small></a> / ' +
-						'<a href="javascript:switchFav()">' + user.favourites_count + '<small>favs</small></a></b>' +
+			'</div><b><a href="javascript:switchFollowing()">' + user.friends_count + '<small>'+_('following')+'</small></a> / ' + 
+						'<a href="javascript:switchFollower()">' + user.followers_count + '<small>'+_('followers')+'</small></a>' +
+			'<br><a href="javascript:switchStatus()">' + user.statuses_count + '<small>'+_('tweets')+'</small></a> / ' +
+						'<a href="javascript:switchFav()">' + user.favourites_count + '<small>'+_('favs')+'</small></a></b>' +
 			'</td></tr></table><a target="twitter" href="' + twitterURL + user.screen_name + '">[Twitter]</a> '
 }
 // 過去の発言取得ボタン(DOM)生成
@@ -737,7 +758,7 @@ function setFavIcon(img, id, f) {
 }
 // followとremove
 function follow(f) {
-	if (!f && !confirm("Are you sure to remove " + last_user + "?")) return;
+	if (!f && !confirm(_("Are you sure to remove $1?", last_user))) return;
 	enqueuePost(twitterAPI + 'friendships/' + (f ? 'create' : 'destroy') + '/' + last_user + '.xml', switchUser);
 	$("loading").style.display = "block";
 }
@@ -807,9 +828,9 @@ function twDirectCheck(tw) {
 // API制限情報の受信
 function twLimit(lim) {
 	$("loading").style.display = "none";
-	$("tw2c").innerHTML = "<b>Twitter API status:</b><br>" +
-					"hourly limit : " + lim.remaining_hits + " / " + lim.hourly_limit + "<br>" +
-					"reset at : " + dateFmt(lim.reset_time);
+	$("tw2c").innerHTML = '<b>'+_('Twitter API status')+':</b><br>' +
+					_('hourly limit')+' : ' + lim.remaining_hits + ' / ' + lim.hourly_limit + "<br>" +
+					_('reset at')+' : ' + dateFmt(lim.reset_time);
 }
 function twLimit2(lim) {
 	ratelimit_reset_time = new Date(lim.reset_time.replace('+','GMT+'));;
@@ -1177,31 +1198,31 @@ function switchMisc() {
 	switchTo("misc");
 	$("tw2h").innerHTML = '<br><a target="twitter" href="index.html"><b>twicli</b></a> : A browser-based Twitter client<br><small>Copyright &copy; 2008-2010 NeoCat</small><hr class="spacer">' +
 					'<form onSubmit="switchUser($(\'user_id\').value); return false;">'+
-					'show user info : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="images/go.png"></form>' +
-					'<a href="javascript:logout()"><b>Log out</b></a><hr class="spacer">' +
-					'<div id="pref"><a href="javascript:togglePreps()">▼<b>Preferences</b></a>' +
+					_('show user info')+' : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="images/go.png"></form>' +
+					'<a href="javascript:logout()"><b>'+_('Log out')+'</b></a><hr class="spacer">' +
+					'<div id="pref"><a href="javascript:togglePreps()">▼<b>'+_('Preferences')+'</b></a>' +
 					'<form id="preps" onSubmit="setPreps(this); return false;" style="display: none;">' +
-					'max #msgs in TL: <input name="limit" size="5" value="' + nr_limit + '"><br>' +
-					'#msgs in TL on update (max=200): <input name="maxc" size="3" value="' + max_count + '"><br>' +
-					'#msgs in user on update (max=200): <input name="maxu" size="3" value="' + max_count_u + '"><br>' +
-					'update interval: <input name="interval" size="3" value="' + updateInterval + '"> sec<br>' +
-					'<input type="checkbox" name="auto_update"' + (auto_update?" checked":"") + '>Update after post<br>' +
-					'<input type="checkbox" name="since_check"' + (no_since_id?"":" checked") + '>since_id check<br>' +
-					'<input type="checkbox" name="replies_in_tl"' + (replies_in_tl?" checked":"") + '>Show not-following replies in TL<br>' +
-					'<input type="checkbox" name="display_as_rt"' + (display_as_rt?" checked":"") + '>Show retweets in "RT:" form<br>' +
-					'<input type="checkbox" name="counter"' + (no_counter?"":" checked") + '>Post length counter<br>' +
-					'<input type="checkbox" name="resize_fst"' + (no_resize_fst?"":" checked") + '>Auto-resize field<br>' +
-					'<input type="checkbox" name="decr_enter"' + (decr_enter?" checked":"") + '>Post with ctrl/shift+enter<br>' +
-					'<input type="checkbox" name="geotag"' + (no_geotag?"":" checked") + '>Enable GeoTagging<br>' +
-					'Footer: <input name="footer" size="10" value="' + footer + '"><br>' +
-					'Plugins:<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>' +
-					'user stylesheet:<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br>' +
+					_('max #msgs in TL')+': <input name="limit" size="5" value="' + nr_limit + '"><br>' +
+					_('#msgs in TL on update (max=200)')+': <input name="maxc" size="3" value="' + max_count + '"><br>' +
+					_('#msgs in user on update (max=200)')+': <input name="maxu" size="3" value="' + max_count_u + '"><br>' +
+					_('update interval')+': <input name="interval" size="3" value="' + updateInterval + '"> sec<br>' +
+					'<input type="checkbox" name="auto_update"' + (auto_update?" checked":"") + '>'+_('Update after post')+'<br>' +
+					'<input type="checkbox" name="since_check"' + (no_since_id?"":" checked") + '>'+_('since_id check')+'<br>' +
+					'<input type="checkbox" name="replies_in_tl"' + (replies_in_tl?" checked":"") + '>'+_('Show not-following replies in TL')+'<br>' +
+					'<input type="checkbox" name="display_as_rt"' + (display_as_rt?" checked":"") + '>'+_('Show retweets in "RT:" form')+'<br>' +
+					'<input type="checkbox" name="counter"' + (no_counter?"":" checked") + '>'+_('Post length counter')+'<br>' +
+					'<input type="checkbox" name="resize_fst"' + (no_resize_fst?"":" checked") + '>'+_('Auto-resize field')+'<br>' +
+					'<input type="checkbox" name="decr_enter"' + (decr_enter?" checked":"") + '>'+_('Post with ctrl/shift+enter')+'<br>' +
+					'<input type="checkbox" name="geotag"' + (no_geotag?"":" checked") + '>'+_('Enable GeoTagging')+'<br>' +
+					_('Footer')+': <input name="footer" size="20" value="' + footer + '"><br>' +
+					_('Plugins')+':<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>' +
+					_('user stylesheet')+':<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br>' +
 					'<input type="submit" value="Save"></form></div><hr class="spacer">';
 	callPlugins("miscTab", $("tw2h"));
 	$("loading").style.display = "block";
 	if (ratelimit_reset_time && new Date < ratelimit_reset_time)
-		$("tw2c").innerHTML = "<b>Twitter API status:</b><br>" +
-					"hourly limit : 0<br>reset at : " + dateFmt(ratelimit_reset_time);
+		$("tw2c").innerHTML = '<b>'+_('Twitter API status')+':</b><br>' +
+					_('hourly limit')+' : 0<br>'+_('reset at')+': ' + dateFmt(ratelimit_reset_time);
 	else
 		update_ele2 = loadXDomainScript(twitterAPI + 'account/rate_limit_status.json' +
 										'?id=' + myname + '&callback=twLimit', update_ele2);
@@ -1213,7 +1234,7 @@ function setPreps(frm) {
 	var ps = frm.list.value.split("\n");
 	for (var i = 0; i < ps.length; i++)
 		if (ps[i].indexOf("/") >= 0)
-			if (!confirm("An external plugin is specified. This plugin can fully access to your account.\nAre you sure to load this?\n\n" + ps[i]))
+			if (!confirm(_('An external plugin is specified. This plugin can fully access to your account.\nAre you sure to load this?')+"\n\n" + ps[i]))
 				return;
 	
 	nr_limit = frm.limit.value;
@@ -1247,10 +1268,11 @@ function setPreps(frm) {
 	writeCookie('tw_plugins', new String(" " + frm.list.value), 3652);
 	writeCookie('user_style', new String(frm.user_style.value), 3652);
 	callPlugins('savePrefs', frm);
-	alert("Your settings are saved. Please reload to apply plugins and CSS.");
+	alert(_("Your settings are saved. Please reload to apply plugins and CSS."));
 }
 // 初期化
 function init() {
+	popup_init();
 	selected_menu = $("TL");
 	setTimeout(function(){scrollTo(0, 1)}, 0);
 	document.request.oauth_token.value = access_token;
@@ -1273,7 +1295,7 @@ function callPlugins(name) {
 			try {
 				plugins[i][name].apply(plugins[i], args);
 			} catch (e) {
-				alert("Plugin error: " + e);
+				alert(_('Plugin error')+': ' + e);
 			}
 }
 function loadPlugins() {
