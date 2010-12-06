@@ -1222,7 +1222,7 @@ function switchMisc() {
 					_('Footer')+': <input name="footer" size="20" value="' + footer + '"><br>' +
 					_('Plugins')+':<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>' +
 					_('user stylesheet')+':<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br>' +
-					'<input type="submit" value="Save"></form></div><hr class="spacer">';
+					'<input type="submit" value="'+_('Save')+'"></form></div><hr class="spacer">';
 	callPlugins("miscTab", $("tw2h"));
 	$("loading").style.display = "block";
 	if (ratelimit_reset_time && new Date < ratelimit_reset_time)

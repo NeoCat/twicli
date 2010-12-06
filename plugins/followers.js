@@ -1,6 +1,8 @@
 langResources['Color followers'] =	['フォロワーを色付け'];
 langResources['Tweets coloring'] =	['ツイートが次のように色付けされます'];
 langResources['follower: black  non-follower: blue'] =	['フォロワー: 黒　非フォロワー: 青'];
+langResources['Renew'] =	['更新'];
+langResources['Off'] =	['無効'];
 
 var followers_ids_list = (readCookie('followers_ids') || '');
 followers_ids_list = followers_ids_list != '' ? followers_ids_list.split(',') : [];
@@ -11,7 +13,7 @@ for (var i = 0; i < followers_ids_list.length; i++)
 registerPlugin({
 	miscTab: function(ele) {
 		var e = document.createElement("div");
-		e.innerHTML = '<form onSubmit="twfcFollwersIDsRenew(); return false;">'+_('Color followers')+': <span id="followers_status">'+(followers_ids_list.length?"on("+followers_ids_list.length+")":"off")+'</span> <input type="submit" value="Renew"><input type="button" onClick="twfcFollwersIDsClear()" value="Off"> <a href="javascript:alert(\''+_('Tweets coloring')+':\\n  '+_('follower: black  non-follower: blue')+'\')">[?]</a></form>';
+		e.innerHTML = '<form onSubmit="twfcFollwersIDsRenew(); return false;">'+_('Color followers')+': <span id="followers_status">'+(followers_ids_list.length?"on("+followers_ids_list.length+")":"off")+'</span> <input type="submit" value="'+_('Renew')+'"><input type="button" onClick="twfcFollwersIDsClear()" value="'+_('Off')+'"> <a href="javascript:alert(\''+_('Tweets coloring')+':\\n  '+_('follower: black  non-follower: blue')+'\')">[?]</a></form>';
 		ele.appendChild(e);
 		var hr = document.createElement("hr");
 		hr.className = "spacer";
