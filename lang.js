@@ -38,7 +38,7 @@ var langResources = {
 	'Twitter API status':	['Twitter APIの状態'],
 	'hourly limit':	['1時間当たりの制限'],
 	'reset at':	['リセット日時'],
-	'Save':	['リセット日時'],
+	'Save':	['保存'],
 	'This tweet is too long.': ['ツイートが長すぎます。'],
 	'Your settings are saved. Please reload to apply plugins and CSS.': ['設定を保存しました。プラグイン、CSSの変更を反映するにはリロードが必要です。'],
 	'Plugin error': ['プラグインのエラー'],
