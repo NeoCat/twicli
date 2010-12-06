@@ -1,5 +1,5 @@
-var langList = ['ja'];
-
+var langNames = { 'en': 'English', 'ja': '日本語 (Japanese)' };
+var langList = ['ja']; // 'en' shouldn't be added here
 var langResources = {
 	'Twitter / user': ['Twitter / ユーザ'],
 	'Twitter / tweet': ['Twitter / ツイート'],
@@ -19,6 +19,7 @@ var langResources = {
 	'show user info':	['ユーザ情報を表示'],
 	'Log out':	['ログアウト'],
 	'Preferences':	['設定'],
+	'language':	['言語'],
 	'max #msgs in TL':	['TLの最大表示数'],
 	'#msgs in TL on update (max=200)':	['起動時のTL取得数(最大200)'],
 	'#msgs in user on update (max=200)':	['ユーザTL取得数(最大200)'],

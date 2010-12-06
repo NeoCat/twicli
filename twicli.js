@@ -7,20 +7,6 @@ function charRef(s) {
 	ele.innerHTML = s;
 	return ele.firstChild.nodeValue;
 }
-// 言語リソースをルックアップ
-var browserLang = navigator.browserLanguage || navigator.language || navigator.userLanguage;
-browserLang = browserLang ? browserLang.split('-')[0] : 'en';
-var lang;
-for (lang = 0; lang < langList.length; lang++)
-	if (langList[lang] == browserLang) break;
-function _(key) {
-	if (!langResources[key])
-		alert("no langResource\n\n"+key);
-	else
-		key = langResources[key][lang] || key;
-	var args = arguments;
-	return key.replace(/\$(\d+)/, function(x,n){ return args[parseInt(n)] });
-}
 // フォームをシリアライズ
 function serializeForm(f) {
 	var url = '';
@@ -236,6 +222,21 @@ Array.prototype.uniq = function() {
 				this.splice(i--, l-- && 1);
 	return this;
 };
+// 言語リソースをルックアップ
+var browser_lang = navigator.browserLanguage || navigator.language || navigator.userLanguage;
+browser_lang = browser_lang ? browser_lang.split('-')[0] : 'en';
+var user_lang = readCookie('user_lang') || browser_lang;
+var lang;
+for (lang = 0; lang < langList.length; lang++)
+	if (langList[lang] == user_lang) break;
+function _(key) {
+	if (!langResources[key])
+		alert("no langResource\n\n"+key);
+	else
+		key = langResources[key][lang] || key;
+	var args = arguments;
+	return key.replace(/\$(\d+)/, function(x,n){ return args[parseInt(n)] });
+}
 // user-defined CSS
 var user_style = readCookie('user_style') || "";
 document.write('<style>' + user_style + '</style>');
@@ -1203,6 +1204,9 @@ function switchMisc() {
 					'<a href="javascript:logout()"><b>'+_('Log out')+'</b></a><hr class="spacer">' +
 					'<div id="pref"><a href="javascript:togglePreps()">▼<b>'+_('Preferences')+'</b></a>' +
 					'<form id="preps" onSubmit="setPreps(this); return false;" style="display: none;">' +
+					_('language')+': <select name="user_lang">'+(['en'].concat(langList)).map(function(x){
+							return '<option value="'+x+'"'+(x==user_lang?' selected':'')+'>'+langNames[x]+'</option>';
+						})+'</select><br>' +
 					_('max #msgs in TL')+': <input name="limit" size="5" value="' + nr_limit + '"><br>' +
 					_('#msgs in TL on update (max=200)')+': <input name="maxc" size="3" value="' + max_count + '"><br>' +
 					_('#msgs in user on update (max=200)')+': <input name="maxu" size="3" value="' + max_count_u + '"><br>' +
@@ -1238,6 +1242,7 @@ function setPreps(frm) {
 			if (!confirm(_('An external plugin is specified. This plugin can fully access to your account.\nAre you sure to load this?')+"\n\n" + ps[i]))
 				return;
 	
+	user_lang = frm.user_lang.value;
 	nr_limit = frm.limit.value;
 	max_count = frm.maxc.value;
 	max_count_u = frm.maxu.value;
@@ -1253,6 +1258,7 @@ function setPreps(frm) {
 	no_geotag = !frm.geotag.checked;
 	resetUpdateTimer();
 	writeCookie('ver', 11, 3652);
+	writeCookie('user_lang', user_lang, 3652);
 	writeCookie('limit', nr_limit, 3652);
 	writeCookie('max_count', max_count, 3652);
 	writeCookie('max_count_u', max_count_u, 3652);
