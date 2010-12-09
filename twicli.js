@@ -223,8 +223,9 @@ Array.prototype.uniq = function() {
 	return this;
 };
 // 言語リソースをルックアップ
-var browser_lang = navigator.browserLanguage || navigator.language || navigator.userLanguage;
-browser_lang = browser_lang ? browser_lang.split('-')[0] : 'en';
+var browser_lang = navigator.browserLanguage || navigator.language || navigator.userLanguage || 'en';
+var browser_lang0 = browser_lang.split('-')[0];
+if (!langNames[browser_lang] && langNames[browser_lang0]) browser_lang = browser_lang0;
 var user_lang = readCookie('user_lang') || browser_lang;
 var lang;
 for (lang = 0; lang < langList.length; lang++)
