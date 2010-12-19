@@ -250,6 +250,7 @@ var twitterAPI = 'http://api.twitter.com/1/';
 var myname = null;		// 自ユーザ名
 var myid = null;		// 自ユーザID
 var last_user = null;	// user TLに表示するユーザ名
+var last_user_info = null;	// user TLに表示するユーザ情報(TLから切替時のキャッシュ)
 // 設定値
 var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) || 60;
@@ -289,6 +290,7 @@ var users_xds = [];
 var auth_ele = null;
 var update_ele = null;
 var update_ele2 = null;
+var relation_ele = null;
 var reply_ele = null;
 var reply_ele2 = null;
 var direct_ele1 = null;
@@ -346,6 +348,7 @@ function twAuth(a) {
 	}
 	if (!myname || myname != a.screen_name) {
 		myname = last_user = a.screen_name;
+		last_user_info = a;
 		myid = a.id;
 		writeCookie('access_user', myname+'|'+myid, 3652);
 		$("user").innerHTML = last_user;
@@ -688,7 +691,7 @@ function makeHTML(tw, no_name, pid) {
 			(t.user.url ? '<a target="_blank" href="'+t.user.url+'" onclick="return link(this);">' : '') +
 			'<img class="uicon" src="' + t.user.profile_image_url + '">' + (t.user.url ? '</a>' : '') +
 			//名前
-			'<a href="' + twitterURL + un + '" onClick="switchUser(\'' + un + '\');return false"><span class="uid">' + un + '</span>' +
+			'<a href="' + twitterURL + un + '" onClick="switchUserTL(this);return false"><span class="uid">' + un + '</span>' +
 			 /*プロフィールの名前*/ (t.user.name!=un ? '<span class="uname">('+insertPDF(t.user.name)+')</span>' : '') + '</a>'
 		: '') +
 		 /* protected? */ (t.user.protected ? '<img alt="lock" id="lock-' + id + '" class="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
@@ -702,7 +705,7 @@ function makeHTML(tw, no_name, pid) {
 			}).replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//Retweet情報
 		' <span class="rtinfo">' +
-		(!display_as_rt && rt ? "<img src=\"images/rt.png\" alt=\"RT\">by <img src=\""+tw.user.profile_image_url+"\" alt=\""+tw.user.screen_name+"\" class=\"rtuicon\"><a href=\""+twitterURL+tw.user.screen_name+"\" onclick=\"switchUser('" + tw.user.screen_name + "');return false\">" + tw.user.screen_name + "</a> " :'') + '</span>' +
+		(!display_as_rt && rt ? "<img src=\"images/rt.png\" alt=\"RT\">by <img src=\""+tw.user.profile_image_url+"\" alt=\""+tw.user.screen_name+"\" class=\"rtuicon\"><a href=\""+twitterURL+tw.user.screen_name+"\" onclick=\"switchUserTL(this, true);return false\">" + tw.user.screen_name + "</a> " :'') + '</span>' +
 		//日付
 		' <span class="utils">' +
 		'<span class="prop"><a class="date" target="twitter" href="'+twitterURL+(t.d_dir ? '#!/messages' : un+'/statuses/'+id2)+'">' + dateFmt(t.created_at) + '</a>' +
@@ -772,9 +775,9 @@ function twUserInfo(user) {
 	elem.innerHTML = makeUserInfoHTML(user);
 	callPlugins("newUserInfoElement", elem, user);
 	if (myname != user.screen_name) {
-		update_ele2 = loadXDomainScript(twitterAPI + 'friendships/show.json' +
+		relation_ele = loadXDomainScript(twitterAPI + 'friendships/show.json' +
 					'?source_screen_name=' + myname + '&target_id=' + user.id +
-					'&suppress_response_codes=true&callback=twRelation', update_ele2);
+					'&suppress_response_codes=true&callback=twRelation', relation_ele);
 	}
 }
 // ユーザ情報にフォロー関係を表示
@@ -784,7 +787,7 @@ function twRelation(rel) {
 	elem.innerHTML += '<input type="button" value="' + _(source.following ? 'Remove $1' : 'Follow $1', last_user) +
 					'" onClick="follow('+!source.following+')">';
 	if (source.followed_by)
-		$("profile").innerHTML += "<br><b>" + _('$1 is following you!', rel.relationship.target.screen_name)+'</b>';
+		$("profile").innerHTML += "<br><span class=\"following_you\">" + _('$1 is following you!', rel.relationship.target.screen_name)+'</span>';
 	callPlugins("newUserRelationship", elem, rel);
 }
 // ダイレクトメッセージ一覧の受信
@@ -904,7 +907,7 @@ function twOldReply(tw) {
 }
 function twShow2(tw) {
 	var user_info = $("user_info");
-	if (tw.error && tw.error == "Not authorized" && !!user_info && !fav_mode) {
+	if (tw.error && tw.error == "Not authorized" && !!user_info && !fav_mode && user_info.innerHTML == '') {
 		update_ele2 = loadXDomainScript(twitterAPI + 'users/show.json?screen_name=' + last_user +
 			'&suppress_response_codes=true&callback=twUserInfo', update_ele2);
 		return;
@@ -917,7 +920,7 @@ function twShow2(tw) {
 		$("tw2c").appendChild(nextButton('next'));
 		get_next_func = getNextFuncCommon;
 	}
-	if (tw[0] && selected_menu.id == "user" && last_user.indexOf(',') < 0 && !fav_mode)
+	if (tw[0] && selected_menu.id == "user" && last_user.indexOf(',') < 0 && !fav_mode && user_info.innerHTML == '')
 		twUserInfo(tw[0].user);
 }
 function twShow3(tw) {
@@ -1134,8 +1137,19 @@ function switchReply() {
 		switchTo("reply");
 	}
 }
+function switchUserTL(div, rt) {
+	var tw = rt ? div.parentNode.parentNode.tw : div.parentNode.tw;
+	if (!(rt || display_as_rt))
+		tw = tw.retweeted_status || tw;
+	if (tw.user.description)
+		last_user_info = tw.user;
+	switchUser(tw.user.screen_name);
+}
 function switchUser(user) {
-	if (!user) user = last_user;
+	if (!user) {
+		user = last_user;
+		last_user_info = null;
+	}
 	last_user = user;
 	$("user").innerHTML = user;
 	switchTo("user");
@@ -1143,6 +1157,8 @@ function switchUser(user) {
 	var users = user.split(',');
 	if (users.length == 1) {
 		$("tw2h").innerHTML = "<div id=\"user_info\"></div>";
+		if (last_user_info && last_user_info.screen_name == user)
+			twUserInfo(last_user_info);
 		update_ele2 = loadXDomainScript(twitterAPI + 'statuses/user_timeline.json' +
 			'?count=' + max_count_u + '&screen_name=' + user + 
 			'&include_rts=true&suppress_response_codes=true&callback=twShow2', update_ele2);
