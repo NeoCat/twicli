@@ -61,8 +61,8 @@ form { margin-bottom: 0; }
 #counter-p2 { border-top: solid 9px transparent; width: 0; height: 0; border-left: solid 5px #99f; float: left; }
 #counter { font-family: Georgia; font-size: 11pt; font-weight: bold; font-style: italic; background-color: #99f; color: white; height: 1.1em; text-align: center; padding: 3px 0; clear: left; }
 
-.thumbnail-image { border: solid 2px white; width: 30px; height: auto; }
-.thumbnail-image:hover { border: solid 2px white; width: auto; }
+.thumbnail-image { border: solid 2px white; max-width: 32px; -moz-transition: all 0.3s ease; -webkit-transition: all 0.3s ease; transition: all 0.2s ease; -o-transition: all 0.3s ease; }
+.thumbnail-image:hover { border: solid 2px white; max-width: 200px; }
 .thumbnail-link { border: solid 1px grey; display: block; float: right; }
 
 @media screen and (max-device-width: 480px) {
