@@ -23,7 +23,7 @@ registerPlugin({
 			var id = RegExp.$1;
 			addThumbnail(elem, 'http://image.movapic.com/pic/t_' + id + '.jpeg', url);
 		}
-		else if (url.match(/^http:\/\/f\.hatena\.ne\.jp\/([\w-]+)\/(\d{8})(\w+)$/)) {
+		else if (url.match(/^http:\/\/f\.hatena\.ne\.jp\/([\w\-]+)\/(\d{8})(\w+)$/)) {
 			var user = RegExp.$1;
 			var date = RegExp.$2;
 			var id = RegExp.$3;
@@ -32,7 +32,7 @@ registerPlugin({
 					'/' + date + '/' + date + id + '_120.jpg',
 					url);
 		}
-		else if (url.match(/^(http:\/\/[\w-]+\.tumblr\.com\/)post\/(\d+)/)) {
+		else if (url.match(/^(http:\/\/[\w\-]+\.tumblr\.com\/)post\/(\d+)/)) {
 			var link = url;
 			xds.load(RegExp.$1+'api/read/json?id='+RegExp.$2,
 					function(x) {
@@ -67,7 +67,7 @@ registerPlugin({
 		else if (url.match(/^(http:\/\/gyazo.com\/\w+\.png)/)) {
 			addThumbnail(elem, 'http://gyazo-thumbnail.appspot.com/thumbnail?url='+url, link);
 		}
-		else if (url.match(/^http:\/\/(?:www\.youtube\.com\/watch\?.*v=|youtu\.be\/)([\w-]+)/)) {
+		else if (url.match(/^http:\/\/(?:www\.youtube\.com\/watch\?.*v=|youtu\.be\/)([\w\-]+)/)) {
 			var id = RegExp.$1;
 			addThumbnail(elem, 'http://i.ytimg.com/vi/' + id + '/default.jpg', url);
 		}
@@ -81,7 +81,7 @@ registerPlugin({
 });
 
 function flickrPhotoID(url) {
-	if (url.match(/^http:\/\/(?:www\.flickr\.com\/photos\/[\w-@]+\/(\d+)|flic\.kr\/p\/(\w+)$)/))
+	if (url.match(/^http:\/\/(?:www\.flickr\.com\/photos\/[\w\-@]+\/(\d+)|flic\.kr\/p\/(\w+)$)/))
 		return RegExp.$2 ? decodeBase58(RegExp.$2) : RegExp.$1;
 }
 function decodeBase58(snipcode) {
