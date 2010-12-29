@@ -99,8 +99,8 @@ function addThumbnail(elem, src, url) {
 	var thm = document.createElement('img');
 	thm.src = src;
 	thm.className = 'thumbnail-image';
-	thm.ontouchstart = function(){ thm.style.width = 'auto'; };
-	thm.ontouchend   = function(){ thm.style.width = '30px'; };
+	thm.ontouchstart = function(){ thm.style.maxWidth = '200px'; };
+	thm.ontouchend   = function(){ thm.style.maxWidth = '30px'; };
 	var a = document.createElement('a');
 	a.href = url;
 	a.target = 'twitter';
