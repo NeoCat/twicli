@@ -966,7 +966,7 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 	var replies = [];
 	for (var i = len-1; i >= 0; i--) {
 		if (!tw[i]) continue;
-		var id = tw[i].id;
+		var id = tw[i].id_str || tw[i].id;
 		var duplication = $(tw_node.id + "-" + id);
 		if (duplication) {
 			if (duplication.weak)
