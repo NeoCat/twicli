@@ -192,6 +192,6 @@ registerPlugin({
 	regexp_switched: function(tab) {
 		if (!tab.info || tab.info.indexOf('list#') != 0) return;
 		var a = tab.info.substr(5);
-		$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: green" href="javascript:void(twlGetListStatus(\''+a+'\'))">'+_('get all tweets')+'</a></div>';
+		$('tw2h').innerHTML = '<div class="tabcmd"><a href="javascript:void(twlGetListStatus(\''+a+'\'))">'+_('get all tweets')+'</a></div>';
 	}
 });
