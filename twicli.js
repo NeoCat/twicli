@@ -606,7 +606,7 @@ function popup_hide() {
 function retweetStatus() {
 	if (!popup_id) return false;
 	if ($('lock-' + popup_id)) {
-		error("This tweet is protected.");
+		error(_("This tweet is protected."));
 		return false;
 	}
 	if (!confirm(_("Retweet to your followers?"))) return false;

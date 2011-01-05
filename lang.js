@@ -45,6 +45,7 @@ var langResources = {
 	'Are you sure to logout? You need to re-authenticate twicli at next launch.': ['ログアウトしてもよろしいですか? 次回起動時には再認証が必要になります。','确定要注销？下次启动的时候需要重新进行认证。'],
 	'Retweet to your followers?': ['あなたのフォロワーにこのツイートをRT(リツイート)してもよろしいですか?'],
 	'This tweet is protected; Are you sure to retweet?': ['このツイートはプロテクトされています。本当にRTしますか?','该发言已被用户锁定。你确定要RT吗？'],
+	'This tweet is protected.': ['このツイートはプロテクトされています。', '该发言已被用户锁定。'],
 	'Are you sure to delete this tweet?': ['このツイートを削除してもよろしいですか?','确定要删除该发言？'],
 	'Are you sure to remove $1?': ['本当に $1 をリムーブしますか?','确定要取消关注$1吗？'],
 	'An external plugin is specified. This plugin can fully access to your account.\nAre you sure to load this?': ['外部プラグインが指定されています。このプラグインはあなたのアカウントに自由にアクセス可能になります。本当にロードしてもよろしいですか?','你欲加载外部地址上的插件。这个插件将自由访问你的帐号信息。确认加载？']
