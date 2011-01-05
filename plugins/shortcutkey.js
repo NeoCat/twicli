@@ -1,12 +1,12 @@
 var shortcutkey_plugin = {
 	selected_div: null, // 選択中のtweet
-	last_selected_div: null, // 前回選択されたtweet(オーバーレイ表示は除く)
+	last_selected_div_id: null, // 前回選択されたtweetのdiv ID(オーバーレイ表示は除く)
 	key_handled: false, // // 他プラグインがkeydownを処理済みか：true時はイベント処理しない
 	
 	// tweetの選択
 	selectTweet: function(ev, div) {
 		if (shortcutkey_plugin.selected_div && shortcutkey_plugin.selected_div.id.indexOf('reps-') != 0)
-			shortcutkey_plugin.last_selected_div = shortcutkey_plugin.selected_div;
+			shortcutkey_plugin.last_selected_div_id = shortcutkey_plugin.selected_div.id;
 		shortcutkey_plugin.deselectTweet();
 		div = div || this;
 		div.className += " selected";
@@ -205,8 +205,8 @@ var shortcutkey_plugin = {
 	},
 	closeRep: function() {
 		if (this.selected_div && this.selected_div.id.indexOf('reps-') == 0) {
-			if (this.last_selected_div)
-				this.selectTweet(null, this.last_selected_div);
+			if (this.last_selected_div_id && $(this.last_selected_div_id))
+				this.selectTweet(null, $(this.last_selected_div_id));
 			else
 				this.deselectTweet();
 		}
