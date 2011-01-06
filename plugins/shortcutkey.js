@@ -145,7 +145,7 @@ var shortcutkey_plugin = {
 				if (!selected) return true;
 					switchUserTL(selected);
 				return false;
-			case 219: // @ : 返信(Reply)
+			case 69: // e : 返信(rEply)
 				if (!selected) return true;
 				replyTo(user, id);
 				return false;
