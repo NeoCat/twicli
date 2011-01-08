@@ -355,9 +355,8 @@ if (location.search.match(/[?&]status=(.*?)(?:&|$)/)) {
 function twAuth(a) {
 	if (a.error) {
 		alert(a.error);
-		if (a.error == "Incorrect signature" || a.error == "Could not authenticate with OAuth.") {
-			location.href = 'oauth/index.html';
-		}
+		if (a.error == "Incorrect signature" || a.error.indexOf("Could not authenticate") >= 0)
+			logout();
 		return;
 	}
 	if (!myname || myname != a.screen_name) {
@@ -372,6 +371,7 @@ function twAuth(a) {
 		$("option").innerHTML += '<div id="geotag"><a href="javascript:toggleGeoTag()"><img align="left" id="geotag-img" src="images/earth_off.png">'+_('GeoTagging')+' <span id="geotag-st">OFF</span></a><small id="geotag-info"></small></div>';
 		setFstHeight(min_fst_height, true);
 	}
+	callPlugins('auth');
 }
 function auth() {
 	var name = readCookie('access_user');
@@ -388,6 +388,7 @@ function auth() {
 function logout() {
 	if (!confirm(_('Are you sure to logout? You need to re-authenticate twicli at next launch.')))
 		return;
+	callPlugins('logout');
 	deleteCookie('access_token');
 	deleteCookie('access_secret');
 	deleteCookie('access_user');
@@ -1240,10 +1241,10 @@ function switchDirect() {
 }
 function switchMisc() {
 	switchTo("misc");
-	$("tw2h").innerHTML = '<br><a target="twitter" href="index.html"><b>twicli</b></a> : A browser-based Twitter client<br><small>Copyright &copy; 2008-2010 NeoCat</small><hr class="spacer">' +
-					'<form onSubmit="switchUser($(\'user_id\').value); return false;">'+
+	$("tw2h").innerHTML = '<br><a id="clientname" target="twitter" href="index.html"><b>twicli</b></a> : A browser-based Twitter client<br><small id="copyright">Copyright &copy; 2008-2010 NeoCat</small><hr class="spacer">' +
+					'<form id="switchuser" onSubmit="switchUser($(\'user_id\').value); return false;">'+
 					_('show user info')+' : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="images/go.png"></form>' +
-					'<a href="javascript:logout()"><b>'+_('Log out')+'</b></a><hr class="spacer">' +
+					'<a id="logout" href="javascript:logout()"><b>'+_('Log out')+'</b></a><hr class="spacer">' +
 					'<div id="pref"><a href="javascript:togglePreps()">▼<b>'+_('Preferences')+'</b></a>' +
 					'<form id="preps" onSubmit="setPreps(this); return false;" style="display: none;">' +
 					_('language')+': <select name="user_lang">'+(['en'].concat(langList)).map(function(x){
