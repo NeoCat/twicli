@@ -28,15 +28,6 @@ var shortcutkey_plugin = {
 		ev = ev || window.event;
 		if (ev.shiftKey || ev.altKey || ev.ctrlKey || ev.metaKey || ev.modifiers) return true;
 		var code = ev.keyCode || ev.charCode;
-		if (shortcutkey_plugin.event_date_check) {
-			var date = ev.timeStamp || new Date();
-			if (shortcutkey_plugin.last_event_date && date - shortcutkey_plugin.last_event_date < 30) {
-				if (ev.type == 'keypress' && (code == 77+32 || code == 81+32 || code == 69+32))
-					return false;
-				return true;
-			}
-			shortcutkey_plugin.last_event_date = date;
-		}
 		//$("fst").value = code;
 		if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA') {
 			// inputフォーカス時はesc以外をパススルー
@@ -45,6 +36,15 @@ var shortcutkey_plugin = {
 				return false;
 			}
 			return true;
+		}
+		if (shortcutkey_plugin.event_date_check) { // 連続する30ms以内のイベントは無視
+			var date = ev.timeStamp || new Date();
+			if (shortcutkey_plugin.last_event_date && date - shortcutkey_plugin.last_event_date < 30) {
+				if (ev.type == 'keypress' && (code == 77+32 || code == 81+32 || code == 69+32))
+					return false;
+				return true;
+			}
+			shortcutkey_plugin.last_event_date = date;
 		}
 		
 		var tw = null;
