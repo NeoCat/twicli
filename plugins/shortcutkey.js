@@ -14,7 +14,7 @@ var shortcutkey_plugin = {
 		div.className += " selected";
 		shortcutkey_plugin.selected_div = div;
 		if (div.id.indexOf('reps-') != 0)
-			scrollToDiv(div, cumulativeOffset(div.parentNode.parentNode)[1]);
+			scrollToDiv(div, $('control').clientHeight+1);
 	},
 	// tweetの選択解除
 	deselectTweet: function() {
@@ -27,14 +27,16 @@ var shortcutkey_plugin = {
 	shortCutKeyDown: function(ev) {
 		ev = ev || window.event;
 		if (ev.shiftKey || ev.altKey || ev.ctrlKey || ev.metaKey || ev.modifiers) return true;
-		var date = ev.timeStamp || new Date();
-		if (this.event_date_check && this.last_event_date && date - this.last_event_date < 30) {
-			if (ev.type == 'keypress' && (ev.keyCode == 77+32 || ev.keyCode == 81+32 || ev.keyCode == 69+32))
-				return false;
-			return true;
+		var code = ev.keyCode || ev.charCode;
+		if (shortcutkey_plugin.event_date_check) {
+			var date = ev.timeStamp || new Date();
+			if (shortcutkey_plugin.last_event_date && date - shortcutkey_plugin.last_event_date < 30) {
+				if (ev.type == 'keypress' && (code == 77+32 || code == 81+32 || code == 69+32))
+					return false;
+				return true;
+			}
+			shortcutkey_plugin.last_event_date = date;
 		}
-		this.last_event_date = date;
-		var code = ev.keyCode;
 		//$("fst").value = code;
 		if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA') {
 			// inputフォーカス時はesc以外をパススルー
@@ -227,6 +229,10 @@ var shortcutkey_plugin = {
 	init: function() {
 		if (navigator.userAgent.indexOf('Opera') >= 0)
 			document.onkeypress = this.shortCutKeyDown;
+		else if (navigator.userAgent.indexOf('Firefox') >= 0) {
+			document.onkeydown = document.onkeypress = this.shortCutKeyDown;
+			this.event_date_check = true;
+		}
 		else
 			document.onkeydown = this.shortCutKeyDown;
 	}
