@@ -72,7 +72,7 @@ function saveAccessToken(f) {
 	if (key.match(/^oauth_token=([^&]+)&oauth_token_secret=([^&]+)/)) {
 		writeCookie('access_token', RegExp.$1);
 		writeCookie('access_secret', RegExp.$2);
-		setTimeout(function(){ location.href = "../twicli.html"; }, 0);
+		setTimeout(function(){ location.href = "../twicli.html"; }, 2000);
 	} else {
 		alert("Invalid format. Please reload and retry the steps.");
 		location.href = "oauth.html";
