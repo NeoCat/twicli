@@ -177,7 +177,7 @@ var shortcutkey_plugin = {
 			case 68+lower: // d : tweetを削除(Delete)
 				if (!selected) return true;
 				if (selected_menu.id != "direct" && user != myname) return true;
-				deleteStatus(selected, id);
+				deleteStatus(id);
 				return false;
 			case 84+lower: // t : 翻訳(Translate)
 				if (!selected) return true;
