@@ -697,7 +697,8 @@ function insertPDF(str) {
 function makeHTML(tw, no_name, pid) {
 	var rt = tw.retweeted_status;
 	var rs = tw.retweeted_status || tw;
-	var t = (display_as_rt || fav_mode == 2 || fav_mode == 3) ? tw : rs;
+	var rt_mode = !!(display_as_rt || fav_mode == 2 || fav_mode == 3);
+	var t = rt_mode ? tw : rs;
 	var text = t.text;
 	var un = t.user.screen_name;
 	if (display_as_rt || fav_mode == 2 || fav_mode == 3)
@@ -713,7 +714,7 @@ function makeHTML(tw, no_name, pid) {
 			(t.user.url ? '<a target="_blank" href="'+t.user.url+'" onclick="return link(this);">' : '') +
 			'<img class="uicon" src="' + t.user.profile_image_url + '">' + (t.user.url ? '</a>' : '') +
 			//名前
-			'<a href="' + twitterURL + un + '" onClick="switchUserTL(this.parentNode);return false"><span class="uid">' + un + '</span>' +
+			'<a href="' + twitterURL + un + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false"><span class="uid">' + un + '</span>' +
 			 /*プロフィールの名前*/ (t.user.name!=un ? '<span class="uname">('+insertPDF(t.user.name)+')</span>' : '') + '</a>'
 		: '') +
 		 /* protected? */ (t.user.protected ? '<img alt="lock" id="lock-' + eid + '" class="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
