@@ -722,7 +722,14 @@ function makeHTML(tw, no_name, pid) {
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text-" + eid + "\" class=\"status\">" +
 		text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+|[@＠]([\/\w-]+)/g, function(_,u){
-				if (!u) return "<a class=\"link\" target=\"_blank\" href=\""+_+"\" onclick=\"return link(this);\">"+_+"</a>";
+				if (!u) {
+					var paren = '';
+					if (_.substr(_.length-1) == ')') { // 末尾の")"はURLに含めない
+						_ = _.substr(0, _.length-1);
+						paren = ')';
+					}
+					return "<a class=\"link\" target=\"_blank\" href=\""+_+"\" onclick=\"return link(this);\">"+_+"</a>"+paren;
+				}
 				if (u.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+u+"\" onclick=\"return link(this);\">"+_+"</a>";
 				return "<a href=\""+twitterURL+u+"\" onClick=\"switchUser('"+u+"'); return false;\" >"+_+"</a>";
 			}).replace(/\r?\n|\r/g, "<br>") + '</span>' +
