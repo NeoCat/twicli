@@ -56,13 +56,8 @@ registerPlugin({
 					},
 					'jsoncallback');
 		}
-		else if (url.match(/^(http:\/\/tweetphoto.com\/\d+)/)) {
-			var _url = url;
-			xds.load('http://TweetPhotoAPI.com/api/TPAPI.svc/jsonp/metadatafromurl?url='+RegExp.$1,
-					function(x) {
-						if (!x.ThumbnailUrl) return;
-						addThumbnail(elem, x.ThumbnailUrl, _url);
-					});
+		else if (url.match(/^(http:\/\/plixi.com\/p\/\d+)/)) {
+			addThumbnail(elem, 'http://api.plixi.com/api/TPAPI.svc/imagefromurl?size=thumbnail&url='+url);
 		}
 		else if (url.match(/^(http:\/\/gyazo.com\/\w+\.png)/)) {
 			addThumbnail(elem, 'http://gyazo-thumbnail.appspot.com/thumbnail?url='+url, url);
