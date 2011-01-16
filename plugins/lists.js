@@ -108,6 +108,7 @@ function twlGetListStatus(list) {
 	last_list = list.split("/");
 	$("loading").style.display = "block";
 	twl_page = 0;
+	if (twl_update_timer) clearInterval(twl_update_timer);
 	if (selected_menu.id == "user") fav_mode = 9;
 	$("tw2c").innerHTML = "";
 	twl_update_timer = setInterval(function(){twlGetListStatusUpdate(list)}, 1000*Math.max(updateInterval, 30));
