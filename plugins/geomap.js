@@ -17,7 +17,6 @@ registerPlugin({
 		}
 		if (!geomap) return alert("geomap not found!!");
 		
-		var plugin = this;
 		geomap.onclick = function() {
 			display_map(rs.geo.coordinates, geomap);
 			return false;
@@ -27,10 +26,12 @@ registerPlugin({
 
 function display_map(coordinates, elem) {
 	rep_top = Math.max(cumulativeOffset(elem)[1] + 20, $("control").offsetHeight);
-	$('reps').innerHTML = '<div id="map_canvas" style="width: 100%; height: 250px;">';
+	var win_h = window.innerHeight || document.documentElement.clientHeight;
+	$('reps').innerHTML = '<div id="map_canvas" style="width: 100%; height: '+Math.ceil(win_h*0.67)+'px;">';
+	$('rep').style.top = rep_top;
 	$('rep').style.display = "block";
 	make_geo_map(coordinates);
-	$('rep').style.top = rep_top;
+	scrollToDiv($('rep'));
 	user_pick1 = user_pick2 = null;
 }
 

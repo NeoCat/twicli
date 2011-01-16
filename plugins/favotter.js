@@ -10,15 +10,15 @@ var twFavPlugin = {
 		twFavPlugin.fav_update = loadXDomainScript('http://twicli.neocat.jp/nr_favs.js?seq='+(seq++), twFavPlugin.fav_update);
 		setTimeout(twFavPlugin.updateFavs, 15*60*1000);
 	},
-	newMessageElement: function(ele, tw) {
+	newMessageElement: function(ele, tw, pid) {
 		var fele = document.createElement("a");
 		var id = tw.id_str || (""+tw.id);
-		fele.id = "nrFav" + id;
+		fele.id = "nrFav-" + pid + '-' + id;
+		fele.className = "nrFav";
 		fele.href = "http://favotter.net/status.php?id=" + id;
 		fele.target = "favotter";
-		fele.style.backgroundColor = "#3fc";
 		if (this.favs[id]) {
-			fele.innerHTML = '<small>[fav:' + this.favs[id] + ']</small>';
+			fele.innerHTML = '[fav:' + this.favs[id] + ']';
 		}
 		ele.insertBefore(fele, ele.childNodes[4]);
 	},
@@ -32,10 +32,12 @@ registerPlugin(twFavPlugin);
 
 function favEntries(favs) {
 	twFavPlugin.favs = favs;
-	for (x in favs) {
-		var target = $('nrFav'+x);
-		if (target)
-			target.innerHTML = '<small>[fav:' + favs[x] + ']</small>';
+	for (var x in favs) {
+		for (var i = 0; i < 3; i++) {
+			var target = $('nrFav-'+['tw-','re-','tw2c-'][i]+x);
+			if (target)
+				target.innerHTML = '[fav:' + favs[x] + ']';
+		}
 	}
 }
 

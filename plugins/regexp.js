@@ -23,8 +23,10 @@ function execRegexp(tw, exp) {
 function switchRegexp(tab) {
 	var pickup = new Array();
 	switchTo(tab.id);
-	if (!tab.no_close)
-		$('tw2h').innerHTML = '<div style="background-color: #ccc; text-align: right"><a style="size: small; color: red" href="javascript:closeRegexp(\''+tab.name+'\')">[x] '+_('remove tab')+'</a></div>';
+	if (!tab.no_close) {
+		$('tw2h').innerHTML = '<div class="tabcmd tabclose"><a id="regexp-closetab" style="size: small; color: red" href="#">[x] '+_('remove tab')+'</a></div>';
+		$('regexp-closetab').onclick = function() { closeRegexp(tab); return false; };
+	}
 	// メインTLから該当する発言を抽出
 	var tl = $('tw').childNodes;
 	for (var i = 0; i < tl.length; i++) {
@@ -61,7 +63,7 @@ function closeRegexp(tab) {
 	var list = pickup_regexp.split(/[\r\n]/);
 	var list2 = [];
 	for (var id = 0; id < list.length; id++)
-		if (list[id].split(':')[0] != tab)
+		if (list[id].split(':')[0] != tab.name)
 			list2.push(list[id]);
 	setRegexp(list2.join("\n"));
 	switchTL();
