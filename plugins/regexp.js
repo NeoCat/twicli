@@ -32,6 +32,7 @@ function switchRegexp(tab) {
 		$('regexp-closetab').onclick = function() { closeRegexp(tab); return false; };
 	}
 	// TLおよび@タブから該当する発言を抽出
+	var duplication = {};
 	for (var t = 0; t < 2; t++) {
 		var tl = $(['tw','re'][t]).childNodes;
 		for (var i = 0; i < tl.length; i++) {
@@ -40,6 +41,8 @@ function switchRegexp(tab) {
 				var target = tl2[j];
 				for (var k = 0; k < tab.pickup.length; k++) {
 					if (target.tw && execRegexp(target.tw, tab.pickup[k])) {
+						if (duplication[target.tw.id_str]) continue;
+						duplication[target.tw.id_str] = true;
 						pickup.push(target.tw);
 						break;
 					}
