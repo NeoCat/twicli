@@ -7,6 +7,7 @@ var tws_page = 0;
 var tws_rpp = 50; /* results per page */
 var tws_update_timer = null;
 var tws_list = (readCookie('twicli_search_list') || "").split(/\r?\n/);
+var tws_API = 'http://search.twitter.com/search.json';
 tws_list.uniq();
 writeCookie('twicli_search_list', tws_list.join("\n"), 3652);
 function twsSearch(qn, no_switch) {
@@ -39,14 +40,14 @@ function twsSearch(qn, no_switch) {
 	$('tw2h').innerHTML = '<div class="tabcmd tabclose"><a id="tws-closetab" href="#">[x] '+_('remove tab')+'</a></div>';
 	$('tws-closetab').onclick = function(){ closeSearchTab(myid); return false; };
 	tws_page = 0;
-	update_ele2 = loadXDomainScript('http://search.twitter.com/search.json?seq=' + (seq++) +
+	update_ele2 = loadXDomainScript(tws_API + '?seq=' + (seq++) +
 							'&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp +
 							'&callback=twsSearchShow', update_ele2);
 	$("loading").style.display = "block";
 	return false;
 }
 function twsSearchUpdate(q) {
-	update_ele2 = loadXDomainScript('http://search.twitter.com/search.json?seq=' + (seq++) +
+	update_ele2 = loadXDomainScript(tws_API + '?seq=' + (seq++) +
 							'&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp +
 							'&callback=twsSearchShow2', update_ele2);
 	$("loading").style.display = "block";
@@ -84,7 +85,7 @@ function twsSearchShow(res, update) {
 		var next = nextButton('next-search');
 		$("tw2c").appendChild(next);
 		get_next_func = function(){
-			update_ele2 = loadXDomainScript('http://search.twitter.com/search.json' + res.next_page +
+			update_ele2 = loadXDomainScript(tws_API + res.next_page +
 								'&seq=' + (seq++) + '&rpp=' + tws_rpp +
 								'&callback=twsSearchShow', update_ele2);
 		}
