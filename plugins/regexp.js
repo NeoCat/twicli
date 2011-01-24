@@ -136,8 +136,8 @@ registerPlugin({
 	newMessageElement: function(s, tw, twNodeId) {
 		if (twNodeId == 'tw2c' && selected_menu.id.substr(0,7) == 'pickup-' && !selected_menu.no_close)
 			return; // 抽出タブ表示中は処理しない(listsは除く)
-		if (twNodeId == 'tw2c' && selected_menu.id == 'direct')
-			return; // Direct Messageは処理しない
+		if (twNodeId == 'tw2c' && (selected_menu.id == 'direct' || fav_mode))
+			return; // Direct Message, Fav, User一覧は処理しない
 		for (var i = 0; i < pickup_tab_list.length; i++) {
 			var tab = pickup_tab_list[i];
 			var match = false;
