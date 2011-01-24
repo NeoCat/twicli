@@ -191,10 +191,18 @@ var shortcutkey_plugin = {
 				return false;
 			case 79+lower: // o : リンクを開く(Open links)
 				if (!selected) return true;
-				tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, function(url){
-					window.open(url, '_blank');
-				});
-
+				for (var i = 0; i < selected.childNodes.length; i++) {
+					var target = selected.childNodes[i]
+					if (target.id && target.id.substr(0,5) == 'text-') {
+						for (i = 0; target.childNodes.length; i++) {
+							var target2 = target.childNodes[i];
+							if (target2.tagName == 'A') {
+								if (link(target2)) window_open(target2.href, "_blank");
+							}
+						}
+						break;
+					}
+				}
 				return false;
 			case 77+lower: // m : 発言欄へ移動(Move to textarea)
 				$('fst').focus();
