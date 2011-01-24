@@ -1342,18 +1342,19 @@ function init() {
 	setTimeout(auth, 0);
 }
 // プラグイン
+var plugin_name;
 function registerPlugin(obj) {
-	plugins.push(obj);
+	plugins.push([plugin_name,obj]);
 }
 function callPlugins(name) {
 	var args = [].slice.apply(arguments);
 	args.shift();
-	for (var i in plugins)
-		if (typeof plugins[i][name] == "function")
+	for (var i = 0; i < plugins.length; i++)
+		if (typeof plugins[i][1][name] == "function")
 			try {
-				plugins[i][name].apply(plugins[i], args);
+				plugins[i][1][name].apply(plugins[i][1], args);
 			} catch (e) {
-				alert(_('Plugin error')+': ' + e);
+				alert(_('Plugin error')+'('+plugins[i][0]+'): ' + e);
 			}
 }
 function loadPlugins() {
@@ -1361,6 +1362,7 @@ function loadPlugins() {
 		var ps = pluginstr.split("\n");
 		var pss = "";
 		for (var i = 0; i < ps.length; i++) {
+			pss += '<scr'+'ipt type="text/javascript">plugin_name="'+ps[i].replace(/[\\\"]/g,'')+'"</scr'+'ipt>';
 			pss += '<scr'+'ipt type="text/javascript" src="' + (ps[i].indexOf("/") >= 0 ? '' : 'plugins/') + ps[i] + '"></scr'+'ipt>';
 		}
 		document.write(pss);
