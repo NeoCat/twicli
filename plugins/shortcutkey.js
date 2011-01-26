@@ -197,7 +197,7 @@ var shortcutkey_plugin = {
 						for (i = 0; target.childNodes.length; i++) {
 							var target2 = target.childNodes[i];
 							if (target2.tagName == 'A' && target2.innerHTML.substr(0,4) == 'http') {
-								if (link(target2)) window_open(target2.href, "_blank");
+								if (link(target2)) window.open(target2.href, "_blank");
 							}
 						}
 						break;
