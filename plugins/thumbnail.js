@@ -62,6 +62,9 @@ registerPlugin({
 		else if (url.match(/^http:\/\/img.ly\/(\w+)/)) {
 			addThumbnail(elem, 'http://img.ly/show/thumb/'+RegExp.$1, url);
 		}
+		else if (url.match(/^http:\/\/ow.ly\/i\/(\w+)/)) {
+			addThumbnail(elem, 'http://static.ow.ly/photos/thumb/'+RegExp.$1+".jpg", url);
+		}
 		else if (url.match(/^(http:\/\/gyazo.com\/\w+\.png)/)) {
 			addThumbnail(elem, 'http://gyazo-thumbnail.appspot.com/thumbnail?url='+url, url);
 		}
@@ -103,6 +106,7 @@ function addThumbnail(elem, src, url) {
 	a.href = url;
 	a.target = 'twitter';
 	a.className = 'thumbnail-link';
+	a.onclick = function(){ return link(a); };
 	a.appendChild(thm);
 	elem.insertBefore(a, elem.childNodes[2]);
 }
