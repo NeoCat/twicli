@@ -25,7 +25,7 @@ function execRegexp(tw, exp) {
 
 // タブ切り替え処理
 function switchRegexp(tab) {
-	var pickup = new Array();
+	var pickup = [[],[]];
 	switchTo(tab.id);
 	if (!tab.no_close) {
 		$('tw2h').innerHTML = '<div class="tabcmd tabclose"><a id="regexp-closetab" style="size: small; color: red" href="#">[x] '+_('remove tab')+'</a></div>';
@@ -43,15 +43,21 @@ function switchRegexp(tab) {
 					if (target.tw && execRegexp(target.tw, tab.pickup[k])) {
 						if (duplication[target.tw.id_str]) continue;
 						duplication[target.tw.id_str] = true;
-						pickup.push(target.tw);
+						pickup[t].push(target.tw);
 						break;
 					}
 				}
 			}
 		}
 	}
-	pickup.sort(function(a,b){ return b.id - a.id });
-	twShow2(pickup);
+	var sorted = [];
+	while (pickup[0].length > 0 || pickup[1].length > 0) {
+		if (!pickup[0][0] || pickup[1][0] && pickup[0][0].id < pickup[1][0].id)
+			sorted.push(pickup[1].shift());
+		else
+			sorted.push(pickup[0].shift());
+	}
+	twShow2(sorted);
 	callPlugins("regexp_switched", tab);
 }
 
