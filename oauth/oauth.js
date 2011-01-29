@@ -321,9 +321,14 @@ OAuth.setProperties(OAuth, // utility functions
     /** The difference between the correct time and my clock. */
     timeCorrectionMsec: 0
 ,
+    lastTimestamp: 0
+,
     timestamp: function timestamp() {
         var t = (new Date()).getTime() + OAuth.timeCorrectionMsec;
-        return Math.floor(t / 1000);
+        t = Math.floor(t / 1000);
+        if (this.lastTimestamp >= t) t = this.lastTimestamp + 1;
+        this.lastTimestamp = t;
+        return t;
     }
 ,
     nonce: function nonce(length) {

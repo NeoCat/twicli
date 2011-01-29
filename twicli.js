@@ -586,7 +586,8 @@ function pickup2() {
 // ポップアップメニューの初期化
 function popup_init() {
 	var popup_id_list = ['popup_link_user', 'popup_link_status', 'popup_status_delete',
-						'popup_status_retweet', 'popup_status_quote'];
+						'popup_status_retweet', 'popup_status_quote',
+						'upopup_user_block', 'upopup_user_unblock', 'upopup_user_spam'];
 	for (var x = 0; x < popup_id_list.length; x++)
 		$(popup_id_list[x]).innerHTML = _($(popup_id_list[x]).innerHTML);
 }
@@ -611,8 +612,21 @@ function popup_menu(user, id, ele) {
 // ポップアップメニューを非表示
 function popup_hide() {
 	$('popup').style.display = 'none';
+	$('userinfo_popup').style.display = 'none';
 	$('popup_hide').style.display = 'none';
 	popup_user = popup_id = popup_ele = null;
+}
+// ユーザ情報のポップアップメニューを表示
+function userinfo_popup_menu(user, id, ele) {
+	popup_user = user;
+	popup_id = id;
+	callPlugins("userinfo_popup", $('userinfo_popup'), user, id, ele);
+	$('userinfo_popup').style.display = "block";
+	var pos = cumulativeOffset(ele);
+	$('userinfo_popup').style.left = pos[0] <  $('userinfo_popup').offsetWidth - ele.offsetWidth ? 0 : pos[0] - $('userinfo_popup').offsetWidth + ele.offsetWidth;
+	$('userinfo_popup').style.top = pos[1] + 20;
+	$('popup_hide').style.height = Math.max(document.body.scrollHeight, $("tw").offsetHeight+$("control").offsetHeight);
+	$('popup_hide').style.display = "block";
 }
 // 発言のReTweet
 function retweetStatus(id, ele) {
@@ -764,7 +778,9 @@ function makeUserInfoHTML(user) {
 						'<a href="javascript:switchFollower()">' + user.followers_count + '<small>'+_('followers')+'</small></a>' +
 			'<br><a href="javascript:switchStatus()">' + user.statuses_count + '<small>'+_('tweets')+'</small></a> / ' +
 						'<a href="javascript:switchFav()">' + user.favourites_count + '<small>'+_('favs')+'</small></a></b>' +
-			'</td></tr></table><a target="twitter" href="' + twitterURL + user.screen_name + '">[Twitter]</a> '
+			'</td></tr></table>'+
+			'<a class="button upopup" href="#" onClick="userinfo_popup_menu(\'' + user.screen_name + '\',' + user.id + ', this); return false;"><small><small>▼</small></small></a>'+
+			'<a target="twitter" href="' + twitterURL + user.screen_name + '">[Twitter]</a> ';
 }
 // 過去の発言取得ボタン(DOM)生成
 function nextButton(id, p) {
@@ -798,9 +814,23 @@ function setFavIcon(img, id, f) {
 }
 // followとremove
 function follow(f) {
-	if (!f && !confirm(_("Are you sure to remove $1?", last_user))) return;
+	if (!f && !confirm(_("Are you sure to remove $1?", last_user))) return false;
 	enqueuePost(twitterAPI + 'friendships/' + (f ? 'create' : 'destroy') + '/' + last_user + '.xml', switchUser);
 	$("loading").style.display = "block";
+	return false;
+}
+// blockとunblock
+function blockUser(f) {
+	if (f && !confirm(_("Are you sure to block $1?", last_user))) return false;
+	enqueuePost(twitterAPI + 'blocks/' + (f ? 'create' : 'destroy') + '/' + last_user + '.xml', switchUser);
+	$("loading").style.display = "block";
+	return false;
+}
+function reportSpam(f) {
+	if (f && !confirm(_("Are you sure to report $1 as spam?", last_user))) return false;
+	enqueuePost(twitterAPI + 'report_spam.xml?screen_name=' + last_user, switchUser);
+	$("loading").style.display = "block";
+	return false;
 }
 // ユーザ情報を表示
 function twUserInfo(user) {

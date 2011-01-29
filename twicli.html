@@ -56,12 +56,17 @@
 <div id="rep"><a href="javascript:closeRep()" class="close"><img alt="×" src="images/clr.png"></a>
 	<a href="javascript:pickup2()" class="close"><img alt="⇔" src="images/both.png"></a><div id="reps"></div></div>
 <!--ポップアップメニュー-->
-<div id="popup" onClick="popup_hide()">
+<div class="popup_menu" id="popup" onClick="popup_hide()">
 <a id="popup_status_delete" href="#" onClick="return deleteStatus()">Delete tweet</a>
 <a id="popup_status_retweet" href="#" onClick="return retweetStatus()">Retweet</a>
 <a id="popup_status_quote" href="#" onClick="return quoteStatus()">Quote with RT:</a>
 <a id="popup_link_user" href="" target="twitter">Twitter / user</a>
 <a id="popup_link_status" href="" target="twitter">Twitter / tweet</a>
+</div>
+<div class="popup_menu" id="userinfo_popup" onClick="popup_hide()">
+<a id="upopup_user_block" href="#" onClick="return blockUser(true)">Block this user</a>
+<a id="upopup_user_unblock" href="#" onClick="return blockUser(false)">Unblock this user</a>
+<a id="upopup_user_spam" href="#" onClick="return reportSpam()">Report as spam</a>
 </div>
 <!--ポップアップメニュー非表示用-->
 <div id="popup_hide" onClick="popup_hide();"></div>
