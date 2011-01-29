@@ -46,7 +46,7 @@ form { margin-bottom: 0; }
 .retweeted .non-follower { color: #55a; }
 .button { text-decoration: none; -webkit-text-size-adjust:140%; }
 .popup { padding: 0 4px; color: #888; }
-.upopup { float: right; padding: 4px 4px; color: #888; }
+.upopup { float: right; padding: 0 4px; color: #888; }
 .lock { position: relative; top: 2px; left: 0; }
 .close { color: red; }
 .get-next { text-align: center; background-color: #999; color: #fec; cursor: pointer; }
