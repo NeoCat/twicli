@@ -1,9 +1,9 @@
-langResources['Add'] =	['追加'];
-langResources['get all tweets'] =	['全ツイートを取得'];
-langResources['Please specify a list like "@user/list".'] =	['リストを"@user/list"の形式で指定して下さい。'];
-langResources['Lists'] =	['リスト'];
-langResources['subscribing lists by twicli'] =	['twicliで購読中のリスト'];
-langResources['Initialization failed; regexp.js may not be loaded.'] =	['初期化に失敗しました。regexp.jsがロードされていないようです。'];
+langResources['Add'] =	['追加','添加'];
+langResources['get all tweets'] =	['全ツイートを取得','获取所有发言'];
+langResources['Please specify a list like "@user/list".'] =	['リストを"@user/list"の形式で指定して下さい。','请使用"@user/list"的格式指定List'];
+langResources['Lists'] =	['リスト','列表'];
+langResources['subscribing lists by twicli'] =	['twicliで購読中のリスト','用twicli订阅的lists'];
+langResources['Initialization failed; regexp.js may not be loaded.'] =	['初期化に失敗しました。regexp.jsがロードされていないようです。','初始化失败。regexp.js可能无法加载。'];
 
 
 var last_list = ['',''];

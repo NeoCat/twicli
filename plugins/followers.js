@@ -1,8 +1,8 @@
-langResources['Color followers'] =	['フォロワーを色付け'];
-langResources['Tweets coloring'] =	['ツイートが次のように色付けされます'];
-langResources['follower: black  non-follower: blue'] =	['フォロワー: 黒　非フォロワー: 青'];
-langResources['Renew'] =	['更新'];
-langResources['Off'] =	['無効'];
+langResources['Color followers'] =	['フォロワーを色付け','给关注者添加颜色'];
+langResources['Tweets coloring'] =	['ツイートが次のように色付けされます','发言将会以这些颜色区分'];
+langResources['follower: black  non-follower: blue'] =	['フォロワー: 黒　非フォロワー: 青','关注者：黑色  非关注者：蓝色'];
+langResources['Renew'] =	['更新','更新关注者数据'];
+langResources['Off'] =	['無効','关闭颜色区分'];
 
 var followers_ids_list = (readCookie('followers_ids') || '');
 followers_ids_list = followers_ids_list != '' ? followers_ids_list.split(',') : [];
