@@ -1,6 +1,6 @@
-langResources['Translate'] =	['翻訳'];
-langResources['translate language'] =	['翻訳先の言語'];
-langResources['Choose "translate" from ▼ to translate the tweet.'] =	['翻訳するにはツイートの▼メニューから"翻訳"を選んで下さい。'];
+langResources['Translate'] =	['翻訳','翻译'];
+langResources['translate language'] =	['翻訳先の言語','翻译语言'];
+langResources['Choose "translate" from ▼ to translate the tweet.'] =	['翻訳するにはツイートの▼メニューから"翻訳"を選んで下さい。','请点击发言中的▼并选择“翻译”进行翻译。'];
 
 
 var translateLang = readCookie("lang") || "ja";

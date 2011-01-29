@@ -1,6 +1,6 @@
-langResources['Twitter search'] =	['Twitter検索'];
-langResources['remove tab'] =	['タブを閉じる'];
-langResources['Are you sure to close this tab?'] =	['このタブを閉じてもよろしいですか?'];
+langResources['Twitter search'] =	['Twitter検索','在Twitter上搜索'];
+langResources['remove tab'] =	['タブを閉じる','关闭标签'];
+langResources['Are you sure to close this tab?'] =	['このタブを閉じてもよろしいですか?','确认要关闭标签？'];
 
 
 var tws_page = 0;

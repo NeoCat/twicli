@@ -1,6 +1,6 @@
-langResources['Favotter / new'] =	['ふぁぼったー / 新着'];
-langResources['Favotter / tweet'] =	['ふぁぼったー / ツイート'];
-langResources['Favotter / fav'] =	['ふぁぼったー / ふぁぼり'];
+langResources['Favotter / new'] =	['ふぁぼったー / 新着','Favotter / 最新'];
+langResources['Favotter / tweet'] =	['ふぁぼったー / ツイート','Favotter / 发言'];
+langResources['Favotter / fav'] =	['ふぁぼったー / ふぁぼり','Favotter / 已收藏'];
 
 var twFavPlugin = {
 	fav_update: null,

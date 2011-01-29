@@ -1,4 +1,4 @@
-langResources['Twitter search (yats)'] =	['Twitter検索(yats)'];
+langResources['Twitter search (yats)'] =	['Twitter検索(yats)','在Twitter上搜索（yats）'];
 
 var test_n = 0;
 var twsj_page = 0;

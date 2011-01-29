@@ -1,5 +1,5 @@
-langResources['Accounts'] =	['アカウント'];
-langResources['Are you sure to delete account "$1"?'] =	['アカウント"$1"を削除してもよろしいですか?'];
+langResources['Accounts'] =	['アカウント','账户'];
+langResources['Are you sure to delete account "$1"?'] =	['アカウント"$1"を削除してもよろしいですか?','确认要删除账户 "$1" ？'];
 
 var accounts_info = {};
 

@@ -1,6 +1,6 @@
-langResources['Sound'] =	['音'];
-langResources['on TL update'] =	['TL新着音'];
-langResources['on new Reply'] =	['@新着音'];
+langResources['Sound'] =	['音','声音'];
+langResources['on TL update'] =	['TL新着音','TL更新提醒'];
+langResources['on new Reply'] =	['@新着音','@更新提醒'];
 
 var twsd_html5 = twsd_mp3 = true;
 try {

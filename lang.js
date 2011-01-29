@@ -6,9 +6,9 @@ var langResources = {
 	'Delete tweet': ['ツイートを削除','删除该发言'],
 	'Retweet': ['リツイート','官方锐推'],
 	'Quote with RT:': ['RT:を付けて引用','加入RT:引用回复'],
-	'Block this user': ['ユーザをブロック', null],
-	'Unblock this user': ['ユーザをブロック解除', null],
-	'Report as spam': ['スパム報告', null],
+	'Block this user': ['ユーザをブロック', '加入黑名单'],
+	'Unblock this user': ['ユーザをブロック解除', '从黑名单中去除'],
+	'Report as spam': ['スパム報告', '举报垃圾信息'],
 	'GeoTagging': ['ジオタグ','地理标签'],
 	'Location':	['場所','方位'],
 	'URL':	['URL','URL'],
@@ -51,7 +51,7 @@ var langResources = {
 	'This tweet is protected.': ['このツイートはプロテクトされています。', '该发言已被用户锁定。'],
 	'Are you sure to delete this tweet?': ['このツイートを削除してもよろしいですか?','确定要删除该发言？'],
 	'Are you sure to remove $1?': ['本当に $1 をリムーブしますか?','确定要取消关注$1吗？'],
-	'Are you sure to block $1?': ['本当に $1 をブロックしますか?',null],
-	'Are you sure to report $1 as spam?': ['本当に $1 をスパムとして報告しますか?',null],
+	'Are you sure to block $1?': ['本当に $1 をブロックしますか?','真的要把 $1 加入黑名单么？'],
+	'Are you sure to report $1 as spam?': ['本当に $1 をスパムとして報告しますか?','真的要举报 $1 么？'],
 	'An external plugin is specified. This plugin can fully access to your account.\nAre you sure to load this?': ['外部プラグインが指定されています。このプラグインはあなたのアカウントに自由にアクセス可能になります。本当にロードしてもよろしいですか?','你欲加载外部地址上的插件。这个插件将自由访问你的帐号信息。确认加载？']
 };

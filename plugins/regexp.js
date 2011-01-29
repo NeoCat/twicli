@@ -1,9 +1,9 @@
-langResources['remove tab'] =	['タブを閉じる'];
-langResources['Are you sure to close this tab?'] =	['このタブを閉じてもよろしいですか?'];
-langResources['Pickup Pattern'] =	['抽出条件'];
-langResources['(TabName:ID:Tweet:Filter)'] =	['(タブ名:ユーザID:ツイート:非表示)'];
-langResources['Apply'] =	['適用'];
-langResources['Pickup this user'] =	['このユーザを抽出'];
+langResources['remove tab'] =	['タブを閉じる','关闭标签'];
+langResources['Are you sure to close this tab?'] =	['このタブを閉じてもよろしいですか?','确认要关闭该标签？'];
+langResources['Pickup Pattern'] =	['抽出条件','过滤规则'];
+langResources['(TabName:ID:Tweet:Filter)'] =	['(タブ名:ユーザID:ツイート:非表示)','标签名:用户ID:用户发言:过滤参数'];
+langResources['Apply'] =	['適用','应用'];
+langResources['Pickup this user'] =	['このユーザを抽出','过滤该用户到新标签'];
 
 
 var pickup_regexp = readCookie('pickup_regexp') || '';
