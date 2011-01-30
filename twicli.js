@@ -346,7 +346,7 @@ if (location.search.match(/[?&]status=(.*?)(?:&|$)/)) {
 	location.href = "twicli.html";
 } else {
 	setTimeout(function(){
-		if ($("fst") && ($("fst").value = readCookie('twicli_onload') || '')ssss) {
+		if ($("fst") && ($("fst").value = readCookie('twicli_onload') || '')) {
 			deleteCookie('twicli_onload');
 		}
 	}, 0);
