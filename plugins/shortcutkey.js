@@ -106,16 +106,21 @@ var shortcutkey_plugin = {
 				if (!selected) {
 					ele = (selected_menu.id == 'TL' ? $('tw') : selected_menu.id == 'reply' ? $('re') :
 							 $('tw2c')).childNodes[0];
+					while (ele && !(ele.childNodes[0] && ele.childNodes[0].tw)) ele = ele.nextSibling;
 					ele = ele && ele.childNodes[0];
 				} else {
 					ele = selected;
 					while (ele == selected || ele && (!ele.tw || ele.style.display == 'none')) {
 						if (ele.nextSibling)
 							ele = ele.nextSibling;
-						else if (ele.parentNode.nextSibling)
-							ele = ele.parentNode.nextSibling.childNodes[0];
-						else
+						else {
+							var pele = ele.parentNode.nextSibling;
 							ele = null;
+							while (!ele && pele) {
+								ele = pele.childNodes[0] && pele.childNodes[0].tw && pele.childNodes[0];
+								pele = pele.nextSibling;
+							}
+						}
 					}
 				}
 				if (ele && ele.tw)
@@ -124,7 +129,7 @@ var shortcutkey_plugin = {
 			case 38: // ↑
 			case 75+lower: // k : 1つ上を選択
 				if (!selected) {
-					ele = (selected_menu.id == 'TL' ? $('tw') : selected_menu.id == 'Re' ? $('re') :
+					ele = (selected_menu.id == 'TL' ? $('tw') : selected_menu.id == 'reply' ? $('re') :
 							 $('tw2c'));
 					ele = ele.childNodes[ele.childNodes.length - 1];
 					while (ele && !(ele.childNodes[0] && ele.childNodes[0].tw)) ele = ele.previousSibling;
@@ -134,12 +139,14 @@ var shortcutkey_plugin = {
 					while (ele == selected || ele && (!ele.tw || ele.style.display == 'none')) {
 						if (ele.previousSibling)
 							ele = ele.previousSibling;
-						else if (ele.parentNode.previousSibling) {
-							ele = ele.parentNode.previousSibling;
-							ele = ele.childNodes[ele.childNodes.length - 1];
-						}
-						else
+						else {
+							var pele = ele.parentNode.previousSibling;
 							ele = null;
+							while (!ele && pele) {
+								ele = pele.childNodes[0] && pele.childNodes[0].tw && pele.childNodes[0];
+								pele = pele.previousSibling;
+							}
+						}
 					}
 				}
 				if (ele && ele.tw)
