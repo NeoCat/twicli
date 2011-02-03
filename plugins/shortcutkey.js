@@ -143,7 +143,8 @@ var shortcutkey_plugin = {
 							var pele = ele.parentNode.previousSibling;
 							ele = null;
 							while (!ele && pele) {
-								ele = pele.childNodes[0] && pele.childNodes[0].tw && pele.childNodes[0];
+								ele = pele.childNodes[0] && pele.childNodes[0].tw &&
+										 pele.childNodes[pele.childNodes.length - 1];
 								pele = pele.previousSibling;
 							}
 						}
