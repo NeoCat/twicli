@@ -42,6 +42,7 @@ var langResources = {
 	'hourly limit':	['1時間当たりの制限','一小时之内API限制'],
 	'reset at':	['リセット日時','重置时刻'],
 	'Save':	['保存','保存'],
+	'API error (Twitter may be over capacity?)': ['APIエラー(Twitter過負荷?)',null],
 	'This tweet is too long.': ['ツイートが長すぎます。','发送字数过多。'],
 	'Your settings are saved. Please reload to apply plugins and CSS.': ['設定を保存しました。プラグイン、CSSの変更を反映するにはリロードが必要です。','选项已保存。请刷新页面以应用插件以及样式表的修改。'],
 	'Plugin error': ['プラグインのエラー','插件发生了错误'],
