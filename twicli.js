@@ -267,6 +267,17 @@ function _(key) {
 	var args = arguments;
 	return key.replace(/\$(\d+)/, function(x,n){ return args[parseInt(n)] });
 }
+
+// version check
+document.twicli_js_ver = 1;
+if (!document.twicli_html_ver || document.twicli_html_ver < document.twicli_js_ver) {
+	if (location.href.indexOf('?') < 0) {
+		location.href = location.href + '?' + document.twicli_js_ver;
+	} else {
+		alert(_('An old HTML file is loaded. Please reload it. If the problem is not fixed, please try erasing caches.'));
+	}
+}
+
 // user-defined CSS
 var user_style = readCookie('user_style') || "";
 document.write('<style>' + user_style + '</style>');
