@@ -57,22 +57,17 @@ function loadXDomainScript(url, ele) {
 }
 // クロスドメインJavaScript呼び出し(エラー処理+リトライ付き, Twitter APIはOAuth認証)
 var xds = {
-	load_default: function(url, callback, old, callback_key) {
-		this.abort(old);
-		return this.load(url, callback, twFail, 3, callback_key);
-	},
 	load: function(url, callback, onerror, retry, callback_key) {
 		loading(true);
-		url += (url.indexOf('?') < 0 ? '?' : '&') + (callback_key ? callback_key : 'callback') + '=cb';
 		var ifr = document.createElement("iframe");
 		ifr.style.display = "none";
 		document.body.appendChild(ifr);
 		var d = ifr.contentWindow.document;
-		ifr[ifr.readyState ? "onreadystatechange" : "onload"] = function() {
+		ifr[ifr.readyState/*IE*/ ? "onreadystatechange" : "onload"] = function() {
 			if (this.readyState && this.readyState != 'complete') return;
-			if (d.x)
-				callback(d.x);
-			else if (retry && retry > 1) {
+			if (d.x) {
+				if (callback) callback.apply(this, d.x);
+			} else if (retry && retry > 1) {
 				loading(true); // retry待ち表示
 				setTimeout(function(){ xds.load(url, callback, onerror, retry-1);
 					loading(false);
@@ -82,8 +77,10 @@ var xds = {
 			loading(false);
 			setTimeout(function(){ document.body.removeChild(ifr); }, 0);
 		};
-		d.write('<scr'+'ipt>function cb(x){document.x=x}</scr'+'ipt>' +
-				'<scr'+'ipt src="'+setupOAuthURL(url)+'"></scr'+'ipt>');
+		var url2 = setupOAuthURL(url + (url.indexOf('?')<0?'?':'&') +
+								(callback_key?callback_key:'callback') + '=cb');
+		d.write('<scr'+'ipt>function cb(){document.x=arguments}</scr'+'ipt>' +
+				'<scr'+'ipt src="'+url2+'"></scr'+'ipt>');
 		d.close();
 		return ifr;
 	},
@@ -92,7 +89,26 @@ var xds = {
 			ifr.parentNode.removeChild(ifr);
 			loading(false);
 		}
-	}
+	},
+	
+	load_default: function(url, callback, old, callback_key) {
+		this.abort(old);
+		return this.load(url, callback, twFail, 3, callback_key);
+	},
+	load_for_tab: function(url, callback, callback_key) { // タブ切替時に自動abort
+		var ifr_tab = this.ifr_tab;
+		var ifr = [this.load(url,
+					function() { callback.apply(this,arguments); ifr_tab.remove(ifr[0]); },
+					function() { twFail(); ifr_tab.remove(ifr[0]); },
+					3, callback_key)];
+		this.ifr_tab.push(ifr[0]);
+	},
+	abort_tab: function() {
+		for (var i = 0; i < this.ifr_tab.length; i++)
+			this.abort(this.ifr_tab[i])
+		this.ifr_tab = [];
+	},
+	ifr_tab: []
 };
 // 動的にフレームを生成してPOSTを投げる(Twitter APIはOAuth認証)
 var postQueue = [];
@@ -254,6 +270,13 @@ Array.prototype.uniq = function() {
 				this.splice(i--, l-- && 1);
 	return this;
 };
+// Array#remove
+Array.prototype.remove = function(x) {
+	for (var i = 0, l = this.length; i < l; i++)
+		if (this[i] === x)
+			this.splice(i--, l-- && 1);
+	return this;
+};
 // 言語リソースをルックアップ
 var browser_lang = navigator.browserLanguage || navigator.language || navigator.userLanguage || 'en';
 var browser_lang0 = browser_lang.split('-')[0];
@@ -318,14 +341,11 @@ var in_reply_to_status_id = null;// 発言の返信先id
 // クロスドメイン通信関連
 var seq = (new Date).getTime();
 var users_log = [];
-var users_xds = [];
 var update_ele = null;
 var update_ele2 = null;
-var relation_ele = null;
 var reply_ele = null;
 var reply_ele2 = null;
-var direct_ele1 = null;
-var direct_ele2 = null;
+var direct_ele = null;
 var direct1 = null;
 var direct2 = null;
 // UI関連
@@ -425,7 +445,7 @@ function error(str) {
 		if (ratelimit_reset_time && new Date < ratelimit_reset_time)
 			return;
 		else
-			xds.load_default(twitterAPI + 'account/rate_limit_status.json?id=' + myname, twLimit2);
+			xds.load_for_tab(twitterAPI + 'account/rate_limit_status.json?id=' + myname, twLimit2);
 	}
 	alert(str);
 }
@@ -858,7 +878,7 @@ function twUserInfo(user) {
 	elem.innerHTML = makeUserInfoHTML(user);
 	callPlugins("newUserInfoElement", elem, user);
 	if (myname != user.screen_name) {
-		relation_ele = xds.load_default(twitterAPI + 'friendships/show.json' +
+		xds.load_for_tab(twitterAPI + 'friendships/show.json' +
 					'?source_screen_name=' + myname + '&target_id=' + user.id +
 					'&suppress_response_codes=true', twRelation);
 	}
@@ -902,8 +922,8 @@ function twDirectShow() {
 	direct1 = direct2 = false;
 }
 function checkDirect() {
-	direct_ele1 = xds.load_default(twitterAPI + 'direct_messages.json' +
-							'?suppress_response_codes=true', twDirectCheck, direct_ele1);
+	direct_ele = xds.load_default(twitterAPI + 'direct_messages.json' +
+							'?suppress_response_codes=true', twDirectCheck, direct_ele);
 	update_direct_counter = 20;
 }
 function twDirectCheck(tw) {
@@ -989,7 +1009,7 @@ function twOldReply(tw) {
 function twShow2(tw) {
 	var user_info = $("user_info");
 	if (tw.error && tw.error == "Not authorized" && !!user_info && !fav_mode && user_info.innerHTML == '') {
-		update_ele2 = xds.load_default(twitterAPI + 'users/show.json?screen_name=' + last_user +
+		xds.load_for_tab(twitterAPI + 'users/show.json?screen_name=' + last_user +
 			'&suppress_response_codes=true', twUserInfo);
 		return;
 	}
@@ -1029,10 +1049,10 @@ function twUsers(tw) {
 		$("tw2c").appendChild(nextButton('next'));
 		get_next_func = function() {
 			cur_page++;
-			update_ele2 = xds.load_default(twitterAPI +
+			xds.load_for_tab(twitterAPI +
 					(fav_mode == 2 ? 'statuses/friends.json' : 'statuses/followers.json') +
 					'?screen_name=' + last_user + '&cursor=' + tw.next_cursor +
-					'&suppress_response_codes=true', twUsers, update_ele2);
+					'&suppress_response_codes=true', twUsers);
 		};
 	}
 }
@@ -1176,15 +1196,16 @@ function getOldReply() {
 }
 function getNextFuncCommon() {
 	if (selected_menu.id == "user" && !fav_mode)
-		update_ele2 = xds.load_default(twitterAPI + 'statuses/user_timeline.json' +
+		xds.load_for_tab(twitterAPI + 'statuses/user_timeline.json' +
 					'?count=' + max_count_u + '&page=' + (++cur_page) + '&screen_name=' + last_user +
-					'&include_rts=true&suppress_response_codes=true', twShow2, update_ele2);
+					'&include_rts=true&suppress_response_codes=true', twShow2);
 	else if (selected_menu.id == "user" && fav_mode)
-		update_ele2 = xds.load_default(twitterAPI + 'favorites/' + last_user + '.json' +
-					'?page=' + (++cur_page) + '&suppress_response_codes=true', twShow2, update_ele2);
+		xds.load_for_tab(twitterAPI + 'favorites/' + last_user + '.json' +
+					'?page=' + (++cur_page) + '&suppress_response_codes=true', twShow2);
 }
 // タイムライン切り替え
 function switchTo(id) {
+	xds.abort_tab();
 	selected_menu.className = "";
 	selected_menu = $(id);
 	selected_menu.className = "sel";
@@ -1236,54 +1257,52 @@ function switchUser(user) {
 		$("tw2h").innerHTML = "<div id=\"user_info\"></div>";
 		if (last_user_info && last_user_info.screen_name == user)
 			twUserInfo(last_user_info);
-		update_ele2 = xds.load_default(twitterAPI + 'statuses/user_timeline.json' +
+		xds.load_for_tab(twitterAPI + 'statuses/user_timeline.json' +
 			'?count=' + max_count_u + '&screen_name=' + user + 
 			'&include_rts=true&suppress_response_codes=true', twShow2);
 	} else {
 		users_log = [];
-		for (var i = 0; i < users_xds.length; i++)
-			xds.abort(users_xds[i]);
-		users_xds = users.map(function(u) {
-			xds.load(twitterAPI + 'statuses/user_timeline.json?screen_name=' + u +
-							 '&include_rts=true&suppress_response_codes=true&count=' + max_count_u, twShow3);
-		});
+		xds.abort_tab();
+		for (var i = 0; i < users.length; i++)
+			xds.load_for_tab(twitterAPI + 'statuses/user_timeline.json?screen_name=' + users[i] +
+						 '&include_rts=true&suppress_response_codes=true&count=' + max_count_u, twShow3);
 	}
 }
 function switchStatus() {
 	cur_page = 1;
 	fav_mode = 0;
 	$("tw2c").innerHTML = "";
-	update_ele2 = xds.load_default(twitterAPI + 'statuses/user_timeline.json' +
+	xds.load_for_tab(twitterAPI + 'statuses/user_timeline.json' +
 		'?count=' + max_count_u + '&screen_name=' + last_user + 
-		'&include_rts=true&suppress_response_codes=true', twShow2, update_ele2);
+		'&include_rts=true&suppress_response_codes=true', twShow2);
 }
 function switchFav() {
 	cur_page = 1;
 	fav_mode = 1;
 	$("tw2c").innerHTML = "";
-	update_ele2 = xds.load_default(twitterAPI + 'favorites/' + last_user + '.json' +
-										'?suppress_response_codes=true', twShow2, update_ele2);
+	xds.load_for_tab(twitterAPI + 'favorites/' + last_user + '.json' +
+										'?suppress_response_codes=true', twShow2);
 }
 function switchFollowing() {
 	cur_page = 1;
 	fav_mode = 2;
 	$("tw2c").innerHTML = "";
-	update_ele2 = xds.load_default(twitterAPI + 'statuses/friends.json' +
-			'?screen_name=' + last_user + '&cursor=-1&suppress_response_codes=true', twUsers, update_ele2);
+	xds.load_for_tab(twitterAPI + 'statuses/friends.json?screen_name=' + last_user + 
+										'&cursor=-1&suppress_response_codes=true', twUsers);
 }
 function switchFollower() {
 	cur_page = 1;
 	fav_mode = 3;
 	$("tw2c").innerHTML = "";
-	update_ele2 = xds.load_default(twitterAPI + 'statuses/followers.json' +
-			'?screen_name=' + last_user + '&cursor=-1&suppress_response_codes=true', twUsers, update_ele2);
+	xds.load_for_tab(twitterAPI + 'statuses/followers.json' +
+			'?screen_name=' + last_user + '&cursor=-1&suppress_response_codes=true', twUsers);
 }
 function switchDirect() {
 	switchTo("direct");
-	direct_ele1 = xds.load_default(twitterAPI + 'direct_messages.json' +
-										'?suppress_response_codes=true', twDirect1, direct_ele1);
-	direct_ele2 = xds.load_default(twitterAPI + 'direct_messages/sent.json' +
-										'?suppress_response_codes=true', twDirect2, direct_ele2);
+	xds.load_for_tab(twitterAPI + 'direct_messages.json' +
+										'?suppress_response_codes=true', twDirect1);
+	xds.load_for_tab(twitterAPI + 'direct_messages/sent.json' +
+										'?suppress_response_codes=true', twDirect2);
 }
 function switchMisc() {
 	switchTo("misc");
@@ -1317,8 +1336,8 @@ function switchMisc() {
 		$("tw2c").innerHTML = '<b>'+_('Twitter API status')+':</b><br>' +
 					_('hourly limit')+' : 0<br>'+_('reset at')+': ' + dateFmt(ratelimit_reset_time);
 	else
-		update_ele2 = xds.load_default(twitterAPI + 'account/rate_limit_status.json' +
-										'?id=' + myname , twLimit, update_ele2);
+		xds.load_for_tab(twitterAPI + 'account/rate_limit_status.json' +
+										'?id=' + myname , twLimit);
 }
 function togglePreps() {
 	$('preps').style.display = $('preps').style.display == 'block' ? 'none' : 'block';

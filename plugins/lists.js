@@ -17,7 +17,7 @@ function twlGetListInfo(name) {
 	var del = name.indexOf('/');
 	var user = name.substr(0, del), slug = name.substr(del+1);
 	lists_users[name] = [];
-	xds.load(twitterAPI + user + '/' + slug + '/members.json',
+	xds.load_for_tab(twitterAPI + user + '/' + slug + '/members.json',
 		function twlListMember (info) {
 			if (info.error) {
 				alert(info.error);
@@ -26,7 +26,7 @@ function twlGetListInfo(name) {
 			}
 			lists_users[name] = lists_users[name].concat(info.users.map(function(u){ delete u.status; return u; }));
 			if (info.next_cursor) {
-				xds.load(twitterAPI + user + '/' + slug + '/members.json?cursor=' + info.next_cursor, twlListMember);
+				xds.load_for_tab(twitterAPI + user + '/' + slug + '/members.json?cursor=' + info.next_cursor, twlListMember);
 			} else {
 				twlUpdateListsList();
 			}
@@ -75,8 +75,7 @@ function twlToggleListsInTL(a, ele) {
 }
 
 function twlGetLists(user) {
-	update_ele2 = loadXDomainScript(twitterAPI + user + '/lists/memberships.json?seq=' + (seq++) +
-							'&callback=twlFollowers', update_ele2);
+	xds.load_for_tab(twitterAPI + user + '/lists/memberships.json?seq=' + (seq++), twlFollowers);
 }
 function twlFollowers(res) {
 	if (selected_menu.id != "user") return;
@@ -86,8 +85,7 @@ function twlFollowers(res) {
 		return '<div> <a target="_blank" href="' + twitterURL + a.uri.substr(1) + '" onclick="return twlGetListStatus(\'' + a.uri.substr(1) + '\')">' + a.full_name + '</a> (' +
 				 a.member_count + ' / ' + a.subscriber_count + ')</div>';
 	}).join("");
-	update_ele2 = loadXDomainScript(twitterAPI + last_user + '/lists.json?seq=' + (seq++) +
-							'&callback=twlLists', update_ele2);
+	xds.load_for_tab(twitterAPI + last_user + '/lists.json?seq=' + (seq++), twlLists);
 }
 function twlLists(res) {
 	if (selected_menu.id != "user") return;
@@ -102,9 +100,8 @@ function twlGetListStatus(list) {
 	twl_page = 0;
 	if (selected_menu.id == "user") fav_mode = 9;
 	$("tw2c").innerHTML = "";
-	update_ele2 = loadXDomainScript(twitterAPI + last_list[0] + '/lists/' + last_list[1] +
-							'/statuses.json?seq=' + (seq++) + '&per_page=' + max_count_u +
-							'&callback=twlShowListStatus', update_ele2);
+	xds.load_for_tab(twitterAPI + last_list[0] + '/lists/' + last_list[1] + '/statuses.json?' +
+				'seq=' + (seq++) + '&per_page=' + max_count_u, twlShowListStatus);
 	return false;
 }
 function twlShowListStatus(tw) {
@@ -117,9 +114,9 @@ function twlShowListStatus(tw) {
 	var next = nextButton('next-list');
 	$("tw2c").appendChild(next);
 	get_next_func = function(){
-	update_ele2 = loadXDomainScript(twitterAPI + last_list[0] + '/lists/' + last_list[1] +
+	xds.load_for_tab(twitterAPI + last_list[0] + '/lists/' + last_list[1] +
 							'/statuses.json?seq=' + (seq++) + '&per_page=' + max_count_u +
-							'&max_id=' + tw[tw.length-1].id + '&callback=twlShowListStatus', update_ele2);
+							'&max_id=' + tw[tw.length-1].id, twlShowListStatus);
 	}
 }
 

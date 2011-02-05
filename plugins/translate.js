@@ -26,10 +26,10 @@ registerPlugin({
 });
 
 function translateStatus(id) {
-	update_ele2 = loadXDomainScript("http://www.google.com/uds/Gtranslate?v=1.0"+
-				"&callback=gTranslate" + "&context=" + id.replace("-","_") +
+	xds.load_for_tab("http://www.google.com/uds/Gtranslate?v=1.0"+
+				"&context=" + id.replace("-","_") +
 				"&q=" + encodeURIComponent($(id).tw.text) +
-				"&langpair=|"+translateLang, update_ele2);
+				"&langpair=|"+translateLang, gTranslate);
 }
 function gTranslate(id, result, code, error, code2) {
 	if (code != 200) {
