@@ -75,11 +75,12 @@ var xds = {
 			} else if (onerror)
 				onerror();
 			loading(false);
-			setTimeout(function(){ document.body.removeChild(ifr); }, 0);
+			setTimeout(function(){ try { ifr.parentNode.removeChild(ifr); } catch(e) {} }, 0);
 		};
 		var url2 = setupOAuthURL(url + (url.indexOf('?')<0?'?':'&') +
 								(callback_key?callback_key:'callback') + '=cb');
-		d.write('<scr'+'ipt>function cb(){document.x=arguments}</scr'+'ipt>' +
+		d.write('<scr'+'ipt src="array.js"></scr'+'ipt>' +
+				'<scr'+'ipt>function cb(){document.x=arguments}</scr'+'ipt>' +
 				'<scr'+'ipt src="'+url2+'"></scr'+'ipt>');
 		d.close();
 		return ifr;
@@ -97,11 +98,11 @@ var xds = {
 	},
 	load_for_tab: function(url, callback, callback_key) { // タブ切替時に自動abort
 		var ifr_tab = this.ifr_tab;
-		var ifr = [this.load(url,
-					function() { callback.apply(this,arguments); ifr_tab.remove(ifr[0]); },
-					function() { twFail(); ifr_tab.remove(ifr[0]); },
+		var fr = [this.load(url,
+					function() { callback.apply(this,arguments); try { ifr_tab.remove(fr[0]); } catch(e) {} },
+					function() { twFail(); try { ifr_tab.remove(fr[0]); } catch(e) {} },
 					3, callback_key)];
-		this.ifr_tab.push(ifr[0]);
+		this.ifr_tab.push(fr[0]);
 	},
 	abort_tab: function() {
 		for (var i = 0; i < this.ifr_tab.length; i++)
@@ -250,33 +251,6 @@ function deleteCookie(key) {
 	document.cookie = key + "=;expires=" + sday.toGMTString();
 }
 
-// Array#mapの再実装(Opera用)
-if (!Array.prototype.map) {
-	Array.prototype.map = function(fun) {
-		var len = this.length;
-		var res = new Array(len);
-		var thisp = arguments[1];
-		for (var i = 0; i < len; i++)
-			if (i in this)
-				res[i] = fun.call(thisp, this[i], i, this);
-		return res;
-	};
-}
-// Array#uniqの再実装
-Array.prototype.uniq = function() {
-	for (var i = 0, l = this.length; i < l; i++)
-		for (var j = 0; j < i; j++)
-			if (this[i] === this[j])
-				this.splice(i--, l-- && 1);
-	return this;
-};
-// Array#remove
-Array.prototype.remove = function(x) {
-	for (var i = 0, l = this.length; i < l; i++)
-		if (this[i] === x)
-			this.splice(i--, l-- && 1);
-	return this;
-};
 // 言語リソースをルックアップ
 var browser_lang = navigator.browserLanguage || navigator.language || navigator.userLanguage || 'en';
 var browser_lang0 = browser_lang.split('-')[0];
@@ -375,8 +349,7 @@ var loading_cnt = 0;
 
 // loading表示のコントロール
 function loading(start) {
-	loading_cnt += start ? 1 : -1;
-	console.log(loading_cnt);
+	loading_cnt += start ? 1 : loading_cnt > 0 ? -1 : 0;
 	$('loading').style.display = loading_cnt > 0 ? "block" : "none";
 }
 

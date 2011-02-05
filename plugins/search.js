@@ -81,9 +81,8 @@ function twsSearchShow(res, update) {
 		var next = nextButton('next-search');
 		$("tw2c").appendChild(next);
 		get_next_func = function(){
-			update_ele2 = loadXDomainScript(tws_API + res.next_page +
-								'&seq=' + (seq++) + '&rpp=' + tws_rpp +
-								'&callback=twsSearchShow', update_ele2);
+			xds.load_for_tab(tws_API + res.next_page +
+								'&seq=' + (seq++) + '&rpp=' + tws_rpp, twsSearchShow);
 		}
 	}
 }
