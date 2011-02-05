@@ -22,7 +22,7 @@ form { margin-bottom: 0; }
 
 .tw { position: absolute; left: 0px; top: 54px; width: 100%; font-size: small; }
 #re { display: none; }
-#tw2 { background-color: #ffd; display: none; min-height: 448px; }
+#tw2 { background-color: #ffe; display: none; min-height: 448px; }
 #tw > div { border-bottom: 1px solid #777; }
 .tw-parent > div > div { padding: 1px; border-bottom: 1px solid #999; }
 .dummy { border-bottom: 0; padding: 0; height: 0; clear: both; }

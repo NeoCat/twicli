@@ -54,7 +54,7 @@ registerPlugin({
 						addThumbnail(elem, 'http://farm'+p.farm+'.static.flickr.com/'+p.server+'/'+
 									p.id+'_'+p.secret+'_s.jpg', _url);
 					},
-					'jsoncallback');
+					null, 1, 'jsoncallback');
 		}
 		else if (url.match(/^(http:\/\/plixi.com\/p\/\d+)/)) {
 			addThumbnail(elem, 'http://api.plixi.com/api/TPAPI.svc/imagefromurl?size=thumbnail&url='+url, url);

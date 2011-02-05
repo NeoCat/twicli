@@ -42,6 +42,7 @@ var langResources = {
 	'hourly limit':	['1時間当たりの制限','一小时之内API限制'],
 	'reset at':	['リセット日時','重置时刻'],
 	'Save':	['保存','保存'],
+	'API error (Twitter may be over capacity?)': ['APIエラー(Twitter過負荷?)',null],
 	'This tweet is too long.': ['ツイートが長すぎます。','发送字数过多。'],
 	'Your settings are saved. Please reload to apply plugins and CSS.': ['設定を保存しました。プラグイン、CSSの変更を反映するにはリロードが必要です。','选项已保存。请刷新页面以应用插件以及样式表的修改。'],
 	'Plugin error': ['プラグインのエラー','插件发生了错误'],
@@ -53,5 +54,6 @@ var langResources = {
 	'Are you sure to remove $1?': ['本当に $1 をリムーブしますか?','确定要取消关注$1吗？'],
 	'Are you sure to block $1?': ['本当に $1 をブロックしますか?','真的要把 $1 加入黑名单么？'],
 	'Are you sure to report $1 as spam?': ['本当に $1 をスパムとして報告しますか?','真的要举报 $1 么？'],
-	'An external plugin is specified. This plugin can fully access to your account.\nAre you sure to load this?': ['外部プラグインが指定されています。このプラグインはあなたのアカウントに自由にアクセス可能になります。本当にロードしてもよろしいですか?','你欲加载外部地址上的插件。这个插件将自由访问你的帐号信息。确认加载？']
+	'An external plugin is specified. This plugin can fully access to your account.\nAre you sure to load this?': ['外部プラグインが指定されています。このプラグインはあなたのアカウントに自由にアクセス可能になります。本当にロードしてもよろしいですか?','你欲加载外部地址上的插件。这个插件将自由访问你的帐号信息。确认加载？'],
+	'An old HTML file is loaded. Please reload it. If the problem is not fixed, please try erasing caches.': ['古いHTMLファイルがロードされています。リロードしてみて下さい。それでも解決しない場合はキャッシュを削除してみて下さい。']
 };

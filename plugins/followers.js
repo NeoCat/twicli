@@ -36,7 +36,6 @@ function twfcFollwersIDsClear() {
 	writeCookie('followers_ids', "", 3652);
 }
 function twfcFollwersIDsRenew() {
-	$("loading").style.display = "block";
 	var status = document.getElementById("followers_status");
 	if (status) status.innerHTML = "loading...";
 	xds.load(twitterAPI + 'followers/ids.json', twfcRenew);
@@ -49,5 +48,4 @@ function twfcRenew(list) {
 	writeCookie('followers_ids', list.join(","), 3652);
 	var status = document.getElementById("followers_status");
 	if (status) status.innerHTML = "on (" + list.length + ")";
-	$("loading").style.display = "none";
 }

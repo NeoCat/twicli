@@ -40,17 +40,13 @@ function twsSearch(qn, no_switch) {
 	$('tw2h').innerHTML = '<div class="tabcmd tabclose"><a id="tws-closetab" href="#">[x] '+_('remove tab')+'</a></div>';
 	$('tws-closetab').onclick = function(){ closeSearchTab(myid); return false; };
 	tws_page = 0;
-	update_ele2 = loadXDomainScript(tws_API + '?seq=' + (seq++) +
-							'&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp +
-							'&callback=twsSearchShow', update_ele2);
-	$("loading").style.display = "block";
+	xds.load_for_tab(tws_API + '?seq=' + (seq++) +
+							'&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow);
 	return false;
 }
 function twsSearchUpdate(q) {
-	update_ele2 = loadXDomainScript(tws_API + '?seq=' + (seq++) +
-							'&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp +
-							'&callback=twsSearchShow2', update_ele2);
-	$("loading").style.display = "block";
+	xds.load_for_tab(tws_API + '?seq=' + (seq++) +
+							'&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow2);
 }
 function closeSearchTab(myid) {
 	if (!confirm(_('Are you sure to close this tab?'))) return;
@@ -85,9 +81,8 @@ function twsSearchShow(res, update) {
 		var next = nextButton('next-search');
 		$("tw2c").appendChild(next);
 		get_next_func = function(){
-			update_ele2 = loadXDomainScript(tws_API + res.next_page +
-								'&seq=' + (seq++) + '&rpp=' + tws_rpp +
-								'&callback=twsSearchShow', update_ele2);
+			xds.load_for_tab(tws_API + res.next_page +
+								'&seq=' + (seq++) + '&rpp=' + tws_rpp, twsSearchShow);
 		}
 	}
 }
