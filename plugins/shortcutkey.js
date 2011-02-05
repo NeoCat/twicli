@@ -3,7 +3,7 @@ var shortcutkey_plugin = {
 	last_selected_div_id: null, // 前回選択されたtweetのdiv ID(オーバーレイ表示は除く)
 	key_handled: false, // 他プラグインがkeydownを処理済みか：true時はイベント処理しない
 	last_event_date: null, // 最終イベント発生時刻
-	event_date_check: false, // 最終イベントから30ms以内のイベントは無視
+	repeat_check: false, // keydown,keypress両指定時のチェック
 	
 	// tweetの選択
 	selectTweet: function(ev, div) {
@@ -37,13 +37,12 @@ var shortcutkey_plugin = {
 			}
 			return true;
 		}
-		if (shortcutkey_plugin.event_date_check) { // 連続する30ms以内のイベントは無視
-			var date = ev.timeStamp || new Date();
-			if (shortcutkey_plugin.last_event_date && date - shortcutkey_plugin.last_event_date < 30) {
-				if (ev.type == 'keypress' && (code == 77+32 || code == 81+32 || code == 69+32))
-					return false;
+		if (shortcutkey_plugin.repeat_check) {
+			if (ev.type == 'keydown' && code != 38 && code != 40 && code != 74 && code != 75)
+				return false;
+			var date = ev.timeStamp || new Date(); // 連続する30ms以内のイベントは無視
+			if (shortcutkey_plugin.last_event_date && date - shortcutkey_plugin.last_event_date < 30)
 				return true;
-			}
 			shortcutkey_plugin.last_event_date = date;
 		}
 		
@@ -73,9 +72,11 @@ var shortcutkey_plugin = {
 					shortcutkey_plugin.deselectTweet();
 				return false;
 			case 49: // 1 : TLタブ
+				console.log("key1");
 				switchTL();
 				return false;
 			case 50: // 2 : @タブ
+				console.log("key2");
 				switchReply();
 				return false;
 			case 51: // 3 : ユーザタブ
@@ -247,7 +248,7 @@ var shortcutkey_plugin = {
 			document.onkeypress = this.shortCutKeyDown;
 		else if (navigator.userAgent.indexOf('Firefox') >= 0) {
 			document.onkeydown = document.onkeypress = this.shortCutKeyDown;
-			this.event_date_check = true;
+			this.repeat_check = true;
 		}
 		else
 			document.onkeydown = this.shortCutKeyDown;
