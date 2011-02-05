@@ -159,7 +159,7 @@ function postInIFrame(url, done, err) {
 			}, 0);
 		}
 	};
-	if (pfr.readyState) pfr.onreadystatechange = function(){ /* for IE */
+	if ('\v'=='v') pfr.onreadystatechange = function(){ /* for IE */
 		if (this.readyState == "complete") {
 			pfr.contentWindow.name = pfr.name;
 			onload();
@@ -627,7 +627,7 @@ function popup_menu(user, id, ele) {
 	callPlugins("popup", $('popup'), user, id, ele);
 	$('popup_link_user').href = twitterURL + user;
 	$('popup_link_status').href = twitterURL + user + '/statuses/' + id;
-	$('popup_status_delete').style.display = (selected_menu.id == "direct" || user == myname ? "block" : "none");
+	$('popup_status_delete').style.display = (selected_menu.id == "direct" || popup_ele.tw.user.screen_name == myname ? "block" : "none");
 	$('popup_status_retweet').style.display = (selected_menu.id != "direct" ? "block" : "none");
 	$('popup_status_quote').style.display = (selected_menu.id != "direct" ? "block" : "none");
 	$('popup').style.display = "block";
