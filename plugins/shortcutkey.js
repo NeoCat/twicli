@@ -72,11 +72,9 @@ var shortcutkey_plugin = {
 					shortcutkey_plugin.deselectTweet();
 				return false;
 			case 49: // 1 : TLタブ
-				console.log("key1");
 				switchTL();
 				return false;
 			case 50: // 2 : @タブ
-				console.log("key2");
 				switchReply();
 				return false;
 			case 51: // 3 : ユーザタブ
