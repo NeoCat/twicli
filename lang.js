@@ -6,6 +6,9 @@ var langResources = {
 	'Delete tweet': ['ツイートを削除','删除该发言'],
 	'Retweet': ['リツイート','官方锐推'],
 	'Quote with RT:': ['RT:を付けて引用','加入RT:引用回复'],
+	'Block this user': ['ユーザをブロック', '加入黑名单'],
+	'Unblock this user': ['ユーザをブロック解除', '从黑名单中去除'],
+	'Report as spam': ['スパム報告', '举报垃圾信息'],
 	'GeoTagging': ['ジオタグ','地理标签'],
 	'Location':	['場所','方位'],
 	'URL':	['URL','URL'],
@@ -39,6 +42,7 @@ var langResources = {
 	'hourly limit':	['1時間当たりの制限','一小时之内API限制'],
 	'reset at':	['リセット日時','重置时刻'],
 	'Save':	['保存','保存'],
+	'API error (Twitter may be over capacity?)': ['APIエラー(Twitter過負荷?)',null],
 	'This tweet is too long.': ['ツイートが長すぎます。','发送字数过多。'],
 	'Your settings are saved. Please reload to apply plugins and CSS.': ['設定を保存しました。プラグイン、CSSの変更を反映するにはリロードが必要です。','选项已保存。请刷新页面以应用插件以及样式表的修改。'],
 	'Plugin error': ['プラグインのエラー','插件发生了错误'],
@@ -48,5 +52,8 @@ var langResources = {
 	'This tweet is protected.': ['このツイートはプロテクトされています。', '该发言已被用户锁定。'],
 	'Are you sure to delete this tweet?': ['このツイートを削除してもよろしいですか?','确定要删除该发言？'],
 	'Are you sure to remove $1?': ['本当に $1 をリムーブしますか?','确定要取消关注$1吗？'],
-	'An external plugin is specified. This plugin can fully access to your account.\nAre you sure to load this?': ['外部プラグインが指定されています。このプラグインはあなたのアカウントに自由にアクセス可能になります。本当にロードしてもよろしいですか?','你欲加载外部地址上的插件。这个插件将自由访问你的帐号信息。确认加载？']
+	'Are you sure to block $1?': ['本当に $1 をブロックしますか?','真的要把 $1 加入黑名单么？'],
+	'Are you sure to report $1 as spam?': ['本当に $1 をスパムとして報告しますか?','真的要举报 $1 么？'],
+	'An external plugin is specified. This plugin can fully access to your account.\nAre you sure to load this?': ['外部プラグインが指定されています。このプラグインはあなたのアカウントに自由にアクセス可能になります。本当にロードしてもよろしいですか?','你欲加载外部地址上的插件。这个插件将自由访问你的帐号信息。确认加载？'],
+	'An old HTML file is loaded. Please reload it. If the problem is not fixed, please try erasing caches.': ['古いHTMLファイルがロードされています。リロードしてみて下さい。それでも解決しない場合はキャッシュを削除してみて下さい。']
 };

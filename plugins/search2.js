@@ -1,4 +1,4 @@
-langResources['Twitter search (yats)'] =	['Twitter検索(yats)'];
+langResources['Twitter search (yats)'] =	['Twitter検索(yats)','在Twitter上搜索（yats）'];
 
 var test_n = 0;
 var twsj_page = 0;
@@ -6,9 +6,8 @@ var twsj_query = '';
 function twsjSearch(q) {
 	twsj_page = 1;
 	twsj_query = q;
-	update_ele2 = loadXDomainScript('http://yats-data.com/yats/search?seq=' + (seq++) +
-							'&query=' + encodeURIComponent(q) + '&json=twsjSearchShow', update_ele2);
-	$("loading").style.display = "block";
+	xds.load_for_tab('http://yats-data.com/yats/search?seq=' + (seq++) +
+						'&query=' + encodeURIComponent(q), twsjSearchShow, 'json');
 }
 function twsjSearchShow(res) {
 	var tmp = $("tmp");
@@ -26,8 +25,8 @@ function twsjSearchShow(res) {
 		$("tw2c").appendChild(nextButton('next-search2'));
 	}
 	get_next_func = function(){
-		update_ele2 = loadXDomainScript('http://yats-data.com/yats/search?page=' + twsj_page +
-							'&query=' + twsj_query + '&seq=' + (seq++) + '&json=twsjSearchShow', update_ele2);
+		xds.load_for_tab('http://yats-data.com/yats/search?page=' + twsj_page +
+						'&query=' + twsj_query + '&seq=' + (seq++), twsjSearchShow, 'json');
 	}
 }
 

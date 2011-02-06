@@ -1,9 +1,9 @@
-langResources['remove tab'] =	['タブを閉じる'];
-langResources['Are you sure to close this tab?'] =	['このタブを閉じてもよろしいですか?'];
-langResources['Pickup Pattern'] =	['抽出条件'];
-langResources['(TabName:ID:Tweet:TLFilter)'] =	['(タブ名:ユーザID:ツイート:TL非表示)'];
-langResources['Apply'] =	['適用'];
-langResources['Pickup this user'] =	['このユーザを抽出'];
+langResources['remove tab'] =	['タブを閉じる','关闭标签'];
+langResources['Are you sure to close this tab?'] =	['このタブを閉じてもよろしいですか?','确认要关闭该标签？'];
+langResources['Pickup Pattern'] =	['抽出条件','过滤规则'];
+langResources['(TabName:ID:Tweet:Filter)'] =	['(タブ名:ユーザID:ツイート:非表示)','标签名:用户ID:用户发言:过滤参数'];
+langResources['Apply'] =	['適用','应用'];
+langResources['Pickup this user'] =	['このユーザを抽出','过滤该用户到新标签'];
 
 
 var pickup_regexp = readCookie('pickup_regexp') || '';
@@ -12,36 +12,52 @@ var pickup_tab_list = new Array();	// タブ一覧
 
 // 発言(JSON)が指定条件にマッチするか判定
 function execRegexp(tw, exp) {
-	var source = "\nvia " + tw.source.replace(/<.*?>/g,'');
-	return	(!exp.id     || tw.user.screen_name.match(exp.id  )) &&
-		(!exp.id_n   ||!tw.user.screen_name.match(exp.id_n)) &&
-		(!exp.text   || (tw.text+source).match(exp.text  )) &&
-		(!exp.text_n ||!(tw.text+source).match(exp.text_n))
+	var source = "\nvia " + (tw.source ? tw.source.replace(/<.*?>/g,'') : '');
+	var rtinfo = tw.retweeted_status ? "\nby @" + tw.user.screen_name : '';
+	var rs = tw.retweeted_status || tw;
+	var t = display_as_rt ? tw : rs;
+	var text = t.text + source + rtinfo;
+	return	(!exp.id     || t.user.screen_name.match(exp.id  )) &&
+		(!exp.id_n   ||!t.user.screen_name.match(exp.id_n)) &&
+		(!exp.text   || text.match(exp.text  )) &&
+		(!exp.text_n ||!text.match(exp.text_n))
 }
 
 // タブ切り替え処理
 function switchRegexp(tab) {
-	var pickup = new Array();
+	var pickup = [[],[]];
 	switchTo(tab.id);
 	if (!tab.no_close) {
 		$('tw2h').innerHTML = '<div class="tabcmd tabclose"><a id="regexp-closetab" style="size: small; color: red" href="#">[x] '+_('remove tab')+'</a></div>';
 		$('regexp-closetab').onclick = function() { closeRegexp(tab); return false; };
 	}
-	// メインTLから該当する発言を抽出
-	var tl = $('tw').childNodes;
-	for (var i = 0; i < tl.length; i++) {
-		var tl2 = tl[i].childNodes;
-		for (var j = 0; j < tl2.length; j++) {
-			var target = tl2[j];
-			for (var k = 0; k < tab.pickup.length; k++) {
-				if (target.tw && execRegexp(target.tw, tab.pickup[k])) {
-					pickup.push(target.tw);
-					break;
+	// TLおよび@タブから該当する発言を抽出
+	var duplication = {};
+	for (var t = 0; t < 2; t++) {
+		var tl = $(['tw','re'][t]).childNodes;
+		for (var i = 0; i < tl.length; i++) {
+			var tl2 = tl[i].childNodes;
+			for (var j = 0; j < tl2.length; j++) {
+				var target = tl2[j];
+				for (var k = 0; k < tab.pickup.length; k++) {
+					if (target.tw && execRegexp(target.tw, tab.pickup[k])) {
+						if (duplication[target.tw.id_str]) continue;
+						duplication[target.tw.id_str] = true;
+						pickup[t].push(target.tw);
+						break;
+					}
 				}
 			}
 		}
 	}
-	twShow2(pickup);
+	var sorted = [];
+	while (pickup[0].length > 0 || pickup[1].length > 0) {
+		if (!pickup[0][0] || pickup[1][0] && pickup[0][0].id < pickup[1][0].id)
+			sorted.push(pickup[1].shift());
+		else
+			sorted.push(pickup[0].shift());
+	}
+	twShow2(sorted);
 	callPlugins("regexp_switched", tab);
 }
 
@@ -108,7 +124,7 @@ function initRegexp() {
 			if (regexp2[0]) exps.text = new RegExp(regexp2[0], 'i');
 			if (regexp2[1]) exps.text_n = new RegExp(regexp2[1], 'i');
 		} catch (e) { alert("RegExp Error in " + tabname + " tab :\nline "+(id+1)+" - " + e); }
-		if (filter) exps.filterTL = true;
+		if (filter) exps.filterTL = parseInt(filter);
 		ptab.pickup.push(exps);
 	}
 }
@@ -117,15 +133,17 @@ initRegexp();
 registerPlugin({
 	miscTab: function(ele) {
 		var e = document.createElement("div");
-		e.innerHTML = _('Pickup Pattern')+' <small>'+_('(TabName:ID:Tweet:TLFilter)')+'</small> : <br><form onSubmit="setRegexp($(\'pickup_regexp\').value); return false;"><textarea cols="30" rows="4" id="pickup_regexp">' + pickup_regexp + '</textarea><br><input type="submit" value="'+_('Apply')+'"></form>';
+		e.innerHTML = _('Pickup Pattern')+' <small>'+_('(TabName:ID:Tweet:Filter)')+'</small> : <br><form onSubmit="setRegexp($(\'pickup_regexp\').value); return false;"><textarea cols="30" rows="4" id="pickup_regexp">' + pickup_regexp + '</textarea><br><input type="submit" value="'+_('Apply')+'"></form>';
 		ele.appendChild(e);
 		var hr = document.createElement("hr");
 		hr.className = "spacer";
 		ele.appendChild(hr);
 	},
 	newMessageElement: function(s, tw, twNodeId) {
-		if (twNodeId != 'tw') return;
-		// 発言にマッチしたら該当タブに色付け
+		if (twNodeId == 'tw2c' && selected_menu.id.substr(0,7) == 'pickup-' && !selected_menu.no_close)
+			return; // 抽出タブ表示中は処理しない(listsは除く)
+		if (twNodeId == 'tw2c' && (selected_menu.id == 'direct' || fav_mode))
+			return; // Direct Message, Fav, User一覧は処理しない
 		for (var i = 0; i < pickup_tab_list.length; i++) {
 			var tab = pickup_tab_list[i];
 			var match = false;
@@ -133,10 +151,16 @@ registerPlugin({
 				if (execRegexp(tw, tab.pickup[k])) {
 					match = true;
 					s.className += " match-" + tab.name;
-					if (tab.className.indexOf(' new') < 0)
+					// TL,Re内の発言にマッチしたら該当タブに色付け
+					if ((twNodeId == 'tw' || twNodeId == 're') && tab.className.indexOf(' new') < 0)
 						tab.className += ' new';
-					if (tab.pickup[k].filterTL)
-						s.style.display = "none";
+					if (tab.pickup[k].filterTL) {
+						// filterTLビットマスク(1:TL 2:@ 4:全タブ)に応じてマッチした発言を隠す
+						if ((tab.pickup[k].filterTL & 1) && twNodeId == 'tw' ||
+						    (tab.pickup[k].filterTL & 2) && twNodeId == 're' ||
+							(tab.pickup[k].filterTL & 4))
+							s.style.display = "none";
+					}
 				}
 			}
 			if (match)

@@ -38,7 +38,8 @@
         remove(task.script);
         queue.splice(n,1);
         // notify to other plugins
-        callPlugins("replaceUrl", link.parentNode.parentNode, link, longUrl, shortUrl);
+        if (link.parentNode && link.parentNode.parentNode)
+          callPlugins("replaceUrl", link.parentNode.parentNode, link, longUrl, shortUrl);
       }
     }
   }

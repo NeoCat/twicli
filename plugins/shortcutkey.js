@@ -3,7 +3,7 @@ var shortcutkey_plugin = {
 	last_selected_div_id: null, // 前回選択されたtweetのdiv ID(オーバーレイ表示は除く)
 	key_handled: false, // 他プラグインがkeydownを処理済みか：true時はイベント処理しない
 	last_event_date: null, // 最終イベント発生時刻
-	event_date_check: false, // 最終イベントから30ms以内のイベントは無視
+	repeat_check: false, // keydown,keypress両指定時のチェック
 	
 	// tweetの選択
 	selectTweet: function(ev, div) {
@@ -37,13 +37,12 @@ var shortcutkey_plugin = {
 			}
 			return true;
 		}
-		if (shortcutkey_plugin.event_date_check) { // 連続する30ms以内のイベントは無視
-			var date = ev.timeStamp || new Date();
-			if (shortcutkey_plugin.last_event_date && date - shortcutkey_plugin.last_event_date < 30) {
-				if (ev.type == 'keypress' && (code == 77+32 || code == 81+32 || code == 69+32))
-					return false;
+		if (shortcutkey_plugin.repeat_check) {
+			if (ev.type == 'keydown' && code != 38 && code != 40 && code != 74 && code != 75)
+				return false;
+			var date = ev.timeStamp || new Date(); // 連続する30ms以内のイベントは無視
+			if (shortcutkey_plugin.last_event_date && date - shortcutkey_plugin.last_event_date < 30)
 				return true;
-			}
 			shortcutkey_plugin.last_event_date = date;
 		}
 		
@@ -106,16 +105,21 @@ var shortcutkey_plugin = {
 				if (!selected) {
 					ele = (selected_menu.id == 'TL' ? $('tw') : selected_menu.id == 'reply' ? $('re') :
 							 $('tw2c')).childNodes[0];
+					while (ele && !(ele.childNodes[0] && ele.childNodes[0].tw)) ele = ele.nextSibling;
 					ele = ele && ele.childNodes[0];
 				} else {
 					ele = selected;
 					while (ele == selected || ele && (!ele.tw || ele.style.display == 'none')) {
 						if (ele.nextSibling)
 							ele = ele.nextSibling;
-						else if (ele.parentNode.nextSibling)
-							ele = ele.parentNode.nextSibling.childNodes[0];
-						else
+						else {
+							var pele = ele.parentNode.nextSibling;
 							ele = null;
+							while (!ele && pele) {
+								ele = pele.childNodes[0] && pele.childNodes[0].tw && pele.childNodes[0];
+								pele = pele.nextSibling;
+							}
+						}
 					}
 				}
 				if (ele && ele.tw)
@@ -124,7 +128,7 @@ var shortcutkey_plugin = {
 			case 38: // ↑
 			case 75+lower: // k : 1つ上を選択
 				if (!selected) {
-					ele = (selected_menu.id == 'TL' ? $('tw') : selected_menu.id == 'Re' ? $('re') :
+					ele = (selected_menu.id == 'TL' ? $('tw') : selected_menu.id == 'reply' ? $('re') :
 							 $('tw2c'));
 					ele = ele.childNodes[ele.childNodes.length - 1];
 					while (ele && !(ele.childNodes[0] && ele.childNodes[0].tw)) ele = ele.previousSibling;
@@ -134,12 +138,15 @@ var shortcutkey_plugin = {
 					while (ele == selected || ele && (!ele.tw || ele.style.display == 'none')) {
 						if (ele.previousSibling)
 							ele = ele.previousSibling;
-						else if (ele.parentNode.previousSibling) {
-							ele = ele.parentNode.previousSibling;
-							ele = ele.childNodes[ele.childNodes.length - 1];
-						}
-						else
+						else {
+							var pele = ele.parentNode.previousSibling;
 							ele = null;
+							while (!ele && pele) {
+								ele = pele.childNodes[0] && pele.childNodes[0].tw &&
+										 pele.childNodes[pele.childNodes.length - 1];
+								pele = pele.previousSibling;
+							}
+						}
 					}
 				}
 				if (ele && ele.tw)
@@ -191,10 +198,18 @@ var shortcutkey_plugin = {
 				return false;
 			case 79+lower: // o : リンクを開く(Open links)
 				if (!selected) return true;
-				tw.text.replace(/https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[\w!#$%&'()*+,.\/:;=?@~-]+/g, function(url){
-					window.open(url, '_blank');
-				});
-
+				for (var i = 0; i < selected.childNodes.length; i++) {
+					var target = selected.childNodes[i]
+					if (target.id && target.id.substr(0,5) == 'text-') {
+						for (i = 0; i < target.childNodes.length; i++) {
+							var target2 = target.childNodes[i];
+							if (target2.tagName == 'A' && target2.innerHTML.substr(0,4) == 'http') {
+								if (link(target2)) window.open(target2.href, "_blank");
+							}
+						}
+						break;
+					}
+				}
 				return false;
 			case 77+lower: // m : 発言欄へ移動(Move to textarea)
 				$('fst').focus();
@@ -231,7 +246,7 @@ var shortcutkey_plugin = {
 			document.onkeypress = this.shortCutKeyDown;
 		else if (navigator.userAgent.indexOf('Firefox') >= 0) {
 			document.onkeydown = document.onkeypress = this.shortCutKeyDown;
-			this.event_date_check = true;
+			this.repeat_check = true;
 		}
 		else
 			document.onkeydown = this.shortCutKeyDown;

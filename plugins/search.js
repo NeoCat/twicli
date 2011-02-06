@@ -1,12 +1,13 @@
-langResources['Twitter search'] =	['Twitter検索'];
-langResources['remove tab'] =	['タブを閉じる'];
-langResources['Are you sure to close this tab?'] =	['このタブを閉じてもよろしいですか?'];
+langResources['Twitter search'] =	['Twitter検索','在Twitter上搜索'];
+langResources['remove tab'] =	['タブを閉じる','关闭标签'];
+langResources['Are you sure to close this tab?'] =	['このタブを閉じてもよろしいですか?','确认要关闭标签？'];
 
 
 var tws_page = 0;
 var tws_rpp = 50; /* results per page */
 var tws_update_timer = null;
 var tws_list = (readCookie('twicli_search_list') || "").split(/\r?\n/);
+var tws_API = 'http://search.twitter.com/search.json';
 tws_list.uniq();
 writeCookie('twicli_search_list', tws_list.join("\n"), 3652);
 function twsSearch(qn, no_switch) {
@@ -39,17 +40,13 @@ function twsSearch(qn, no_switch) {
 	$('tw2h').innerHTML = '<div class="tabcmd tabclose"><a id="tws-closetab" href="#">[x] '+_('remove tab')+'</a></div>';
 	$('tws-closetab').onclick = function(){ closeSearchTab(myid); return false; };
 	tws_page = 0;
-	update_ele2 = loadXDomainScript('http://search.twitter.com/search.json?seq=' + (seq++) +
-							'&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp +
-							'&callback=twsSearchShow', update_ele2);
-	$("loading").style.display = "block";
+	xds.load_for_tab(tws_API + '?seq=' + (seq++) +
+							'&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow);
 	return false;
 }
 function twsSearchUpdate(q) {
-	update_ele2 = loadXDomainScript('http://search.twitter.com/search.json?seq=' + (seq++) +
-							'&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp +
-							'&callback=twsSearchShow2', update_ele2);
-	$("loading").style.display = "block";
+	xds.load_for_tab(tws_API + '?seq=' + (seq++) +
+							'&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow2);
 }
 function closeSearchTab(myid) {
 	if (!confirm(_('Are you sure to close this tab?'))) return;
@@ -84,9 +81,8 @@ function twsSearchShow(res, update) {
 		var next = nextButton('next-search');
 		$("tw2c").appendChild(next);
 		get_next_func = function(){
-			update_ele2 = loadXDomainScript('http://search.twitter.com/search.json' + res.next_page +
-								'&seq=' + (seq++) + '&rpp=' + tws_rpp +
-								'&callback=twsSearchShow', update_ele2);
+			xds.load_for_tab(tws_API + res.next_page +
+								'&seq=' + (seq++) + '&rpp=' + tws_rpp, twsSearchShow);
 		}
 	}
 }

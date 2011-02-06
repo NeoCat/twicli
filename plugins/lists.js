@@ -1,9 +1,9 @@
-langResources['Add'] =	['追加'];
-langResources['get all tweets'] =	['全ツイートを取得'];
-langResources['Please specify a list like "@user/list".'] =	['リストを"@user/list"の形式で指定して下さい。'];
-langResources['Lists'] =	['リスト'];
-langResources['subscribing lists by twicli'] =	['twicliで購読中のリスト'];
-langResources['Initialization failed; regexp.js may not be loaded.'] =	['初期化に失敗しました。regexp.jsがロードされていないようです。'];
+langResources['Add'] =	['追加','添加'];
+langResources['get all tweets'] =	['全ツイートを取得','获取所有发言'];
+langResources['Please specify a list like "@user/list".'] =	['リストを"@user/list"の形式で指定して下さい。','请使用"@user/list"的格式指定List'];
+langResources['Lists'] =	['リスト','列表'];
+langResources['subscribing lists by twicli'] =	['twicliで購読中のリスト','用twicli订阅的lists'];
+langResources['Initialization failed; regexp.js may not be loaded.'] =	['初期化に失敗しました。regexp.jsがロードされていないようです。','初始化失败。regexp.js可能无法加载。'];
 
 
 var last_list = ['',''];
@@ -18,21 +18,17 @@ function twlGetListInfo(name) {
 	var del = name.indexOf('/');
 	var user = name.substr(0, del), slug = name.substr(del+1);
 	lists_users[name] = [];
-	$("loading").style.display = "block";
-	xds.load(twitterAPI + user + '/' + slug + '/members.json',
+	xds.load_for_tab(twitterAPI + user + '/' + slug + '/members.json',
 		function twlListMember (info) {
 			if (info.error) {
 				alert(info.error);
 				twlUnsubscribeList(name);
-				$("loading").style.display = "none";
 				return;
 			}
 			lists_users[name] = lists_users[name].concat(info.users.map(function(u){ delete u.status; return u; }));
 			if (info.next_cursor) {
-				$("loading").style.display = "block";
-				xds.load(twitterAPI + user + '/' + slug + '/members.json?cursor=' + info.next_cursor, twlListMember);
+				xds.load_for_tab(twitterAPI + user + '/' + slug + '/members.json?cursor=' + info.next_cursor, twlListMember);
 			} else {
-				$("loading").style.display = "none";
 				twlUpdateListsList();
 			}
 		});
@@ -80,9 +76,7 @@ function twlToggleListsInTL(a, ele) {
 }
 
 function twlGetLists(user) {
-	$("loading").style.display = "block";
-	update_ele2 = loadXDomainScript(twitterAPI + user + '/lists/memberships.json?seq=' + (seq++) +
-							'&callback=twlFollowers', update_ele2);
+	xds.load_for_tab(twitterAPI + user + '/lists/memberships.json?seq=' + (seq++), twlFollowers);
 }
 function twlFollowers(res) {
 	if (selected_menu.id != "user") return;
@@ -92,8 +86,7 @@ function twlFollowers(res) {
 		return '<div> <a target="_blank" href="' + twitterURL + a.uri.substr(1) + '" onclick="return twlGetListStatus(\'' + a.uri.substr(1) + '\')">' + a.full_name + '</a> (' +
 				 a.member_count + ' / ' + a.subscriber_count + ')</div>';
 	}).join("");
-	update_ele2 = loadXDomainScript(twitterAPI + last_user + '/lists.json?seq=' + (seq++) +
-							'&callback=twlLists', update_ele2);
+	xds.load_for_tab(twitterAPI + last_user + '/lists.json?seq=' + (seq++), twlLists);
 }
 function twlLists(res) {
 	if (selected_menu.id != "user") return;
@@ -101,29 +94,25 @@ function twlLists(res) {
 		return '<div> <a target="_blank" href="' + twitterURL + a.uri.substr(1) + '" onclick="return twlGetListStatus(\'' + a.uri.substr(1) + '\')">' + a.full_name + '</a> (' +
 				 a.member_count + ' / ' + a.subscriber_count + ')</div>';
 	}).join("");
-	$("loading").style.display = "none";
 }
 
 function twlGetListStatus(list) {
 	last_list = list.split("/");
-	$("loading").style.display = "block";
 	twl_page = 0;
 	if (twl_update_timer) clearInterval(twl_update_timer);
 	if (selected_menu.id == "user") fav_mode = 9;
 	$("tw2c").innerHTML = "";
 	twl_update_timer = setInterval(function(){twlGetListStatusUpdate(list)}, 1000*Math.max(updateInterval, 30));
-	update_ele2 = loadXDomainScript(twitterAPI + last_list[0] + '/lists/' + last_list[1] +
-							'/statuses.json?seq=' + (seq++) + '&per_page=' + max_count_u +
-							'&callback=twlShowListStatus', update_ele2);
+	xds.load_for_tab(twitterAPI + last_list[0] + '/lists/' + last_list[1] + '/statuses.json?' +
+				'seq=' + (seq++) + '&per_page=' + max_count_u, twlShowListStatus);
 	return false;
 }
 function twlGetListStatusUpdate(list) {
 	last_list = list.split("/");
-	$("loading").style.display = "block";
 	if (selected_menu.id == "user") fav_mode = 9;
-	update_ele2 = loadXDomainScript(twitterAPI + last_list[0] + '/lists/' + last_list[1] +
-							'/statuses.json?seq=' + (seq++) + '&per_page=' + max_count_u +
-							'&callback=twlShowListStatus2', update_ele2);
+	xds.load_for_tab(twitterAPI + last_list[0] + '/lists/' + last_list[1] +
+							'/statuses.json?seq=' + (seq++) + '&per_page=' + max_count_u,
+							twlShowListStatus2)
 }
 function twlShowListStatus2(tw) {
 	twlShowListStatus(tw, true);
@@ -140,9 +129,9 @@ function twlShowListStatus(tw, update) {
 	var next = nextButton('next-list');
 	$("tw2c").appendChild(next);
 	get_next_func = function(){
-	update_ele2 = loadXDomainScript(twitterAPI + last_list[0] + '/lists/' + last_list[1] +
+	xds.load_for_tab(twitterAPI + last_list[0] + '/lists/' + last_list[1] +
 							'/statuses.json?seq=' + (seq++) + '&per_page=' + max_count_u +
-							'&max_id=' + tw[tw.length-1].id + '&callback=twlShowListStatus', update_ele2);
+							'&max_id=' + tw[tw.length-1].id, twlShowListStatus);
 	}
 	}
 }
