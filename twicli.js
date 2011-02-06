@@ -58,6 +58,9 @@ function loadXDomainScript(url, ele) {
 // クロスドメインJavaScript呼び出し(エラー処理+リトライ付き, Twitter APIはOAuth認証)
 var xds = {
 	load: function(url, callback, onerror, retry, callback_key) {
+		var url2 = setupOAuthURL(url + (url.indexOf('?')<0?'?':'&') +
+								(callback_key?callback_key:'callback') + '=cb');
+		if (!url2) return null;
 		loading(true);
 		var ifr = document.createElement("iframe");
 		ifr.style.display = "none";
@@ -78,8 +81,6 @@ var xds = {
 			loading(false);
 			setTimeout(function(){ try { ifr.parentNode.removeChild(ifr); } catch(e) {} }, 0);
 		};
-		var url2 = setupOAuthURL(url + (url.indexOf('?')<0?'?':'&') +
-								(callback_key?callback_key:'callback') + '=cb');
 		d.write('<scr'+'ipt src="array.js"></scr'+'ipt>' +
 				'<scr'+'ipt>function cb(){document.x=arguments}</scr'+'ipt>' +
 				'<scr'+'ipt src="'+url2+'"></scr'+'ipt>');
@@ -270,7 +271,7 @@ function _(key) {
 }
 
 // version check
-document.twicli_js_ver = 1;
+document.twicli_js_ver = 2;
 if (!document.twicli_html_ver || document.twicli_html_ver < document.twicli_js_ver) {
 	if (location.href.indexOf('?') < 0) {
 		location.href = location.href + '?' + document.twicli_js_ver;
@@ -358,6 +359,7 @@ var geo = null;
 var geowatch = null;
 var ratelimit_reset_time = null;
 var loading_cnt = 0;
+var err_timeout = null;
 
 // loading表示のコントロール
 function loading(start) {
@@ -432,7 +434,23 @@ function error(str) {
 		else
 			xds.load_for_tab(twitterAPI + 'account/rate_limit_status.json?id=' + myname, twLimit2);
 	}
-	alert(str);
+	$("error").innerHTML = str;
+	$("error").style.display = "block";
+	if (err_timeout) clearTimeout(err_timeout);
+	err_timeout = error_animate(true);
+}
+function error_animate(show, t) {
+	t = t || new Date();
+	var dur = new Date() - t;
+	var opacity = Math.min(0.8, dur/300.0);
+	if (!show) opacity = Math.max(0, 0.8-opacity);
+	$("error").style.opacity = opacity;
+	if (show && opacity == 0.8)
+		err_timeout = setTimeout(function(){ error_animate(false); }, 5000);
+	else if (!show && opacity == 0)
+		$("error").style.display = "none";
+	else
+		err_timeout = setTimeout(function(){ error_animate(show, t); }, 30);
 }
 
 function twFail() {
@@ -1190,6 +1208,10 @@ function getNextFuncCommon() {
 }
 // タイムライン切り替え
 function switchTo(id) {
+	if (err_timeout) {
+		clearTimeout(err_timeout);
+		err_timeout = error_animate(false);
+	}
 	xds.abort_tab();
 	selected_menu.className = "";
 	selected_menu = $(id);

@@ -63,6 +63,7 @@ form { margin-bottom: 0; }
 .selected { background-color: #cef !important; }
 .deleted > .status { text-decoration: line-through; }
 .nrFav { background-color: #3fc; font-size: small; }
+#error { display: none; background-color: black; color: white; text-align: center; font-weight: bold; z-index: 10; padding: 10px; position: absolute; top: 30%; width: 80%; height: 100px; left: 10%; -moz-border-radius: 16px; -webkit-border-radius: 16px; border-radius: 16px; -moz-box-shadow: 1px 1px 4px #000; -webkit-box-shadow: 1px 1px 4px #000; box-shadow; 1px 1px 4px #000; opacity: 0.80; filter: alpha(opacity=80); }
 
 #counter-div { display: none; width: 3em; position: fixed; top: 33px; right: 6%; z-index: 9; opacity: 0.80; filter: alpha(opacity=80); }
 #counter-p1 { border-top: solid 9px transparent; width: 0; height: 0; border-right: solid 5px #99f; float: left; margin-left: 8px; }
