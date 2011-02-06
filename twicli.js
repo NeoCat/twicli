@@ -63,8 +63,9 @@ var xds = {
 		ifr.style.display = "none";
 		document.body.appendChild(ifr);
 		var d = ifr.contentWindow.document;
+		var cnt = 0; // 二重onload防止
 		ifr[ifr.readyState/*IE*/ ? "onreadystatechange" : "onload"] = function() {
-			if (this.readyState && this.readyState != 'complete') return;
+			if (this.readyState && this.readyState != 'complete' || cnt++) return;
 			if (d.x) {
 				if (callback) callback.apply(this, d.x);
 			} else if (retry && retry > 1) {
