@@ -271,7 +271,7 @@ function _(key) {
 }
 
 // version check
-document.twicli_js_ver = 2;
+document.twicli_js_ver = 3;
 if (!document.twicli_html_ver || document.twicli_html_ver < document.twicli_js_ver) {
 	if (location.href.indexOf('?') < 0) {
 		location.href = location.href + '?' + document.twicli_js_ver;
@@ -434,7 +434,7 @@ function error(str) {
 		else
 			xds.load_for_tab(twitterAPI + 'account/rate_limit_status.json?id=' + myname, twLimit2);
 	}
-	$("error").innerHTML = str;
+	$("errorc").innerHTML = str;
 	$("error").style.display = "block";
 	if (err_timeout) clearTimeout(err_timeout);
 	err_timeout = error_animate(true);
