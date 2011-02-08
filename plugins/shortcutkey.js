@@ -39,7 +39,7 @@ var shortcutkey_plugin = {
 		}
 		if (shortcutkey_plugin.repeat_check) {
 			if (ev.type == 'keydown' && code != 38 && code != 40 && code != 74 && code != 75)
-				return false;
+				return true;
 			var date = ev.timeStamp || new Date(); // 連続する30ms以内のイベントは無視
 			if (shortcutkey_plugin.last_event_date && date - shortcutkey_plugin.last_event_date < 30)
 				return true;
