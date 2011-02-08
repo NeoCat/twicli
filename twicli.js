@@ -1422,12 +1422,13 @@ function callPlugins(name) {
 }
 function loadPlugins() {
 	if (pluginstr) {
-		var ps = pluginstr.split("\n");
+		var ps = pluginstr.split(/[\r\n]+/);
 		var pss = "";
 		for (var i = 0; i < ps.length; i++) {
 			pss += '<scr'+'ipt type="text/javascript">plugin_name="'+ps[i].replace(/[\\\"]/g,'')+'"</scr'+'ipt>';
 			pss += '<scr'+'ipt type="text/javascript" src="' + (ps[i].indexOf("/") >= 0 ? '' : 'plugins/') + ps[i] + '"></scr'+'ipt>';
 		}
+		alert(pss);
 		document.write(pss);
 	}
 }
