@@ -824,7 +824,7 @@ function makeUserInfoHTML(user) {
 			'<br><a href="javascript:switchStatus()">' + user.statuses_count + '<small>'+_('tweets')+'</small></a> / ' +
 						'<a href="javascript:switchFav()">' + user.favourites_count + '<small>'+_('favs')+'</small></a></b>' +
 			'</td></tr></table>'+
-			'<a class="button upopup" href="#" onClick="userinfo_popup_menu(\'' + user.screen_name + '\',' + user.id + ', this); return false;"><small><small>▼</small></small></a>'+
+			(user.screen_name != myname ? '<a class="button upopup" href="#" onClick="userinfo_popup_menu(\'' + user.screen_name + '\',' + user.id + ', this); return false;"><small><small>▼</small></small></a>' : '')+
 			'<a target="twitter" href="' + twitterURL + user.screen_name + '">[Twitter]</a> ';
 }
 // 過去の発言取得ボタン(DOM)生成
