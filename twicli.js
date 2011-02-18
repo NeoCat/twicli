@@ -81,8 +81,8 @@ var xds = {
 			loading(false);
 			setTimeout(function(){ try { ifr.parentNode.removeChild(ifr); } catch(e) {} }, 0);
 		};
-		d.write('<scr'+'ipt src="array.js"></scr'+'ipt>' +
-				'<scr'+'ipt>function cb(){document.x=arguments}</scr'+'ipt>' +
+		d.write('<scr'+'ipt src="array.js"></scr'+'ipt>');
+		d.write('<scr'+'ipt>function cb(){document.x=arguments}</scr'+'ipt>' +
 				'<scr'+'ipt src="'+url2+'"></scr'+'ipt>');
 		d.close();
 		return ifr;
