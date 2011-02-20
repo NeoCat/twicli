@@ -301,6 +301,7 @@ if (!(cookieVer>8)) pluginstr+="\nthumbnail.js";
 //if (!(cookieVer>9)) pluginstr=" worldcup-2010.js\n" + pluginstr.substr(1);
 if (!(cookieVer>10)) pluginstr = pluginstr.replace(/worldcup-2010\.js[\r\n]+/,'');
 if (!(cookieVer>10)) pluginstr+="\ngeomap.js";
+if (!(cookieVer>11) && pluginstr.indexOf('tweet_url_reply.js')<0) pluginstr+="\ntweet_url_reply.js";
 pluginstr = pluginstr.substr(1);
 var plugins = new Array;
 var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 200);
@@ -1370,7 +1371,7 @@ function setPreps(frm) {
 	decr_enter = frm.decr_enter.checked;
 	no_geotag = !frm.geotag.checked;
 	resetUpdateTimer();
-	writeCookie('ver', 11, 3652);
+	writeCookie('ver', 12, 3652);
 	writeCookie('user_lang', user_lang, 3652);
 	writeCookie('limit', nr_limit, 3652);
 	writeCookie('max_count', max_count, 3652);
