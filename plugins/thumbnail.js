@@ -78,8 +78,8 @@ registerPlugin({
 			var host = parseInt(id)%4 + 1;
 			addThumbnail(elem, 'http://tn-skr' + host + '.smilevideo.jp/smile?i=' + id, url);
 		}
-		else if (url.match(/^http:\/\/instagr\.am\/p\/[\w\-]+\/?$/)) {
-			addThumbnail(elem, 'http://thumbnail-image.appspot.com/thumbnail?url=' + url, url);
+		else if (url.match(/^(http:\/\/instagr\.am\/p\/[\w\-]+)\/?$/)) {
+			addThumbnail(elem, RegExp.$1+'/media/?size=t', url);
 		}
 	}
 });
