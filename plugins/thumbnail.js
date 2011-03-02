@@ -81,7 +81,7 @@ registerPlugin({
 		else if (url.match(/^(http:\/\/instagr\.am\/p\/[\w\-]+)\/?$/)) {
 			addThumbnail(elem, RegExp.$1+'/media/?size=t', url);
 		}
-		else if (url.match(/^(http:\/\/picplz.com\/\d+)/)) {
+		else if (url.match(/^(http:\/\/picplz.com\/\w+)/)) {
 			addThumbnail(elem, url+'/thumb/400', url);
 		}
 	}
