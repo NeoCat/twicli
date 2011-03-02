@@ -82,7 +82,7 @@ registerPlugin({
 			addThumbnail(elem, RegExp.$1+'/media/?size=t', url);
 		}
 		else if (url.match(/^(http:\/\/picplz.com\/\w+)/)) {
-			addThumbnail(elem, url+'/thumb/400', url);
+			addThumbnail(elem, url+'/thumb/150', url);
 		}
 	}
 });
