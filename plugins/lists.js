@@ -100,11 +100,15 @@ function twlGetListStatus(list) {
 	last_list = list.split("/");
 	twl_page = 0;
 	if (twl_update_timer) clearInterval(twl_update_timer);
-	if (selected_menu.id == "user") fav_mode = 9;
 	$("tw2c").innerHTML = "";
-	twl_update_timer = setInterval(function(){twlGetListStatusUpdate(list)}, 1000*Math.max(updateInterval, 30));
-	xds.load_for_tab(twitterAPI + last_list[0] + '/lists/' + last_list[1] + '/statuses.json?' +
+	if (selected_menu.id == "user") {
+		fav_mode = 9;
+		twlGetListStatusUpdate(list);
+	} else {
+		twl_update_timer = setInterval(function(){twlGetListStatusUpdate(list)}, 1000*Math.max(updateInterval, 30));
+		xds.load_for_tab(twitterAPI + last_list[0] + '/lists/' + last_list[1] + '/statuses.json?' +
 				'seq=' + (seq++) + '&per_page=' + max_count_u, twlShowListStatus);
+	}
 	return false;
 }
 function twlGetListStatusUpdate(list) {
