@@ -102,7 +102,6 @@ function twlGetListStatus(list) {
 	if (twl_update_timer) clearInterval(twl_update_timer);
 	$("tw2c").innerHTML = "";
 	if (selected_menu.id == "user") {
-		fav_mode = 9;
 		twlGetListStatusUpdate(list);
 	} else {
 		twl_update_timer = setInterval(function(){twlGetListStatusUpdate(list)}, 1000*Math.max(updateInterval, 30));
