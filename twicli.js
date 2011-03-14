@@ -708,7 +708,7 @@ function quoteStatus(id, user, ele) {
 }
 // 発言の削除
 function deleteStatus(id) {
-	id = id || popup_id;
+	id = id || popup_ele.tw.id_str || popup_ele.tw.id;
 	if (!id) return false;
 	if (!confirm(_('Are you sure to delete this tweet?'))) return false;
 	for (var i = 0; i < 3; i++) {
