@@ -84,6 +84,10 @@ registerPlugin({
 		else if (url.match(/^(http:\/\/picplz.com\/\w+)/)) {
 			addThumbnail(elem, url+'/thumb/150', url);
 		}
+		else if (url.match(/^http:\/\/photozou\.jp\/photo\/show\/\d+\/(\d+)/)) {
+			addThumbnail(elem, "http://art"+Math.floor(Math.random()*40+1)+".photozou.jp/bin/photo/"+
+							RegExp.$1 +"/org.bin?size=120", url);
+		}
 	}
 });
 
