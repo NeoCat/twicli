@@ -58,6 +58,9 @@ function loadXDomainScript(url, ele) {
 // クロスドメインJavaScript呼び出し(エラー処理+リトライ付き, Twitter APIはOAuth認証)
 var xds = {
 	load: function(url, callback, onerror, retry, callback_key) {
+		var url2 = setupOAuthURL(url + (url.indexOf('?')<0?'?':'&') +
+								(callback_key?callback_key:'callback') + '=cb');
+		if (!url2) return null;
 		loading(true);
 		var ifr = document.createElement("iframe");
 		ifr.style.display = "none";
@@ -78,10 +81,7 @@ var xds = {
 			loading(false);
 			setTimeout(function(){ try { ifr.parentNode.removeChild(ifr); } catch(e) {} }, 0);
 		};
-		var url2 = setupOAuthURL(url + (url.indexOf('?')<0?'?':'&') +
-								(callback_key?callback_key:'callback') + '=cb');
 		d.write('<scr'+'ipt src="array.js"></scr'+'ipt>' +
-				'<scr'+'ipt>function cb(){document.x=arguments}</scr'+'ipt>' +
 				'<scr'+'ipt src="'+url2+'"></scr'+'ipt>');
 		d.close();
 		return ifr;
@@ -270,7 +270,7 @@ function _(key) {
 }
 
 // version check
-document.twicli_js_ver = 1;
+document.twicli_js_ver = 3;
 if (!document.twicli_html_ver || document.twicli_html_ver < document.twicli_js_ver) {
 	if (location.href.indexOf('?') < 0) {
 		location.href = location.href + '?' + document.twicli_js_ver;
@@ -301,6 +301,7 @@ if (!(cookieVer>8)) pluginstr+="\nthumbnail.js";
 //if (!(cookieVer>9)) pluginstr=" worldcup-2010.js\n" + pluginstr.substr(1);
 if (!(cookieVer>10)) pluginstr = pluginstr.replace(/worldcup-2010\.js[\r\n]+/,'');
 if (!(cookieVer>10)) pluginstr+="\ngeomap.js";
+if (!(cookieVer>11) && pluginstr.indexOf('tweet_url_reply.js')<0) pluginstr+="\ntweet_url_reply.js";
 pluginstr = pluginstr.substr(1);
 var plugins = new Array;
 var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 200);
@@ -358,6 +359,7 @@ var geo = null;
 var geowatch = null;
 var ratelimit_reset_time = null;
 var loading_cnt = 0;
+var err_timeout = null;
 
 // loading表示のコントロール
 function loading(start) {
@@ -432,7 +434,23 @@ function error(str) {
 		else
 			xds.load_for_tab(twitterAPI + 'account/rate_limit_status.json?id=' + myname, twLimit2);
 	}
-	alert(str);
+	$("errorc").innerHTML = str;
+	$("error").style.display = "block";
+	if (err_timeout) clearTimeout(err_timeout);
+	err_timeout = error_animate(true);
+}
+function error_animate(show, t) {
+	t = t || new Date();
+	var dur = new Date() - t;
+	var opacity = Math.min(0.8, dur/300.0);
+	if (!show) opacity = Math.max(0, 0.8-opacity);
+	$("error").style.opacity = opacity;
+	if (show && opacity == 0.8)
+		err_timeout = setTimeout(function(){ error_animate(false); }, 5000);
+	else if (!show && opacity == 0)
+		$("error").style.display = "none";
+	else
+		err_timeout = setTimeout(function(){ error_animate(show, t); }, 30);
 }
 
 function twFail() {
@@ -690,7 +708,7 @@ function quoteStatus(id, user, ele) {
 }
 // 発言の削除
 function deleteStatus(id) {
-	id = id || popup_id;
+	id = id || popup_ele.tw.id_str || popup_ele.tw.id;
 	if (!id) return false;
 	if (!confirm(_('Are you sure to delete this tweet?'))) return false;
 	for (var i = 0; i < 3; i++) {
@@ -806,7 +824,7 @@ function makeUserInfoHTML(user) {
 			'<br><a href="javascript:switchStatus()">' + user.statuses_count + '<small>'+_('tweets')+'</small></a> / ' +
 						'<a href="javascript:switchFav()">' + user.favourites_count + '<small>'+_('favs')+'</small></a></b>' +
 			'</td></tr></table>'+
-			'<a class="button upopup" href="#" onClick="userinfo_popup_menu(\'' + user.screen_name + '\',' + user.id + ', this); return false;"><small><small>▼</small></small></a>'+
+			(user.screen_name != myname ? '<a class="button upopup" href="#" onClick="userinfo_popup_menu(\'' + user.screen_name + '\',' + user.id + ', this); return false;"><small><small>▼</small></small></a>' : '')+
 			'<a target="twitter" href="' + twitterURL + user.screen_name + '">[Twitter]</a> ';
 }
 // 過去の発言取得ボタン(DOM)生成
@@ -1190,6 +1208,10 @@ function getNextFuncCommon() {
 }
 // タイムライン切り替え
 function switchTo(id) {
+	if (err_timeout) {
+		clearTimeout(err_timeout);
+		err_timeout = error_animate(false);
+	}
 	xds.abort_tab();
 	selected_menu.className = "";
 	selected_menu = $(id);
@@ -1349,7 +1371,7 @@ function setPreps(frm) {
 	decr_enter = frm.decr_enter.checked;
 	no_geotag = !frm.geotag.checked;
 	resetUpdateTimer();
-	writeCookie('ver', 11, 3652);
+	writeCookie('ver', 12, 3652);
 	writeCookie('user_lang', user_lang, 3652);
 	writeCookie('limit', nr_limit, 3652);
 	writeCookie('max_count', max_count, 3652);
@@ -1400,7 +1422,7 @@ function callPlugins(name) {
 }
 function loadPlugins() {
 	if (pluginstr) {
-		var ps = pluginstr.split("\n");
+		var ps = pluginstr.split(/[\r\n]+/);
 		var pss = "";
 		for (var i = 0; i < ps.length; i++) {
 			pss += '<scr'+'ipt type="text/javascript">plugin_name="'+ps[i].replace(/[\\\"]/g,'')+'"</scr'+'ipt>';

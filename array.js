@@ -25,3 +25,6 @@ Array.prototype.remove = function(x) {
 			this.splice(i--, l-- && 1);
 	return this;
 };
+
+// callback for xds.load
+function cb(){document.x=arguments}

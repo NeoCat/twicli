@@ -78,8 +78,15 @@ registerPlugin({
 			var host = parseInt(id)%4 + 1;
 			addThumbnail(elem, 'http://tn-skr' + host + '.smilevideo.jp/smile?i=' + id, url);
 		}
-		else if (url.match(/^http:\/\/instagr\.am\/p\/[\w\-]+\/?$/)) {
-			addThumbnail(elem, 'http://thumbnail-image.appspot.com/thumbnail?url=' + url, url);
+		else if (url.match(/^(http:\/\/instagr\.am\/p\/[\w\-]+)\/?$/)) {
+			addThumbnail(elem, RegExp.$1+'/media/?size=t', url);
+		}
+		else if (url.match(/^(http:\/\/picplz.com\/\w+)/)) {
+			addThumbnail(elem, url+'/thumb/150', url);
+		}
+		else if (url.match(/^http:\/\/photozou\.jp\/photo\/show\/\d+\/(\d+)/)) {
+			addThumbnail(elem, "http://art"+Math.floor(Math.random()*40+1)+".photozou.jp/bin/photo/"+
+							RegExp.$1 +"/org.bin?size=120", url);
 		}
 	}
 });

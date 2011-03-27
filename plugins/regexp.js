@@ -19,8 +19,29 @@ function execRegexp(tw, exp) {
 	var text = t.text + source + rtinfo;
 	return	(!exp.id     || t.user.screen_name.match(exp.id  )) &&
 		(!exp.id_n   ||!t.user.screen_name.match(exp.id_n)) &&
+		(!exp.fn     || exp.fn.apply(tw)) &&
 		(!exp.text   || text.match(exp.text  )) &&
 		(!exp.text_n ||!text.match(exp.text_n))
+}
+
+// Lambda( {}で囲われたキーワード条件指定 )の関数化
+function evalFnStr(str) {
+	if (!str || !str.match(/^\{(.*)\}$/)) return null;
+	// {〜}の対応チェック
+	var check_str = RegExp.$1.replace(/\\\\/g,'').replace(/\\[\"\']/g,'')
+			.replace(/\'.*?\'/g, '').replace(/\".*?\"/g, ''); // 文字列を除外
+	var s = 0;
+	var depth_list = check_str.split('{').map(function(x){return s=s-x.split('}').length+2});
+	if (depth_list[depth_list.length-1] != 1) return alert("{ and } are not matched"); // {と}の個数不一致
+	for (var i = 0; i < depth_list.length; i++)
+		if (depth_list[i] < 1) return alert("{ and } are not matched"); // 前の"{"に対応しない"}"が存在
+	var ret = null;
+	try {
+		eval('ret = (function(){try\n' + str + '\ncatch(e){ window.regexp_error = e; }})');
+	} catch(e) {
+		alert("regexp.js: Error in pattern in {}:\n\n"+e);
+	}
+	return ret;
 }
 
 // タブ切り替え処理
@@ -93,7 +114,8 @@ function initRegexp() {
 		var entry = list[id].split(':');
 		var tabname = entry[0];
 		var regexp = entry[1] ? entry[1].split("/") : [];
-		var regexp2 = entry[2] ? entry[2].split("/") : [];
+		var regexp2_fn = evalFnStr(entry[2]);
+		var regexp2 = !regexp2_fn && entry[2] ? entry[2].split("/") : [];
 		var filter = entry[3];
 		var no_close = false;
 		if (!tabname) continue;
@@ -121,6 +143,7 @@ function initRegexp() {
 		try {
 			if (regexp[0]) exps.id = new RegExp(regexp[0]);
 			if (regexp[1]) exps.id_n = new RegExp(regexp[1]);
+			if (regexp2_fn) exps.fn = regexp2_fn;
 			if (regexp2[0]) exps.text = new RegExp(regexp2[0], 'i');
 			if (regexp2[1]) exps.text_n = new RegExp(regexp2[1], 'i');
 		} catch (e) { alert("RegExp Error in " + tabname + " tab :\nline "+(id+1)+" - " + e); }
