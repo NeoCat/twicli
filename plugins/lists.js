@@ -25,8 +25,8 @@ function twlGetListInfo(name) {
 				return;
 			}
 			lists_users[name] = lists_users[name].concat(info.users.map(function(u){ delete u.status; return u; }));
-			if (info.next_cursor) {
-				xds.load_for_tab(twitterAPI + user + '/' + slug + '/members.json?cursor=' + info.next_cursor, twlListMember);
+			if (info.next_cursor_str && info.next_cursor_str != "0" || info.next_cursor) {
+				xds.load_for_tab(twitterAPI + user + '/' + slug + '/members.json?cursor=' + (info.next_cursor_str || info.next_cursor), twlListMember);
 			} else {
 				twlUpdateListsList();
 			}
