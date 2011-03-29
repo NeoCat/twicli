@@ -112,11 +112,12 @@ registerPlugin({
 		for (var i = 0; i < eles.length; i++) {
 			var target = eles[i];
 			if (target.className == "status") {
-				target.innerHTML = target.innerHTML.replace(/<a .*?>.*?<\/a>|(\W|_|^)([#＃])(\w{2,})(?=\W|$)/gi, function(_,d1,m,t){
-					if (_.substr(0,1) == '<') return _; // skip link
-					if (t.match(/^[#＃]\d+$/)) return _;
-					return d1+'<a href="http://search.twitter.com/search?q=' + encodeURIComponent(t) +'" onclick="return twsSearch(\'#'+t+'\')">'+m+t+'</a>';
-				});
+				eles = target.getElementsByTagName("a");
+				for (var j = 0; j < eles.length; j++) {
+					target = eles[j];
+					if (target.className.indexOf("hashtag") >= 0)
+						(function(h){ target.onclick = function(){ return twsSearch(h) } })(target.title);
+				}
 				break;
 			}
 		}

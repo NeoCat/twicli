@@ -781,14 +781,18 @@ function makeHTML(tw, no_name, pid) {
 		/*ダイレクトメッセージの方向*/ (t.d_dir == 1 ? '<span class="dir">→</span> ' : t.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text-" + eid + "\" class=\"status\">" +
-		text.replace(/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+|[@＠]([\/\w-]+)/g, function(_,u){
-				if (!u) {
+		text.replace(/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+|[@＠]([\/\w-]+)|(\W|_|^)([#＃])(\w+)(?=\W|$)/g, function(_,u,t,h,s){
+				if (!u && !h) {
 					var paren = '';
 					if (_.substr(_.length-1) == ')') { // 末尾の")"はURLに含めない
 						_ = _.substr(0, _.length-1);
 						paren = ')';
 					}
 					return "<a class=\"link\" target=\"_blank\" href=\""+_+"\" onclick=\"return link(this);\">"+_+"</a>"+paren;
+				}
+				if (h == "#" || h == "＃") {
+					if (s.match(/^\d+$/)) return _;
+					return t+"<a target=\"_blank\" class=\"hashtag\" title=\""+s+"\" href=\"http://search.twitter.com/search?q="+encodeURIComponent(s)+"\">"+h+s+"</a>";
 				}
 				if (u.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+u+"\" onclick=\"return link(this);\">"+_+"</a>";
 				return "<a href=\""+twitterURL+u+"\" onClick=\"switchUser('"+u+"'); return false;\" >"+_+"</a>";
@@ -1086,8 +1090,7 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 		if (tw[i].user) {
 			var s = document.createElement('div');
 			s.id = tw_node.id + "-" + id;
-			var x = makeHTML(tw[i], no_name, tw_node.id);
-			s.innerHTML = x;
+			s.innerHTML = makeHTML(tw[i], no_name, tw_node.id);
 			s.screen_name = tw[i].user.screen_name;
 			s.tw = tw[i]; // DOMツリーにJSONを記録
 			if (weak) s.weak = true;
