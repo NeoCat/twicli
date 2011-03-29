@@ -776,6 +776,7 @@ function makeHTML(tw, no_name, pid) {
 			'<a href="' + twitterURL + un + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false"><span class="uid">' + un + '</span>' +
 			 /*プロフィールの名前*/ (t.user.name!=un ? '<span class="uname">('+insertPDF(t.user.name)+')</span>' : '') + '</a>'
 		: '') +
+		 /* verified? */ (t.user.verified ? '<img alt="verified" id="verified-' + eid + '" class="verified" src="images/verified.png">' : '') +
 		 /* protected? */ (t.user.protected ? '<img alt="lock" id="lock-' + eid + '" class="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
 		/*ダイレクトメッセージの方向*/ (t.d_dir == 1 ? '<span class="dir">→</span> ' : t.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
@@ -814,7 +815,8 @@ function makeHTML(tw, no_name, pid) {
 function makeUserInfoHTML(user) {
 	return '<table><tr><td><a target="twitter" href="' + twitterURL + 'account/profile_image/'+
 			user.screen_name+'"><img class="uicon2" src="' + user.profile_image_url + '"></a></td><td id="profile"><div>' +
-			(user.protected ? '<img alt="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
+			(user.verified ? '<img class="verified" alt="verified" src="images/verified.png">' : '') +
+			(user.protected ? '<img class="lock" alt="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
 			'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b></div>' +
 			(user.location ? '<div><b>'+_('Location')+'</b>: ' + user.location + '</div>' : '') +
 			(user.url ? '<div><b>'+_('URL')+'</b>: <a target="_blank" href="' + user.url + '" onclick="return link(this);">' + user.url + '</a></div>' : '') +
@@ -1084,7 +1086,8 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 		if (tw[i].user) {
 			var s = document.createElement('div');
 			s.id = tw_node.id + "-" + id;
-			s.innerHTML = makeHTML(tw[i], no_name, tw_node.id);
+			var x = makeHTML(tw[i], no_name, tw_node.id);
+			s.innerHTML = x;
 			s.screen_name = tw[i].user.screen_name;
 			s.tw = tw[i]; // DOMツリーにJSONを記録
 			if (weak) s.weak = true;
