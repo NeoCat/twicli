@@ -792,7 +792,7 @@ function makeHTML(tw, no_name, pid) {
 				}
 				if (h == "#" || h == "＃") {
 					if (s.match(/^\d+$/)) return _;
-					return t+"<a target=\"_blank\" class=\"hashtag\" title=\""+s+"\" href=\"http://search.twitter.com/search?q="+encodeURIComponent(s)+"\">"+h+s+"</a>";
+					return t+"<a target=\"_blank\" class=\"hashtag\" title=\"#"+s+"\" href=\"http://search.twitter.com/search?q="+encodeURIComponent("#"+s)+"\">"+h+s+"</a>";
 				}
 				if (u.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+u+"\" onclick=\"return link(this);\">"+_+"</a>";
 				return "<a href=\""+twitterURL+u+"\" onClick=\"switchUser('"+u+"'); return false;\" >"+_+"</a>";
