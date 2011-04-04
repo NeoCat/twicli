@@ -1219,6 +1219,17 @@ function switchTo(id) {
 		err_timeout = error_animate(false);
 	}
 	xds.abort_tab();
+	if (selected_menu.id == "TL" || selected_menu.id == "reply") {
+		if (getScrollY() >= 10) {
+			// スクロール位置を保持
+			selected_menu.lastTopDiv = $(selected_menu.id=="TL"?"tw":"re").childNodes[0];
+			selected_menu.lastScrollY = getScrollY() - selected_menu.offsetTop;
+		} else {
+			selected_menu.lastTopDiv = null;
+			selected_menu.lastScrollY = 0;
+		}
+	}
+	var last_menu = selected_menu;
 	selected_menu.className = "";
 	selected_menu = $(id);
 	selected_menu.className = "sel";
@@ -1230,7 +1241,13 @@ function switchTo(id) {
 	$("tw2c").nr_tw = 0;
 	$("tw2c").oldest_id = undefined;
 	closeRep();
-	scrollTo(0, 1); scrollTo(0, 0);
+	if (last_menu.id != id && (id == "TL" || id == "reply") &&
+		selected_menu.lastScrollY && selected_menu.lastTopDiv && selected_menu.lastTopDiv.parentNode) {
+		scrollTo(0, selected_menu.lastScrollY + selected_menu.lastTopDiv.offsetTop);
+	} else {
+		scrollTo(0, 1);
+		scrollTo(0, 0);
+	}
 	cur_page = 1;
 	fav_mode = 0;
 	callPlugins("switchTo", selected_menu);
