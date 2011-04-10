@@ -29,7 +29,7 @@
 						dispEmbedSrc(lng.replace(res[i].search, res[i].replace), link);
 						return false;
 					};
-					a.innerHTML = '<img src="images/inrep.png" alt="☞" width="14" height="14">';
+					a.innerHTML = '<img src="images/jump.png" alt="☞" width="14" height="14">';
 					div = document.createElement('div');
 					div.appendChild(a);
 					link.parentNode.insertBefore(div.firstChild, link.nextSibling);
