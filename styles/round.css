@@ -50,3 +50,9 @@ body, #tw2 { background-color: #eee; }
 	-moz-box-shadow: 4px 4px 10px rgba(0,0,0,0.5), 0 0 10px rgba(255,255,255,1.0) inset;
 	-webkit-box-shadow: 4px 4px 10px rgba(0,0,0,0.5), 0 0 10px rgba(255,255,255,1.0) inset;
 }
+
+.tw-parent > div > div.selected {
+	background-color: #cef !important;
+	background: -moz-linear-gradient(top, #fff, #cef);
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#cef));
+}

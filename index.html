@@ -52,7 +52,7 @@ IE7でも一応動作しますが、一部の表示が乱れます。<br>
 <h2><a name="howto">使い方</a></h2>
 <h3><a name="launch">起動</a></h3>
 上のリンク(bookmarklet)をクリック、またはブックマークにD&amp;Dで登録して選択すると、別窓で起動します。<br>
-初回アクセス時や、+タブのLog outをクリックした場合は、認証を求められます。ブラウザ上、もしくはサーバ経由で認証(OAuth)を行って下さい。<br><br>
+初回アクセス時や、+タブの「ログアウト」をクリックした場合は、認証を求められます。ブラウザ上、もしくはサーバ経由で認証(OAuth)を行って下さい。<br><br>
 あんまり激しくクリックしまくるとAPI制限(350回/1時間)に引っかかりますので、基本まったりご使用下さい。^^;
 </p>
 
@@ -80,51 +80,53 @@ function go(d) {
 <h2><a name="faq">FAQ</a></h2>
 <ul>
 <li><b>公式ハッシュタグは?</b><blockquote> → <a href="http://search.twitter.com/search?q=%23twicliJP">#twicliJP</a> です。疑問//不具合/ご要望などなど、なんでもどうぞ。</blockquote></li>
-<li><b>NGワード（指定語句を含むtweetを隠す）機能はないの?</b><blockquote> →抽出プラグインでできます。(下記リンク参照)</blockquote></li>
-<li><b>Enterで送信だと誤爆が増える…</b><blockquote> → 「+」タブのPreferencesで"Post with ctrl/shift+enter"を有効にしてSaveすると、Shift+EnterまたはCtrl+Enterでないと送信されなくなります。</blockquote></li>
+<li><b>NGワード（指定語句を含むtweetを隠す）機能はないの?</b><blockquote> →抽出プラグインでできます。(<a href="#link">下記リンク</a>参照)</blockquote></li>
+<li><b>Enterで送信だと誤爆が増える…</b><blockquote> → 「+」タブの設定で「ctrl+enter/shift+enterで発言」を有効にして「保存」することで、enterキーのみでは発言しないようにできます。</blockquote></li>
 <li><b>たまにtweetに失敗するみたいなんだけど…</b><blockquote> → Twitterの過負荷で鯨が出ているのかもしれません。「r」とだけ書いてEnterキーを押すと、一つ前のtweetを再送できます。</blockquote></li>
-<li><b>見た目がしょぼいんだけど…</b><blockquote> → 標準では表示できる情報量を増やすため詰め込みぎです。
-「+」タブのPreferencesでCSSを使ってuser stylesheetで見た目をカスタマイズ可能です。例えば
-<pre>@import url(styles/round.css);</pre>
-と記述すると、角丸／影付きの外観に変更できます。他にもtwicli用のuser stylesheetを公開して下さっている方がいらっしゃるので、参考にしてみてください。改善案もお待ちしてます。</blockquote></li>
-<li><b>tweet数が多いときにAPI制限に引っかかる</b><blockquote> →「+」タブのPreferencesで"Update after post"の設定を解除して"Save"すると、tweet後のTL更新を抑止してAPI使用回数を抑えます。</blockquote></li>
+<li><b>見た目がしょぼいんだけど…</b><blockquote> → 標準では表示できる情報量を増やすため詰め込みぎみです。
+twicliはCSSを使って見た目を好みに合わせてカスタマイズ可能です。詳しくは下記の「<a href="#customize">カスタマイズ</a>」を参考にして下さい。</blockquote></li>
+<li><b>tweet数が多いときにAPI制限に引っかかる</b><blockquote> →「+」タブの設定で「発言後に自動更新」の設定を解除して「保存」すると、発言後のTL更新を抑止してAPI使用回数を少なくできます。</blockquote></li>
 <li><a href="http://github.com/NeoCat/twicli/wiki">twicli wiki</a>も参考にして下さい。</li>
 </ul>
 
 <h2><a name="customize">カスタマイズ</a></h2>
 <a href="http://github.com/NeoCat/twicli/wiki">twicli wiki</a>にもカスタマイズに関する情報があります。
-<h3><a name="css">user stylesheetについて</a></h3>
-「+」タブのuser stylesheetにCSSを記述して、見た目のカスタマイズが可能です。例えば：
+<h3><a name="css">ユーザースタイルシートについて</a></h3>
+「+」タブの設定→「ユーザースタイルシート」にCSSを記述して、見た目のカスタマイズが可能です。例えば：
 <ul>
+<li>角丸／影付きの外観に変更 → <tt> @import url(styles/round.css); </tt>
 <li>ユーザのアイコンを消す → <tt> .uicon { display: none; } </tt>
 <li>tweetの行間を広げる　　 → <tt> .status { line-height: 1.5; } </tt>
 </ul>
+他にもtwicli用のユーザースタイルシートを公開して下さっている方がいらっしゃるので、参考にしてみてください(→<a href="https://github.com/NeoCat/twicli/wiki/User-stylesheet">参考</a>)。
 
 <h3><a name="plugins">プラグインについて</a></h3>
-「+」タブのPreferencesでプラグイン(JavaScript)を登録することにより、機能拡張ができます。<br>
+「+」タブの設定でプラグイン(JavaScript)を登録することにより、機能拡張ができます。<br>
 以下のプラグインがあります。
 <ul>
 <li><b>regexp.js</b> : 特定のIDやキーワードを含むtweetを抽出するタブを追加します。詳しくは<a href="http://d.hatena.ne.jp/NeoCat/20090101">こちら</a>。
-<li><b>lists.js</b> : フォローしているListsのうち、指定されたものをタブとして表示します。詳しくは<a href="http://d.hatena.ne.jp/NeoCat/20091101/1257088158">こちら</a>。
+<li><b>lists.js</b> : フォローしているリストのうち、指定されたものをタブとして表示します。詳しくは<a href="http://d.hatena.ne.jp/NeoCat/20091101/1257088158">こちら</a>。
 <li><b>outputz.js</b> : tweetした文字数を<a href="http://outputz.com/">Outputz</a>に送信します。
 <li><b>search.js</b> : <a href="http://search.twitter.com/">Twitter Search</a>でのキーワード検索を「+」タブに追加します。
 <li><b>search2.js</b> : <a href="http://pcod.no-ip.org/yats/">twitter検索</a>での検索機能を「+」タブに追加します。
 <li><b>favotter.js</b> : <a href="http://favotter.matope.com/">ふぁぼったー</a>の最新2000件のふぁぼられ数を<span style="background-color:#6fc; color:#00c;">[fav:3]</span>のようにTLやユーザのtweetに追加表示します。
-<li><b>followers.js</b> : follower以外<small> (いわゆる片想い) </small>のtweetを青色で表示します。「+」タブのColor Followers→Renewボタンを押して最新のfollower一覧を取得する必要があります(デフォルトは無効)。
+<li><b>followers.js</b> : follower以外<small> (いわゆる片想い) </small>のtweetを青色で表示します。「+」タブの「フォロワーを色付け」の「Renew」ボタンを押して、定期的に最新のfollower一覧を取得する必要があります(デフォルトは無効)。
 <li><b>ssl.js</b> : TL取得やtweet時にSSLで通信を暗号化します。
-<li><b>translate.js</b> : ▼から"translate"を選ぶと、「+」タブ>Translateで指定した言語にtweetを翻訳します。
-<li><b>thumbnail.js</b> : 写真投稿サービスのURLを含むtweetにサムネールをつけます。現在<a href="http://twitpic.com/">twitpic</a>, <a href="http://movapic.com/">携帯百景</a>, <a href="http://f.hatena.ne.jp/">HatenaFotolife</a>, <a href="http://tumblr.com/">Tumblr</a>, <a href="http://yfrog.com/">Yfrog</a>, <a href="http://www.flickr.com/">Flickr</a>に対応しています。
-<li><b>resolve_url.js</b> : タイムライン上の短縮URLを短縮前のURLに変換します。(created by <a href="http://twitter.com/edvakf">@edvakf</a>)
+<li><b>translate.js</b> : ▼から「翻訳」を選ぶと、「+」タブ>「翻訳」で指定した言語にtweetを翻訳します。
+<li><b>thumbnail.js</b> : 写真投稿サービスのURLを含むtweetにサムネールをつけます。現在<a href="http://twitpic.com/">twitpic</a>, <a href="http://movapic.com/">携帯百景</a>, <a href="http://f.hatena.ne.jp/">HatenaFotolife</a>, <a href="http://tumblr.com/">Tumblr</a>, <a href="http://yfrog.com/">yFrog</a>, <a href="http:/plixi.com/">Plixi</a>, <a href="http://img.ly/">img.ly</a>, <a href="http://ow.ly/">Ow.ly</a>, <a href="http://www.flickr.com/">Flickr</a>, <a href="http://instagr.am/">Instagram</a>, <a href="http://picplz.com/">picplz</a>に対応しています。
+<li><b>resolve_url.js</b> : タイムライン上の短縮URLを短縮前のURLに展開します。(created by <a href="http://twitter.com/edvakf">@edvakf</a>)
 <li><b>shorten_url.js</b> : 発言欄で、URLの後に ;;; と打ち込むとURLを短縮します。もう一度打ち込むと元に戻ります。(created by <a href="http://twitter.com/edvakf">@edvakf</a>)
-<li><b>geomap.js</b> : GeoLocationが付加されたtweetで、マーカ(<img src="images/marker.png">)をクリックした際にGoogle Mapをインライン表示します。詳しくは<a href="http://d.hatena.ne.jp/NeoCat/20100722/1279741190">こちら</a>。
-<li><b>tweet_url_reply.js</b> <span style="font-size: small; color: red">[非標準]</span> : tweetへのリンクURLに内容を取得するボタン(<img src="images/inrep.png">)を追加します。(created by <a href="http://twitter.com/edvakf">@edvakf</a>)
+<li><b>geomap.js</b> : ジオタグ(GeoLocation)が付加されたtweetで、マーカ(<img src="images/marker.png">)をクリックした際にGoogle Mapをインライン表示します。詳しくは<a href="http://d.hatena.ne.jp/NeoCat/20100722/1279741190">こちら</a>。
+<li><b>tweet_url_reply.js</b> : tweetへのリンクURLに内容を取得するボタン(<img src="images/jump.png">)を追加します。(created by <a href="http://twitter.com/edvakf">@edvakf</a>)
 <li><b>reply_favicon.js</b> <span style="font-size: small; color: red">[非標準]</span> : Re新着時にfavicon(IE,Safari以外)とタイトルを変更します。(created by <a href="http://twitter.com/edvakf">@edvakf</a>)
-<li><b>sound.js</b> <span style="font-size: small; color: red">[非標準]</span> : TLやReの新着時にサウンドを鳴らします。デフォルトでは入っていませんので、使用するにはPreferences＞Pluginsに追加してください。
+<li><b>sound.js</b> <span style="font-size: small; color: red">[非標準]</span> : TLやReの新着時にサウンドを鳴らします。
+<li><b>insert_hashtag.js</b> <span style="font-size: small; color: red">[非標準]</span> : ハッシュタグ(#〜)のタブを開いた状態でtweetすると、末尾にそのハッシュタグを自動追加します。(created by <a href="http://twitter.com/_wa_">@_wa_</a>)
+<li><b>shortcutkey.js</b> <span style="font-size: small; color: red">[非標準]</span> : キーボードショートカットで操作できるようにします(→<a href="https://github.com/NeoCat/twicli/wiki/Shortcutkeys">ショートカットキー一覧</a>)。
+<li><b>multi_account.js</b> <span style="font-size: small; color: red">[非標準]</span> : 複数のアカウントを"+"タブで切り替えられるようにします。タブブラウザと組み合わせれば複数のアカウントを同時利用できます。
 </ul>
 
 <h2><a name="source">ソース</a></h2>
 開発は<a href="http://coderepos.org/share/browser/websites/twicli/">CodeRepos</a>か<a href="http://github.com/NeoCat/twicli/">github</a>上で行っています。パッチや勝手にコミット大歓迎です。なお、ライセンスは<a href="LICENSE.txt">MITライセンス</a>です。開発途上なので随時アップデートしていきます。
-<p><a href="http://coderepos.org/share/browser/websites/twicli/twicli.html">twicli.html</a>が本体(HTML+CSS+JavaScript)。他にプラグイン、画像ファイルが要ります。</p>
 <p>不具合／要望などは<a href="http://twitter.com/NeoCat">@NeoCat</a>にreplyして頂くと対応するかもしれません。#twicliJP ハッシュタグでつぶやいてもらってもOKです。</p>
 
 <h2><a name="link">リンク</a></h2>
@@ -132,14 +134,18 @@ function go(d) {
 <li><a href="http://github.com/NeoCat/twicli/wiki">twicli wiki</a>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20080819/1219133294">開発メモ</a>
 <script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20080819/1219133294");</script></li>
+<li><a href="http://d.hatena.ne.jp/NeoCat/20110206/1296934235">API呼出しについて</a>
+<script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20110206/1296934235");</script></li>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20080904/1220482528">プラグイン開発メモ</a>
 <script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20080904/1220482528");</script></li>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20081121/1227282584">Outputzプラグインについて</a>
 <script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20081121/1227282584");</script></li>
-<li><a href="http://d.hatena.ne.jp/NeoCat/20090101/1230838882">抽出プラグインについて(1/2)</a>
+<li><a href="http://d.hatena.ne.jp/NeoCat/20090101/1230838882">抽出プラグインについて(1)</a>
 <script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20090101/1230838882");</script></li>
-<li><a href="http://d.hatena.ne.jp/NeoCat/20090101/1230913660">抽出プラグインについて(2/2)</a>
+<li><a href="http://d.hatena.ne.jp/NeoCat/20090101/1230913660">抽出プラグインについて(2)</a>
 <script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20090101/1230913660");</script></li>
+<li><a href="http://d.hatena.ne.jp/NeoCat/20110119/1295391840">抽出プラグインについて(3)</a>
+<script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20110119/1295391840");</script></li>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20090824/1251125679">soundプラグインについて</a>
 <script type="text/javascript">hatena_bookmark("http://d.hatena.ne.jp/NeoCat/20090824/1251125679");</script></li>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20091101/1257088158">listsプラグインについて</a>

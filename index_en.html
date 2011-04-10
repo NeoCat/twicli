@@ -23,7 +23,6 @@ pre { background-color: #ddf; border: 1px solid #66f; }
 <a class="language_selection" href="index.html">Japanese</a>
 <div class="whole">
 <h1><a name="twicli"><img alt="twicli" src="images/icon_large.png" width="48" height="48"> twicli</a></h1>
-<a href="http://delicious.com/save" onclick="window.open('http://delicious.com/save?v=5&amp;noui&amp;jump=close&amp;url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title), 'delicious','toolbar=no,width=550,height=550'); return false;"><img src="http://static.delicious.com/img/delicious.small.gif" height="12" width="12" alt="Delicious"> Bookmark this on Delicious</a>
 <table><tr><td>
 <p>
 twicli is a browser-based Twitter client.
@@ -75,9 +74,7 @@ function go(d) {
 <ul>
 <li><b>How to hide tweet which contains specified kerwords?</b><blockquote> => Write "-::keyword:1" into "Pickup Pattern" in the "+" tab.</blockquote></li>
 <li><b>My tweets are sometimes lost ...</b><blockquote> => Twitter may be too crowded. Try writing just "r" and hit enter to re-post your previous tweet.</blockquote></li>
-<li><b>Appearance is poor ...</b><blockquote> => Default appearance isn't decorated at all to display many tweets at once. Try adding CSS below to 'user stylesheet' in Preferences in '+' tab for corner-rounded and shadowed tweets display.
-<pre>@import url(styles/round.css);</pre>
-There are some guys publishing more stylesheets for twicli. Your proposal is also appreciated. :-)</blockquote></li>
+<li><b>Appearance is poor ...</b><blockquote> => Default appearance isn't decorated at all to display many tweets at once. You can customize twicli's appearance using CSS. Please refer <a href="#customize">"Customize" section</a> below.</blockquote></li>
 <li><b>Too much API usage when I tweet frequently ...</b><blockquote> => Disable "Update after post" in "Preferences" in "+" tab to suppress automatic update after tweet is posted.</blockquote></li>
 <li>You can find more information in <a href="http://github.com/NeoCat/twicli/wiki">twicli wiki</a>.</li>
 </ul>
@@ -87,9 +84,11 @@ There are also some information about customizing twicli in <a href="http://gith
 <h3><a name="css">User Stylesheet</a></h3>
 You can add your own CSS in "user stylesheet" section of the "+" tab. For example;
 <ul>
+<li>to apply corner-rounded and shadowed appearance : <tt> @import url(styles/round.css); </tt>
 <li>to hide user icons : <tt> .uicon { display: none; } </tt>
 <li>wider lines : <tt> .status { line-height: 1.5; } </tt>
 </ul>
+There are some guys publishing more stylesheets for twicli (=><a href="https://github.com/NeoCat/twicli/wiki/User-stylesheet">twicli wiki</a>).
 
 <h3><a name="plugins">Plugins</a></h3>
 You can register plugins by setting them at the "Preferences" in the "+" tab.<br>
@@ -104,28 +103,32 @@ Currently, there are plugins below:
 <li><b>followers.js</b> : Colorize tweets of users that you don't follow in blue. To use this, you need to fetch the list of followers by clicking the "Renew" button at the "Color followers" section.
 <li><b>ssl.js</b> : Use SSL to get timeline and to tweet.
 <li><b>translate.js</b> : Choose "translate" from ▼, then the tweet is translated into the language specified in "+" tab > Translate. (Specify "en" for English.)
-<li><b>thumbnail.js</b> : Add thumbnails to the URL of some photo sharing services. Currently supports <a href="http://twitpic.com/">twitpic</a>, <a href="http://movapic.com/">movapic</a>, <a href="http://f.hatena.ne.jp/">HatenaFotolife</a>, <a href="http://tumblr.com/">Tumblr</a>, <a href="http://yfrog.com/">Yfrog</a>, and <a href="http://www.flickr.com/">Flickr</a>.
+<li><b>thumbnail.js</b> : Add thumbnails to the URL of some photo sharing services. Currently supports <a href="http://twitpic.com/">twitpic</a>, <a href="http://movapic.com/">movapic</a>, <a href="http://f.hatena.ne.jp/">HatenaFotolife</a>, <a href="http://tumblr.com/">Tumblr</a>, <a href="http://yfrog.com/">yFrog</a>, <a href="http:/plixi.com/">Plixi</a>, <a href="http://img.ly/">img.ly</a>, <a href="http://ow.ly/">Ow.ly</a>, <a href="http://www.flickr.com/">Flickr</a>, <a href="http://instagr.am/">Instagram</a>, and <a href="http://picplz.com/">picplz</a>.
 <li><b>resolve_url.js</b> : Replace short URLs with the originals in the timeline. (created by <a href="http://twitter.com/edvakf">@edvakf</a>)
 <li><b>shorten_url.js</b> : Typing a URL in the text area followed by three semicolons (;;;) makes a shortened URL. (created by <a href="http://twitter.com/edvakf">@edvakf</a>)
 <li><b>geomap.js</b> : Display inline Google Map by clicking the marker (<img src="images/marker.png">) of tweets with GeoLocation.
-<li><b>tweet_url_reply.js</b> <small>[non-default]</small>: Add a button (<img src="images/inrep.png">) to get the content to URL of a tweet. (created by <a href="http://twitter.com/edvakf">@edvakf</a>)
-<li><b>reply_favicon.js</b> <small>[non-default]</small>: Change favicon(not supported by IE and Safari) and the title when 'Re' is updated。(created by <a href="http://twitter.com/edvakf">@edvakf</a>)
+<li><b>tweet_url_reply.js</b>: Add a button (<img src="imagesjump.png">) to get the content to URL of a tweet. (created by <a href="http://twitter.com/edvakf">@edvakf</a>)
+<li><b>reply_favicon.js</b> <small>[non-default]</small>: Change favicon(not supported by IE and Safari) and the title when 'Re' is updated. (created by <a href="http://twitter.com/edvakf">@edvakf</a>)
 <li><b>sound.js</b> <small>[non-default]</small>: Play sound when 'TL'/'Re' is updated.
+<li><b>insert_hashtag.js</b> <small>[non-default]</small>: Append the hashtag to your tweets automatically while a tab for the hashtag is opened. (created by <a href="http://twitter.com/_wa_">@_wa_</a>)
+<li><b>shortcutkey.js</b> <small>[non-default]</small>: Enable operation by shortcut keys. (-><a href="https://github.com/NeoCat/twicli/wiki/Shortcutkeys">List of the shortcut keys</a>)
+<li><b>multi_account.js</b> <small>[non-default]</small>: Switch between multiple accounts in '+' tab. Useful with tabbed browsers.
 </ul>
 
 <h2><a name="source">Source</a></h2>
 "twicli" is developed at <a href="http://coderepos.org/share/browser/websites/twicli/">CodeRepos</a> and <a href="http://github.com/NeoCat/twicli/">github</a> under <a href="LICENSE.txt">MIT license</a>.
-<p><a href="http://coderepos.org/share/browser/websites/twicli/twicli.html">twicli.html</a> is the main file (HTML+CSS+JavaScript), others are plugins and images.</p>
-<p>Please report any bugs/wishes to <a href="http://twitter.com/NeoCat">@NeoCat</a>.</p>
+<p>Please report any bugs/wishes to <a href="http://twitter.com/NeoCat">@NeoCat</a>. Your patches are also appreciated.</p>
 
 <h2><a name="link">Links <small><small>(all in Japanese)</small></small></a></h2>
 <ul>
 <li><a href="http://github.com/NeoCat/twicli/wiki">twicli wiki</a>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20080819/1219133294">Development Memo</a>
+<li><a href="http://d.hatena.ne.jp/NeoCat/20110206/1296934235">About API call from JavaScript</a>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20080819/1219133294">About development of Plugins</a>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20081121/1227282584">About Outputz plugin</a>
-<li><a href="http://d.hatena.ne.jp/NeoCat/20090101/1230838882">About Regexp plugin(1/2)</a>
-<li><a href="http://d.hatena.ne.jp/NeoCat/20090101/1230913660">About Regexp plugin(2/2)</a>
+<li><a href="http://d.hatena.ne.jp/NeoCat/20090101/1230838882">About Regexp plugin(1)</a>
+<li><a href="http://d.hatena.ne.jp/NeoCat/20090101/1230913660">About Regexp plugin(2)</a>
+<li><a href="http://d.hatena.ne.jp/NeoCat/20110119/1295391840">About Regexp plugin(3)</a>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20090824/1251125679">About Sound plugin</a>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20091101/1257088158">About Lists plugin</a>
 <li><a href="http://d.hatena.ne.jp/NeoCat/20100722/1279741190">About Geomap plugin</a>

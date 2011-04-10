@@ -1,3 +1,7 @@
+langResources['Favotter / new'] =	['ふぁぼったー / 新着','Favotter / 最新'];
+langResources['Favotter / tweet'] =	['ふぁぼったー / ツイート','Favotter / 发言'];
+langResources['Favotter / fav'] =	['ふぁぼったー / ふぁぼり','Favotter / 已收藏'];
+
 var twFavPlugin = {
 	fav_update: null,
 	favs: [],
@@ -6,14 +10,15 @@ var twFavPlugin = {
 		twFavPlugin.fav_update = loadXDomainScript('http://twicli.neocat.jp/nr_favs.js?seq='+(seq++), twFavPlugin.fav_update);
 		setTimeout(twFavPlugin.updateFavs, 15*60*1000);
 	},
-	newMessageElement: function(ele, tw) {
+	newMessageElement: function(ele, tw, pid) {
 		var fele = document.createElement("a");
-		fele.id = "nrFav" + tw.id;
-		fele.href = "http://favotter.net/status.php?id=" + tw.id;
+		var id = tw.id_str || (""+tw.id);
+		fele.id = "nrFav-" + pid + '-' + id;
+		fele.className = "nrFav";
+		fele.href = "http://favotter.net/status.php?id=" + id;
 		fele.target = "favotter";
-		fele.style.backgroundColor = "#3fc";
-		if (this.favs[tw.id]) {
-			fele.innerHTML = '<small>[fav:' + this.favs[tw.id] + ']</small>';
+		if (this.favs[id]) {
+			fele.innerHTML = '[fav:' + this.favs[id] + ']';
 		}
 		ele.insertBefore(fele, ele.childNodes[4]);
 	},
@@ -27,10 +32,12 @@ registerPlugin(twFavPlugin);
 
 function favEntries(favs) {
 	twFavPlugin.favs = favs;
-	for (x in favs) {
-		var target = $('nrFav'+x);
-		if (target)
-			target.innerHTML = '<small>[fav:' + favs[x] + ']</small>';
+	for (var x in favs) {
+		for (var i = 0; i < 3; i++) {
+			var target = $('nrFav-'+['tw-','re-','tw2c-'][i]+x);
+			if (target)
+				target.innerHTML = '[fav:' + favs[x] + ']';
+		}
 	}
 }
 
@@ -42,18 +49,18 @@ $('popup').appendChild(a)
 a = document.createElement("a");
 a.target = 'favotter';
 a.id = 'favotter_link_user';
-a.innerHTML = 'Favotter / New';
+a.innerHTML = _('Favotter / new');
 $('popup').appendChild(a)
 
 a = document.createElement("a");
 a.target = 'favotter';
 a.id = 'favotter_link_status';
-a.innerHTML = 'Favotter / Status';
+a.innerHTML = _('Favotter / tweet');
 $('popup').appendChild(a)
 
 a = document.createElement("a");
 a.target = 'favotter';
 a.id = 'favotter_link_fav';
-a.innerHTML = 'Favotter / fav';
+a.innerHTML = _('Favotter / fav');
 $('popup').appendChild(a)
 

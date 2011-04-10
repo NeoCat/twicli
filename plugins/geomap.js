@@ -17,7 +17,6 @@ registerPlugin({
 		}
 		if (!geomap) return alert("geomap not found!!");
 		
-		var plugin = this;
 		geomap.onclick = function() {
 			display_map(rs.geo.coordinates, geomap);
 			return false;
@@ -27,10 +26,12 @@ registerPlugin({
 
 function display_map(coordinates, elem) {
 	rep_top = Math.max(cumulativeOffset(elem)[1] + 20, $("control").offsetHeight);
-	$('reps').innerHTML = '<div id="map_canvas" style="width: 100%; height: 250px;">';
+	var win_h = window.innerHeight || document.documentElement.clientHeight;
+	$('reps').innerHTML = '<div id="map_canvas" style="width: 100%; height: '+Math.ceil(win_h*0.67)+'px;">';
+	$('rep').style.top = rep_top;
 	$('rep').style.display = "block";
 	make_geo_map(coordinates);
-	$('rep').style.top = rep_top;
+	scrollToDiv($('rep'));
 	user_pick1 = user_pick2 = null;
 }
 
@@ -39,9 +40,25 @@ function make_geo_map(coordinates) {
 	var map = new google.maps.Map(document.getElementById("map_canvas"),
 		{zoom: 13, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP});
 	var marker = new google.maps.Marker({position: latlng, map: map});
+
+	if (coordinates[2]) {
+		mapAccCircleOption.radius = coordinates.pop();
+		var accCircle = new google.maps.Circle(mapAccCircleOption);
+		accCircle.setCenter(latlng);
+		accCircle.setMap(map);
+	}
+
 	google.maps.event.addListener(marker, 'click', function(event) {
 		window.open('http://maps.google.com?q='+coordinates.join(","));
 	});
 }
+
+var mapAccCircleOption = {
+	fillColor:      '#f37171',
+	fillOpacity:    0.3,
+	strokeColor:    '#f37171',
+	strokeOpacity:  0.7,
+	strokeWeight:   4
+};
 
 document.write('<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>');

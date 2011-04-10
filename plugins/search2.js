@@ -1,12 +1,13 @@
+langResources['Twitter search (yats)'] =	['Twitter検索(yats)','在Twitter上搜索（yats）'];
+
 var test_n = 0;
 var twsj_page = 0;
 var twsj_query = '';
 function twsjSearch(q) {
 	twsj_page = 1;
 	twsj_query = q;
-	update_ele2 = loadXDomainScript('http://pcod.no-ip.org/yats/search?seq=' + (seq++) +
-							'&query=' + encodeURIComponent(q) + '&json=twsjSearchShow', update_ele2);
-	$("loading").style.display = "block";
+	xds.load_for_tab('http://yats-data.com/yats/search?seq=' + (seq++) +
+						'&query=' + encodeURIComponent(q), twsjSearchShow, 'json');
 }
 function twsjSearchShow(res) {
 	var tmp = $("tmp");
@@ -24,15 +25,15 @@ function twsjSearchShow(res) {
 		$("tw2c").appendChild(nextButton('next-search2'));
 	}
 	get_next_func = function(){
-		update_ele2 = loadXDomainScript('http://pcod.no-ip.org/yats/search?page=' + twsj_page +
-							'&query=' + twsj_query + '&seq=' + (seq++) + '&json=twsjSearchShow', update_ele2);
+		xds.load_for_tab('http://yats-data.com/yats/search?page=' + twsj_page +
+						'&query=' + twsj_query + '&seq=' + (seq++), twsjSearchShow, 'json');
 	}
 }
 
 registerPlugin({
 	miscTab: function(ele) {
 		var e = document.createElement("div");
-		e.innerHTML = '<form onSubmit="twsjSearch($(\'searchj_q\').value); return false;"><a target="twitter" href="http://pcod.no-ip.org/yats/">Twitter search (yats)</a>: <input type="text" size="15" id="searchj_q"><input type="image" src="images/go.png"></form>';
+		e.innerHTML = '<form onSubmit="twsjSearch($(\'searchj_q\').value); return false;"><a target="twitter" href="http://yats-data.com/yats/">'+_('Twitter search (yats)')+'</a>: <input type="text" size="15" id="searchj_q"><input type="image" src="images/go.png"></form>';
 		ele.appendChild(e);
 		var hr = document.createElement("hr");
 		hr.className = "spacer";

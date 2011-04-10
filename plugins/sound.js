@@ -1,3 +1,7 @@
+langResources['Sound'] =	['音','声音'];
+langResources['on TL update'] =	['TL新着音','TL更新提醒'];
+langResources['on new Reply'] =	['@新着音','@更新提醒'];
+
 var twsd_html5 = twsd_mp3 = true;
 try {
 	twsd_audio = new Audio("");
@@ -15,10 +19,10 @@ function setSoundNames(names) {
 registerPlugin({
 	miscTab: function(ele) {
 		var e = document.createElement("div");
-		e.innerHTML = '<a href="javascript:var s = $(\'sound_pref\').style; s.display = s.display==\'block\'?\'none\':\'block\';void(0)"><b>▼Sound</b></a>' +
+		e.innerHTML = '<a href="javascript:var s = $(\'sound_pref\').style; s.display = s.display==\'block\'?\'none\':\'block\';void(0)"><b>▼'+_('Sound')+'</b></a>' +
 			'<form id="sound_pref" style="display:none" onSubmit="setSoundNames([$(\'sound0\').value,$(\'sound1\').value]); return false;">' +
-			'on TL update: <input type="text" size="15" id="sound0" value="'+sound_name[0]+'"><br>' +
-			'on new Reply: <input type="text" size="15" id="sound1" value="'+sound_name[1]+'"><br>' +
+			_('on TL update')+': <input type="text" size="15" id="sound0" value="'+sound_name[0]+'"><br>' +
+			_('on new Reply')+': <input type="text" size="15" id="sound1" value="'+sound_name[1]+'"><br>' +
 			'<input type="submit" value="Apply"></form>';
 		$("pref").appendChild(e);
 	},
