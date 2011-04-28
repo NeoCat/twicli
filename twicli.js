@@ -520,13 +520,13 @@ function setFstHeight(h, force) {
 	if (!h)
 		h = $("fst").value.length ? Math.max($("fst").scrollHeight+2,min_fst_height) : min_fst_height;
 	if (no_resize_fst && !force) return;
-	var exh = (navigator.userAgent.indexOf("MSIE 8") >= 0 ? 1 : 0), opt = $("option").clientHeight;
-	$("fst").style.height = h;
-	$("option").style.top = h + 2;
-	$("menu").style.top = $("counter-div").style.top = h+3+exh*5 + opt;
+	var exh = (navigator.userAgent.indexOf("MSIE 8") >= 0 ? 1 : navigator.userAgent.indexOf("MSIE 9") >= 0 ? 1 : 0), opt = $("option").clientHeight;
+	$("fst").style.height = h + 'px';
+	$("option").style.top = h + 2 + exh*5 + 'px';
+	$("menu").style.top = $("counter-div").style.top = h+3+exh*5 + opt + 'px';
 	var mh = Math.max($("menu").clientHeight, $("menu2").clientHeight);
-	$("control").style.height = h+mh+2+exh*5 + opt;
-	$("tw").style.top = $("tw2").style.top = $("re").style.top = h+mh+3+exh*4 + opt;
+	$("control").style.height = h+mh+2+exh*5 + opt + 'px';
+	$("tw").style.top = $("tw2").style.top = $("re").style.top = h+mh+3+exh*4 + opt + 'px';
 }
 if (navigator.userAgent.indexOf('iPhone') < 0)
 	window.onresize = function(){ setFstHeight(null, true); }
@@ -604,7 +604,7 @@ function dispReply2(tw) {
 	callPlugins("newMessageElement", el, tw, 'reps');
 	if (!rep_trace_id || id != rep_trace_id) {
 		$('reps').innerHTML = '';
-		$('rep').style.top = rep_top;
+		$('rep').style.top = rep_top + 'px';
 	} else
 		$('reps').appendChild(document.createElement('hr'));
 	$('reps').appendChild(el);
@@ -651,9 +651,10 @@ function popup_menu(user, id, ele) {
 	$('popup_status_quote').style.display = (selected_menu.id != "direct" ? "block" : "none");
 	$('popup').style.display = "block";
 	var pos = cumulativeOffset(ele);
-	$('popup').style.left = pos[0] <  $('popup').offsetWidth - ele.offsetWidth ? 0 : pos[0] - $('popup').offsetWidth + ele.offsetWidth;
-	$('popup').style.top = popup_top = pos[1] + 20;
-	$('popup_hide').style.height = Math.max(document.body.scrollHeight, $("tw").offsetHeight+$("control").offsetHeight);
+	$('popup').style.left = pos[0] <  $('popup').offsetWidth - ele.offsetWidth ? 0 : pos[0] - $('popup').offsetWidth + ele.offsetWidth + 'px';
+	popup_top = pos[1] + 20;
+	$('popup').style.top = popup_top + 'px';
+	$('popup_hide').style.height = Math.max(document.body.scrollHeight, $("tw").offsetHeight+$("control").offsetHeight) + 'px';
 	$('popup_hide').style.display = "block";
 }
 // ポップアップメニューを非表示
@@ -670,9 +671,9 @@ function userinfo_popup_menu(user, id, ele) {
 	callPlugins("userinfo_popup", $('userinfo_popup'), user, id, ele);
 	$('userinfo_popup').style.display = "block";
 	var pos = cumulativeOffset(ele);
-	$('userinfo_popup').style.left = pos[0] <  $('userinfo_popup').offsetWidth - ele.offsetWidth ? 0 : pos[0] - $('userinfo_popup').offsetWidth + ele.offsetWidth;
-	$('userinfo_popup').style.top = pos[1] + 20;
-	$('popup_hide').style.height = Math.max(document.body.scrollHeight, $("tw").offsetHeight+$("control").offsetHeight);
+	$('userinfo_popup').style.left = pos[0] <  $('userinfo_popup').offsetWidth - ele.offsetWidth ? 0 : pos[0] - $('userinfo_popup').offsetWidth + ele.offsetWidth + 'px';
+	$('userinfo_popup').style.top = pos[1] + 20 + 'px';
+	$('popup_hide').style.height = Math.max(document.body.scrollHeight, $("tw").offsetHeight+$("control").offsetHeight) + 'px';
 	$('popup_hide').style.display = "block";
 }
 // 発言のReTweet
@@ -1129,8 +1130,8 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 		animate(pNode, maxH, (new Date).getTime());
 	else if (animation) {
 		var ch = pNode.clientHeight + parseInt(pNode.style.borderBottomWidth || 0);
-		$('rep').style.top = (rep_top += ch);
-		$('popup').style.top = (popup_top += ch);
+		$('rep').style.top = (rep_top += ch) + 'px';
+		$('popup').style.top = (popup_top += ch) + 'px';
 		scrollTo(0, getScrollY()+ch);
 		scroll_adjust += ch;
 	}
