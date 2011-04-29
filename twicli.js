@@ -293,6 +293,7 @@ var myid = null;		// 自ユーザID
 var last_user = null;	// user TLに表示するユーザ名
 var last_user_info = null;	// user TLに表示するユーザ情報(TLから切替時のキャッシュ)
 // 設定値
+var currentCookieVer = 13;
 var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) || 60;
 var pluginstr = (cookieVer>6) && readCookie('tw_plugins') || ' ssl.js\nregexp.js\nlists.js\noutputz.js\nsearch.js\nsearch2.js\nfavotter.js\nfollowers.js\nshorten_url.js\nresolve_url.js';
@@ -302,6 +303,7 @@ if (!(cookieVer>8)) pluginstr+="\nthumbnail.js";
 if (!(cookieVer>10)) pluginstr = pluginstr.replace(/worldcup-2010\.js[\r\n]+/,'');
 if (!(cookieVer>10)) pluginstr+="\ngeomap.js";
 if (!(cookieVer>11) && pluginstr.indexOf('tweet_url_reply.js')<0) pluginstr+="\ntweet_url_reply.js";
+if (!(cookieVer>12)) pluginstr+="\nrelated_results.js";
 pluginstr = pluginstr.substr(1);
 var plugins = new Array;
 var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 200);
@@ -1395,7 +1397,7 @@ function setPreps(frm) {
 	decr_enter = frm.decr_enter.checked;
 	no_geotag = !frm.geotag.checked;
 	resetUpdateTimer();
-	writeCookie('ver', 12, 3652);
+	writeCookie('ver', currentCookieVer, 3652);
 	writeCookie('user_lang', user_lang, 3652);
 	writeCookie('limit', nr_limit, 3652);
 	writeCookie('max_count', max_count, 3652);
