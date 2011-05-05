@@ -2,11 +2,9 @@
 (function(){
   var re = /^http:\/\/(t\.co|tinyurl\.com|bit\.ly|is\.gd|u\.nu|icio\.us|tr\.im|cli\.gs|twurl\.nl|url\.ie|j\.mp|ow\.ly|ff\.im|digg\.com|tumblr\.com|htn\.to|goo\.gl)\/|http:\/\/p\.tl\/(?!.\/)/;
   var api = 'http://atsushaa.appspot.com/untiny/get';
-  var queue = [];
-  var wait = 10000;
   var remove = function(e){if (e && e.parentNode) e.parentNode.removeChild(e)};
 
-  window.replaceUrl = function(hash) {
+  window.replaceUrl = function(hash, link) {
     for (var shortUrl in hash) if (hash.hasOwnProperty(shortUrl)) {
       var longUrl = hash[shortUrl];
       // make human friendly URL
@@ -21,44 +19,23 @@
         var truncated = decoded;
       }
 
-      // search for a link with the shortUrl
-      var n = queue.length, task;
-      while (task = queue[--n]) if (task.link.href === shortUrl) {
-        var link = task.link;
-        // replace link href and text with longUrl
-        link.href = longUrl;
-        if (link.textContent === shortUrl) {
-          link.textContent = truncated;
-        } else if (link.innerText === shortUrl) {
-          link.innerText = truncated;
-        }
-        link.className += ' resolved';
-        // cleanup
-        clearTimeout(task.timer);
-        remove(task.script);
-        queue.splice(n,1);
-        // notify to other plugins
-        if (link.parentNode && link.parentNode.parentNode)
-          callPlugins("replaceUrl", link.parentNode.parentNode, link, longUrl, shortUrl);
+      link.href = longUrl;
+      if (link.textContent === shortUrl) {
+        link.textContent = truncated;
+      } else if (link.innerText === shortUrl) {
+        link.innerText = truncated;
       }
+      link.className += ' resolved';
+      // notify to other plugins
+      if (link.parentNode && link.parentNode.parentNode)
+        callPlugins("replaceUrl", link.parentNode.parentNode, link, longUrl, shortUrl);
     }
   }
 
   function setResolver(link) {
     // JSONP with callback window.replaceUrl
-    var src = api + '?callback=replaceUrl&url=' + encodeURIComponent(link.href);
-    var script = loadXDomainScript(src);
-
-    // cleanup if JSONP doesn't load in time
-    var timer = setTimeout(function(){
-      var n = queue.length;
-      while (n--) if (task === queue[n]) {
-        queue.splice(n,1);
-        remove(task.script);
-      }
-    }, wait);
-    var task = {link:link, script:script, timer:timer};
-    queue.push(task);
+    var src = api + '?url=' + encodeURIComponent(link.href);
+    var script = xds.load(src, function(hash){replaceUrl(hash, link)}, null, 0);
   }
 
   function findShortUrls(elem) {
