@@ -136,15 +136,14 @@ function postInIFrame(url, done, err) {
 	pfr.src = "about:blank";
 	pfr.style.display = "none";
 	var errTimer = false;
-	if (err) {  // 10秒で正常終了しなければエラーとみなす
-		errTimer = setTimeout(function(){
-			loading(false);
-			err();
-			pfr.parentNode && pfr.parentNode.removeChild(pfr);
-			postQueue.shift();
-			postNext();
-		}, 100000);
-	}
+	// 10秒で正常終了しなければエラーとみなす
+	errTimer = setTimeout(function(){
+		loading(false);
+		if (err) err();
+		pfr.parentNode && pfr.parentNode.removeChild(pfr);
+		postQueue.shift();
+		postNext();
+	}, 10000);
 	var cnt = 0;
 	var onload = pfr.onload = function(){
 		if (cnt++ == 0) {
