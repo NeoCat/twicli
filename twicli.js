@@ -135,14 +135,16 @@ function postInIFrame(url, done, err, retry) {
 	pfr.src = "about:blank";
 	pfr.style.display = "none";
 	var errTimer = false;
-	// 3秒(リトライ時10秒)で正常終了しなければエラーとみなす
+	// 5秒(エラー処理指定時は3秒→10秒)で正常終了しなければエラーとみなす
 	errTimer = setTimeout(function(){
 		loading(false);
-		if (err) err();
-		pfr.parentNode && pfr.parentNode.removeChild(pfr);
-		postQueue.shift();
-		postNext();
-	}, retry?10000:3000);
+		if (err) err(); else done();
+		setTimeout(function(){
+			pfr.parentNode && pfr.parentNode.removeChild(pfr);
+			postQueue.shift();
+			postNext();
+		}, 0);
+	}, retry?10000:err?3000:5000);
 	var cnt = 0;
 	var onload = pfr.onload = function(){
 		if (cnt++ == 0) {
@@ -854,7 +856,7 @@ function fav(img, id) {
 	var f = img.src.indexOf('empty') >= 0;
 	setFavIcon(img, id, -1);
 	enqueuePost(twitterAPI + 'favorites/' + (f ? 'create' : 'destroy') + '/' + id + '.xml',
-		function(){ setFavIcon(img, id, f) }, function(){ setFavIcon(img, id, !f) });
+		function(){ setFavIcon(img, id, f) }/*, function(){ setFavIcon(img, id, !f) }*/);
 }
 // favアイコンの設定(f=0: 未fav, f=1:fav済, f=-1:通信中)
 function setFavIcon(img, id, f) {
