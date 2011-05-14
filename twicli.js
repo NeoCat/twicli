@@ -114,19 +114,18 @@ var xds = {
 };
 // 動的にフレームを生成してPOSTを投げる(Twitter APIはOAuth認証)
 var postQueue = [];
-function enqueuePost(url, done, err) {
-	postQueue.push([url, done, err]);
+function enqueuePost(url, done, err, retry) {
+	postQueue.push(arguments);
 	if (postQueue.length > 1) // 複数リクエストを同時に投げないようキューイング
 		return;
 	postNext();
 }
 function postNext() {
-	if (postQueue.length) {
-		postInIFrame(postQueue[0][0], postQueue[0][1], postQueue[0][2]);
-	}
+	if (postQueue.length)
+		postInIFrame.apply(this, postQueue[0]);
 }
 var postSeq = 0;
-function postInIFrame(url, done, err) {
+function postInIFrame(url, done, err, retry) {
 	loading(true);
 	var frm = url.indexOf(twitterAPI) == 0 ? document.request : document.post;
 	frm.action = setupOAuthURL(url, true);
@@ -136,14 +135,14 @@ function postInIFrame(url, done, err) {
 	pfr.src = "about:blank";
 	pfr.style.display = "none";
 	var errTimer = false;
-	// 5秒で正常終了しなければエラーとみなす
+	// 3秒(リトライ時10秒)で正常終了しなければエラーとみなす
 	errTimer = setTimeout(function(){
 		loading(false);
 		if (err) err();
 		pfr.parentNode && pfr.parentNode.removeChild(pfr);
 		postQueue.shift();
 		postNext();
-	}, 5000);
+	}, retry?10000:3000);
 	var cnt = 0;
 	var onload = pfr.onload = function(){
 		if (cnt++ == 0) {
@@ -361,6 +360,7 @@ var geowatch = null;
 var ratelimit_reset_time = null;
 var loading_cnt = 0;
 var err_timeout = null;
+var update_post_check = false;
 
 // loading表示のコントロール
 function loading(start) {
@@ -474,7 +474,9 @@ function press(e) {
 		alert(_("This tweet is too long."));
 		return false;
 	}
+	var retry = false;
 	if (st.value == "r" && last_post) {
+		retry = true;
 		st.value = last_post;
 		in_reply_to_user = last_in_reply_to_user;
 		setReplyId(last_in_reply_to_status_id);
@@ -487,11 +489,13 @@ function press(e) {
 	callPlugins("post", st.value);
 	st.value += footer;
 	st.select();
+	var text = st.value;
 	enqueuePost(twitterAPI + 'statuses/update.xml?status=' + encodeURIComponent(st.value) +
 				(geo && geo.coords ?  "&display_coordinates=true&lat=" + geo.coords.latitude +
 										"&long=" + geo.coords.longitude : "") +
 				(in_reply_to_status_id ? "&in_reply_to_status_id=" + in_reply_to_status_id : ""),
-				function(){ resetFrm(); if (auto_update) update() });
+				function(){ resetFrm(); if (auto_update) update() },
+				function(){ if (auto_update) { update_post_check = [retry,text]; update() }}, retry);
 	in_reply_to_user = in_reply_to_status_id = null;
 	return false;
 }
@@ -989,7 +993,13 @@ function twShow(tw) {
 	if (tw.error) return error(tw.error);
 
 	tw.reverse();
-	for (var j in tw) if (tw[j] && tw[j].user) callPlugins("gotNewMessage", tw[j]);
+	for (var j in tw) if (tw[j] && tw[j].user) {
+		callPlugins("gotNewMessage", tw[j]);
+		if (update_post_check && tw[j].user.screen_name == myname && tw[j].text == update_post_check[1]) {
+			update_post_check = false;
+			if ($('fst').value == tw[j].text) resetFrm();
+		}
+	}
 	tw.reverse();
 	if (nr_page == 0) {
 		nr_page = max_count == 200 ? 2 : 1;
@@ -1002,6 +1012,14 @@ function twShow(tw) {
 	if (update_direct_counter-- <= 0)
 		checkDirect();
 	callPlugins("noticeUpdate", tw, nr_shown);
+	if (update_post_check) {
+		var st = document.frm.status;
+		if (!update_post_check[0] && st.value == update_post_check[1] && st.value == last_post) {
+			st.value = 'r';
+			press(1);
+		} else
+				update_post_check = false;
+	}
 }
 function twOld(tw) {
 	if (tw.error) return error(tw.error);
