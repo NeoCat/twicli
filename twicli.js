@@ -815,6 +815,7 @@ function makeHTML(tw, no_name, pid) {
 		(t.source ? '<span class="separator"> / </span><span class="source">' + t.source.replace(/<a /,'<a target="twitter"') + '</span>' : '') + '</span>' +
 		//Geolocation
 		(rs.geo && rs.geo.type == 'Point' ? '<a class="button geomap" id="geomap-' + eid + '" target="_blank" href="http://maps.google.com?q=' + rs.geo.coordinates.join(',') + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.geo.coordinates.join(',') + '"></a>' : '') +
+		(!rs.geo && rs.place ? '<a class="button geomap" id="geomap-' + eid + '" target="_blank" href="http://maps.google.com?q=' + encodeURIComponent(rs.place.full_name) + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.place.full_name.replace(/'/g,"&apos;") + '"></a>' : '') +
 		//返信先を設定
 		' <a class="button reply" href="javascript:replyTo(\'' + un + "','" + id2 + '\')"><img src="images/reply.png" alt="↩" width="14" height="14"></a>' +
 		//返信元へのリンク
