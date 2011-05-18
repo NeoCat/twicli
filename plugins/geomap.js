@@ -89,7 +89,30 @@ function make_geo_placemap(place) {
 	la /= box_coords.length;
 	var latlng = new google.maps.LatLng(la, lo);
 	var map = new google.maps.Map(document.getElementById("map_canvas"),
-		{zoom: 13, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP});
+		{zoom: 11, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP});
+
+	if (!place.id) return;
+
+	var rendarPolygonMap = function (geoobj) {
+		if (!geoobj.geometry || geoobj.geometry.type != "Polygon") return;
+		var paths = [];
+		for (var i=0; i< geoobj.geometry.coordinates[0].length; i++)
+			paths.push(new google.maps.LatLng(
+						geoobj.geometry.coordinates[0][i][1],
+						geoobj.geometry.coordinates[0][i][0]));
+		var polygon = new google.maps.Polygon(mapPolygonOptions);
+		polygon.setPaths(paths);
+		polygon.setMap(map);
+	};
+	xds.load_for_tab(twitterAPI + 'geo/id/' + place.id + '.json', rendarPolygonMap);
 }
+
+var mapPolygonOptions = {
+	fillColor:      '#f37171',
+	fillOpacity:    0.3,
+	strokeColor:    '#f37171',
+	strokeOpacity:  0.7,
+	strokeWeight:   4
+};
 
 document.write('<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>');
