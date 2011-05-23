@@ -35,6 +35,7 @@ var langResources = {
 	'Post length counter':	['残り文字数を表示','显示发言的剩余字数'],
 	'Post with ctrl/shift+enter':	['ctrl+enter/shift+enterで発言','敲击Ctrl+回车或Shift+回车来发言'],
 	'Enable GeoTagging':	['ジオタグ(位置情報)を有効に','开启地理标签（方位信息）'],
+	'Use HTTPS':	['HTTPSを使用','使用HTTPS'],
 	'Footer':	['フッター','加尾修饰'],
 	'Plugins':	['プラグイン','插件'],
 	'user stylesheet':	['ユーザスタイルシート','用户自定义样式表'],

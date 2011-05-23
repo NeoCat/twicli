@@ -318,6 +318,7 @@ var display_as_rt = parseInt(readCookie('display_as_rt') || "0");	// Retweetを"
 var footer = readCookie('footer') || ""; 							// フッタ文字列
 var decr_enter = parseInt(readCookie('decr_enter') || "0");			// Shift/Ctrl+Enterで投稿
 var no_geotag = parseInt(readCookie('no_geotag') || "0");			// GeoTaggingを無効化
+var use_ssl = parseInt(readCookie('use_ssl') || "0");				// SSLを使用
 // TL管理用
 var cur_page = 1;				// 現在表示中のページ
 var nr_page = 0;				// 次に取得するページ
@@ -389,11 +390,17 @@ if (location.search.match(/[?&]status=(.*?)(?:&|$)/)) {
 
 function twAuth(a) {
 	if (a.error) {
+		if (!use_ssl) {
+			use_ssl = 1;
+			return auth();
+		}
 		alert(a.error);
 		if (a.error == "Incorrect signature" || a.error.indexOf("Could not authenticate") >= 0)
 			logout();
 		return;
 	}
+	if (use_ssl)
+		writeCookie('use_ssl', 1, 3652);
 	if (!myname || myname != a.screen_name) {
 		myname = last_user = a.screen_name;
 		last_user_info = a;
@@ -409,6 +416,8 @@ function twAuth(a) {
 	callPlugins('auth');
 }
 function auth() {
+	if (use_ssl)
+		twitterAPI = twitterAPI.replace('http', 'https');
 	var name = readCookie('access_user');
 	if (name) {
 		name = name.split('|');
@@ -1380,6 +1389,7 @@ function switchMisc() {
 					'<input type="checkbox" name="resize_fst"' + (no_resize_fst?"":" checked") + '>'+_('Auto-resize field')+'<br>' +
 					'<input type="checkbox" name="decr_enter"' + (decr_enter?" checked":"") + '>'+_('Post with ctrl/shift+enter')+'<br>' +
 					'<input type="checkbox" name="geotag"' + (no_geotag?"":" checked") + '>'+_('Enable GeoTagging')+'<br>' +
+					'<input type="checkbox" name="use_ssl"' + (use_ssl?" checked":"") + '>'+_('Use HTTPS')+'<br>' +
 					_('Footer')+': <input name="footer" size="20" value="' + footer + '"><br>' +
 					_('Plugins')+':<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>' +
 					_('user stylesheet')+':<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br>' +
@@ -1416,6 +1426,7 @@ function setPreps(frm) {
 	footer = new String(frm.footer.value);
 	decr_enter = frm.decr_enter.checked;
 	no_geotag = !frm.geotag.checked;
+	use_ssl = frm.use_ssl.checked;
 	resetUpdateTimer();
 	writeCookie('ver', currentCookieVer, 3652);
 	writeCookie('user_lang', user_lang, 3652);
@@ -1432,6 +1443,7 @@ function setPreps(frm) {
 	writeCookie('footer', footer, 3652);
 	writeCookie('decr_enter', decr_enter?1:0, 3652);
 	writeCookie('no_geotag', no_geotag?1:0, 3652);
+	writeCookie('use_ssl', use_ssl?1:0, 3652);
 	writeCookie('tw_plugins', new String(" " + frm.list.value), 3652);
 	writeCookie('user_style', new String(frm.user_style.value), 3652);
 	callPlugins('savePrefs', frm);
