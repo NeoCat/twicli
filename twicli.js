@@ -851,7 +851,7 @@ function makeUserInfoHTML(user) {
 			'</td></tr></table>'+
 			(user.screen_name != myname ? '<a class="button upopup" href="#" onClick="userinfo_popup_menu(\'' + user.screen_name + '\',' + user.id + ', this); return false;"><small><small>▼</small></small></a>' : '')+
 			'<a target="twitter" href="' + twitterURL + user.screen_name + '">[Twitter]</a>' +
-			'<a target="twitter" href="javascript:switchFollowingTL()">[TL]</a> ';
+			'<a href="javascript:switchFollowingTL()">[TL]</a> ';
 }
 // 過去の発言取得ボタン(DOM)生成
 function nextButton(id, p) {
