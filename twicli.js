@@ -323,6 +323,7 @@ var use_ssl = parseInt(readCookie('use_ssl') || "0");				// SSLを使用
 var cur_page = 1;				// 現在表示中のページ
 var nr_page = 0;				// 次に取得するページ
 var nr_page_re = 0;				// 次に取得するページ(reply用)
+var max_id;
 var get_next_func = getOldTL;	// 次ページ取得関数
 var since_id = null;			// TLの最終since_id
 var since_id_reply = null;		// Replyの最終since_id
@@ -849,7 +850,8 @@ function makeUserInfoHTML(user) {
 						'<a href="javascript:switchFav()">' + user.favourites_count + '<small>'+_('favs')+'</small></a></b>' +
 			'</td></tr></table>'+
 			(user.screen_name != myname ? '<a class="button upopup" href="#" onClick="userinfo_popup_menu(\'' + user.screen_name + '\',' + user.id + ', this); return false;"><small><small>▼</small></small></a>' : '')+
-			'<a target="twitter" href="' + twitterURL + user.screen_name + '">[Twitter]</a> ';
+			'<a target="twitter" href="' + twitterURL + user.screen_name + '">[Twitter]</a>' +
+			'<a target="twitter" href="javascript:switchFollowingTL()">[TL]</a> ';
 }
 // 過去の発言取得ボタン(DOM)生成
 function nextButton(id, p) {
@@ -1059,6 +1061,7 @@ function twShow2(tw) {
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
 	twShowToNode(tw, $("tw2c"), !!user_info && !fav_mode, cur_page > 1);
 	if (selected_menu.id == "reply" || selected_menu.id == "user" && last_user.indexOf(',') < 0) {
+		max_id = tw[tw.length-1].id_str;
 		$("tw2c").appendChild(nextButton('next'));
 		get_next_func = getNextFuncCommon;
 	}
@@ -1240,9 +1243,15 @@ function getNextFuncCommon() {
 		xds.load_for_tab(twitterAPI + 'statuses/user_timeline.json' +
 					'?count=' + max_count_u + '&page=' + (++cur_page) + '&screen_name=' + last_user +
 					'&include_rts=true&suppress_response_codes=true', twShow2);
-	else if (selected_menu.id == "user" && fav_mode)
+	else if (selected_menu.id == "user" && fav_mode == 1)
 		xds.load_for_tab(twitterAPI + 'favorites/' + last_user + '.json' +
 					'?page=' + (++cur_page) + '&suppress_response_codes=true', twShow2);
+	else if (selected_menu.id == "user" && fav_mode == 4) {
+		++cur_page;
+		xds.load_for_tab(twitterAPI + 'statuses/following_timeline.json' +
+					'?count = ' + max_count_u + '&max_id=' + max_id + '&suppress_response_codes=true' +
+					'&screen_name=' + last_user, twShow2);
+	}
 }
 // タイムライン切り替え
 function switchTo(id) {
@@ -1351,6 +1360,13 @@ function switchFollowing() {
 	$("tw2c").innerHTML = "";
 	xds.load_for_tab(twitterAPI + 'statuses/friends.json?screen_name=' + last_user + 
 										'&cursor=-1&suppress_response_codes=true', twUsers);
+}
+function switchFollowingTL() {
+	cur_page = 1;
+	fav_mode = 4;
+	$("tw2c").innerHTML = "";
+	xds.load_for_tab(twitterAPI + 'statuses/following_timeline.json?screen_name=' + last_user + 
+										'&cursor=-1&suppress_response_codes=true', twShow2);
 }
 function switchFollower() {
 	cur_page = 1;
