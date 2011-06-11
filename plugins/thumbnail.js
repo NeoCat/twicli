@@ -13,6 +13,8 @@ registerPlugin({
 	},
 	replaceUrl: function(elem, link, url) {
 		var flickr_id;
+		if (link.thumbnailed && link.thumbnailed == url) return;
+		link.thumbnailed = url;
 		if (url.indexOf(twitterURL) == 0 || url.indexOf("javascript:") == 0)
 			return; // skip @... or #...
 		if (url.match(/^http:\/\/twitpic\.com\/(\w+)/)) {
