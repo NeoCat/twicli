@@ -25,9 +25,13 @@
       } else if (link.innerText === shortUrl) {
         link.innerText = truncated;
       }
-      link.className += ' resolved';
+      if (link.className.indexOf('resolved') < 0);
+        link.className += ' resolved';
+      link.resolved = link.resolved ? link.resolved+1 : 1;
+      if (link.resolved <= 3 && re.test(link.href)) // resolve multiply-shortened URL
+        setResolver(link);
       // notify to other plugins
-      if (link.parentNode && link.parentNode.parentNode)
+      else if (link.parentNode && link.parentNode.parentNode)
         callPlugins("replaceUrl", link.parentNode.parentNode, link, longUrl, shortUrl);
     }
   }
