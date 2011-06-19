@@ -13,6 +13,8 @@ registerPlugin({
 	},
 	replaceUrl: function(elem, link, url) {
 		var flickr_id;
+		if (link.thumbnailed && link.thumbnailed == url) return;
+		link.thumbnailed = url;
 		if (url.indexOf(twitterURL) == 0 || url.indexOf("javascript:") == 0)
 			return; // skip @... or #...
 		if (url.match(/^http:\/\/twitpic\.com\/(\w+)/)) {
@@ -87,6 +89,12 @@ registerPlugin({
 		else if (url.match(/^http:\/\/photozou\.jp\/photo\/show\/\d+\/(\d+)/)) {
 			addThumbnail(elem, "http://art"+Math.floor(Math.random()*40+1)+".photozou.jp/bin/photo/"+
 							RegExp.$1 +"/org.bin?size=120", url);
+		}
+		else if (url.match(/^(https?:\/\/www\.slideshare\.net\/[-_0-9a-zA-Z]+\/[-_0-9a-zA-Z]+)/)) {
+			xds.load("http://www.slideshare.net/api/oembed/2?url=" + RegExp.$1 + "&format=jsonp",
+					function(x) {
+						addThumbnail(elem, x.thumbnail, url);
+					});
 		}
 	}
 });

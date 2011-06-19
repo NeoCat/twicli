@@ -8,7 +8,7 @@
 <script type="text/javascript" src="twicli_oauth.js"></script>
 </head>
 <body onload="fillRequst(document.request, document.etc)">
-<form name="request" method="POST" onsubmit="consumer.signForm(this, document.etc);">
+<form name="request" method="POST" onsubmit="consumer.signForm(this, document.etc);" target="_blank">
 	<input name="oauth_consumer_key"     type="hidden" value="93rRnGZHjH5tMSuvkIMNg">
 	<input name="oauth_signature_method" type="hidden" value="HMAC-SHA1">
 	<input name="oauth_timestamp"        type="hidden">
@@ -19,7 +19,7 @@
 	<input value="Get Access Token"      type="submit">
 </form>
 <form name="etc">
-	<input name="URL"                    type="hidden" value="http://api.twitter.com/oauth/access_token"><br>
+	<input name="URL"                    type="hidden" value="https://api.twitter.com/oauth/access_token"><br>
 	<input name="consumerSecret"         type="hidden" value="7ypxMreeJuumgiq3ts7QtOqigl5G1sosJFfeaoKGJA">
 	<input name="tokenSecret"            type="hidden">
 </form>

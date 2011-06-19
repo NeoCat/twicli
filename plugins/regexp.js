@@ -16,6 +16,7 @@ function execRegexp(tw, exp) {
 	var rtinfo = tw.retweeted_status ? "\nby @" + tw.user.screen_name : '';
 	var rs = tw.retweeted_status || tw;
 	var t = display_as_rt ? tw : rs;
+	if (!t.user || !t.user.screen_name) return false;
 	var text = t.text + source + rtinfo;
 	return	(!exp.id     || t.user.screen_name.match(exp.id  )) &&
 		(!exp.id_n   ||!t.user.screen_name.match(exp.id_n)) &&
