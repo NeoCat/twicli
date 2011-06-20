@@ -58,7 +58,7 @@ registerPlugin({
 					},
 					null, 1, 'jsoncallback');
 		}
-		else if (url.match(/^(http:\/\/plixi.com\/p\/\d+)/)) {
+		else if (url.match(/^(http:\/\/lockerz.com\/s\/\d+|http:\/\/plixi.com\/p\/\d+)/)) {
 			addThumbnail(elem, 'http://api.plixi.com/api/TPAPI.svc/imagefromurl?size=thumbnail&url='+url, url);
 		}
 		else if (url.match(/^http:\/\/img.ly\/(\w+)/)) {
