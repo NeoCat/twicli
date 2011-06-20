@@ -96,6 +96,9 @@ registerPlugin({
 						addThumbnail(elem, x.thumbnail, url);
 					});
 		}
+		else if (url.match(/^http:\/\/p\.twipple\.jp\/(\w+)/)) {
+			addThumbnail(elem, 'http://p.twipple.jp/show/thumb/' + RegExp.$1, url);
+		}
 	}
 });
 
