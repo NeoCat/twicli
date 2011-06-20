@@ -1,5 +1,7 @@
 (function(){
 	var res = [
+		{search: /^https?:\/\/(?:www\.youtube\.com\/watch\?.*v=|youtu\.be\/)([\w\-]+).*$/,
+			replace: "http://www.youtube.com/embed/$1"},
 		{search: /^https?:\/\/gist\.github\.com\/(\d+)(?:\.txt)?$/, replace: "https://gist.github.com/$1.pibb"},
 		{search: /^https?:\/\/raw\.github\.com\/gist\/(\d+)(?:.*)$/, replace: "https://gist.github.com/$1.pibb"}
 	];
