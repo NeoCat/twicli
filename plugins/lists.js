@@ -176,7 +176,7 @@ registerPlugin({
 		$("pref").appendChild(e);
 		twlUpdateMisc();
 	},
-	init: function() {
+	auth: function() {
 		lists_to_get.map(twlGetListInfo);
 	},
 	regexp_switched: function(tab) {
