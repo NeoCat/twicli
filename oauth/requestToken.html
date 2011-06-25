@@ -8,7 +8,7 @@
 <script type="text/javascript" src="twicli_oauth.js"></script>
 </head>
 <body onload="document.request.oauth_callback.value = location.href.replace(/\/[^\/]*$/,'/oauth2.html')">
-<form name="request" method="POST" onsubmit="consumer.signForm(this, document.etc)">
+<form name="request" method="POST" onsubmit="consumer.signForm(this, document.etc)" target="_blank">
 	<input name="oauth_consumer_key"     type="hidden" value="93rRnGZHjH5tMSuvkIMNg">
 	<input name="oauth_signature_method" type="hidden" value="HMAC-SHA1">
 	<input name="oauth_timestamp"        type="hidden">

@@ -80,6 +80,7 @@ function go(d) {
 <h2><a name="faq">FAQ</a></h2>
 <ul>
 <li><b>公式ハッシュタグは?</b><blockquote> → <a href="http://search.twitter.com/search?q=%23twicliJP">#twicliJP</a> です。疑問//不具合/ご要望などなど、なんでもどうぞ。</blockquote></li>
+<li><b>ダイレクトメッセージ(D)を送るには?</b><blockquote> → 「d ユーザ名 メッセージの内容」と発言欄に書いて送信します。2回目以降はDタブで返信ボタンを押せば簡単です。なお相手が自分をフォローしていないと送信できません。</blockquote></li>
 <li><b>NGワード（指定語句を含むtweetを隠す）機能はないの?</b><blockquote> →抽出プラグインでできます。(<a href="#link">下記リンク</a>参照)</blockquote></li>
 <li><b>Enterで送信だと誤爆が増える…</b><blockquote> → 「+」タブの設定で「ctrl+enter/shift+enterで発言」を有効にして「保存」することで、enterキーのみでは発言しないようにできます。</blockquote></li>
 <li><b>たまにtweetに失敗するみたいなんだけど…</b><blockquote> → Twitterの過負荷で鯨が出ているのかもしれません。「r」とだけ書いてEnterキーを押すと、一つ前のtweetを再送できます。</blockquote></li>
@@ -111,13 +112,13 @@ twicliはCSSを使って見た目を好みに合わせてカスタマイズ可�
 <li><b>search2.js</b> : <a href="http://pcod.no-ip.org/yats/">twitter検索</a>での検索機能を「+」タブに追加します。
 <li><b>favotter.js</b> : <a href="http://favotter.matope.com/">ふぁぼったー</a>の最新2000件のふぁぼられ数を<span style="background-color:#6fc; color:#00c;">[fav:3]</span>のようにTLやユーザのtweetに追加表示します。
 <li><b>followers.js</b> : follower以外<small> (いわゆる片想い) </small>のtweetを青色で表示します。「+」タブの「フォロワーを色付け」の「Renew」ボタンを押して、定期的に最新のfollower一覧を取得する必要があります(デフォルトは無効)。
-<li><b>ssl.js</b> : TL取得やtweet時にSSLで通信を暗号化します。
 <li><b>translate.js</b> : ▼から「翻訳」を選ぶと、「+」タブ>「翻訳」で指定した言語にtweetを翻訳します。
 <li><b>thumbnail.js</b> : 写真投稿サービスのURLを含むtweetにサムネールをつけます。現在<a href="http://twitpic.com/">twitpic</a>, <a href="http://movapic.com/">携帯百景</a>, <a href="http://f.hatena.ne.jp/">HatenaFotolife</a>, <a href="http://tumblr.com/">Tumblr</a>, <a href="http://yfrog.com/">yFrog</a>, <a href="http:/plixi.com/">Plixi</a>, <a href="http://img.ly/">img.ly</a>, <a href="http://ow.ly/">Ow.ly</a>, <a href="http://www.flickr.com/">Flickr</a>, <a href="http://instagr.am/">Instagram</a>, <a href="http://picplz.com/">picplz</a>に対応しています。
 <li><b>resolve_url.js</b> : タイムライン上の短縮URLを短縮前のURLに展開します。(created by <a href="http://twitter.com/edvakf">@edvakf</a>)
 <li><b>shorten_url.js</b> : 発言欄で、URLの後に ;;; と打ち込むとURLを短縮します。もう一度打ち込むと元に戻ります。(created by <a href="http://twitter.com/edvakf">@edvakf</a>)
 <li><b>geomap.js</b> : ジオタグ(GeoLocation)が付加されたtweetで、マーカ(<img src="images/marker.png">)をクリックした際にGoogle Mapをインライン表示します。詳しくは<a href="http://d.hatena.ne.jp/NeoCat/20100722/1279741190">こちら</a>。
 <li><b>tweet_url_reply.js</b> : tweetへのリンクURLに内容を取得するボタン(<img src="images/jump.png">)を追加します。(created by <a href="http://twitter.com/edvakf">@edvakf</a>)
+<li><b>related_results.js</b>: ▼に関連するツイートを表示するメニューを追加します。(created by <a href="http://twitter.com/tkawa">@tkawa</a>)
 <li><b>reply_favicon.js</b> <span style="font-size: small; color: red">[非標準]</span> : Re新着時にfavicon(IE,Safari以外)とタイトルを変更します。(created by <a href="http://twitter.com/edvakf">@edvakf</a>)
 <li><b>sound.js</b> <span style="font-size: small; color: red">[非標準]</span> : TLやReの新着時にサウンドを鳴らします。
 <li><b>insert_hashtag.js</b> <span style="font-size: small; color: red">[非標準]</span> : ハッシュタグ(#〜)のタブを開いた状態でtweetすると、末尾にそのハッシュタグを自動追加します。(created by <a href="http://twitter.com/_wa_">@_wa_</a>)
