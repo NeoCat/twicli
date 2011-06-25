@@ -455,15 +455,21 @@ function error(str) {
 function error_animate(show, t) {
 	t = t || new Date();
 	var dur = new Date() - t;
-	var opacity = Math.min(0.8, dur/300.0);
-	if (!show) opacity = Math.max(0, 0.8-opacity);
+	var opacity = Math.min(0.7, dur/300.0);
+	if (!show) opacity = Math.max(0, 0.7-opacity);
 	$("error").style.opacity = opacity;
-	if (show && opacity == 0.8)
+	if (show && opacity == 0.7)
 		err_timeout = setTimeout(function(){ error_animate(false); }, 5000);
 	else if (!show && opacity == 0)
 		$("error").style.display = "none";
 	else
 		err_timeout = setTimeout(function(){ error_animate(show, t); }, 30);
+}
+function clear_error() {
+	if ($("error").style.opacity == 0.7) {
+		clearTimeout(err_timeout);
+		err_timeout = setTimeout(function(){ error_animate(false); }, 0);
+	}
 }
 
 function twFail() {
