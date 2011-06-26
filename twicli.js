@@ -293,7 +293,7 @@ var myid = null;		// 自ユーザID
 var last_user = null;	// user TLに表示するユーザ名
 var last_user_info = null;	// user TLに表示するユーザ情報(TLから切替時のキャッシュ)
 // 設定値
-var currentCookieVer = 13;
+var currentCookieVer = 14;
 var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) || 60;
 var pluginstr = (cookieVer>6) && readCookie('tw_plugins') || ' regexp.js\nlists.js\noutputz.js\nsearch.js\nsearch2.js\nfavotter.js\nfollowers.js\nshorten_url.js\nresolve_url.js';
@@ -304,6 +304,7 @@ if (cookieVer<11) pluginstr = pluginstr.replace(/worldcup-2010\.js[\r\n]+/,'');
 if (cookieVer<11) pluginstr+="\ngeomap.js";
 if (cookieVer<12 && pluginstr.indexOf('tweet_url_reply.js')<0) pluginstr+="\ntweet_url_reply.js";
 if (cookieVer<13) pluginstr+="\nrelated_results.js";
+if (cookieVer<14) pluginstr+="\nembedsrc.js";
 pluginstr = pluginstr.substr(1);
 var plugins = new Array;
 var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 200);
