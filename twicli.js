@@ -431,8 +431,8 @@ function auth() {
 	xds.load_default(twitterAPI + "account/verify_credentials.json?suppress_response_codes=true", twAuth);
 }
 
-function logout() {
-	if (!confirm(_('Are you sure to logout? You need to re-authenticate twicli at next launch.')))
+function logout(force) {
+	if (!force && !confirm(_('Are you sure to logout? You need to re-authenticate twicli at next launch.')))
 		return;
 	callPlugins('logout');
 	deleteCookie('access_token');
@@ -441,7 +441,13 @@ function logout() {
 	location.href = 'oauth/index.html';
 }
 
-function error(str) {
+function error(str, err) {
+	console.log(err);
+	if (err && err[0] && err[0].code == 93) {
+		if (confirm(_('Cannot access to direct messages. Please re-auth twicli for DM access.')))
+			logout(true);
+		return;
+	}
 	if (str.indexOf('Rate limit exceeded.') == 0) {
 		if (ratelimit_reset_time && new Date < ratelimit_reset_time)
 			return;
@@ -932,12 +938,14 @@ function twRelation(rel) {
 // ダイレクトメッセージ一覧の受信
 function twDirect1(tw) {
 	if (tw.error) return error(tw.error);
+	if (tw.errors) return error(tw.errors[0].message, tw.errors);
 	direct1 = tw;
 	if (direct2)
 		twDirectShow();
 }
 function twDirect2(tw) {
 	if (tw.error) return error(tw.error);
+	if (tw.errors) return error(tw.errors[0].message, tw.errors);
 	direct2 = tw;
 	if (direct1)
 		twDirectShow();
@@ -964,6 +972,7 @@ function checkDirect() {
 }
 function twDirectCheck(tw) {
 	if (tw.error) return error(tw.error);
+	if (tw.errors) return error(tw.errors[0].message, tw.errors);
 	if (!tw || tw.length == 0) return false;
 	var id = tw[0].id_str || tw[0].id;
 	if (last_direct_id && last_direct_id != id)
