@@ -32,6 +32,7 @@
 			}
 		},
 		replaceUrl : function(elem, link, lng, sht) {
+			if (link.embedsrc) return;
 			for (var i = 0; i < res.length; i++) {
 				if (res[i].search.test(lng)) {
 					createAnchor(link, function(){
@@ -58,6 +59,7 @@
 }());
 
 function dispEmbedSrc(url, link, type) {
+	link.embedsrc = true;
 	rep_top = Math.max(cumulativeOffset(link)[1] + 20, $("control").offsetHeight);
 	var win_h = window.innerHeight || document.documentElement.clientHeight;
 	$('rep').style.display = "block";
