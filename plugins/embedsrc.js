@@ -35,6 +35,7 @@
 			if (link.embedsrc) return;
 			for (var i = 0; i < res.length; i++) {
 				if (res[i].search.test(lng)) {
+					link.embedsrc = true;
 					createAnchor(link, function(){
 						dispEmbedSrc(lng.replace(res[i].search, res[i].replace), link, res[i].type);
 						return false;
@@ -43,6 +44,7 @@
 				}
 			}
 			if (lng.match(/^(https?:\/\/www\.slideshare\.net\/[-_0-9a-zA-Z]+\/[-_0-9a-zA-Z]+)/)) {
+				link.embedsrc = true;
 				xds.load("http://www.slideshare.net/api/oembed/2?url=" + RegExp.$1 + "&format=jsonp",
 						function(x) {
 							createAnchor(link, function(){
@@ -59,7 +61,6 @@
 }());
 
 function dispEmbedSrc(url, link, type) {
-	link.embedsrc = true;
 	rep_top = Math.max(cumulativeOffset(link)[1] + 20, $("control").offsetHeight);
 	var win_h = window.innerHeight || document.documentElement.clientHeight;
 	$('rep').style.display = "block";
