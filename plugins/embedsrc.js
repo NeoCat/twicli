@@ -68,7 +68,7 @@ function dispEmbedSrc(url, link, type) {
 		$('reps').innerHTML = '<iframe id="embedsrc" src="' + url
 			+ '" style="border:0; width:100%; height:'+Math.ceil(win_h*0.5)+'px; display:block"></iframe>';
 	} else if (type == 'script') {
-		$('reps').innerHTML = '<iframe id="embedsrc" style="border:0; width:100%; height: 402px; display:block"></iframe>';
+		$('reps').innerHTML = '<iframe id="embedsrc" style="border:0; width:100%; height: 426px; display:block"></iframe>';
 		document.getElementById('embedsrc').contentWindow.document.write(
 			'<div style="text-align: center;"><scr'+'ipt type="text/javascript" src="'+url+
 				'"></scr'+'ipt></div>');
