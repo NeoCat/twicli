@@ -75,7 +75,7 @@ registerPlugin({
 			addThumbnail(elem, 'http://i.ytimg.com/vi/' + id + '/default.jpg', url);
 		}
 		else if (url.match(/^http:\/\/(?:www\.nicovideo\.jp\/watch|nico\.ms)\/([a-z][a-z])(\d+)$/)) {
-			if (RegExp.$1 == "lv") return; // live thumbnail is not supported
+			if (RegExp.$1 == "lv" || RegExp.$1 == "nw") return; // live/news thumbnail is not supported
 			var id = RegExp.$2;
 			var host = parseInt(id)%4 + 1;
 			addThumbnail(elem, 'http://tn-skr' + host + '.smilevideo.jp/smile?i=' + id, url);
@@ -98,6 +98,9 @@ registerPlugin({
 		}
 		else if (url.match(/^http:\/\/p\.twipple\.jp\/(\w+)/)) {
 			addThumbnail(elem, 'http://p.twipple.jp/show/thumb/' + RegExp.$1, url);
+		}
+		else if (url.match(/^(http:\/\/moby\.to\/\w+)/)) {
+			addThumbnail(elem, RegExp.$1+':thumbnail', url);
 		}
 	}
 });
