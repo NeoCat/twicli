@@ -819,7 +819,7 @@ function makeHTML(tw, no_name, pid) {
 						_ = _.substr(0, _.length-1);
 						paren = ')';
 					}
-					return "<a class=\"link\" target=\"_blank\" href=\""+_+"\" onclick=\"return link(this);\">"+_+"</a>"+paren;
+					return "<a class=\"link\" target=\"_blank\" href=\""+_.replace(/\"/g, '%22')+"\" onclick=\"return link(this);\">"+_+"</a>"+paren;
 				}
 				if (h == "#" || h == "＃") {
 					if (s.match(/^\d+$/)) return _;
