@@ -401,8 +401,6 @@ function twAuth(a) {
 			logout();
 		return;
 	}
-	if (use_ssl)
-		writeCookie('use_ssl', 1, 3652);
 	if (!myname || myname != a.screen_name) {
 		myname = last_user = a.screen_name;
 		last_user_info = a;
