@@ -4,6 +4,7 @@ langResources['Please specify a list like "@user/list".'] =	['リストを"@user
 langResources['Lists'] =	['リスト','列表'];
 langResources['subscribing lists by twicli'] =	['twicliで購読中のリスト','用twicli订阅的lists'];
 langResources['Initialization failed; regexp.js may not be loaded.'] =	['初期化に失敗しました。regexp.jsがロードされていないようです。','初始化失败。regexp.js可能无法加载。'];
+langResources['Reload'] =	['更新','更新'];
 
 
 var last_list = ['',''];
@@ -16,6 +17,12 @@ function twlGetListInfo(name) {
 	if (name[0] == "#") name = name.substr(1);
 	var del = name.indexOf('/');
 	var user = name.substr(0, del), slug = name.substr(del+1);
+	var lists_users_str = readCookie("lists_users." + name);
+	if (lists_users_str) {
+		lists_users[name] = lists_users_str.split(",");
+		twlUpdateListsList();
+		return;
+	}
 	lists_users[name] = [];
 	xds.load_for_tab(twitterAPI + 'lists/members.json?owner_screen_name=' + user + '&slug=' + slug,
 		function twlListMember (info) {
@@ -24,10 +31,11 @@ function twlGetListInfo(name) {
 				twlUnsubscribeList(name);
 				return;
 			}
-			lists_users[name] = lists_users[name].concat(info.users.map(function(u){ delete u.status; return u; }));
+			lists_users[name] = lists_users[name].concat(info.users.map(function(u){ return u.screen_name; }));
 			if (info.next_cursor_str && info.next_cursor_str != "0" || info.next_cursor) {
 				xds.load_for_tab(twitterAPI + 'lists/members.json?owner_screen_name=' + user + '&slug=' + slug + '&cursor=' + (info.next_cursor_str || info.next_cursor), twlListMember);
 			} else {
+				writeCookie("lists_users." + name, lists_users[name].join(","), 3652);
 				twlUpdateListsList();
 			}
 		});
@@ -52,6 +60,7 @@ function twlUnsubscribeList(name) {
 		}
 	}
 	writeCookie("lists", lists_to_get.join("\n"), 3652);
+	deleteCookie("lists_users." + name);
 	twlUpdateListsList();
 }
 function twlToggleListsInTL(a, ele) {
@@ -130,8 +139,7 @@ function twlUpdateListsList() {
 		var users = lists_users[a];
 		if (!users) return "";
 		return "\\"/*supress closeTab*/ + a.substr(a.indexOf('/')+1) + "\\list#"/*info*/ + a +
-			':^' + users.map(function(u){ return u.screen_name }).join('$|^') + '$' +
-			(l[0] == '#' ? '::1'/*don't display in TL*/ : '');
+			':^' + users.join('$|^') + '$' + (l[0] == '#' ? '::1'/*don't display in TL*/ : '');
 	}).join("\n");
 	if (typeof(setRegexp) == "function") {
 		setRegexp(pickup_regexp);
@@ -157,8 +165,16 @@ function twlUpdateMisc() {
 			'<label for="chk-lists-'+a.replace('/','-')+'">TL</label>&nbsp;&nbsp;'+
 			' <a class="close" href="javascript:twlUnsubscribeList(\''+a+'\')">'+
 			'<img style="position: relative; top: 2px;" src="images/clr.png"></a>'+
+			'<input type="button" onclick="twlReloadListInfo(\'' + a + '\')" '+
+					'value="'+ _('Reload') + '"></a>'+
 			'</li>' : a
 	}).join("");
+}
+
+function twlReloadListInfo(name) {
+	deleteCookie("lists_users." + name);
+	twlGetListInfo(name);
+	twlUpdateMisc();
 }
 
 registerPlugin({
