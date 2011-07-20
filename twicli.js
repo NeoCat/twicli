@@ -440,7 +440,6 @@ function logout(force) {
 }
 
 function error(str, err) {
-	console.log(err);
 	if (err && err[0] && err[0].code == 93) {
 		if (confirm(_('Cannot access to direct messages. Please re-auth twicli for DM access.')))
 			logout(true);
