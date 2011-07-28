@@ -426,7 +426,7 @@ function auth() {
 		$("user").innerHTML = last_user;
 		update();
 	}
-	xds.load_default(twitterAPI + "account/verify_credentials.json?suppress_response_codes=true", twAuth);
+	xds.load_default(twitterAPI + "users/show.json?suppress_response_codes=true&screen_name=" + myname, twAuth);
 }
 
 function logout(force) {
