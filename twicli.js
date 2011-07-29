@@ -390,6 +390,7 @@ if (location.search.match(/[?&]status=(.*?)(?:&|$)/)) {
 	}, 0);
 }
 
+var re_auth = false;
 function twAuth(a) {
 	if (a.error) {
 		if (!use_ssl) {
@@ -401,7 +402,8 @@ function twAuth(a) {
 			logout();
 		return;
 	}
-	if (!myname || myname != a.screen_name) {
+	if (!myname || myname != a.screen_name || re_auth) {
+		re_auth = false;
 		myname = last_user = a.screen_name;
 		last_user_info = a;
 		myid = a.id;
@@ -415,6 +417,17 @@ function twAuth(a) {
 	}
 	callPlugins('auth');
 }
+function twAuthFallback() {
+	// verify_credentials API is unavailable?
+	var $screen_name = readCookie('access_user');
+	if ($screen_name.indexOf('|') > 0) {
+		callPlugins('auth');
+		return; // skip authentication this time
+	} else if ($screen_name) {
+		re_auth = true;
+		xds.load_default(twitterAPI + "users/show.json?suppress_response_codes=true&screen_name="+myname, twAuth);
+	}
+}
 function auth() {
 	if (use_ssl)
 		twitterAPI = twitterAPI.replace('http', 'https');
@@ -426,7 +439,7 @@ function auth() {
 		$("user").innerHTML = last_user;
 		update();
 	}
-	xds.load_default(twitterAPI + "account/verify_credentials.json?suppress_response_codes=true", twAuth);
+	xds.load(twitterAPI + "account/verify_credentials.json?suppress_response_codes=true", twAuth, twAuthFallback, 3);
 }
 
 function logout(force) {

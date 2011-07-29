@@ -72,6 +72,8 @@ function saveAccessToken(f) {
 	if (key.match(/^oauth_token=([^&]+)&oauth_token_secret=([^&]+)/)) {
 		writeCookie('access_token', RegExp.$1);
 		writeCookie('access_secret', RegExp.$2);
+		if (key.match(/screen_name=([^&]+)/))
+			writeCookie('access_user', RegExp.$1);
 		setTimeout(function(){ location.href = "../twicli.html"; }, 2000);
 	} else {
 		alert("Invalid format. Please reload and retry the steps.");
