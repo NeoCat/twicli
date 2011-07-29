@@ -419,14 +419,8 @@ function twAuth(a) {
 }
 function twAuthFallback() {
 	// verify_credentials API is unavailable?
-	var $screen_name = readCookie('access_user');
-	if ($screen_name.indexOf('|') > 0) {
-		callPlugins('auth');
-		return; // skip authentication this time
-	} else if ($screen_name) {
-		re_auth = true;
-		xds.load_default(twitterAPI + "users/show.json?suppress_response_codes=true&screen_name="+myname, twAuth);
-	}
+	re_auth = true;
+	xds.load_default(twitterAPI + "users/show.json?suppress_response_codes=true&screen_name="+myname, twAuth);
 }
 function auth() {
 	if (use_ssl)
