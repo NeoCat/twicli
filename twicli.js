@@ -1023,15 +1023,18 @@ function twReplies(tw, fromTL) {
 	if (!fromTL && tw.length > 0) since_id_reply = tw[0].id_str || tw[0].id;
 }
 // 受信tweetを表示
+function removeLink(text) {
+	return text.replace(/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+/g, '');
+}
 function twShow(tw) {
 	if (tw.error) return error(tw.error);
 
 	tw.reverse();
 	for (var j in tw) if (tw[j] && tw[j].user) {
 		callPlugins("gotNewMessage", tw[j]);
-		if (update_post_check && tw[j].user.screen_name == myname && tw[j].text == update_post_check[1]) {
+		if (update_post_check && tw[j].user.screen_name == myname && removeLink(tw[j].text) == removeLink(update_post_check[1])) {
+			if ($('fst').value == update_post_check[1]) resetFrm();
 			update_post_check = false;
-			if ($('fst').value == tw[j].text) resetFrm();
 		}
 	}
 	tw.reverse();
