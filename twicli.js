@@ -615,7 +615,7 @@ function dispReply(user, id, ele, cascade) {
 			return;
 		}
 		if (cascade) return;
-		reply_ele = xds.load_default(twitterAPI + 'statuses/show/'+id+'.json?suppress_response_codes=true', dispReply2, reply_ele);
+		reply_ele = xds.load_default(twitterAPI + 'statuses/show/'+id+'.json?include_entities=true&suppress_response_codes=true', dispReply2, reply_ele);
 		return;
 	}
 	// 反転表示
@@ -760,7 +760,7 @@ function update() {
 	callPlugins("update");
 	update_ele = xds.load_default(twitterAPI + 'statuses/home_timeline.json' +
 						'?count=' + (since_id ? 200 : max_count) +
-						'&suppress_response_codes=true'
+						'&include_entities=true&suppress_response_codes=true'
 						+ (!no_since_id && since_id ? '&since_id='+since_id : ''), twShow, update_ele);
 	resetUpdateTimer();
 }
@@ -1003,7 +1003,8 @@ function getReplies() {
 		reply_ele2 = xds.load_default(twitterAPI + 'statuses/mentions.json' +
 						'?count=' + (since_id_reply ? 200 : max_count_u) +
 						(since_id_reply ? '&since_id='+since_id_reply : '') +
-						'&suppress_response_codes=true', twReplies, reply_ele2);
+						'&indclude_entities=true&suppress_response_codes=true',
+						twReplies, reply_ele2);
 		update_reply_counter = 4;
 }
 // 受信repliesを表示
@@ -1119,7 +1120,7 @@ function twUsers(tw) {
 			xds.load_for_tab(twitterAPI +
 					(fav_mode == 2 ? 'statuses/friends.json' : 'statuses/followers.json') +
 					'?screen_name=' + last_user + '&cursor=' + tw.next_cursor +
-					'&suppress_response_codes=true', twUsers);
+					'&include_entities=true&suppress_response_codes=true', twUsers);
 		};
 	}
 }
@@ -1254,18 +1255,18 @@ function getNext(ele) {
 function getOldTL() {
 	update_ele2 = xds.load_default(twitterAPI + 'statuses/home_timeline.json' +
 				'?count=200&page=' + (nr_page++) +
-				'&suppress_response_codes=true', twOld, update_ele2);
+				'&include_entities=true&suppress_response_codes=true', twOld, update_ele2);
 }
 function getOldReply() {
 	update_ele2 = xds.load_default(twitterAPI + 'statuses/mentions.json' +
 				'?count=' + max_count_u + '&page=' + (nr_page_re++) +
-				'&suppress_response_codes=true', twOldReply, update_ele2);
+				'&include_entities=true&suppress_response_codes=true', twOldReply, update_ele2);
 }
 function getNextFuncCommon() {
 	if (selected_menu.id == "user" && !fav_mode)
 		xds.load_for_tab(twitterAPI + 'statuses/user_timeline.json' +
 					'?count=' + max_count_u + '&page=' + (++cur_page) + '&screen_name=' + last_user +
-					'&include_rts=true&suppress_response_codes=true', twShow2);
+					'&include_rts=true&include_entities=true&suppress_response_codes=true', twShow2);
 	else if (selected_menu.id == "user" && fav_mode == 1)
 		xds.load_for_tab(twitterAPI + 'favorites/' + last_user + '.json' +
 					'?page=' + (++cur_page) + '&suppress_response_codes=true', twShow2);
@@ -1273,7 +1274,7 @@ function getNextFuncCommon() {
 		++cur_page;
 		xds.load_for_tab(twitterAPI + 'statuses/following_timeline.json' +
 					'?count = ' + max_count_u + '&max_id=' + max_id + '&suppress_response_codes=true' +
-					'&screen_name=' + last_user, twShow2);
+					'&include_entities=true&screen_name=' + last_user, twShow2);
 	}
 }
 // タイムライン切り替え
@@ -1353,13 +1354,13 @@ function switchUser(user) {
 			twUserInfo(last_user_info);
 		xds.load_for_tab(twitterAPI + 'statuses/user_timeline.json' +
 			'?count=' + max_count_u + '&screen_name=' + user + 
-			'&include_rts=true&suppress_response_codes=true', twShow2);
+			'&include_rts=true&include_entities=true&suppress_response_codes=true', twShow2);
 	} else {
 		users_log = [];
 		xds.abort_tab();
 		for (var i = 0; i < users.length; i++)
 			xds.load_for_tab(twitterAPI + 'statuses/user_timeline.json?screen_name=' + users[i] +
-						 '&include_rts=true&suppress_response_codes=true&count=' + max_count_u, twShow3);
+						 '&include_rts=true&include_entities=true&suppress_response_codes=true&count=' + max_count_u, twShow3);
 	}
 }
 function switchStatus() {
@@ -1368,7 +1369,7 @@ function switchStatus() {
 	$("tw2c").innerHTML = "";
 	xds.load_for_tab(twitterAPI + 'statuses/user_timeline.json' +
 		'?count=' + max_count_u + '&screen_name=' + last_user + 
-		'&include_rts=true&suppress_response_codes=true', twShow2);
+		'&include_rts=true&include_entities=true&suppress_response_codes=true', twShow2);
 }
 function switchFav() {
 	cur_page = 1;
@@ -1382,21 +1383,21 @@ function switchFollowing() {
 	fav_mode = 2;
 	$("tw2c").innerHTML = "";
 	xds.load_for_tab(twitterAPI + 'statuses/friends.json?screen_name=' + last_user + 
-										'&cursor=-1&suppress_response_codes=true', twUsers);
+										'&cursor=-1&include_entities=true&suppress_response_codes=true', twUsers);
 }
 function switchFollowingTL() {
 	cur_page = 1;
 	fav_mode = 4;
 	$("tw2c").innerHTML = "";
 	xds.load_for_tab(twitterAPI + 'statuses/following_timeline.json?screen_name=' + last_user + 
-										'&cursor=-1&suppress_response_codes=true', twShow2);
+										'&cursor=-1&include_entities=true&suppress_response_codes=true', twShow2);
 }
 function switchFollower() {
 	cur_page = 1;
 	fav_mode = 3;
 	$("tw2c").innerHTML = "";
 	xds.load_for_tab(twitterAPI + 'statuses/followers.json' +
-			'?screen_name=' + last_user + '&cursor=-1&suppress_response_codes=true', twUsers);
+			'?screen_name=' + last_user + '&cursor=-1&include_entities=true&suppress_response_codes=true', twUsers);
 }
 function switchDirect() {
 	switchTo("direct");

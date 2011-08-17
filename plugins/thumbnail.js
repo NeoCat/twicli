@@ -1,5 +1,14 @@
 registerPlugin({
-	newMessageElement: function(elem) {
+	newMessageElement: function(elem, tw) {
+		if (tw.entities && tw.entities.media) {
+			for (var i = 0; i < tw.entities.media.length; i++) {
+				if (tw.entities.media[i].type == "photo") {
+					addThumbnail(elem,
+						tw.entities.media[i].media_url + ":thumb",
+						tw.entities.media[i].media_url + ":large");
+				}
+			}
+		}
 		var status = null;
 		for(var i = 0; i < elem.childNodes.length; i++) {
 			status = elem.childNodes[i];
