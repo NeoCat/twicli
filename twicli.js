@@ -801,6 +801,11 @@ function makeHTML(tw, no_name, pid) {
 	var id2 = t.id_str || t.id;
 	var eid = pid+'-'+id;
 	var in_reply_to = t.in_reply_to_status_id_str || t.in_reply_to_status_id;
+	var expanded_urls = {};
+	if (tw.entities && tw.entities.urls)
+		tw.entities.urls.concat(tw.entities.media || []).map(function(_){
+			if (_.url && _.expanded_url) expanded_urls[_.url] = _.expanded_url;
+		});
 	return /*fav*/ (t.d_dir ? '' : '<img alt="☆" class="fav" src="http://assets3.twitter.com/images/icon_star_'+(!rt&&rs.favorited?'full':'empty')+'.gif" ' +
 			'onClick="fav(this,\'' + id + '\')"' + (pid ? ' id="fav-'+eid+'"' : '') + '>')+
 		 (!no_name || (!display_as_rt && rt) ?
@@ -823,6 +828,7 @@ function makeHTML(tw, no_name, pid) {
 						_ = _.substr(0, _.length-1);
 						paren = ')';
 					}
+					if (expanded_urls[_]) _ = expanded_urls[_];
 					return "<a class=\"link\" target=\"_blank\" href=\""+_.replace(/\"/g, '%22')+"\" onclick=\"return link(this);\">"+_+"</a>"+paren;
 				}
 				if (h == "#" || h == "＃") {
