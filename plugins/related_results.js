@@ -32,7 +32,6 @@ var dispRelated;
     $("loading").style.display = "block";
 
     xds.load(twitterAPI + 'related_results/show/'+id+'.json?pc=true&include_entities=1&suppress_response_codes=true', function(data) {
-      console.log(['related_results', data]);
       $('loading').style.display = 'none';
       
       if (data[0] && data[0].results) {

@@ -116,7 +116,7 @@ function twlGetListStatus(list) {
 		twl_update_timer = setInterval(function(){twlGetListStatusUpdate(list)}, 1000*Math.max(updateInterval, 30));
 		xds.load_for_tab(twitterAPI + 'lists/statuses.json?seq=' + (seq++)
 				+ '&owner_screen_name=' + last_list[0] + '&slug=' + last_list[1]
-				+ '&include_rts=true&per_page=' + max_count_u, twlShowListStatus);
+				+ '&include_entities=true&include_rts=true&per_page=' + max_count_u, twlShowListStatus);
 	}
 	return false;
 }
@@ -125,7 +125,8 @@ function twlGetListStatusUpdate(list) {
 	if (selected_menu.id == "user") fav_mode = 9;
 	xds.load_for_tab(twitterAPI + 'lists/statuses.json?seq=' + (seq++)
 			+ '&owner_screen_name=' + last_list[0] + '&slug=' + last_list[1]
-			+ '&include_rts=true&per_page=' + max_count_u, twlShowListStatus2);
+			+ '&include_entities=true&include_rts=true&per_page=' + max_count_u,
+			twlShowListStatus2);
 }
 function twlShowListStatus2(tw) {
 	twlShowListStatus(tw, true);
@@ -143,7 +144,7 @@ function twlShowListStatus(tw, update) {
 	get_next_func = function(){
 	xds.load_for_tab(twitterAPI + 'lists/statuses.json?seq=' + (seq++)
 			+ '&owner_screen_name=' + last_list[0] + '&slug=' + last_list[1]
-			+ '&include_rts=true&per_page=' + max_count_u
+			+ '&include_entities=true&include_rts=true&per_page=' + max_count_u
 			+ '&max_id=' + tw[tw.length-1].id, twlShowListStatus);
 	}
 	}
