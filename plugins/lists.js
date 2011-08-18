@@ -111,7 +111,8 @@ function twlGetListStatus(list) {
 	$("tw2c").innerHTML = "";
 	xds.load_for_tab(twitterAPI + 'lists/statuses.json?seq=' + (seq++)
 			+ '&owner_screen_name=' + last_list[0] + '&slug=' + last_list[1]
-			+ '&include_rts=true&per_page=' + max_count_u, twlShowListStatus);
+			+ '&include_entities=true&include_rts=true&per_page=' + max_count_u,
+			twlShowListStatus);
 	return false;
 }
 function twlShowListStatus(tw) {
@@ -126,7 +127,7 @@ function twlShowListStatus(tw) {
 	get_next_func = function(){
 	xds.load_for_tab(twitterAPI + 'lists/statuses.json?seq=' + (seq++)
 			+ '&owner_screen_name=' + last_list[0] + '&slug=' + last_list[1]
-			+ '&include_rts=true&per_page=' + max_count_u
+			+ '&include_entities=true&include_rts=true&per_page=' + max_count_u
 			+ '&max_id=' + tw[tw.length-1].id, twlShowListStatus);
 	}
 }
