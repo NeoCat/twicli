@@ -366,6 +366,8 @@ var ratelimit_reset_time = null;
 var loading_cnt = 0;
 var err_timeout = null;
 var update_post_check = false;
+var tw_config;
+var t_co_maxstr = "http://t.co/*******";
 
 // loading表示のコントロール
 function loading(start) {
@@ -568,10 +570,11 @@ if (navigator.userAgent.indexOf('iPhone') < 0)
 function updateCount() {
 	setFstHeight();
 	if (!no_counter) $("counter-div").style.display = "block";
+	
 	// for calculate length with shorten URL.
 	var s = $("fst").value.replace(
 			/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+/g,
-			function(t) {return "http://t.co/*******".slice(0, t.length);});
+			function(t) {return t_co_maxstr.slice(0, t.length);});
 	$("counter").innerHTML = 140 - footer.length - s.length;
 }
 // フォームの初期化
@@ -1001,6 +1004,13 @@ function twLimit(lim) {
 function twLimit2(lim) {
 	ratelimit_reset_time = new Date(lim.reset_time.replace('+','GMT+'));;
 }
+// API情報の受信
+function twConfig(config) {
+	tw_config = config;
+	if (tw_config && tw_config.short_url_length)
+		while (t_co_maxstr.length < tw_config.short_url_length)
+			t_co_maxstr += "*";
+}
 // 新着reply受信通知
 function noticeNewReply(replies) {
 	if ($("reply").className.indexOf("new") < 0)
@@ -1034,7 +1044,7 @@ function twReplies(tw, fromTL) {
 }
 // 受信tweetを表示
 function removeLink(text) {
-	return text.replace(/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+/g, '');
+	return text.replace(/https?:\/\/[^\/\s]*[\w!#$%&\'()*+,.\/:;=?@~-]+/g, '');
 }
 function twShow(tw) {
 	if (tw.error) return error(tw.error);
@@ -1507,6 +1517,7 @@ function init() {
 	document.etc.tokenSecret.value = access_secret;
 	document.etc.consumerSecret.value = "7ypxMreeJuumgiq3ts7QtOqigl5G1sosJFfeaoKGJA";
 	setFstHeight(min_fst_height, true);
+	xds.load_default(twitterAPI + 'help/configuration.json', twConfig);
 	// 初回アップデート
 	callPlugins("init");
 	setTimeout(auth, 0);
