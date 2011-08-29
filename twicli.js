@@ -499,7 +499,7 @@ function press(e) {
 		update();
 		return false;
 	}
-	if (st.value.length + footer.length > 140) {
+	if (parseInt($("counter").innerHTML,10) < 0) {
 		alert(_("This tweet is too long."));
 		return false;
 	}
@@ -567,9 +567,12 @@ if (navigator.userAgent.indexOf('iPhone') < 0)
 // 発言文字数カウンタ表示・更新
 function updateCount() {
 	setFstHeight();
-	if (no_counter) return;
-	$("counter-div").style.display = "block";
-	$("counter").innerHTML = 140 - footer.length - $("fst").value.length;
+	if (!no_counter) $("counter-div").style.display = "block";
+	// for calculate length with shorten URL.
+	var s = $("fst").value.replace(
+			/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+/g,
+			function(t) {return "http://t.co/*******".slice(0, t.length);});
+	$("counter").innerHTML = 140 - footer.length - s.length;
 }
 // フォームの初期化
 function resetFrm() {
