@@ -574,7 +574,7 @@ function updateCount() {
 	// for calculate length with shorten URL.
 	var s = $("fst").value.replace(
 			/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+/g,
-			function(t) {return t_co_maxstr.slice(0, t.length);});
+			function(t) {return t_co_maxstr.slice(0, t.length) + (t.substr(t.length-1) == ')' ? ')' : '');});
 	$("counter").innerHTML = 140 - footer.length - s.length;
 }
 // フォームの初期化
