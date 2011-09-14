@@ -404,7 +404,7 @@ function twAuth(a) {
 			logout();
 		return;
 	}
-	if (!myname || myname != a.screen_name || re_auth) {
+	if (!myname || !myid || myname != a.screen_name || re_auth) {
 		re_auth = false;
 		myname = last_user = a.screen_name;
 		last_user_info = a;
