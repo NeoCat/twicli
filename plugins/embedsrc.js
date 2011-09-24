@@ -43,7 +43,7 @@
 					return;
 				}
 			}
-			if (lng.match(/^(https?:\/\/www\.slideshare\.net\/[-_0-9a-zA-Z]+\/[-_0-9a-zA-Z]+)/)) {
+			if (lng.match(/^(https?:\/\/www\.slideshare\.net\/[-_0-9a-zA-Z.]+\/[-_0-9a-zA-Z.]+)/)) {
 				link.embedsrc = true;
 				xds.load("http://www.slideshare.net/api/oembed/2?url=" + RegExp.$1 + "&format=jsonp",
 						function(x) {
