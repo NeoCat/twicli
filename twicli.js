@@ -846,7 +846,7 @@ function makeHTML(tw, no_name, pid) {
 			}).replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//Retweet情報
 		' <span id="rtinfo-'+eid+'" class="rtinfo">' +
-		(!display_as_rt && rt ? "<img src=\"images/rt.png\" alt=\"RT\">by <img src=\""+tw.user.profile_image_url+"\" alt=\""+tw.user.screen_name+"\" class=\"rtuicon\"><a href=\""+twitterURL+tw.user.screen_name+"\" onclick=\"switchUserTL(this.parentNode.parentNode, true);return false\">" + tw.user.screen_name + "</a> " :'') + '</span>' +
+		(!display_as_rt && rt ? "<img src=\"images/rt.png\" alt=\"RT\">by <img src=\""+tw.user.profile_image_url+"\" alt=\""+tw.user.screen_name+"\" class=\"rtuicon\"><a href=\""+twitterURL+tw.user.screen_name+"\" onclick=\"switchUserTL(this.parentNode.parentNode, true);return false\">" + tw.user.screen_name + "</a> " + (parseInt(tw.retweet_count) > 1 ? '<small>& ' + tw.retweet_count + '</small>' : '') :'') + '</span>' +
 		//日付
 		' <span id="utils-'+eid+'" class="utils">' +
 		'<span class="prop"><a class="date" target="twitter" href="'+twitterURL+(t.d_dir ? '#!/messages' : un+'/statuses/'+id2)+'">' + dateFmt(t.created_at) + '</a>' +
