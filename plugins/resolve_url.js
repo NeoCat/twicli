@@ -28,8 +28,13 @@
       if (link.className.indexOf('resolved') < 0);
         link.className += ' resolved';
       link.resolved = link.resolved ? link.resolved+1 : 1;
-      if (link.resolved <= 3 && re.test(link.href)) // resolve multiply-shortened URL
+      if (link.resolved <= 3 && re.test(link.href)) {// resolve multiply-shortened URL
+        if (RegExp.$1 == 'tumblr.com') { // Specialization for tumblr.com
+          link.href = link.href.replace('tumblr.com','www.tumblr.com');
+          link.innerHTML = link.innerHTML.replace('tumblr.com','www.tumblr.com');
+        }
         setResolver(link);
+      }
       // notify to other plugins
       else if (link.parentNode && link.parentNode.parentNode)
         callPlugins("replaceUrl", link.parentNode.parentNode, link, longUrl, shortUrl);
