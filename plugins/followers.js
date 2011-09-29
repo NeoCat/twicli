@@ -38,14 +38,17 @@ function twfcFollwersIDsClear() {
 function twfcFollwersIDsRenew() {
 	var status = document.getElementById("followers_status");
 	if (status) status.innerHTML = "loading...";
-	xds.load(twitterAPI + 'followers/ids.json', twfcRenew);
+	followers_ids_list = [];
+	followers_ids = [];
+	xds.load(twitterAPI + 'followers/ids.json?cursor=-1', twfcRenew);
 }
 function twfcRenew(list) {
-	followers_ids_list = list;
-	followers_ids = [];
-	for (var i = 0; i < list.length; i++)
-		followers_ids[list[i]] = 1;
-	writeCookie('followers_ids', list.join(","), 3652);
+	followers_ids_list = followers_ids_list.concat(list.ids);
+	for (var i = 0; i < list.ids.length; i++)
+		followers_ids[list.ids[i]] = 1;
+	writeCookie('followers_ids', followers_ids_list.join(","), 3652);
 	var status = document.getElementById("followers_status");
-	if (status) status.innerHTML = "on (" + list.length + ")";
+	if (status) status.innerHTML = "on (" + list.ids.length + ")";
+	if (list.next_cursor)
+		xds.load(twitterAPI + 'followers/ids.json?cursor='+list.next_cursor_str, twfcRenew);
 }
