@@ -48,7 +48,7 @@ function twfcRenew(list) {
 		followers_ids[list.ids[i]] = 1;
 	writeCookie('followers_ids', followers_ids_list.join(","), 3652);
 	var status = document.getElementById("followers_status");
-	if (status) status.innerHTML = "on (" + list.ids.length + ")";
+	if (status) status.innerHTML = "on (" + followers_ids_list.length + ")";
 	if (list.next_cursor)
 		xds.load(twitterAPI + 'followers/ids.json?cursor='+list.next_cursor_str, twfcRenew);
 }
