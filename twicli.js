@@ -827,19 +827,22 @@ function makeHTML(tw, no_name, pid) {
 		/*ダイレクトメッセージの方向*/ (t.d_dir == 1 ? '<span class="dir">→</span> ' : t.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text-" + eid + "\" class=\"status\">" +
-		text.replace(/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+|[@＠](\w+(?:\/[\w-]+)?)|([,.!?　、。！？「」]|\s|^)([#＃])([\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]+)(?=[^\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]|$)/g, function(_,u,t,h,s){
+		text.replace(/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+|[@＠](\w+(?:\/[\w-]+)?)|([,.!?　、。！？「」]|\s|^)([#＃])([\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]+)(?=[^\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]|$)/g, function(_,u,x,h,s){
 				if (!u && !h) {
 					var paren = '';
 					if (_.substr(_.length-1) == ')') { // 末尾の")"はURLに含めない
 						_ = _.substr(0, _.length-1);
 						paren = ')';
 					}
-					if (expanded_urls[_]) _ = expanded_urls[_];
+					if (expanded_urls[_]) {
+						t.text_replaced = (t.text_replaced || t.text).replace(_, expanded_urls[_]);
+						_ = expanded_urls[_];
+					}
 					return "<a class=\"link\" target=\"_blank\" href=\""+_.replace(/\"/g, '%22')+"\" onclick=\"return link(this);\">"+_+"</a>"+paren;
 				}
 				if (h == "#" || h == "＃") {
 					if (s.match(/^\d+$/)) return _;
-					return t+"<a target=\"_blank\" class=\"hashtag\" title=\"#"+s+"\" href=\"http://search.twitter.com/search?q="+encodeURIComponent("#"+s)+"\">"+h+s+"</a>";
+					return x+"<a target=\"_blank\" class=\"hashtag\" title=\"#"+s+"\" href=\"http://search.twitter.com/search?q="+encodeURIComponent("#"+s)+"\">"+h+s+"</a>";
 				}
 				if (u.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+u+"\" onclick=\"return link(this);\">"+_+"</a>";
 				return "<a href=\""+twitterURL+u+"\" onClick=\"switchUser('"+u+"'); return false;\" >"+_+"</a>";
