@@ -366,6 +366,8 @@ var ratelimit_reset_time = null;
 var loading_cnt = 0;
 var err_timeout = null;
 var update_post_check = false;
+var tw_config;
+var t_co_maxstr = "http://t.co/*******";
 
 // loading表示のコントロール
 function loading(start) {
@@ -402,7 +404,7 @@ function twAuth(a) {
 			logout();
 		return;
 	}
-	if (!myname || myname != a.screen_name || re_auth) {
+	if (!myname || !myid || myname != a.screen_name || re_auth) {
 		re_auth = false;
 		myname = last_user = a.screen_name;
 		last_user_info = a;
@@ -499,7 +501,7 @@ function press(e) {
 		update();
 		return false;
 	}
-	if (st.value.length + footer.length > 140) {
+	if (parseInt($("counter").innerHTML,10) < 0) {
 		alert(_("This tweet is too long."));
 		return false;
 	}
@@ -567,9 +569,13 @@ if (navigator.userAgent.indexOf('iPhone') < 0)
 // 発言文字数カウンタ表示・更新
 function updateCount() {
 	setFstHeight();
-	if (no_counter) return;
-	$("counter-div").style.display = "block";
-	$("counter").innerHTML = 140 - footer.length - $("fst").value.length;
+	if (!no_counter) $("counter-div").style.display = "block";
+	
+	// for calculate length with shorten URL.
+	var s = $("fst").value.replace(
+			/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+/g,
+			function(t) {return t_co_maxstr.slice(0, t.length) + (t.substr(t.length-1) == ')' ? ')' : '');});
+	$("counter").innerHTML = 140 - footer.length - s.length;
 }
 // フォームの初期化
 function resetFrm() {
@@ -821,26 +827,29 @@ function makeHTML(tw, no_name, pid) {
 		/*ダイレクトメッセージの方向*/ (t.d_dir == 1 ? '<span class="dir">→</span> ' : t.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text-" + eid + "\" class=\"status\">" +
-		text.replace(/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+|[@＠]([\/\w-]+)|([,.!?　、。！？「」]|\s|^)([#＃])([\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]+)(?=[^\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]|$)/g, function(_,u,t,h,s){
+		text.replace(/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+|[@＠](\w+(?:\/[\w-]+)?)|([,.!?　、。！？「」]|\s|^)([#＃])([\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]+)(?=[^\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]|$)/g, function(_,u,x,h,s){
 				if (!u && !h) {
 					var paren = '';
 					if (_.substr(_.length-1) == ')') { // 末尾の")"はURLに含めない
 						_ = _.substr(0, _.length-1);
 						paren = ')';
 					}
-					if (expanded_urls[_]) _ = expanded_urls[_];
+					if (expanded_urls[_]) {
+						t.text_replaced = (t.text_replaced || t.text).replace(_, expanded_urls[_]);
+						_ = expanded_urls[_];
+					}
 					return "<a class=\"link\" target=\"_blank\" href=\""+_.replace(/\"/g, '%22')+"\" onclick=\"return link(this);\">"+_+"</a>"+paren;
 				}
 				if (h == "#" || h == "＃") {
 					if (s.match(/^\d+$/)) return _;
-					return t+"<a target=\"_blank\" class=\"hashtag\" title=\"#"+s+"\" href=\"http://search.twitter.com/search?q="+encodeURIComponent("#"+s)+"\">"+h+s+"</a>";
+					return x+"<a target=\"_blank\" class=\"hashtag\" title=\"#"+s+"\" href=\"http://search.twitter.com/search?q="+encodeURIComponent("#"+s)+"\">"+h+s+"</a>";
 				}
 				if (u.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+u+"\" onclick=\"return link(this);\">"+_+"</a>";
 				return "<a href=\""+twitterURL+u+"\" onClick=\"switchUser('"+u+"'); return false;\" >"+_+"</a>";
 			}).replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//Retweet情報
 		' <span id="rtinfo-'+eid+'" class="rtinfo">' +
-		(!display_as_rt && rt ? "<img src=\"images/rt.png\" alt=\"RT\">by <img src=\""+tw.user.profile_image_url+"\" alt=\""+tw.user.screen_name+"\" class=\"rtuicon\"><a href=\""+twitterURL+tw.user.screen_name+"\" onclick=\"switchUserTL(this.parentNode.parentNode, true);return false\">" + tw.user.screen_name + "</a> " :'') + '</span>' +
+		(!display_as_rt && rt ? "<img src=\"images/rt.png\" alt=\"RT\">by <img src=\""+tw.user.profile_image_url+"\" alt=\""+tw.user.screen_name+"\" class=\"rtuicon\"><a href=\""+twitterURL+tw.user.screen_name+"\" onclick=\"switchUserTL(this.parentNode.parentNode, true);return false\">" + tw.user.screen_name + "</a> " + (parseInt(tw.retweet_count) > 1 ? '<small>& ' + (typeof(tw.retweet_count) == 'string' ? tw.retweet_count : tw.retweet_count-1) + '</small>' : '') :'') + '</span>' +
 		//日付
 		' <span id="utils-'+eid+'" class="utils">' +
 		'<span class="prop"><a class="date" target="twitter" href="'+twitterURL+(t.d_dir ? '#!/messages' : un+'/statuses/'+id2)+'">' + dateFmt(t.created_at) + '</a>' +
@@ -998,6 +1007,13 @@ function twLimit(lim) {
 function twLimit2(lim) {
 	ratelimit_reset_time = new Date(lim.reset_time.replace('+','GMT+'));;
 }
+// API情報の受信
+function twConfig(config) {
+	tw_config = config;
+	if (tw_config && tw_config.short_url_length)
+		while (t_co_maxstr.length < tw_config.short_url_length)
+			t_co_maxstr += "*";
+}
 // 新着reply受信通知
 function noticeNewReply(replies) {
 	if ($("reply").className.indexOf("new") < 0)
@@ -1031,7 +1047,7 @@ function twReplies(tw, fromTL) {
 }
 // 受信tweetを表示
 function removeLink(text) {
-	return text.replace(/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+/g, '');
+	return text.replace(/https?:\/\/[^\/\s]*[\w!#$%&\'()*+,.\/:;=?@~-]+/g, '');
 }
 function twShow(tw) {
 	if (tw.error) return error(tw.error);
@@ -1504,6 +1520,7 @@ function init() {
 	document.etc.tokenSecret.value = access_secret;
 	document.etc.consumerSecret.value = "7ypxMreeJuumgiq3ts7QtOqigl5G1sosJFfeaoKGJA";
 	setFstHeight(min_fst_height, true);
+	xds.load_default(twitterAPI + 'help/configuration.json', twConfig);
 	// 初回アップデート
 	callPlugins("init");
 	setTimeout(auth, 0);

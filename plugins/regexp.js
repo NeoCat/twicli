@@ -17,7 +17,7 @@ function execRegexp(tw, exp) {
 	var rs = tw.retweeted_status || tw;
 	var t = display_as_rt ? tw : rs;
 	if (!t.user || !t.user.screen_name) return false;
-	var text = t.text + source + rtinfo;
+	var text = (t.text_replaced || t.text) + source + rtinfo;
 	return	(!exp.id     || t.user.screen_name.match(exp.id  )) &&
 		(!exp.id_n   ||!t.user.screen_name.match(exp.id_n)) &&
 		(!exp.fn     || exp.fn.apply(tw)) &&
@@ -137,6 +137,7 @@ function initRegexp() {
 			ptab.no_close = no_close;
 			ptab.info = info;
 			ptab.onclick = function() { switchRegexp(this); return false; };
+			ptab.matchTest = new RegExp(" match-" + tabname + '(?:$| )');
 			$('menu2').appendChild(ptab);
 			pickup_tab_list.push(ptab);
 		}
@@ -171,8 +172,11 @@ registerPlugin({
 		for (var i = 0; i < pickup_tab_list.length; i++) {
 			var tab = pickup_tab_list[i];
 			var match = false;
+			var alreadyMatched = s.className.indexOf(' match') >= 0
 			for (var k = 0; k < tab.pickup.length; k++) {
 				if (execRegexp(tw, tab.pickup[k])) {
+					if (alreadyMatched && s.className.match(tab.matchTest))
+							continue;
 					match = true;
 					s.className += " match-" + tab.name;
 					// TL,Re内の発言にマッチしたら該当タブに色付け
@@ -187,9 +191,17 @@ registerPlugin({
 					}
 				}
 			}
-			if (match)
+			if (match && !alreadyMatched)
 				s.className += " match";
 		}
+	},
+	replaceUrl: function(s, link, longUrl, shortUrl) {
+		var rs = s.tw.retweeted_status || s.tw;
+		var t = display_as_rt ? s.tw : rs;
+		var twNodeId = '';
+		try { twNodeId = s.parentNode ? s.parentNode.id : ''; } catch(e) {}
+		t.text_replaced = (t.text_replaced || t.text).replace(shortUrl, longUrl);
+		this.newMessageElement(s, s.tw, twNodeId);
 	},
 	fav: function(id, f, img, img_tl) {
 		var s = $('tw-' + id);
