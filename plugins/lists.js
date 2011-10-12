@@ -5,6 +5,8 @@ langResources['Lists'] =	['リスト','列表'];
 langResources['subscribing lists by twicli'] =	['twicliで購読中のリスト','用twicli订阅的lists'];
 langResources['Initialization failed; regexp.js may not be loaded.'] =	['初期化に失敗しました。regexp.jsがロードされていないようです。','初始化失败。regexp.js可能无法加载。'];
 langResources['Reload'] =	['更新','更新'];
+langResources['Add this user to list "$1"'] =	['ユーザをリスト"$1"に追加','把这个用户追加到名单"$1"'];
+langResources['Remove this user from list "$1"'] =	['ユーザをリスト"$1"から削除', '从名单"$1"删除这个用户'];
 
 
 var last_list = ['',''];
@@ -174,6 +176,39 @@ function twlUpdateMisc() {
 	}).join("");
 }
 
+function twlUpdateUserPopup(target_ele, user) {
+	for (var i = 0; i < target_ele.childNodes.length; i++) {
+		var ele = target_ele.childNodes[i];
+		if (ele.id && ele.id.indexOf('edit_list_user_') == 0) {
+			target_ele.removeChild(ele);
+			i--;
+		}
+	}
+	var hr = document.createElement('hr');
+	hr.id = 'edit_list_user_hr';
+	target_ele.appendChild(hr);
+	for (var i = 0; i < lists_to_get.length; i++) {
+		var list = lists_to_get[i];
+		list = list[0] == '#' ? list.substr(1) : list;
+		var a = document.createElement("a");
+		a.id = 'edit_list_user_' + list.replace('/', '_');
+		if (lists_users[list].indexOf(user) < 0) {
+			a.innerHTML = _('Add this user to list "$1"', list);
+			a.href = 'javascript:twlEditUserInList("'+list+'","'+user+'",true)';
+		} else {
+			a.innerHTML = _('Remove this user from list "$1"', list);
+			a.href = 'javascript:twlEditUserInList("'+list+'","'+user+'",false)';
+		}
+		target_ele.appendChild(a);
+	}
+}
+function twlEditUserInList(list, user, f) {
+	var l = list.split('/');
+	enqueuePost(twitterAPI + 'lists/members/' + (f ? 'create' : 'destroy') + '.xml' +
+			'?owner_screen_name=' + l[0] + '&slug=' + l[1] + '&screen_name=' + user,
+		function(){ twlReloadListInfo(list); });
+}
+
 function twlReloadListInfo(name) {
 	deleteCookie("lists_users." + name);
 	twlGetListInfo(name);
@@ -204,5 +239,8 @@ registerPlugin({
 		if (!tab.info || tab.info.indexOf('list#') != 0) return;
 		var a = tab.info.substr(5);
 		$('tw2h').innerHTML = '<div class="tabcmd"><a href="javascript:void(twlGetListStatus(\''+a+'\'))">'+_('get all tweets')+'</a></div>';
+	},
+	userinfo_popup: function(ele, user, id) {
+		twlUpdateUserPopup(ele, user);
 	}
 });
