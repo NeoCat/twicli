@@ -487,7 +487,7 @@ function clear_error() {
 }
 
 function twFail() {
-	error(_('API error (Twitter may be over capacity?)'));
+	error('<img style="vertical-align:middle" src="images/whale.png">&nbsp;&nbsp;'+_('API error (Twitter may be over capacity?)'));
 }
 
 // enterキーで発言, "r"入力で再投稿, 空欄でTL更新
