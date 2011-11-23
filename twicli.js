@@ -818,7 +818,7 @@ function makeHTML(tw, no_name, pid) {
 		 (!no_name || (!display_as_rt && rt) ?
 			//ユーザアイコン
 			(t.user.url ? '<a target="_blank" href="'+t.user.url+'" onclick="return link(this);">' : '') +
-			'<img class="uicon" src="' + t.user.profile_image_url + '" title="' + t.user.description + '">' + (t.user.url ? '</a>' : '') +
+			'<img class="uicon" src="' + t.user.profile_image_url + '" title="' + (t.user.description ? t.user.description.replace(/"/g,'&quot;') :'') + '">' + (t.user.url ? '</a>' : '') +
 			//名前
 			'<a href="' + twitterURL + un + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false"><span class="uid">' + un + '</span>' +
 			 /*プロフィールの名前*/ (t.user.name!=un ? '<span class="uname">('+insertPDF(t.user.name)+')</span>' : '') + '</a>'
