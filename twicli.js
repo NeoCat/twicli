@@ -795,15 +795,17 @@ function insertPDF(str) {
 		str += "\u202C"
 	return str;
 }
-function makeHTML(tw, no_name, pid) {
+function makeHTML(tw, no_name, pid, userdesc) {
 	var rt = tw.retweeted_status;
 	var rs = tw.retweeted_status || tw;
-	var rt_mode = !!(display_as_rt || fav_mode == 2 || fav_mode == 3);
+	var rt_mode = !!(display_as_rt || userdesc);
 	var t = rt_mode ? tw : rs;
 	var text = t.text;
 	var un = t.user.screen_name;
-	if (display_as_rt || fav_mode == 2 || fav_mode == 3)
+	if (display_as_rt)
 		text = rt && rt.user ? "RT @" + rt.user.screen_name + ":" + rt.text : tw.text;
+	if (userdesc)
+		text = tw.user.description || '';
 	var id = tw.id_str || tw.id;
 	var id2 = t.id_str || t.id;
 	var eid = pid+'-'+id;
@@ -1135,7 +1137,7 @@ function twUsers(tw) {
 		x.status.user = x;
 		return x.status;
 	});
-	twShowToNode(tw2, $("tw2c"), false, cur_page > 1);
+	twShowToNode(tw2, $("tw2c"), false, cur_page > 1, false, false, false, false, false, true);
 	if (tw.next_cursor) {
 		$("tw2c").appendChild(nextButton('next'));
 		get_next_func = function() {
@@ -1147,7 +1149,7 @@ function twUsers(tw) {
 		};
 	}
 }
-function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignore_old, ignore_new, weak) {
+function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignore_old, ignore_new, weak, userdesc) {
 	var len = tw.length;
 	if (len == 0) return 0;
 	var pNode = document.createElement('div');
@@ -1172,7 +1174,7 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 		if (tw[i].user) {
 			var s = document.createElement('div');
 			s.id = tw_node.id + "-" + id;
-			s.innerHTML = makeHTML(tw[i], no_name, tw_node.id);
+			s.innerHTML = makeHTML(tw[i], no_name, tw_node.id, userdesc);
 			s.screen_name = tw[i].user.screen_name;
 			s.tw = tw[i]; // DOMツリーにJSONを記録
 			if (weak) s.weak = true;
@@ -1185,8 +1187,10 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 			var user = tw[i].retweeted_status && tw[i].retweeted_status.user || tw[i].user;
 			if (tw[i].d_dir == 2 || user.screen_name == myname)
 				s.className = "fromme";
-			if (tw[i].retweeted_status)
+			if (tw[i].retweeted_status && !userdesc)
 				s.className += " retweeted";
+			if (userdesc)
+				s.className += " userdesc";
 			callPlugins("newMessageElement", s, tw[i], tw_node.id);
 			pNode.insertBefore(s, pNode.childNodes[0]);
 			nr_show++;

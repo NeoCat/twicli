@@ -37,6 +37,9 @@ form { margin-bottom: 0; }
 .status a.link:hover { background-color: #ff9; }
 .rtinfo { text-align: right; display: inline-block; }
 .utils { text-align: right; display: inline-block; }
+.userdesc > .fav { display: none; }
+.userdesc > .rtinfo { display: none; }
+.userdesc > .utils { display: none; }
 .prop, .prop a { color: #999; font-size: smaller; }
 .fromme { background-color: #cfd; }
 .tome { background-color: #ccf; }
