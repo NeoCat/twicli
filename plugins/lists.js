@@ -217,10 +217,7 @@ function twlReloadListInfo(name) {
 
 registerPlugin({
 	newUserInfoElement: function(ele, user) {
-		var e = document.createElement("a");
-		e.href = "javascript:twlGetLists('" + user.screen_name + "')";
-		e.innerHTML = '[Lists]';
-		ele.appendChild(e);
+		ele.innerHTML += '<a href="' + twitterURL + user.screen_name + '/lists/memberships" onclick="twlGetLists(\'' + user.screen_name + '\'); return false;">[Lists]</a>';
 	},
 	miscTab: function(ele) {
 		var e = document.createElement("div");

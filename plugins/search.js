@@ -120,10 +120,7 @@ registerPlugin({
 		ele.appendChild(hr);
 	},
 	newUserInfoElement: function(ele, user) {
-		var e = document.createElement("a");
-		e.href = "javascript:void(twsSearch('" + user.screen_name + "'))";
-		e.innerHTML = '[Search]';
-		ele.appendChild(e);
+		ele.innerHTML += '<a href="' + twitterURL + 'search/' + user.screen_name + '" onclick="twsSearch(\'' + user.screen_name + '\'); return false;">[Search]</a>';
 	},
 	newMessageElement: function(ele, tw) {
 		var eles = ele.getElementsByTagName("span");
