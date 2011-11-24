@@ -293,10 +293,10 @@ var myid = null;		// 自ユーザID
 var last_user = null;	// user TLに表示するユーザ名
 var last_user_info = null;	// user TLに表示するユーザ情報(TLから切替時のキャッシュ)
 // 設定値
-var currentCookieVer = 14;
+var currentCookieVer = 15;
 var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) || 60;
-var pluginstr = (cookieVer>6) && readCookie('tw_plugins') || ' regexp.js\nlists.js\noutputz.js\nsearch.js\nsearch2.js\nfavotter.js\nfollowers.js\nshorten_url.js\nresolve_url.js';
+var pluginstr = (cookieVer>6) && readCookie('tw_plugins') || ' regexp.js\nlists.js\noutputz.js\nsearch.js\nfavotter.js\nfollowers.js\nshorten_url.js\nresolve_url.js';
 if (cookieVer<8) pluginstr+="\ntranslate.js\nscroll.js";
 if (cookieVer<9) pluginstr+="\nthumbnail.js";
 //if (cookieVer<10) pluginstr=" worldcup-2010.js\n" + pluginstr.substr(1);
@@ -305,6 +305,7 @@ if (cookieVer<11) pluginstr+="\ngeomap.js";
 if (cookieVer<12 && pluginstr.indexOf('tweet_url_reply.js')<0) pluginstr+="\ntweet_url_reply.js";
 if (cookieVer<13) pluginstr+="\nrelated_results.js";
 if (cookieVer<14) pluginstr+="\nembedsrc.js";
+if (cookieVer<15) pluginstr = pluginstr.replace(/search2\.js[\r\n]+/,'');
 pluginstr = pluginstr.substr(1);
 var plugins = new Array;
 var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 200);
@@ -486,7 +487,7 @@ function clear_error() {
 }
 
 function twFail() {
-	error(_('API error (Twitter may be over capacity?)'));
+	error('<img style="vertical-align:middle" src="images/whale.png">&nbsp;&nbsp;'+_('API error (Twitter may be over capacity?)'));
 }
 
 // enterキーで発言, "r"入力で再投稿, 空欄でTL更新
@@ -574,7 +575,7 @@ function updateCount() {
 	// for calculate length with shorten URL.
 	var s = $("fst").value.replace(
 			/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+/g,
-			function(t) {return t_co_maxstr.slice(0, t.length) + (t.substr(t.length-1) == ')' ? ')' : '');});
+			function(t) {return t_co_maxstr + (t.substr(t.length-1) == ')' ? ')' : '');});
 	$("counter").innerHTML = 140 - footer.length - s.length;
 }
 // フォームの初期化
@@ -778,7 +779,7 @@ function resetUpdateTimer() {
 function link(a) { return true; }
 // tweetのHTML表現を生成
 function dateFmt(d) {
-	d = new Date(typeof(d)=='string' ? d.replace('+','GMT+') : d);
+	d = new Date(typeof(d)=='string' && document.all ? d.replace('+','GMT+') : d);
 	function d2(dig) { return (dig>9?"":"0") + dig }
 	return (d.getMonth()+1) + "/" + d.getDate() + " " + d.getHours() + ":" + d2(d.getMinutes()) + ":" + d2(d.getSeconds());
 }
@@ -794,15 +795,17 @@ function insertPDF(str) {
 		str += "\u202C"
 	return str;
 }
-function makeHTML(tw, no_name, pid) {
+function makeHTML(tw, no_name, pid, userdesc) {
 	var rt = tw.retweeted_status;
 	var rs = tw.retweeted_status || tw;
-	var rt_mode = !!(display_as_rt || fav_mode == 2 || fav_mode == 3);
+	var rt_mode = !!(display_as_rt || userdesc);
 	var t = rt_mode ? tw : rs;
 	var text = t.text;
 	var un = t.user.screen_name;
-	if (display_as_rt || fav_mode == 2 || fav_mode == 3)
+	if (display_as_rt)
 		text = rt && rt.user ? "RT @" + rt.user.screen_name + ":" + rt.text : tw.text;
+	if (userdesc)
+		text = tw.user.description || '';
 	var id = tw.id_str || tw.id;
 	var id2 = t.id_str || t.id;
 	var eid = pid+'-'+id;
@@ -817,7 +820,7 @@ function makeHTML(tw, no_name, pid) {
 		 (!no_name || (!display_as_rt && rt) ?
 			//ユーザアイコン
 			(t.user.url ? '<a target="_blank" href="'+t.user.url+'" onclick="return link(this);">' : '') +
-			'<img class="uicon" src="' + t.user.profile_image_url + '">' + (t.user.url ? '</a>' : '') +
+			'<img class="uicon" src="' + t.user.profile_image_url + '" title="' + (t.user.description ? t.user.description.replace(/"/g,'&quot;') :'') + '">' + (t.user.url ? '</a>' : '') +
 			//名前
 			'<a href="' + twitterURL + un + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false"><span class="uid">' + un + '</span>' +
 			 /*プロフィールの名前*/ (t.user.name!=un ? '<span class="uname">('+insertPDF(t.user.name)+')</span>' : '') + '</a>'
@@ -876,14 +879,14 @@ function makeUserInfoHTML(user) {
 			(user.location ? '<div><b>'+_('Location')+'</b>: ' + user.location + '</div>' : '') +
 			(user.url ? '<div><b>'+_('URL')+'</b>: <a target="_blank" href="' + user.url + '" onclick="return link(this);">' + user.url + '</a></div>' : '') +
 			'<div>' + (user.description ? user.description : '<br>') +
-			'</div><b><a href="javascript:switchFollowing()">' + user.friends_count + '<small>'+_('following')+'</small></a> / ' + 
-						'<a href="javascript:switchFollower()">' + user.followers_count + '<small>'+_('followers')+'</small></a>' +
-			'<br><a href="javascript:switchStatus()">' + user.statuses_count + '<small>'+_('tweets')+'</small></a> / ' +
-						'<a href="javascript:switchFav()">' + user.favourites_count + '<small>'+_('favs')+'</small></a></b>' +
+			'</div><b><a href="' + twitterURL + user.screen_name + '/following" onclick="switchFollowing();return false;">' + user.friends_count + '<small>'+_('following')+'</small></a> / ' + 
+						'<a href="' + twitterURL + user.screen_name + '/followers" onclick="switchFollower();return false;">' + user.followers_count + '<small>'+_('followers')+'</small></a>' +
+			'<br><a href="' + twitterURL + user.screen_name + '" onclick="switchStatus();return false;">' + user.statuses_count + '<small>'+_('tweets')+'</small></a> / ' +
+						'<a href="' + twitterURL + user.screen_name + '/favorites" onclick="switchFav();return false;">' + user.favourites_count + '<small>'+_('favs')+'</small></a></b>' +
 			'</td></tr></table>'+
 			(user.screen_name != myname ? '<a class="button upopup" href="#" onClick="userinfo_popup_menu(\'' + user.screen_name + '\',' + user.id + ', this); return false;"><small><small>▼</small></small></a>' : '')+
 			'<a target="twitter" href="' + twitterURL + user.screen_name + '">[Twitter]</a>' +
-			'<a href="javascript:switchFollowingTL()">[TL]</a> ';
+			'<a href="' + twitterURL + user.screen_name + '/following/tweets" onclick="switchFollowingTL();return false;">[TL]</a> ';
 }
 // 過去の発言取得ボタン(DOM)生成
 function nextButton(id, p) {
@@ -1134,7 +1137,7 @@ function twUsers(tw) {
 		x.status.user = x;
 		return x.status;
 	});
-	twShowToNode(tw2, $("tw2c"), false, cur_page > 1);
+	twShowToNode(tw2, $("tw2c"), false, cur_page > 1, false, false, false, false, false, true);
 	if (tw.next_cursor) {
 		$("tw2c").appendChild(nextButton('next'));
 		get_next_func = function() {
@@ -1146,7 +1149,7 @@ function twUsers(tw) {
 		};
 	}
 }
-function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignore_old, ignore_new, weak) {
+function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignore_old, ignore_new, weak, userdesc) {
 	var len = tw.length;
 	if (len == 0) return 0;
 	var pNode = document.createElement('div');
@@ -1171,7 +1174,7 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 		if (tw[i].user) {
 			var s = document.createElement('div');
 			s.id = tw_node.id + "-" + id;
-			s.innerHTML = makeHTML(tw[i], no_name, tw_node.id);
+			s.innerHTML = makeHTML(tw[i], no_name, tw_node.id, userdesc);
 			s.screen_name = tw[i].user.screen_name;
 			s.tw = tw[i]; // DOMツリーにJSONを記録
 			if (weak) s.weak = true;
@@ -1184,8 +1187,10 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 			var user = tw[i].retweeted_status && tw[i].retweeted_status.user || tw[i].user;
 			if (tw[i].d_dir == 2 || user.screen_name == myname)
 				s.className = "fromme";
-			if (tw[i].retweeted_status)
+			if (tw[i].retweeted_status && !userdesc)
 				s.className += " retweeted";
+			if (userdesc)
+				s.className += " userdesc";
 			callPlugins("newMessageElement", s, tw[i], tw_node.id);
 			pNode.insertBefore(s, pNode.childNodes[0]);
 			nr_show++;

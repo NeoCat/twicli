@@ -1,5 +1,6 @@
 registerPlugin({
 	newMessageElement: function(elem, tw) {
+		tw = tw.retweeted_status || tw;
 		if (tw.entities && tw.entities.media) {
 			for (var i = 0; i < tw.entities.media.length; i++) {
 				if (tw.entities.media[i].type == "photo") {

@@ -11,14 +11,17 @@ var tws_API = 'http://search.twitter.com/search.json';
 tws_list.uniq();
 writeCookie('twicli_search_list', tws_list.join("\n"), 3652);
 function twsSearch(qn, no_switch) {
-	var myid = 'search-' + qn;
-	var colon = qn.indexOf(':');
-	var name = qn;
-	var q = qn;
+	var exclude_rt = qn.substr(0,1) == '^';
+	var qn2 = qn.substr(exclude_rt?1:0);
+	var myid = 'search-' + qn2;
+	var colon = qn2.indexOf(':');
+	var name = qn2;
+	var q = qn2;
 	if (colon > 0) {
-		name = qn.substr(0, colon);
-		q = qn.substr(colon+1);
+		name = qn2.substr(0, colon);
+		q = qn2.substr(colon+1);
 	}
+	if (exclude_rt) q += ' exclude:retweets';
 	if (!$(myid)) {
 		var tab = document.createElement('a');
 		tab.id = myid;
@@ -27,7 +30,7 @@ function twsSearch(qn, no_switch) {
 		tab.name = name;
 		tab.appendChild(document.createTextNode(name));
 		tab.href = '#';
-		tab.onclick = function() { twsSearch(qn); return false; };
+		tab.onclick = function() { twsSearch(this.tws_qn); return false; };
 		$('menu2').appendChild(tab);
 		if (no_switch) return;
 		tws_list.push(qn);
@@ -36,17 +39,18 @@ function twsSearch(qn, no_switch) {
 	}
 	switchTo(myid);
 	tws_update_timer = setInterval(function(){twsSearchUpdate(q)}, 1000*Math.max(updateInterval, 30));
-
-	$('tw2h').innerHTML = '<div class="tabcmd tabclose"><a id="tws-closetab" href="#">[x] '+_('remove tab')+'</a></div>';
+	var rt_checked = exclude_rt ? "" : " checked";
+	$('tw2h').innerHTML = '<div class="tabcmd tabclose"><input id="tws-RT" type="checkbox"'+rt_checked+'><label for="tws-RT">RT</label> <a id="tws-closetab" href="#">[x] '+_('remove tab')+'</a></div>';
 	$('tws-closetab').onclick = function(){ closeSearchTab(myid); return false; };
 	tws_page = 0;
+	$('tws-RT').onclick = function() { twsSwitchRT(myid); };
 	xds.load_for_tab(tws_API + '?seq=' + (seq++) +
-							'&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow);
+							'&include_entities=true&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow);
 	return false;
 }
 function twsSearchUpdate(q) {
 	xds.load_for_tab(tws_API + '?seq=' + (seq++) +
-							'&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow2);
+							'&include_entities=true&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow2);
 }
 function closeSearchTab(myid) {
 	if (!confirm(_('Are you sure to close this tab?'))) return;
@@ -58,13 +62,27 @@ function closeSearchTab(myid) {
 	writeCookie('twicli_search_list', tws_list.join("\n"), 3652);
 	switchTL();
 }
+function twsSwitchRT(myid) {
+	var target = $(myid);
+	var qn = target.tws_qn;
+	if ($('tws-RT').checked)
+		qn = qn.substr(1);
+	else
+		qn = '^' + qn;
+	for (var i = 0; i < tws_list.length; i++)
+		if (target.tws_qn == tws_list[i])
+			tws_list[i] = qn;
+	writeCookie('twicli_search_list', tws_list.join("\n"), 3652);
+	target.tws_qn = qn;
+	twsSearch(qn);
+}
 function twsSearchShow2(res) {
 	twsSearchShow(res, true);
-	var twNode = $('tw2c');
 }
 function twsSearchShow(res, update) {
 	var tmp = $("tmp");
 	if (tmp) tmp.parentNode.removeChild(tmp);
+	if (res.error) { error(res.error); return; }
 	if (!update) tws_page++;
 	var result = res.results.map(function(a){
 		a.user = {screen_name:a.from_user,
@@ -82,7 +100,7 @@ function twsSearchShow(res, update) {
 		$("tw2c").appendChild(next);
 		get_next_func = function(){
 			xds.load_for_tab(tws_API + res.next_page +
-								'&seq=' + (seq++) + '&rpp=' + tws_rpp, twsSearchShow);
+								'&include_entities=true&seq=' + (seq++) + '&rpp=' + tws_rpp, twsSearchShow);
 		}
 	}
 }
@@ -102,10 +120,7 @@ registerPlugin({
 		ele.appendChild(hr);
 	},
 	newUserInfoElement: function(ele, user) {
-		var e = document.createElement("a");
-		e.href = "javascript:void(twsSearch('" + user.screen_name + "'))";
-		e.innerHTML = '[Search]';
-		ele.appendChild(e);
+		ele.innerHTML += '<a href="' + twitterURL + 'search/' + user.screen_name + '" onclick="twsSearch(\'' + user.screen_name + '\'); return false;">[Search]</a>';
 	},
 	newMessageElement: function(ele, tw) {
 		var eles = ele.getElementsByTagName("span");
