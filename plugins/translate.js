@@ -26,21 +26,18 @@ registerPlugin({
 });
 
 function translateStatus(id) {
-	xds.load_for_tab("http://www.google.com/uds/Gtranslate?v=1.0"+
-				"&context=" + id.replace("-","_") +
-				"&q=" + encodeURIComponent($(id).tw.text) +
-				"&langpair=|"+translateLang, gTranslate);
+	window.translateTarget = $(id);
+	xds.load_for_tab("http://api.microsofttranslator.com/V2/Ajax.svc/Translate?"+
+				"&appId=73B027BB51D74FB461C097BCCF841DB5678FDBB3" +
+				"&text=" + encodeURIComponent($(id).tw.text) +
+				"&to="+translateLang, translateResult, 'oncomplete');
 }
-function gTranslate(id, result, code, error, code2) {
-	if (code != 200) {
-		alert("Translate error " + code + ": " + error);
-		return;
-	}
-	var target = $(id.replace("_","-"));
+function translateResult(result) {
+	var target = window.translateTarget;
 	if (!target) return;
 
 	rep_top = cumulativeOffset(target)[1] + 20;
-	$('reps').innerHTML = result.translatedText;
+	$('reps').innerText = result;
 	$('rep').style.display = "block";
 	$('rep').style.top = rep_top;
 	user_pick1 = user_pick2 = null;
