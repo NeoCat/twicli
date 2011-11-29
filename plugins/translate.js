@@ -37,7 +37,10 @@ function translateResult(result) {
 	if (!target) return;
 
 	rep_top = cumulativeOffset(target)[1] + 20;
-	$('reps').innerText = result;
+	if (document.all)
+		$('reps').innerText = result;
+	else
+		$('reps').textContent = result;
 	$('rep').style.display = "block";
 	$('rep').style.top = rep_top;
 	user_pick1 = user_pick2 = null;
