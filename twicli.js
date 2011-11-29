@@ -125,6 +125,7 @@ function postNext() {
 		postInIFrame.apply(this, postQueue[0]);
 }
 var postSeq = 0;
+var postTimeout = 2000;
 function postInIFrame(url, done, err, retry) {
 	loading(true);
 	var frm = url.indexOf(twitterAPI) == 0 ? document.request : document.post;
@@ -135,7 +136,7 @@ function postInIFrame(url, done, err, retry) {
 	pfr.src = "about:blank";
 	pfr.style.display = "none";
 	var errTimer = false;
-	// 5秒(エラー処理指定時は3秒→10秒)で正常終了しなければエラーとみなす
+	// 5秒(エラー処理指定時はデフォルト2秒→10秒)で正常終了しなければエラーとみなす
 	errTimer = setTimeout(function(){
 		loading(false);
 		if (err) err(); else done();
@@ -144,7 +145,7 @@ function postInIFrame(url, done, err, retry) {
 			postQueue.shift();
 			postNext();
 		}, 0);
-	}, retry?10000:err?3000:5000);
+	}, retry?10000:err?postTimeout:5000);
 	var cnt = 0;
 	var onload = pfr.onload = function(){
 		if (cnt++ == 0) {
@@ -506,9 +507,9 @@ function press(e) {
 		alert(_("This tweet is too long."));
 		return false;
 	}
-	var retry = false;
+	var retry = 0;
 	if (st.value == "r" && last_post) {
-		retry = true;
+		retry = 1;
 		st.value = last_post;
 		in_reply_to_user = last_in_reply_to_user;
 		setReplyId(last_in_reply_to_status_id);
@@ -526,7 +527,7 @@ function press(e) {
 				(geo && geo.coords ?  "&display_coordinates=true&lat=" + geo.coords.latitude +
 										"&long=" + geo.coords.longitude : "") +
 				(in_reply_to_status_id ? "&in_reply_to_status_id=" + in_reply_to_status_id : ""),
-				function(){ resetFrm(); if (auto_update) update() },
+				function(){ resetFrm(); if (auto_update) { update_post_check = [2,text]; setTimeout(update, postTimeout); }},
 				function(){ if (auto_update) { update_post_check = [retry,text]; update() }}, retry);
 	in_reply_to_user = in_reply_to_status_id = null;
 	return false;
@@ -1060,6 +1061,7 @@ function twShow(tw) {
 		callPlugins("gotNewMessage", tw[j]);
 		if (update_post_check && tw[j].user.screen_name == myname && removeLink(tw[j].text) == removeLink(update_post_check[1])) {
 			if ($('fst').value == update_post_check[1]) resetFrm();
+			if (update_post_check[0] != 1) postTimeout = Math.max(1000, postTimeout-50);
 			update_post_check = false;
 		}
 	}
@@ -1077,11 +1079,15 @@ function twShow(tw) {
 	callPlugins("noticeUpdate", tw, nr_shown);
 	if (update_post_check) {
 		var st = document.frm.status;
-		if (!update_post_check[0] && st.value == update_post_check[1] && st.value == last_post) {
-			st.value = 'r';
-			press(1);
-		} else
+		if (update_post_check[0] != 1)  {
+			postTimeout = Math.min(10000, postTimeout+500);
+			if (update_post_check[0] == 0 && st.value == update_post_check[1] && st.value == last_post) {
+				st.value = 'r';
+				press(1);
+			} else
 				update_post_check = false;
+		} else
+			update_post_check = false;
 	}
 }
 function twOld(tw) {
