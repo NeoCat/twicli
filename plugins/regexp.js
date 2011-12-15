@@ -217,7 +217,6 @@ function expireRegexp() {
 	var now = new Date().getTime() / 1000;
 	for (var id = 0; id < list.length; id++) {
 		var limit = parseInt(list[id].split(':')[4]);
-		console.log(limit);
 		if (isNaN(limit) || limit == 0 || limit > now)
 			list2.push(list[id]);
 		else
