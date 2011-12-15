@@ -294,7 +294,7 @@ var myid = null;		// 自ユーザID
 var last_user = null;	// user TLに表示するユーザ名
 var last_user_info = null;	// user TLに表示するユーザ情報(TLから切替時のキャッシュ)
 // 設定値
-var currentCookieVer = 15;
+var currentCookieVer = 16;
 var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) || 60;
 var pluginstr = (cookieVer>6) && readCookie('tw_plugins') || ' regexp.js\nlists.js\noutputz.js\nsearch.js\nfavotter.js\nfollowers.js\nshorten_url.js\nresolve_url.js';
@@ -307,6 +307,7 @@ if (cookieVer<12 && pluginstr.indexOf('tweet_url_reply.js')<0) pluginstr+="\ntwe
 if (cookieVer<13) pluginstr+="\nrelated_results.js";
 if (cookieVer<14) pluginstr+="\nembedsrc.js";
 if (cookieVer<15) pluginstr = pluginstr.replace(/search2\.js[\r\n]+/,'');
+if (cookieVer<16) pluginstr+="\nmute.js";
 pluginstr = pluginstr.substr(1);
 var plugins = new Array;
 var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 200);
@@ -701,6 +702,7 @@ function popup_menu(user, id, ele) {
 }
 // ポップアップメニューを非表示
 function popup_hide() {
+	callPlugins("popup_hide");
 	$('popup').style.display = 'none';
 	$('userinfo_popup').style.display = 'none';
 	$('popup_hide').style.display = 'none';
@@ -849,7 +851,7 @@ function makeHTML(tw, no_name, pid, userdesc) {
 					return x+"<a target=\"_blank\" class=\"hashtag\" title=\"#"+s+"\" href=\"http://search.twitter.com/search?q="+encodeURIComponent("#"+s)+"\">"+h+s+"</a>";
 				}
 				if (u.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+u+"\" onclick=\"return link(this);\">"+_+"</a>";
-				return "<a href=\""+twitterURL+u+"\" onClick=\"switchUser('"+u+"'); return false;\" >"+_+"</a>";
+				return "<a href=\""+twitterURL+u+"\"  class=\"mention\" onClick=\"switchUser('"+u+"'); return false;\" >"+_+"</a>";
 			}).replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//Retweet情報
 		' <span id="rtinfo-'+eid+'" class="rtinfo">' +

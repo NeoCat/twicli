@@ -210,6 +210,24 @@ registerPlugin({
 	}
 });
 
+function expireRegexp() {
+	var updated = false;
+	var list = pickup_regexp.split(/[\r\n]/);
+	var list2 = [];
+	var now = new Date().getTime() / 1000;
+	for (var id = 0; id < list.length; id++) {
+		var limit = parseInt(list[id].split(':')[4]);
+		console.log(limit);
+		if (isNaN(limit) || limit == 0 || limit > now)
+			list2.push(list[id]);
+		else
+			updated = true;
+	}
+	if (updated) setRegexp(list2.join("\n"));
+	setTimeout(expireRegexp, 60*1000);
+}
+expireRegexp();
+
 // Popup menu
 function addIDRegexp(user, id) {
 	setRegexp(user + ':^' + user + '$\n' + user + '::@' + user + '\n' + pickup_regexp);
