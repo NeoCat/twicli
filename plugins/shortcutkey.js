@@ -168,6 +168,10 @@ var shortcutkey_plugin = {
 				if (!selected) return true;
 				replyTo(user, id);
 				return false;
+			case 76+lower: // l : リストの全ツイート取得(get all tweets in the List)
+				if (!$('list_get_all')) return true;
+				$('list_get_all').onclick();
+				return false;
 			case 80+lower: // p : ユーザを抽出(Pickup)
 				if (!selected) return true;
 				if (typeof(addIDRegexp) != 'function') return true;
