@@ -125,7 +125,7 @@ function postNext() {
 		postInIFrame.apply(this, postQueue[0]);
 }
 var postSeq = 0;
-var postTimeout = 2000;
+var postTimeout = 3000;
 function postInIFrame(url, done, err, retry) {
 	loading(true);
 	var frm = url.indexOf(twitterAPI) == 0 ? document.request : document.post;
