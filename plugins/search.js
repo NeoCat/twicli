@@ -88,7 +88,7 @@ function twsSearchShow(res, update) {
 		a.user = {screen_name:a.from_user,
 						name: a.from_user,
 						profile_image_url: a.profile_image_url};
-		a.source = a.source.replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&").replace(/&quot;/g,'"');
+		a.source = a.source ? a.source.replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&").replace(/&quot;/g,'"') : '';
 		return a;
 	});
 	if (!update && tws_page == 1) {
