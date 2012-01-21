@@ -5,7 +5,6 @@ langResources['(TabName:ID:Tweet:Filter)'] =	['(タブ名:ユーザID:ツイー�
 langResources['Apply'] =	['適用','应用'];
 langResources['Pickup this user'] =	['このユーザを抽出','过滤该用户到新标签'];
 
-
 var pickup_regexp = readCookie('pickup_regexp') || '';
 var pickup_regexp_ex = ''; // 他プラグインからの検索条件
 var pickup_tab_list = new Array();	// タブ一覧
@@ -137,7 +136,9 @@ function initRegexp() {
 			ptab.no_close = no_close;
 			ptab.info = info;
 			ptab.onclick = function() { switchRegexp(this); return false; };
-			ptab.matchTest = new RegExp(" match-" + tabname + '(?:$| )');
+			try {
+				ptab.matchTest = new RegExp(" match-" + tabname + '(?:$| )');
+			} catch (e) { alert("RegExp Error in " + tabname + " tab :\nline "+(id+1)+" - " + e); }
 			$('menu2').appendChild(ptab);
 			pickup_tab_list.push(ptab);
 		}
