@@ -836,10 +836,10 @@ function makeHTML(tw, no_name, pid, userdesc) {
 		text.replace(/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+|[@＠](\w+(?:\/[\w-]+)?)|([,.!?　、。！？「」]|\s|^)([#＃])([\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]+)(?=[^\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]|$)/g, function(_,u,x,h,s){
 				if (!u && !h) {
 					var paren = '';
-					if (_.substr(_.length-1) == ')') { // 末尾の")"はURLに含めない
-						_ = _.substr(0, _.length-1);
-						paren = ')';
-					}
+					_ = _.replace(/[()]+$/,function(p){ // 末尾の"()"はURLに含めない
+						paren = p;
+						return '';
+					});
 					if (expanded_urls[_]) {
 						t.text_replaced = (t.text_replaced || t.text).replace(_, expanded_urls[_]);
 						_ = expanded_urls[_];

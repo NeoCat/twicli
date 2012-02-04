@@ -4,7 +4,7 @@
 			replace: "http://www.youtube.com/embed/$1", type: "iframe"},
 		{search: /^https?:\/\/gist\.github\.com\/(\d+)(?:\.txt)?$/, replace: "https://gist.github.com/$1.pibb", type: "iframe"},
 		{search: /^https?:\/\/raw\.github\.com\/gist\/(\d+)(?:.*)$/, replace: "https://gist.github.com/$1.pibb", type: "iframe"},
-		{search: /https?:\/\/(?:nico\.ms|www\.nicovideo\.jp\/watch)\/((?!lv)(?!nw)[a-z]{2}\d+)/, replace: "http://ext.nicovideo.jp/thumb_watch/$1", type: "script"}
+		{search: /https?:\/\/(?:nico\.ms|www\.nicovideo\.jp\/watch)\/((?!lv)(?!nw)(?!im)[a-z]{2}\d+)/, replace: "http://ext.nicovideo.jp/thumb_watch/$1", type: "script"}
 	];
 
 	var createAnchor = function(link, onclick) {
