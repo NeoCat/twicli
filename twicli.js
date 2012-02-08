@@ -136,7 +136,7 @@ function postInIFrame(url, done, err, retry) {
 	pfr.src = "about:blank";
 	pfr.style.display = "none";
 	var errTimer = false;
-	// 5秒(エラー処理指定時はデフォルト2秒→10秒)で正常終了しなければエラーとみなす
+	// 5秒(エラー処理指定時はデフォルト3秒→10秒)で正常終了しなければエラーとみなす
 	errTimer = setTimeout(function(){
 		loading(false);
 		if (err) err(); else done();
@@ -369,6 +369,7 @@ var ratelimit_reset_time = null;
 var loading_cnt = 0;
 var err_timeout = null;
 var update_post_check = false;
+var tweet_failed_notified = false;
 var tw_config;
 var t_co_maxstr = "http://t.co/*******";
 
@@ -1088,8 +1089,13 @@ function twShow(tw) {
 				press(1);
 			} else
 				update_post_check = false;
-		} else
+		} else {
+			// fault again...
 			update_post_check = false;
+			if (!tweet_failed_notified)
+				error(_('Cannot tweet from twicli? Please try logging out of Twitter web site...'));
+			tweet_failed_notified = true;
+		}
 	}
 }
 function twOld(tw) {
