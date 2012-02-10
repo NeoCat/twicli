@@ -294,7 +294,7 @@ var myid = null;		// 自ユーザID
 var last_user = null;	// user TLに表示するユーザ名
 var last_user_info = null;	// user TLに表示するユーザ情報(TLから切替時のキャッシュ)
 // 設定値
-var currentCookieVer = 16;
+var currentCookieVer = 17;
 var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) || 60;
 var pluginstr = (cookieVer>6) && readCookie('tw_plugins') || ' regexp.js\nlists.js\noutputz.js\nsearch.js\nfavotter.js\nfollowers.js\nshorten_url.js\nresolve_url.js';
@@ -308,6 +308,7 @@ if (cookieVer<13) pluginstr+="\nrelated_results.js";
 if (cookieVer<14) pluginstr+="\nembedsrc.js";
 if (cookieVer<15) pluginstr = pluginstr.replace(/search2\.js[\r\n]+/,'');
 if (cookieVer<16) pluginstr+="\nmute.js";
+if (cookieVer<17) pluginstr = pluginstr.replace(/outputz\.js[\r\n]+/,'');
 pluginstr = pluginstr.substr(1);
 var plugins = new Array;
 var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 200);
