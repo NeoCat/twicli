@@ -424,6 +424,10 @@ function twAuth(a) {
 	callPlugins('auth');
 }
 function twAuthFallback() {
+	if (!use_ssl) {
+		use_ssl = 1;
+		return auth();
+	}
 	// verify_credentials API is unavailable?
 	re_auth = true;
 	xds.load_default(twitterAPI + "users/show.json?suppress_response_codes=true&screen_name="+myname, twAuth);
@@ -439,7 +443,7 @@ function auth() {
 		$("user").innerHTML = last_user;
 		update();
 	}
-	xds.load(twitterAPI + "account/verify_credentials.json?suppress_response_codes=true", twAuth, twAuthFallback, 3);
+	xds.load(twitterAPI + "account/verify_credentials.json?suppress_response_codes=true", twAuth, twAuthFallback, 1);
 }
 
 function logout(force) {
