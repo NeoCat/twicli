@@ -582,8 +582,8 @@ function updateCount() {
 	
 	// for calculate length with shorten URL.
 	var s = $("fst").value.replace(
-			/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+/g,
-			function(t) {return t_co_maxstr.replace(/^http/, t.substr(0, t.indexOf(':'))) + (t.substr(t.length-1) == ')' ? ')' : '')});
+			/https?:\/\/[^\/\s]*[\w!#$%&\'()*+,.\/:;=?~-]*[\w#\/+-]/g,
+			function(t) {return t_co_maxstr.replace(/^http/, t.substr(0, t.indexOf(':')))});
 	$("counter").innerHTML = 140 - footer.length - s.length;
 }
 // フォームの初期化
@@ -839,18 +839,13 @@ function makeHTML(tw, no_name, pid, userdesc) {
 		/*ダイレクトメッセージの方向*/ (t.d_dir == 1 ? '<span class="dir">→</span> ' : t.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text-" + eid + "\" class=\"status\">" +
-		text.replace(/https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+(?=&\w+;)|https?:\/\/[^\/\s]*[\w!#$%&'()*+,.\/:;=?@~-]+|[@＠](\w+(?:\/[\w-]+)?)|([,.!?　、。！？「」]|\s|^)([#＃])([\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]+)(?=[^\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]|$)/g, function(_,u,x,h,s){
+		text.replace(/https?:\/\/[^\/\s]*[\w!#$%&\'()*+,.\/:;=?~-]*[\w#\/+-]|[@＠](\w+(?:\/[\w-]+)?)|([,.!?　、。！？「」]|\s|^)([#＃])([\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]+)(?=[^\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]|$)/g, function(_,u,x,h,s){
 				if (!u && !h) {
-					var paren = '';
-					_ = _.replace(/[\W_]+$/,function(p){ // 末尾の記号類はURLに含めない
-						paren = p;
-						return '';
-					});
 					if (expanded_urls[_]) {
 						t.text_replaced = (t.text_replaced || t.text).replace(_, expanded_urls[_]);
 						_ = expanded_urls[_];
 					}
-					return "<a class=\"link\" target=\"_blank\" href=\""+_.replace(/\"/g, '%22')+"\" onclick=\"return link(this);\">"+_+"</a>"+paren;
+					return "<a class=\"link\" target=\"_blank\" href=\""+_.replace(/\"/g, '%22')+"\" onclick=\"return link(this);\">"+_.replace(/&/g, '&amp;')+"</a>";
 				}
 				if (h == "#" || h == "＃") {
 					if (s.match(/^\d+$/)) return _;
@@ -1059,7 +1054,7 @@ function twReplies(tw, fromTL) {
 }
 // 受信tweetを表示
 function removeLink(text) {
-	return text.replace(/https?:\/\/[^\/\s]*[\w!#$%&\'()*+,.\/:;=?@~-]+/g, '');
+	return text.replace(/https?:\/\/[^\/\s]*[\w!#$%&\'()*+,.\/:;=?~-]*[\w#\/+-]/g, '');
 }
 function twShow(tw) {
 	if (tw.error) return error(tw.error);
