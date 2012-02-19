@@ -877,7 +877,7 @@ function makeHTML(tw, no_name, pid, userdesc) {
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
 	return '<table><tr><td><a target="twitter" href="' + twitterURL + 'account/profile_image/'+
-			user.screen_name+'"><img class="uicon2" src="' + user.profile_image_url + '"></a></td><td id="profile"><div>' +
+			user.screen_name+'"><img class="uicon2" src="' + user.profile_image_url.replace('normal.','reasonably_small.') + '"></a></td><td id="profile"><div>' +
 			(user.verified ? '<img class="verified" alt="verified" src="images/verified.png">' : '') +
 			(user.protected ? '<img class="lock" alt="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
 			'<b>' + user.screen_name + '</b> / <b>' + user.name + '</b></div>' +
