@@ -772,13 +772,22 @@ function deleteStatus(id) {
 	return false;
 }
 // 最新タイムラインを取得
+function dec_id(id_str) {
+	id_str = ('' + id_str).split('');
+	var i = id_str.length - 1;
+	while (id_str[i] == '0' && i) {
+		id_str[i--] = '9';
+	}
+	id_str[i] = ''+(id_str[i]-1);
+	return id_str.join('');
+}
 function update() {
 	if (!myname) return auth();
 	callPlugins("update");
 	update_ele = xds.load_default(twitterAPI + 'statuses/home_timeline.json' +
 						'?count=' + (since_id ? 200 : max_count) +
 						'&include_entities=true&suppress_response_codes=true'
-						+ (!no_since_id && since_id ? '&since_id='+since_id : ''), twShow, update_ele);
+						+ (!no_since_id && since_id ? '&since_id='+dec_id(since_id) : ''), twShow, update_ele);
 	resetUpdateTimer();
 }
 function resetUpdateTimer() {
@@ -1061,8 +1070,11 @@ function twShow(tw) {
 	if (tw.error) return error(tw.error);
 
 	tw.reverse();
+	var skipped = !no_since_id && !!since_id;
 	for (var j in tw) if (tw[j] && tw[j].user) {
 		callPlugins("gotNewMessage", tw[j]);
+		if (since_id && since_id == (tw[j].id_str || tw[j].id))
+			skipped = false;
 		if (update_post_check && tw[j].user.screen_name == myname && removeLink(tw[j].text) == removeLink(update_post_check[1])) {
 			if ($('fst').value == update_post_check[1]) resetFrm();
 			if (update_post_check[0] != 1) postTimeout = Math.max(1000, postTimeout-50);
@@ -1073,9 +1085,16 @@ function twShow(tw) {
 	if (nr_page == 0) {
 		nr_page = max_count == 200 ? 2 : 1;
 		$("tw").appendChild(nextButton('get_old', nr_page));
+		skipped = false;
+	} else if (skipped) {
+		skipped = document.createElement('div');
+		skipped.innerHTML = '…';
+		skipped.className = 'skipped';
 	}
 
 	var nr_shown = twShowToNode(tw, $("tw"), false, false, true, true, true);
+	if (nr_shown && skipped)
+		$("tw").childNodes[0].appendChild(skipped);
 	if ($("tw").oldest_id && update_reply_counter-- <= 0)
 		getReplies();
 	if (update_direct_counter-- <= 0)
