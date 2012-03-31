@@ -1134,7 +1134,7 @@ function twOldReply(tw) {
 }
 function twShow2(tw) {
 	var user_info = $("user_info");
-	if (tw.error && tw.error == "Not authorized" && !!user_info && !fav_mode && user_info.innerHTML == '') {
+	if ((tw.error && tw.error == "Not authorized" || tw.length < 1 ) && !!user_info && !fav_mode && user_info.innerHTML == '') {
 		xds.load_for_tab(twitterAPI + 'users/show.json?screen_name=' + last_user +
 			'&suppress_response_codes=true', twUserInfo);
 		return;
