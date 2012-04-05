@@ -11,6 +11,7 @@ langResources['Remove this user from list "$1"'] =	['ユーザをリスト"$1"�
 
 var last_list = ['',''];
 var twl_page = 0;
+var twl_update_timer = null;
 var lists_to_get = readCookie("lists");
 lists_to_get = lists_to_get ? lists_to_get.split("\n") : [];
 var lists_users = {};
@@ -109,21 +110,37 @@ function twlLists(res) {
 function twlGetListStatus(list) {
 	last_list = list.split("/");
 	twl_page = 0;
-	if (selected_menu.id == "user") fav_mode = 9;
+	if (twl_update_timer) clearInterval(twl_update_timer);
 	$("tw2c").innerHTML = "";
+	if (selected_menu.id == "user") {
+		twlGetListStatusUpdate(list);
+	} else {
+		twl_update_timer = setInterval(function(){twlGetListStatusUpdate(list)}, 1000*Math.max(updateInterval, 30));
+		xds.load_for_tab(twitterAPI + 'lists/statuses.json?seq=' + (seq++)
+				+ '&owner_screen_name=' + last_list[0] + '&slug=' + last_list[1]
+				+ '&include_entities=true&include_rts=true&per_page=' + max_count_u, twlShowListStatus);
+	}
+	return false;
+}
+function twlGetListStatusUpdate(list) {
+	last_list = list.split("/");
+	if (selected_menu.id == "user") fav_mode = 9;
 	xds.load_for_tab(twitterAPI + 'lists/statuses.json?seq=' + (seq++)
 			+ '&owner_screen_name=' + last_list[0] + '&slug=' + last_list[1]
 			+ '&include_entities=true&include_rts=true&per_page=' + max_count_u,
-			twlShowListStatus);
-	return false;
+			twlShowListStatus2);
 }
-function twlShowListStatus(tw) {
+function twlShowListStatus2(tw) {
+	twlShowListStatus(tw, true);
+}
+function twlShowListStatus(tw, update) {
 	var tmp = $("tmp");
 	if (tmp) tmp.parentNode.removeChild(tmp);
-	if (++twl_page == 1) {
+	if (!update && ++twl_page == 1) {
 		$('tw2c').innerHTML = '';
 	}
-	twShowToNode(tw, $("tw2c"), false, twl_page > 1);
+	twShowToNode(tw, $("tw2c"), false, !update && twl_page > 1, update, false, update);
+	if (!update) {
 	var next = nextButton('next-list');
 	$("tw2c").appendChild(next);
 	get_next_func = function(){
@@ -131,6 +148,7 @@ function twlShowListStatus(tw) {
 			+ '&owner_screen_name=' + last_list[0] + '&slug=' + last_list[1]
 			+ '&include_entities=true&include_rts=true&per_page=' + max_count_u
 			+ '&max_id=' + tw[tw.length-1].id, twlShowListStatus);
+	}
 	}
 }
 
@@ -216,6 +234,11 @@ function twlReloadListInfo(name) {
 }
 
 registerPlugin({
+	switchTo: function(m) {
+		if (!twl_update_timer) return;
+		clearInterval(twl_update_timer);
+		twl_update_timer = null;
+	},
 	newUserInfoElement: function(ele, user) {
 		ele.innerHTML += '<a href="' + twitterURL + user.screen_name + '/lists/memberships" onclick="twlGetLists(\'' + user.screen_name + '\'); return false;">[Lists]</a>';
 	},
