@@ -110,18 +110,16 @@ function twlLists(res) {
 }
 
 function twlGetListStatus(list) {
-	last_list = list.split("/");
 	twl_page = 0;
 	if (twl_update_timer) clearInterval(twl_update_timer);
 	if (selected_menu.id == "user") {
 		$("tw2c").innerHTML = "";
-		twlGetListStatusUpdate(list);
 	} else {
 		if (list_auto_update)
 			twl_update_timer = setInterval(function(){twlGetListStatusUpdate(list,true)}, 
 				1000*Math.max(updateInterval, 30));
-		twlGetListStatusUpdate(list);
 	}
+	twlGetListStatusUpdate(list);
 	return false;
 }
 function twlGetListStatusUpdate(list, update) {
