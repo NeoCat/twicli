@@ -1004,7 +1004,7 @@ function twDirectShow() {
 function checkDirect() {
 	direct_ele = xds.load_default(twitterAPI + 'direct_messages.json' +
 							'?suppress_response_codes=true', twDirectCheck, direct_ele);
-	update_direct_counter = 20;
+	update_direct_counter = 4;
 }
 function twDirectCheck(tw) {
 	if (tw.error) return error(tw.error);
