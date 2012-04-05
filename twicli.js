@@ -1073,7 +1073,7 @@ function twShow(tw) {
 	var skipped = !no_since_id && !!since_id;
 	for (var j in tw) if (tw[j] && tw[j].user) {
 		callPlugins("gotNewMessage", tw[j]);
-		if (since_id && since_id == (tw[j].retweeted_status && (tw[j].retweeted_status.id_str || tw[j].retweeted_status.id) || tw[j].id_str || tw[j].id))
+		if (since_id && since_id == (tw[j].id_str || tw[j].id))
 			skipped = false;
 		if (update_post_check && tw[j].user.screen_name == myname && removeLink(tw[j].text) == removeLink(update_post_check[1])) {
 			if ($('fst').value == update_post_check[1]) resetFrm();
