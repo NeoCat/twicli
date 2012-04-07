@@ -1140,6 +1140,7 @@ function twShow2(tw) {
 		return;
 	}
 	if (tw.error) return error(tw.error);
+	if (tw.length < 1) return;
 	var tmp = $("tmp");
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
 	twShowToNode(tw, $("tw2c"), !!user_info && !fav_mode, cur_page > 1);
