@@ -831,7 +831,7 @@ function makeHTML(tw, no_name, pid, userdesc) {
 	var in_reply_to = t.in_reply_to_status_id_str || t.in_reply_to_status_id;
 	var expanded_urls = {};
 	if (tw.entities && tw.entities.urls)
-		tw.entities.urls.concat(tw.entities.media || []).map(function(_){
+		Array.prototype.concat.apply(tw.entities.urls, tw.entities.media || []).map(function(_){
 			if (_.url && _.expanded_url) expanded_urls[_.url] = _.expanded_url;
 		});
 	return /*fav*/ (t.d_dir ? '' : '<img alt="☆" class="fav" src="http://assets3.twitter.com/images/icon_star_'+(!rt&&rs.favorited?'full':'empty')+'.gif" ' +
