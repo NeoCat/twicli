@@ -45,6 +45,8 @@ var shortcutkey_plugin = {
 				return true;
 			shortcutkey_plugin.last_event_date = date;
 		}
+		if (ev.type == 'keypress' && navigator.userAgent.indexOf('Firefox') >= 0 && ev.charCode == 0 && ev.keyCode >= 112)
+			return true; // FirefoxでFnキーを解釈しない
 		
 		var tw = null;
 		var id = null;
