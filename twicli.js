@@ -1550,7 +1550,7 @@ function setPreps(frm) {
 	writeCookie('no_counter', no_counter?1:0, 3652);
 	writeCookie('no_resize_fst', no_resize_fst?1:0, 3652);
 	writeCookie('replies_in_tl', replies_in_tl?1:0, 3652);
-	writeCookie('reply_to_all', display_as_rt?1:0, 3652);
+	writeCookie('reply_to_all', reply_to_all?1:0, 3652);
 	writeCookie('display_as_rt', display_as_rt?1:0, 3652);
 	writeCookie('footer', footer, 3652);
 	writeCookie('decr_enter', decr_enter?1:0, 3652);
