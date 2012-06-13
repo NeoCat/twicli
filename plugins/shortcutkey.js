@@ -168,7 +168,7 @@ var shortcutkey_plugin = {
 				return false;
 			case 69+lower: // e : 返信(rEply)
 				if (!selected) return true;
-				replyTo(user, id);
+				replyTo(user, id, selected.id);
 				return false;
 			case 76+lower: // l : リストの全ツイート取得(get all tweets in the List)
 				if (!$('list_get_all')) return true;

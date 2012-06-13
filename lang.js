@@ -30,6 +30,7 @@ var langResources = {
 	'Update after post':	['発言後に自動更新','在发言之后自动更新'],
 	'since_id check':	['TL取得時にsince_idを使用','在取得TL的时候使用since_id'],
 	'Show not-following replies in TL':	['フォローしていない返信もTLに表示','没有关注的用户的回复也在TL上显示'],
+	'Reply to all':	['全員に返信','为全体人员回复'],
 	'Show retweets in "RT:" form':	['リツイートを"RT:〜"形式で表示','官方锐推也用RT:～来显示'],
 	'Auto-resize field':	['発言欄のサイズを自動調整','输入框大小自动调整'],
 	'Post length counter':	['残り文字数を表示','显示发言的剩余字数'],

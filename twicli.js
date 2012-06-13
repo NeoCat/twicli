@@ -320,6 +320,7 @@ var no_counter = parseInt(readCookie('no_counter') || "0");			// 発言文字数
 var no_resize_fst = parseInt(readCookie('no_resize_fst') || "0");	// フィールドの自動リサイズを無効化
 var replies_in_tl = parseInt(readCookie('replies_in_tl') || "1");	// フォロー外からのReplyをTLに表示
 var display_as_rt = parseInt(readCookie('display_as_rt') || "0");	// Retweetを"RT @〜: …"形式で表示
+var reply_to_all = parseInt(readCookie('reply_to_all') || "1");	// 全員に返信
 var footer = readCookie('footer') || ""; 							// フッタ文字列
 var decr_enter = parseInt(readCookie('decr_enter') || "0");			// Shift/Ctrl+Enterで投稿
 var no_geotag = parseInt(readCookie('no_geotag') || "0");			// GeoTaggingを無効化
@@ -599,9 +600,15 @@ function setReplyId(id) {
 	in_reply_to_status_id = id;
 }
 // reply先を設定
-function replyTo(user, id) {
+function replyTo(user, id, tw_id) {
 	in_reply_to_user = user;
 	var head = (selected_menu.id == "direct" ? "d " : "@") + user + " ";
+	var ele = $(tw_id);
+	if (selected_menu.id != "direct" && reply_to_all && ele) {
+		var users = (ele.tw.retweeted_status||ele.tw).text.match(/@\w+/);
+		if (users)
+			head = head + (users.join(" ")+" ").replace(head, '').replace('@'+myname+' ', '');
+	}
 	if (document.frm.status.value.indexOf(head) !== 0) // 連続押しガード
 		document.frm.status.value = head + document.frm.status.value;
 	setReplyId(id);
@@ -876,7 +883,7 @@ function makeHTML(tw, no_name, pid, userdesc) {
 		(rs.geo && rs.geo.type == 'Point' ? '<a class="button geomap" id="geomap-' + eid + '" target="_blank" href="http://maps.google.com?q=' + rs.geo.coordinates.join(',') + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.geo.coordinates.join(',') + '"></a>' : '') +
 		(!rs.geo && rs.place ? '<a class="button geomap" id="geomap-' + eid + '" target="_blank" href="http://maps.google.com?q=' + encodeURIComponent(rs.place.full_name) + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.place.full_name.replace(/'/g,"&apos;") + '"></a>' : '') +
 		//返信先を設定
-		' <a class="button reply" href="javascript:replyTo(\'' + un + "','" + id2 + '\')"><img src="images/reply.png" alt="↩" width="14" height="14"></a>' +
+		' <a class="button reply" href="javascript:replyTo(\'' + un + "','" + id2 + '\',\'' + eid + '\')"><img src="images/reply.png" alt="↩" width="14" height="14"></a>' +
 		//返信元へのリンク
 		(in_reply_to ? ' <a class="button inrep" href="#" onClick="dispReply(\'' + un + '\',\'' + in_reply_to + '\',this); return false;"><img src="images/inrep.png" alt="☞" width="14" height="14"></a>' : '') +
 		//popupメニュー表示
@@ -1486,6 +1493,7 @@ function switchMisc() {
 					'<input type="checkbox" name="auto_update"' + (auto_update?" checked":"") + '>'+_('Update after post')+'<br>' +
 					'<input type="checkbox" name="since_check"' + (no_since_id?"":" checked") + '>'+_('since_id check')+'<br>' +
 					'<input type="checkbox" name="replies_in_tl"' + (replies_in_tl?" checked":"") + '>'+_('Show not-following replies in TL')+'<br>' +
+					'<input type="checkbox" name="reply_to_all"' + (reply_to_all?" checked":"") + '>'+_('Reply to all')+'<br>' +
 					'<input type="checkbox" name="display_as_rt"' + (display_as_rt?" checked":"") + '>'+_('Show retweets in "RT:" form')+'<br>' +
 					'<input type="checkbox" name="counter"' + (no_counter?"":" checked") + '>'+_('Post length counter')+'<br>' +
 					'<input type="checkbox" name="resize_fst"' + (no_resize_fst?"":" checked") + '>'+_('Auto-resize field')+'<br>' +
@@ -1524,6 +1532,7 @@ function setPreps(frm) {
 	no_counter = !frm.counter.checked;
 	no_resize_fst = !frm.resize_fst.checked;
 	replies_in_tl = frm.replies_in_tl.checked;
+	reply_to_all = frm.reply_to_all.checked;
 	display_as_rt = frm.display_as_rt.checked;
 	footer = new String(frm.footer.value);
 	decr_enter = frm.decr_enter.checked;
@@ -1541,6 +1550,7 @@ function setPreps(frm) {
 	writeCookie('no_counter', no_counter?1:0, 3652);
 	writeCookie('no_resize_fst', no_resize_fst?1:0, 3652);
 	writeCookie('replies_in_tl', replies_in_tl?1:0, 3652);
+	writeCookie('reply_to_all', display_as_rt?1:0, 3652);
 	writeCookie('display_as_rt', display_as_rt?1:0, 3652);
 	writeCookie('footer', footer, 3652);
 	writeCookie('decr_enter', decr_enter?1:0, 3652);
