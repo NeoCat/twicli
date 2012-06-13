@@ -605,9 +605,9 @@ function replyTo(user, id, tw_id) {
 	var head = (selected_menu.id == "direct" ? "d " : "@") + user + " ";
 	var ele = $(tw_id);
 	if (selected_menu.id != "direct" && reply_to_all && ele) {
-		var users = (ele.tw.retweeted_status||ele.tw).text.match(/@\w+/);
+		var users = (ele.tw.retweeted_status||ele.tw).text.match(/@\w+/g);
 		if (users)
-			head = head + (users.join(" ")+" ").replace(head, '').replace('@'+myname+' ', '');
+			head = head + (users.uniq().join(" ")+" ").replace(head, '').replace('@'+myname+' ', '');
 	}
 	if (document.frm.status.value.indexOf(head) !== 0) // 連続押しガード
 		document.frm.status.value = head + document.frm.status.value;
