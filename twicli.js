@@ -323,6 +323,7 @@ var display_as_rt = parseInt(readCookie('display_as_rt') || "0");	// Retweetを"
 var reply_to_all = parseInt(readCookie('reply_to_all') || "1");	// 全員に返信
 var footer = readCookie('footer') || ""; 							// フッタ文字列
 var decr_enter = parseInt(readCookie('decr_enter') || "0");			// Shift/Ctrl+Enterで投稿
+var confirm_close = parseInt(readCookie('confirm_close') || "1");			// Tabを閉じるとき確認
 var no_geotag = parseInt(readCookie('no_geotag') || "0");			// GeoTaggingを無効化
 var use_ssl = parseInt(readCookie('use_ssl') || "1");				// SSLを使用
 if (cookieVer<18) use_ssl = 1;
@@ -1498,6 +1499,7 @@ function switchMisc() {
 					'<input type="checkbox" name="counter"' + (no_counter?"":" checked") + '>'+_('Post length counter')+'<br>' +
 					'<input type="checkbox" name="resize_fst"' + (no_resize_fst?"":" checked") + '>'+_('Auto-resize field')+'<br>' +
 					'<input type="checkbox" name="decr_enter"' + (decr_enter?" checked":"") + '>'+_('Post with ctrl/shift+enter')+'<br>' +
+					'<input type="checkbox" name="confirm_close"' + (confirm_close?" checked":"") + '>'+_('Confirm before closing tabs')+'<br>' +
 					'<input type="checkbox" name="geotag"' + (no_geotag?"":" checked") + '>'+_('Enable GeoTagging')+'<br>' +
 					'<input type="checkbox" name="use_ssl"' + (use_ssl?" checked":"") + '>'+_('Use HTTPS')+'<br>' +
 					_('Footer')+': <input name="footer" size="20" value="' + footer + '"><br>' +
@@ -1534,6 +1536,7 @@ function setPreps(frm) {
 	replies_in_tl = frm.replies_in_tl.checked;
 	reply_to_all = frm.reply_to_all.checked;
 	display_as_rt = frm.display_as_rt.checked;
+	confirm_close = frm.confirm_close.checked;
 	footer = new String(frm.footer.value);
 	decr_enter = frm.decr_enter.checked;
 	no_geotag = !frm.geotag.checked;
@@ -1554,6 +1557,7 @@ function setPreps(frm) {
 	writeCookie('display_as_rt', display_as_rt?1:0, 3652);
 	writeCookie('footer', footer, 3652);
 	writeCookie('decr_enter', decr_enter?1:0, 3652);
+	writeCookie('confirm_close', confirm_close?1:0, 3652);
 	writeCookie('no_geotag', no_geotag?1:0, 3652);
 	writeCookie('use_ssl', use_ssl?1:0, 3652);
 	writeCookie('tw_plugins', new String(" " + frm.list.value), 3652);

@@ -96,7 +96,7 @@ function setRegexp(str) {
 
 // タブを削除
 function closeRegexp(tab) {
-	if (!confirm(_('Are you sure to close this tab?'))) return;
+	if (confirm_close && !confirm(_('Are you sure to close this tab?'))) return;
 	var list = pickup_regexp.split(/[\r\n]/);
 	var list2 = [];
 	for (var id = 0; id < list.length; id++)

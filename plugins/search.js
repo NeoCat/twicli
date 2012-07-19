@@ -53,7 +53,7 @@ function twsSearchUpdate(q) {
 							'&include_entities=true&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow2);
 }
 function closeSearchTab(myid) {
-	if (!confirm(_('Are you sure to close this tab?'))) return;
+	if (confirm_close && !confirm(_('Are you sure to close this tab?'))) return;
 	var target = $(myid);
 	target.parentNode.removeChild(target);
 	for (var i = 0; i < tws_list.length; i++)
