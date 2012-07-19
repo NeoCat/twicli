@@ -689,7 +689,6 @@ function pickup2() {
 }
 // ポップアップメニューの初期化
 function popup_init() {
-	popup_hide(true);
 	var popup_id_list = ['popup_link_user', 'popup_link_status', 'popup_status_delete',
 						'popup_status_retweet', 'popup_status_quote',
 						'upopup_user_block', 'upopup_user_unblock', 'upopup_user_spam'];
@@ -716,8 +715,8 @@ function popup_menu(user, id, ele) {
 	$('popup_hide').style.display = "block";
 }
 // ポップアップメニューを非表示
-function popup_hide(init) {
-	if (!init) callPlugins("popup_hide");
+function popup_hide() {
+	callPlugins("popup_hide");
 	$('popup').style.display = 'none';
 	$('userinfo_popup').style.display = 'none';
 	$('popup_hide').style.display = 'none';
