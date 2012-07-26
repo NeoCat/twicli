@@ -254,7 +254,7 @@ registerPlugin({
 			_('subscribing lists by twicli')+':<ul id="lists_list">' +
 			'</ul><ul><li><input type="text" size="15" id="newList" value="">' +
 			'<input type="submit" value="'+_('Add')+'"></li></ul><p>' +
-			'<input id="auto_update" type="checkbox" onchange="twlSetAutoUpdate(this.value)"' +
+			'<input id="auto_update" type="checkbox" onchange="twlSetAutoUpdate(this.checked)"' +
 			(list_auto_update ? ' checked' : '') + '>' +
 			'<label for="auto_update">' + _('Update tweets in list tab automatically') +
 			'</label></form>';
