@@ -975,7 +975,7 @@ function twRelation(rel) {
 	var source = rel.relationship.source;
 	var elem = $("user_info");
 	if (source.followed_by)
-		elem.innerHTML += '<a target="twitter" href="javascript:replyTo(\'' + rel.relationship.target.screen_name + '\',0,0,1)">[DM]</a>';
+		elem.innerHTML += '<a href="javascript:replyTo(\'' + rel.relationship.target.screen_name + '\',0,0,1)">[DM]</a>';
 	elem.innerHTML += '<input type="button" value="' + _(source.following ? 'Remove $1' : 'Follow $1', last_user) +
 					'" onClick="follow('+!source.following+')">';
 	if (source.followed_by)
