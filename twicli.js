@@ -602,16 +602,16 @@ function setReplyId(id) {
 	in_reply_to_status_id = id;
 }
 // reply先を設定
-function replyTo(user, id, tw_id) {
+function replyTo(user, id, tw_id, direct) {
 	in_reply_to_user = user;
-	var head = (selected_menu.id == "direct" ? "d " : "@") + user + " ";
+	var head = (direct || selected_menu.id == "direct" ? "d " : "@") + user + " ";
 	var ele = $(tw_id);
-	if (selected_menu.id != "direct" && reply_to_all && ele) {
+	if (!direct && selected_menu.id != "direct" && reply_to_all && ele) {
 		var users = (ele.tw.retweeted_status||ele.tw).text.match(/@\w+/g);
 		if (users)
 			head = head + (users.uniq().join(" ")+" ").replace(head, '').replace('@'+myname+' ', '');
 	}
-	if (document.frm.status.value.indexOf(head) !== 0) // 連続押しガード
+	if (document.frm.status.value.toLowerCase().indexOf(head.toLowerCase()) !== 0) // 連続押しガード
 		document.frm.status.value = head + document.frm.status.value;
 	setReplyId(id);
 	document.frm.status.select();
@@ -909,7 +909,7 @@ function makeUserInfoHTML(user) {
 			'</td></tr></table>'+
 			(user.screen_name != myname ? '<a class="button upopup" href="#" onClick="userinfo_popup_menu(\'' + user.screen_name + '\',' + user.id + ', this); return false;"><small><small>▼</small></small></a>' : '')+
 			'<a target="twitter" href="' + twitterURL + user.screen_name + '">[Twitter]</a>' +
-			'<a href="' + twitterURL + user.screen_name + '/following/tweets" onclick="switchFollowingTL();return false;">[TL]</a> ';
+			'<a href="' + twitterURL + user.screen_name + '/following/tweets" onclick="switchFollowingTL();return false;">[TL]</a>'
 }
 // 過去の発言取得ボタン(DOM)生成
 function nextButton(id, p) {
@@ -974,10 +974,12 @@ function twUserInfo(user) {
 function twRelation(rel) {
 	var source = rel.relationship.source;
 	var elem = $("user_info");
+	if (source.followed_by)
+		elem.innerHTML += '<a target="twitter" href="javascript:replyTo(\'' + rel.relationship.target.screen_name + '\',0,0,1)">[DM]</a>';
 	elem.innerHTML += '<input type="button" value="' + _(source.following ? 'Remove $1' : 'Follow $1', last_user) +
 					'" onClick="follow('+!source.following+')">';
 	if (source.followed_by)
-		$("profile").innerHTML += "<br><span class=\"following_you\">" + _('$1 is following you!', rel.relationship.target.screen_name)+'</span>';
+		$("profile").innerHTML += "<br><span id=\"following_you\" class=\"following_you\">" + _('$1 is following you!', rel.relationship.target.screen_name)+'</span>';
 	callPlugins("newUserRelationship", elem, rel);
 }
 // ダイレクトメッセージ一覧の受信
