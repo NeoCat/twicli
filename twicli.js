@@ -568,7 +568,7 @@ function setFstHeight(h, force) {
 	if (!h)
 		h = $("fst").value.length ? Math.max($("fst").scrollHeight+2,min_fst_height) : min_fst_height;
 	if (no_resize_fst && !force) return;
-	if (Math.abs(h - parseInt($("fst").style.height)) < 3) return;
+	if (Math.abs(h - parseInt($("fst").style.height)) < 3 && !force) return;
 	var exh = (navigator.userAgent.indexOf("MSIE 8") >= 0 ? 1 : navigator.userAgent.indexOf("MSIE 9") >= 0 ? 1 : 0), opt = $("option").clientHeight;
 	$("fst").style.height = h + 'px';
 	$("option").style.top = h + 2 + exh*5 + 'px';
