@@ -508,7 +508,7 @@ function press(e) {
 		!decr_enter && (e.ctrlKey || e.shiftKey) || decr_enter && !(e.ctrlKey || e.shiftKey)) )
 			return true;
 	var st = document.frm.status;
-	if (!key_press_detected) st.value = st.value.replace(/\n/g, "");
+	if (!key_press_detected && !decr_enter) st.value = st.value.replace(/\n/g, "");
 	if (st.value == '') {
 		update();
 		return false;
