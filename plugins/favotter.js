@@ -5,7 +5,7 @@ langResources['Favotter / fav'] =	['ふぁぼったー / ふぁぼり','Favotter
 var twFavPlugin = {
 	fav_update: null,
 	favs: [],
-	init: function() { this.updateFavs(); },
+	init: function() { /* this.updateFavs(); */ }, // no info update now...
 	updateFavs: function() {
 		twFavPlugin.fav_update = loadXDomainScript('http://twicli.neocat.jp/nr_favs.js?seq='+(seq++), twFavPlugin.fav_update);
 		setTimeout(twFavPlugin.updateFavs, 15*60*1000);
