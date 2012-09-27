@@ -2,8 +2,8 @@
 	var res = [
 		{search: /^https?:\/\/(?:www\.youtube\.com\/watch\?.*v=|youtu\.be\/)([\w\-]+).*$/,
 			replace: "http://www.youtube.com/embed/$1", type: "iframe"},
-		{search: /^https?:\/\/gist\.github\.com\/(\d+)(?:\.txt)?$/, replace: "https://gist.github.com/$1.pibb", type: "iframe"},
-		{search: /^https?:\/\/raw\.github\.com\/gist\/(\d+)(?:.*)$/, replace: "https://gist.github.com/$1.pibb", type: "iframe"},
+		{search: /^https?:\/\/gist\.github\.com\/(\d+)(?:\.txt)?$/, replace: "https://gist.github.com/$1.js", type: "script"},
+		{search: /^https?:\/\/raw\.github\.com\/gist\/(\d+)(?:.*)$/, replace: "https://gist.github.com/$1.js", type: "script"},
 		{search: /https?:\/\/(?:nico\.ms|www\.nicovideo\.jp\/watch)\/((?!lv)(?!nw)(?!im)[a-z]{2}\d+)/, replace: "http://ext.nicovideo.jp/thumb_watch/$1", type: "script"}
 	];
 
@@ -70,7 +70,7 @@ function dispEmbedSrc(url, link, type) {
 	} else if (type == 'script') {
 		$('reps').innerHTML = '<iframe id="embedsrc" style="border:0; width:100%; height: 426px; display:block"></iframe>';
 		document.getElementById('embedsrc').contentWindow.document.write(
-			'<div style="text-align: center;"><scr'+'ipt type="text/javascript" src="'+url+
+			'<div><scr'+'ipt type="text/javascript" src="'+url+
 				'"></scr'+'ipt></div>');
 	}
 	$('rep').style.top = rep_top;
