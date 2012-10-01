@@ -362,7 +362,6 @@ var selected_menu;				// 選択中のタブ
 var update_timer = null;
 var update_reply_counter = 0;
 var update_direct_counter = 0;
-var key_press_detected = false;
 var last_post = null;
 var last_in_reply_to_user = null;
 var last_in_reply_to_status_id = null;
@@ -503,12 +502,10 @@ function twFail() {
 
 // enterキーで発言, "r"入力で再投稿, 空欄でTL更新
 function press(e) {
-	if (e != 1) key_press_detected = true;
 	if (e != 1 && (e.keyCode != 13 && e.keyCode != 10 ||
 		!decr_enter && (e.ctrlKey || e.shiftKey) || decr_enter && !(e.ctrlKey || e.shiftKey)) )
 			return true;
 	var st = document.frm.status;
-	if (!key_press_detected && !decr_enter) st.value = st.value.replace(/\n/g, "");
 	if (st.value == '') {
 		update();
 		return false;
