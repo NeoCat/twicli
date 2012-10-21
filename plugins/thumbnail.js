@@ -106,7 +106,7 @@ registerPlugin({
 		else if (url.match(/^(https?:\/\/www\.slideshare\.net\/[-_0-9a-zA-Z]+\/[-_0-9a-zA-Z]+)/)) {
 			xds.load("http://www.slideshare.net/api/oembed/2?url=" + RegExp.$1 + "&format=jsonp",
 					function(x) {
-						addThumbnail(elem, x.thumbnail, url);
+						addThumbnail(elem, 'http:' + x.thumbnail, url);
 					});
 		}
 		else if (url.match(/^http:\/\/p\.twipple\.jp\/(\w+)/)) {
