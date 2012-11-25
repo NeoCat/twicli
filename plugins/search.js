@@ -4,13 +4,12 @@ langResources['Are you sure to close this tab?'] =	['このタブを閉じても
 
 
 var tws_page = 0;
-var tws_rpp = 50; /* results per page */
+var tws_next_max_id = -1;
 var tws_update_timer = null;
 var tws_list = (readCookie('twicli_search_list') || "").split(/\r?\n/);
-var tws_API = 'http://search.twitter.com/search.json';
 tws_list.uniq();
 writeCookie('twicli_search_list', tws_list.join("\n"), 3652);
-function twsSearch(qn, no_switch) {
+function twsSearch(qn, no_switch, max_id) {
 	var exclude_rt = qn.substr(0,1) == '^';
 	var qn2 = qn.substr(exclude_rt?1:0);
 	var myid = 'search-' + qn2;
@@ -37,20 +36,24 @@ function twsSearch(qn, no_switch) {
 		tws_list.uniq();
 		writeCookie('twicli_search_list', tws_list.join("\n"), 3652);
 	}
-	switchTo(myid);
+	if (!no_switch) switchTo(myid);
+	if (tws_update_timer) clearInterval(tws_update_timer);
 	tws_update_timer = setInterval(function(){twsSearchUpdate(q)}, 1000*Math.max(updateInterval, 30));
 	var rt_checked = exclude_rt ? "" : " checked";
 	$('tw2h').innerHTML = '<div class="tabcmd tabclose"><input id="tws-RT" type="checkbox"'+rt_checked+'><label for="tws-RT">RT</label> <a id="tws-closetab" href="#">[x] '+_('remove tab')+'</a></div>';
 	$('tws-closetab').onclick = function(){ closeSearchTab(myid); return false; };
-	tws_page = 0;
+	if (!max_id) tws_page = 0;
 	$('tws-RT').onclick = function() { twsSwitchRT(myid); };
-	xds.load_for_tab(tws_API + '?seq=' + (seq++) +
-							'&include_entities=true&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow);
+	xds.load_for_tab(twitterAPI + 'search/tweets.json' +
+							'?include_entities=true&q=' + encodeURIComponent(q) +
+							(max_id ? '&max_id=' + max_id : '') +
+							'&count=' + Math.min(100, max_count_u), twsSearchShow);
 	return false;
 }
 function twsSearchUpdate(q) {
-	xds.load_for_tab(tws_API + '?seq=' + (seq++) +
-							'&include_entities=true&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow2);
+	xds.load_for_tab(twitterAPI + 'search/tweets.json' +
+							'?include_entities=true&q=' + encodeURIComponent(q) +
+							'&count=' + Math.min(100, max_count_u), twsSearchShow2);
 }
 function closeSearchTab(myid) {
 	if (confirm_close && !confirm(_('Are you sure to close this tab?'))) return;
@@ -82,25 +85,18 @@ function twsSearchShow2(res) {
 function twsSearchShow(res, update) {
 	var tmp = $("tmp");
 	if (tmp) tmp.parentNode.removeChild(tmp);
-	if (res.error) { error(res.error); return; }
+	if (res.errors) { error('', res.errors); return; }
 	if (!update) tws_page++;
-	var result = res.results.map(function(a){
-		a.user = {screen_name:a.from_user,
-						name: a.from_user,
-						profile_image_url: a.profile_image_url};
-		a.source = a.source ? a.source.replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&").replace(/&quot;/g,'"') : '';
-		return a;
-	});
-	if (!update && tws_page == 1) {
+	tw = res.statuses;
+	if (!update && tws_page == 1)
 		$('tw2c').innerHTML = '';
-	}
-	twShowToNode(result, $("tw2c"), false, !update && tws_page > 1, update, false, update);
-	if (!update && res.next_page) {
-		var next = nextButton('next-search');
-		$("tw2c").appendChild(next);
+	if (tw.length == 0) return;
+	twShowToNode(tw, $("tw2c"), false, !update && tws_page > 1, update, false, update);
+	if (!update) {
+		tws_next_max_id = tw[tw.length-1].id_str;
+		$("tw2c").appendChild(nextButton('next-search'));
 		get_next_func = function(){
-			xds.load_for_tab(tws_API + res.next_page +
-								'&include_entities=true&seq=' + (seq++) + '&rpp=' + tws_rpp, twsSearchShow);
+			twsSearch(selected_menu.tws_qn, true, tws_next_max_id);
 		}
 	}
 }
