@@ -13,7 +13,7 @@ function serializeForm(f) {
 	for (var e = 0; e < f.elements.length; e++) {
 		var input = f.elements[e];
 		if (input.name && input.value)
-			url += (url == '' ? '?' : '&') + input.name + "=" + OAuth.percentEncode(input.value);
+			url += (url == '' ? '?' : '&') + input.name + "=" + OAuth.percentEncode(input.value.replace(/\r?\n/g, "\r\n"));
 	}
 	return url;
 }
