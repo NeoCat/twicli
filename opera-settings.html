@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<title>twicli - Opera settings</title>
+<style type="text/css"><!--
+body { background-color: #115; margin: 0; padding: 0; }
+.whole { width: 900px; padding: 20px; margin: 0; background-color: #fff; font-size: 90%; }
+li { margin: 4px; }
+h1 { border-bottom: solid 2px red; }
+h2 { border-left: solid 1.2em #cf6; padding-left: 4px; }
+h3 { border-left: solid 1.2em #fc0; padding-left: 4px; }
+img { border: none; }
+.language_selection { float:left; margin-left:700px;}
+pre { background-color: #ddf; border: 1px solid #66f; }
+--></style>
+</head>
+<body>
+<div class="whole">
+<h2>Operaでtwicli使用中にダウンロードダイアログの表示を避けるには</h2>
+
+Operaでtwicliを使用する際、一部の操作（ツイートの削除やfavなど）を行うと、ファイルのダウンロードを促すダイアログが表示されてしまうことがあります。
+これを避けるためには、Operaの設定を次のように変更する必要があります。
+
+<ol>
+<li>設定→詳細設定→ダウンロードを開きます。
+<li>追加ボタンを押します。
+<li>MIMEタイプ: 「application/json」, ファイル拡張子: 「json」, 処理: Operaで開く　を入力/選択します。
+<li>OKボタンを押してダイアログを閉じます。
+</ol>
+
+<img src="images/opera-settings.png" width=800 height=420><br>
+
+このダウンロードダイアログが表示されるようになったのは、Twitter API 1.1へのバージョンアップに伴ってXML形式のサポートが廃止されjson形式のみになったことが原因です。
+
+<a name="en"><h2>How to avoid download dialog in twicli with Opera</h2></a>
+
+Some of operations (e.g. deleting tweets, make tweets favorites) in twicli may cause displaying download dialog unexpectedly in Opera. To avoid this, the settings below are required.
+
+<ol>
+<li>Go to Opera preferences -> Advanced -> Downloads.
+<li>Press Add button.
+<li>Enter MIME type: "application/json", file extension: "json", and select action "Open with Opera".
+<li>Press OK to close the dialogs.
+</ol>
+
+<img src="images/opera-settings-en.png" width=798 height=420><br>
+
+This is because XML-form API is obsoleted and only json-format API is supported in Twitter API 1.1.
+
+</div>
+</body>
+</html>
