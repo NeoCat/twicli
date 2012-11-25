@@ -775,8 +775,10 @@ function deleteStatus(id) {
 		var target = $(['tw-','re-','tw2c-'][i]+id);
 		if (target) target.className += " deleted";
 	}
-	enqueuePost(twitterAPI + (selected_menu.id == 'direct'?'direct_messages':'statuses') + '/destroy/' + id + '.json',
-		function(){}, function(){});
+	if (selected_menu.id == 'direct')
+		enqueuePost(twitterAPI + 'direct_messages/destroy.json?id=' + id, function(){}, function(){});
+	else
+		enqueuePost(twitterAPI + 'statuses/destroy/' + id + '.json', function(){}, function(){});
 	return false;
 }
 // 最新タイムラインを取得
