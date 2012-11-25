@@ -13,7 +13,7 @@ function serializeForm(f) {
 	for (var e = 0; e < f.elements.length; e++) {
 		var input = f.elements[e];
 		if (input.name && input.value)
-			url += (url == '' ? '?' : '&') + input.name + "=" + encodeURIComponent(input.value);
+			url += (url == '' ? '?' : '&') + input.name + "=" + OAuth.percentEncode(input.value);
 	}
 	return url;
 }
@@ -532,11 +532,11 @@ function press(e) {
 	st.select();
 	var text = st.value;
 	(post_via_agent ? xds.load : enqueuePost)(twitterAPI + 'statuses/update.json?'+
-				'status=' + encodeURIComponent(st.value) +
+				'status=' + OAuth.percentEncode(st.value) +
 				(geo && geo.coords ?  "&display_coordinates=true&lat=" + geo.coords.latitude +
 										"&long=" + geo.coords.longitude : "") +
 				(in_reply_to_status_id ? "&in_reply_to_status_id=" + in_reply_to_status_id : ""),
-				function(tw){ resetFrm(); if (tw.errors) error('', tw); twShow([tw]) },
+				function(tw){ if (tw.errors) error('', tw); else resetFrm(); twShow([tw]) },
 				function(err){ if (err) error('', err); }, retry);
 	in_reply_to_user = in_reply_to_status_id = null;
 	return false;
