@@ -42,8 +42,10 @@ function setupOAuthURL(url, post) {
 	document.etc.URL.value = url[0];
 	consumer.signForm(document.request, document.etc);
 	url = document.etc.URL.value;
-	if (post_agent)
-		url = url.replace(twitterAPI + 'statuses/update.json', 'https://tweet-agent.appspot.com/post');
+	if (post_agent) {
+		var sid = ['','2'][((new Date).getTime()/1000/60/60/12|0)%2];
+		url = url.replace(twitterAPI + 'statuses/update.json', 'https://tweet-agent'+sid+'.appspot.com/post');
+	}
 	return url + (!post ? serializeForm(document.request) : '');
 }
 // クロスドメインJavaScript呼び出し(Twitter APIはOAuth認証)
