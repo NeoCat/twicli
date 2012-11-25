@@ -127,7 +127,7 @@ function twlGetListStatusUpdate(list, update) {
 	if (selected_menu.id == "user") fav_mode = 9;
 	xds.load_for_tab(twitterAPI + 'lists/statuses.json?seq=' + (seq++)
 			+ '&owner_screen_name=' + last_list[0] + '&slug=' + last_list[1]
-			+ '&include_entities=true&include_rts=true&per_page=' + max_count_u,
+			+ '&include_entities=true&include_rts=true&count=' + max_count_u,
 			update ? twlShowListStatus2 : twlShowListStatus);
 }
 function twlShowListStatus2(tw) {
