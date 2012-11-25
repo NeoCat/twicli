@@ -288,7 +288,7 @@ document.write('<style>' + user_style + '</style>');
 // twicli用変数
 
 var twitterURL = 'http://twitter.com/';
-var twitterAPI = 'http://api.twitter.com/1/';
+var twitterAPI = 'http://api.twitter.com/1.1/';
 var myname = null;		// 自ユーザ名
 var myid = null;		// 自ユーザID
 var last_user = null;	// user TLに表示するユーザ名
@@ -530,7 +530,7 @@ function press(e) {
 	st.value += footer;
 	st.select();
 	var text = st.value;
-	enqueuePost(twitterAPI + 'statuses/update.xml?status=' + encodeURIComponent(st.value) +
+	enqueuePost(twitterAPI + 'statuses/update.json?status=' + encodeURIComponent(st.value) +
 				(geo && geo.coords ?  "&display_coordinates=true&lat=" + geo.coords.latitude +
 										"&long=" + geo.coords.longitude : "") +
 				(in_reply_to_status_id ? "&in_reply_to_status_id=" + in_reply_to_status_id : ""),
@@ -744,7 +744,7 @@ function retweetStatus(id, ele) {
 	}
 	if (!confirm(_("Retweet to your followers?"))) return false;
 	var target_ele = ele;
-	enqueuePost(twitterAPI + 'statuses/retweet/' + id + '.xml',
+	enqueuePost(twitterAPI + 'statuses/retweet/' + id + '.json',
 		function(){
 			var img = document.createElement("img");
 			img.src = "images/rt.png";
@@ -773,7 +773,7 @@ function deleteStatus(id) {
 		var target = $(['tw-','re-','tw2c-'][i]+id);
 		if (target) target.className += " deleted";
 	}
-	enqueuePost(twitterAPI + (selected_menu.id == 'direct'?'direct_messages':'statuses') + '/destroy/' + id + '.xml',
+	enqueuePost(twitterAPI + (selected_menu.id == 'direct'?'direct_messages':'statuses') + '/destroy/' + id + '.json',
 		function(){}, function(){});
 	return false;
 }
@@ -922,7 +922,7 @@ function fav(img, id) {
 	if (img.src.indexOf('throbber') >= 0) return;
 	var f = img.src.indexOf('empty') >= 0;
 	setFavIcon(img, id, -1);
-	enqueuePost(twitterAPI + 'favorites/' + (f ? 'create' : 'destroy') + '/' + id + '.xml',
+	enqueuePost(twitterAPI + 'favorites/' + (f ? 'create' : 'destroy') + '.json?id=' + id,
 		function(){ setFavIcon(img, id, f) }/*, function(){ setFavIcon(img, id, !f) }*/);
 }
 // favアイコンの設定(f=0: 未fav, f=1:fav済, f=-1:通信中)
@@ -941,18 +941,18 @@ function setFavIcon(img, id, f) {
 // followとremove
 function follow(f) {
 	if (!f && !confirm(_("Are you sure to remove $1?", last_user))) return false;
-	enqueuePost(twitterAPI + 'friendships/' + (f ? 'create' : 'destroy') + '/' + last_user + '.xml', switchUser);
+	enqueuePost(twitterAPI + 'friendships/' + (f ? 'create' : 'destroy') + '/' + last_user + '.json', switchUser);
 	return false;
 }
 // blockとunblock
 function blockUser(f) {
 	if (f && !confirm(_("Are you sure to block $1?", last_user))) return false;
-	enqueuePost(twitterAPI + 'blocks/' + (f ? 'create' : 'destroy') + '/' + last_user + '.xml', switchUser);
+	enqueuePost(twitterAPI + 'blocks/' + (f ? 'create' : 'destroy') + '/' + last_user + '.json', switchUser);
 	return false;
 }
 function reportSpam(f) {
 	if (f && !confirm(_("Are you sure to report $1 as spam?", last_user))) return false;
-	enqueuePost(twitterAPI + 'report_spam.xml?screen_name=' + last_user, switchUser);
+	enqueuePost(twitterAPI + 'report_spam.json?screen_name=' + last_user, switchUser);
 	return false;
 }
 // ユーザ情報を表示
@@ -1338,8 +1338,8 @@ function getNextFuncCommon() {
 					'?count=' + max_count_u + '&page=' + (++cur_page) + '&screen_name=' + last_user +
 					'&include_rts=true&include_entities=true&suppress_response_codes=true', twShow2);
 	else if (selected_menu.id == "user" && fav_mode == 1)
-		xds.load_for_tab(twitterAPI + 'favorites/' + last_user + '.json' +
-					'?page=' + (++cur_page) + '&suppress_response_codes=true', twShow2);
+		xds.load_for_tab(twitterAPI + 'favorites/list.json?screen_name=' + last_user +
+					'&page=' + (++cur_page) + '&suppress_response_codes=true', twShow2);
 	else if (selected_menu.id == "user" && fav_mode == 4) {
 		++cur_page;
 		xds.load_for_tab(twitterAPI + 'statuses/following_timeline.json' +
@@ -1445,8 +1445,8 @@ function switchFav() {
 	cur_page = 1;
 	fav_mode = 1;
 	$("tw2c").innerHTML = "";
-	xds.load_for_tab(twitterAPI + 'favorites/' + last_user + '.json' +
-										'?suppress_response_codes=true', twShow2);
+	xds.load_for_tab(twitterAPI + 'favorites/list.json?screen_name=' + last_user +
+										'&suppress_response_codes=true', twShow2);
 }
 function switchFollowing() {
 	cur_page = 1;
