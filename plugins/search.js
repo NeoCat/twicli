@@ -21,14 +21,8 @@ function twsSearch(qn, no_switch) {
 		name = qn2.substr(0,colon);
 		q = qn2.substr(colon+1);
 	}
-	var lang = q.indexOf('lang=');
-	if (lang > 0) {
-		qn2 = q.substr(lang+5);
-		q = q.substr(0,lang);
-		lang = qn2;
-	} else {
-		lang = '';
-	}
+	var lang = null;
+	q = q.replace(/lang=(\w+)\s*/, function(_,l){ lang = l; return ''; });
 	if (exclude_rt) q += ' exclude:retweets';
 	if (!$(myid)) {
 		var tab = document.createElement('a');
@@ -53,12 +47,12 @@ function twsSearch(qn, no_switch) {
 	tws_page = 0;
 	$('tws-RT').onclick = function() { twsSwitchRT(myid); };
 	xds.load_for_tab(tws_API + '?seq=' + (seq++) +
-							'&include_entities=true' + (lang.length>0?'&lang=' + lang:'') + '&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow);
+							'&include_entities=true' + (lang?'&lang=' + lang:'') + '&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow);
 	return false;
 }
 function twsSearchUpdate(q,lang) {
 	xds.load_for_tab(tws_API + '?seq=' + (seq++) +
-							'&include_entities=true' + (lang.length>0?'&lang=' + lang:'') + '&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow2);
+							'&include_entities=true' + (lang?'&lang=' + lang:'') + '&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow2);
 }
 function closeSearchTab(myid) {
 	if (confirm_close && !confirm(_('Are you sure to close this tab?'))) return;
