@@ -18,8 +18,16 @@ function twsSearch(qn, no_switch) {
 	var name = qn2;
 	var q = qn2;
 	if (colon > 0) {
-		name = qn2.substr(0, colon);
+		name = qn2.substr(0,colon);
 		q = qn2.substr(colon+1);
+	}
+	var lang = q.indexOf('lang=');
+	if (lang > 0) {
+		qn2 = q.substr(lang+5);
+		q = q.substr(0,lang);
+		lang = qn2;
+	} else {
+		lang = '';
 	}
 	if (exclude_rt) q += ' exclude:retweets';
 	if (!$(myid)) {
@@ -38,19 +46,19 @@ function twsSearch(qn, no_switch) {
 		writeCookie('twicli_search_list', tws_list.join("\n"), 3652);
 	}
 	switchTo(myid);
-	tws_update_timer = setInterval(function(){twsSearchUpdate(q)}, 1000*Math.max(updateInterval, 30));
+	tws_update_timer = setInterval(function(){twsSearchUpdate(q,lang)}, 1000*Math.max(updateInterval, 30));
 	var rt_checked = exclude_rt ? "" : " checked";
 	$('tw2h').innerHTML = '<div class="tabcmd tabclose"><input id="tws-RT" type="checkbox"'+rt_checked+'><label for="tws-RT">RT</label> <a id="tws-closetab" href="#">[x] '+_('remove tab')+'</a></div>';
 	$('tws-closetab').onclick = function(){ closeSearchTab(myid); return false; };
 	tws_page = 0;
 	$('tws-RT').onclick = function() { twsSwitchRT(myid); };
 	xds.load_for_tab(tws_API + '?seq=' + (seq++) +
-							'&include_entities=true&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow);
+							'&include_entities=true' + (lang.length>0?'&lang=' + lang:'') + '&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow);
 	return false;
 }
-function twsSearchUpdate(q) {
+function twsSearchUpdate(q,lang) {
 	xds.load_for_tab(tws_API + '?seq=' + (seq++) +
-							'&include_entities=true&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow2);
+							'&include_entities=true' + (lang.length>0?'&lang=' + lang:'') + '&q=' + encodeURIComponent(q) + '&rpp=' + tws_rpp, twsSearchShow2);
 }
 function closeSearchTab(myid) {
 	if (confirm_close && !confirm(_('Are you sure to close this tab?'))) return;
