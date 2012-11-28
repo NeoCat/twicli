@@ -20,6 +20,8 @@ function twsSearch(qn, no_switch, max_id) {
 		name = qn2.substr(0, colon);
 		q = qn2.substr(colon+1);
 	}
+	var lang = null;
+	q = q.replace(/lang=(\w+)\s*/, function(_,l){ lang = l; return ''; });
 	if (exclude_rt) q += ' exclude:retweets';
 	if (!$(myid)) {
 		var tab = document.createElement('a');
@@ -38,21 +40,21 @@ function twsSearch(qn, no_switch, max_id) {
 	}
 	if (!no_switch) switchTo(myid);
 	if (tws_update_timer) clearInterval(tws_update_timer);
-	tws_update_timer = setInterval(function(){twsSearchUpdate(q)}, 1000*Math.max(updateInterval, 30));
+	tws_update_timer = setInterval(function(){twsSearchUpdate(q,lang)}, 1000*Math.max(updateInterval, 30));
 	var rt_checked = exclude_rt ? "" : " checked";
 	$('tw2h').innerHTML = '<div class="tabcmd tabclose"><input id="tws-RT" type="checkbox"'+rt_checked+'><label for="tws-RT">RT</label> <a id="tws-closetab" href="#">[x] '+_('remove tab')+'</a></div>';
 	$('tws-closetab').onclick = function(){ closeSearchTab(myid); return false; };
 	if (!max_id) tws_page = 0;
 	$('tws-RT').onclick = function() { twsSwitchRT(myid); };
 	xds.load_for_tab(twitterAPI + 'search/tweets.json' +
-							'?include_entities=true&q=' + encodeURIComponent(q) +
+							'?include_entities=true' + (lang?'&lang=' + lang:'') + '&q=' + encodeURIComponent(q) +
 							(max_id ? '&max_id=' + max_id : '') +
 							'&count=' + Math.min(100, max_count_u), twsSearchShow);
 	return false;
 }
-function twsSearchUpdate(q) {
+function twsSearchUpdate(q,lang) {
 	xds.load_for_tab(twitterAPI + 'search/tweets.json' +
-							'?include_entities=true&q=' + encodeURIComponent(q) +
+							'?include_entities=true' + (lang?'&lang=' + lang:'') + '&q=' + encodeURIComponent(q) +
 							'&count=' + Math.min(100, max_count_u), twsSearchShow2);
 }
 function closeSearchTab(myid) {
