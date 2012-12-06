@@ -912,8 +912,7 @@ function makeUserInfoHTML(user) {
 						'<a href="' + twitterURL + user.screen_name + '/favorites" onclick="switchFav();return false;">' + user.favourites_count + '<small>'+_('favs')+'</small></a></b>' +
 			'</td></tr></table>'+
 			(user.screen_name != myname ? '<a class="button upopup" href="#" onClick="userinfo_popup_menu(\'' + user.screen_name + '\',' + user.id + ', this); return false;"><small><small>▼</small></small></a>' : '')+
-			'<a target="twitter" href="' + twitterURL + user.screen_name + '">[Twitter]</a>' +
-			'<a href="' + twitterURL + user.screen_name + '/following/tweets" onclick="switchFollowingTL();return false;">[TL]</a>'
+			'<a target="twitter" href="' + twitterURL + user.screen_name + '">[Twitter]</a>'
 }
 // 過去の発言取得ボタン(DOM)生成
 function nextButton(id, p) {
@@ -948,7 +947,7 @@ function setFavIcon(img, id, f) {
 // followとremove
 function follow(f) {
 	if (!f && !confirm(_("Are you sure to remove $1?", last_user))) return false;
-	enqueuePost(twitterAPI + 'friendships/' + (f ? 'create' : 'destroy') + '/' + last_user + '.json', switchUser);
+	enqueuePost(twitterAPI + 'friendships/' + (f ? 'create' : 'destroy') + '.json?screen_name=' + last_user, switchUser);
 	return false;
 }
 // blockとunblock
@@ -1137,11 +1136,12 @@ function twOldReply(tw) {
 }
 function twShow2(tw) {
 	var user_info = $("user_info");
-	if ((tw.errors && tw.errors[0].message == "Not authorized" || tw.length < 1 ) && !!user_info && !fav_mode && user_info.innerHTML == '') {
+	if ((tw.errors && tw.errors[0].message == "Not authorized" || tw.error && tw.error == "Not authorized" || tw.length < 1 ) && !!user_info && !fav_mode && user_info.innerHTML == '') {
 		xds.load_for_tab(twitterAPI + 'users/show.json?screen_name=' + last_user +
 			'&suppress_response_codes=true', twUserInfo);
 		return;
 	}
+	if (tw.error) return error(tw.error);
 	if (tw.errors) return error('', tw);
 	if (tw.length < 1) return;
 	var tmp = $("tmp");
