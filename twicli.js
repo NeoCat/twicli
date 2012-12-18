@@ -920,7 +920,7 @@ function makeRateLimitInfo(ep) {
 	var info = tw_limits.resources[family] && tw_limits.resources[family]['/'+ep];
 	if (!info) return '<tr><th>' + ep + ' :</th><td>???</td>';
 	var d = info.reset - Math.floor((new Date).getTime()/1000);
-	return "<tr><th>" + ep.replace('statuses/','') + " :</th><td>" + info.remaining + "/" + info.limit + "</td><td>(" + Math.floor(d/60) + ":" + d2(Math.floor(d%60)) + ")</td></tr>"
+	return "<tr><th>" + ep + " :</th><td>" + info.remaining + "/" + info.limit + "</td><td>(" + Math.floor(d/60) + ":" + d2(Math.floor(d%60)) + ")</td></tr>"
 }
 // 過去の発言取得ボタン(DOM)生成
 function nextButton(id, p) {
@@ -1193,6 +1193,7 @@ function twShow3(tw) {
 	}
 }
 function twUsers(tw) {
+	if (tw.error) return error(tw.error);
 	if (tw.errors) return error('', tw);
 	var tmp = $("tmp");
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
@@ -1207,7 +1208,7 @@ function twUsers(tw) {
 		get_next_func = function() {
 			cur_page++;
 			xds.load_for_tab(twitterAPI +
-					(fav_mode == 2 ? 'statuses/friends.json' : 'statuses/followers.json') +
+					(fav_mode == 2 ? 'friends/list.json' : 'followers/list.json') +
 					'?screen_name=' + last_user + '&cursor=' + tw.next_cursor +
 					'&include_entities=true&suppress_response_codes=true', twUsers);
 		};
@@ -1473,21 +1474,14 @@ function switchFollowing() {
 	cur_page = 1;
 	fav_mode = 2;
 	$("tw2c").innerHTML = "";
-	xds.load_for_tab(twitterAPI + 'statuses/friends.json?screen_name=' + last_user + 
+	xds.load_for_tab(twitterAPI + 'friends/list.json?screen_name=' + last_user + 
 										'&cursor=-1&include_entities=true&suppress_response_codes=true', twUsers);
-}
-function switchFollowingTL() {
-	cur_page = 1;
-	fav_mode = 4;
-	$("tw2c").innerHTML = "";
-	xds.load_for_tab(twitterAPI + 'statuses/following_timeline.json?screen_name=' + last_user + 
-										'&cursor=-1&include_entities=true&suppress_response_codes=true', twShow2);
 }
 function switchFollower() {
 	cur_page = 1;
 	fav_mode = 3;
 	$("tw2c").innerHTML = "";
-	xds.load_for_tab(twitterAPI + 'statuses/followers.json' +
+	xds.load_for_tab(twitterAPI + 'followers/list.json' +
 			'?screen_name=' + last_user + '&cursor=-1&include_entities=true&suppress_response_codes=true', twUsers);
 }
 function switchDirect() {
@@ -1529,7 +1523,7 @@ function switchMisc() {
 					'<input type="submit" value="'+_('Save')+'"></form></div><hr class="spacer">';
 	callPlugins("miscTab", $("tw2h"));
 	xds.load_for_tab(twitterAPI + 'application/rate_limit_status.json' +
-				'?suppress_response_codes=true&resources=statuses,friendships,users,search,lists,favorites', twRateLimit);
+				'?suppress_response_codes=true&resources=statuses,friendships,friends,followers,users,search,lists,favorites', twRateLimit);
 }
 function togglePreps() {
 	$('preps').style.display = $('preps').style.display == 'block' ? 'none' : 'block';
