@@ -222,7 +222,7 @@ function twlUpdateUserPopup(target_ele, user) {
 }
 function twlEditUserInList(list, user, f) {
 	var l = list.split('/');
-	enqueuePost(twitterAPI + 'lists/members/' + (f ? 'create' : 'destroy') + '.xml' +
+	enqueuePost(twitterAPI + 'lists/members/' + (f ? 'create' : 'destroy') + '.json' +
 			'?owner_screen_name=' + l[0] + '&slug=' + l[1] + '&screen_name=' + user,
 		function(){ twlReloadListInfo(list); });
 }
