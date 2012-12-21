@@ -2,6 +2,20 @@ langResources['Accounts'] =	['アカウント','账户'];
 langResources['Are you sure to delete account "$1"?'] =	['アカウント"$1"を削除してもよろしいですか?','确认要删除账户 "$1" ？'];
 
 var accounts_info = {};
+var q = location.search.match('account=([^/]+)');
+var accounts = readCookie('accounts');
+accounts = accounts ? accounts.split(',') : [];
+for (var i = 0; i < accounts.length; i++) {
+	var info = accounts[i].split('|');
+	accounts_info[info[1]] = accounts[i];
+	if (q && q[1] == info[0]) {
+		writeCookie('access_user', info[0]+'|'+info[1], 3652);
+		writeCookie('access_token', info[2], 3652);
+		writeCookie('access_secret', info[3], 3652);
+		window.access_token = info[2];
+		window.access_secret = info[3];
+	}
+}
 
 function accounts_save() {
 	var accounts = [];
@@ -49,13 +63,6 @@ registerPlugin({
 			$('accounts').appendChild(opt);
 		}
 	},
-	init: function() {
-		var accounts = readCookie('accounts');
-		accounts = accounts ? accounts.split(',') : [];
-		for (var i = 0; i < accounts.length; i++) {
-			accounts_info[accounts[i].split('|')[1]] = accounts[i];
-		}
-	},
 	auth: function() {
 		var current_account = readCookie('access_user')+'|'+readCookie('access_token')+'|'+readCookie('access_secret');
 		accounts_info[current_account.split('|')[1]] = current_account; // update account info
@@ -66,4 +73,3 @@ registerPlugin({
 		accounts_save();
 	}
 });
-
