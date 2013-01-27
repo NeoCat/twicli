@@ -77,10 +77,23 @@ var xds = {
 			if (d.x) {
 				if (callback) callback.apply(this, d.x);
 			} else if (retry && retry > 1) {
-				loading(true); // retry待ち表示
-				setTimeout(function(){ xds.load(url, callback, onerror, retry-1);
-					loading(false);
-				}, 1000);
+				if (url.indexOf(twitterAPI) == 0) {
+					updateRateLimit(function(limits){
+						if (url.substr(twitterAPI.length).match(/(.*?)\/(.*)\.json/)) {
+							var ep = '/'+RegExp.$1+'/'+RegExp.$2;
+							var resource = limits.resources[RegExp.$1];
+							ep = ep.replace(/\d+/,':id');
+							if (resource && resource[ep] && resource[ep].remaining <= 0) {
+								var d = resource[ep].reset - Math.floor((new Date).getTime()/1000);
+								return error(_('Too many requests: Twitter API $1 is rate limited; reset in $2', ep, Math.floor(d/60) + ":" + d2(Math.floor(d%60))));
+							}
+						}
+						loading(true); // retry待ち表示
+						setTimeout(function(){ xds.load(url, callback, onerror, retry-1);
+							loading(false);
+						}, 1000);
+					});
+				}
 			} else if (onerror)
 				onerror();
 			loading(false);
@@ -272,7 +285,7 @@ function _(key) {
 	else
 		key = langResources[key][lang] || key;
 	var args = arguments;
-	return key.replace(/\$(\d+)/, function(x,n){ return args[parseInt(n)] });
+	return key.replace(/\$(\d+)/g, function(x,n){ return args[parseInt(n)] });
 }
 
 // version check
@@ -383,6 +396,7 @@ var tweet_failed_notified = false;
 var tw_config;
 var tw_limits = {};
 var t_co_maxstr = "http://t.co/*******";
+var api_resources = ['statuses','friendships','friends','followers','users','search','lists','favorites'];
 
 // loading表示のコントロール
 function loading(start) {
@@ -1059,6 +1073,15 @@ function twRateLimit(limits) {
 	$('tw2c').innerHTML = '<div><b>API statuses:</b></div>'
 	$('tw2c').appendChild(ele);
 }
+function updateRateLimit(callback) {
+	xds.load(twitterAPI + 'application/rate_limit_status.json' +
+				'?suppress_response_codes=true&resources='+api_resources.join(','),
+		function(limits){
+			if (tw.errors) return error('Cannot update rate limit status', tw);
+			tw_limits = limits;
+			callback(limits);
+		});
+}
 // 新着reply受信通知
 function noticeNewReply(replies) {
 	if ($("reply").className.indexOf("new") < 0)
@@ -1523,7 +1546,7 @@ function switchMisc() {
 					'<input type="submit" value="'+_('Save')+'"></form></div><hr class="spacer">';
 	callPlugins("miscTab", $("tw2h"));
 	xds.load_for_tab(twitterAPI + 'application/rate_limit_status.json' +
-				'?suppress_response_codes=true&resources=statuses,friendships,friends,followers,users,search,lists,favorites', twRateLimit);
+				'?suppress_response_codes=true&resources='+api_resources.join(','), twRateLimit);
 }
 function togglePreps() {
 	$('preps').style.display = $('preps').style.display == 'block' ? 'none' : 'block';

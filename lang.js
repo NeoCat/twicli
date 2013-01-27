@@ -62,5 +62,6 @@ var langResources = {
 	'An external plugin is specified. This plugin can fully access to your account.\nAre you sure to load this?': ['外部プラグインが指定されています。このプラグインはあなたのアカウントに自由にアクセス可能になります。本当にロードしてもよろしいですか?','你欲加载外部地址上的插件。这个插件将自由访问你的帐号信息。确认加载？'],
 	'Cannot access to direct messages. Please re-auth twicli for DM access.': ['ダイレクトメッセージにアクセスできません。お手数ですが再度認証を行ってください。'],
 	'Cannot tweet from twicli? Please try logging out of Twitter web site...': ['もしツイートがうまくできない場合、TwitterのWebサイトからログアウトすると成功することがあります。'],
+	'Too many requests: Twitter API $1 is rate limited; reset in $2': ['リクエスト回数超過: Twitter API「$1」は$2後まで制限されています。'],
 	'An old HTML file is loaded. Please reload it. If the problem is not fixed, please try erasing caches.': ['古いHTMLファイルがロードされています。リロードしてみて下さい。それでも解決しない場合はキャッシュを削除してみて下さい。']
 };
