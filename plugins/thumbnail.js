@@ -6,7 +6,7 @@ registerPlugin({
 				if (tw.entities.media[i].type == "photo") {
 					addThumbnail(elem,
 						tw.entities.media[i].media_url + ":thumb",
-						tw.entities.media[i].media_url + ":large");
+						tw.entities.media[i].expanded_url);
 				}
 			}
 		}
