@@ -289,7 +289,7 @@ function _(key) {
 }
 
 // version check
-document.twicli_js_ver = 3;
+document.twicli_js_ver = 4;
 if (!document.twicli_html_ver || document.twicli_html_ver < document.twicli_js_ver) {
 	if (location.href.indexOf('?') < 0) {
 		location.href = location.href + '?' + document.twicli_js_ver;
