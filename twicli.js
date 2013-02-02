@@ -330,6 +330,7 @@ if (cookieVer<17) pluginstr = pluginstr.replace(/outputz\.js[\r\n]+/,'');
 if (cookieVer<17) pluginstr = pluginstr.replace(/related_results\.js[\r\n]+/,'');
 if (cookieVer<18) if (pluginstr.indexOf('shortcutkey.js')<0) pluginstr+="\nshortcutkey.js";
 if (cookieVer<18) if (pluginstr.indexOf('multi_account.js')<0) pluginstr+="\nmulti_account.js";
+if (cookieVer<18) if (pluginstr.indexOf('notify.js')<0) pluginstr+="\nnotify.js";
 pluginstr = pluginstr.substr(1);
 var plugins = new Array;
 var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 800);
