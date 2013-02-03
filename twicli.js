@@ -314,7 +314,7 @@ var last_user_info = null;	// user TLに表示するユーザ情報(TLから切�
 // 設定値
 var currentCookieVer = 19;
 var cookieVer = parseInt(readCookie('ver')) || 0;
-var updateInterval = (cookieVer>3) && parseInt(readCookie('update_interval')) || 90;
+var updateInterval = (cookieVer>18) && parseInt(readCookie('update_interval')) || 90;
 var pluginstr = (cookieVer>6) && readCookie('tw_plugins') || ' regexp.js\nlists.js\nsearch.js\nfollowers.js\nshorten_url.js\nresolve_url.js';
 if (cookieVer<8) pluginstr+="\ntranslate.js\nscroll.js";
 if (cookieVer<9) pluginstr+="\nthumbnail.js";
