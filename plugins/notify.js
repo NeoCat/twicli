@@ -18,7 +18,7 @@ registerPlugin({
 		if (tw.errors) return error('', tw);
 		if (tw.length < 1) return;
 		for (var i = 0; i < tw.length; i++) {
-			tw[i].text += ' <a href="javascript:twn_hide('+tw[i].id_str+')">['+_('Hide')+']</a>';
+			tw[i].text += ' <a href="javascript:twn_hide(\''+tw[i].id_str+'\')">['+_('Hide')+']</a>';
 		}
 		twShowToNode(tw, $("tw"));
 	},
