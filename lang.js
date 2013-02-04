@@ -39,6 +39,7 @@ var langResources = {
 	'Enable GeoTagging':	['ジオタグ(位置情報)を有効に','开启地理标签（方位信息）'],
 	'Use HTTPS':	['HTTPSを使用','使用HTTPS'],
 	'Tweet via GAE server':	['GAEサーバ経由でツイート','使用GAE server'],
+	'Show header image':	['ヘッダ画像を表示','显示横幅图像'],
 	'Footer':	['フッター','加尾修饰'],
 	'Plugins':	['プラグイン','插件'],
 	'user stylesheet':	['ユーザスタイルシート','用户自定义样式表'],
