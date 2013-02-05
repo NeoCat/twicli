@@ -89,7 +89,7 @@ function twsSearchShow(res, update) {
 	if (tmp) tmp.parentNode.removeChild(tmp);
 	if (res.errors) { error('', res.errors); return; }
 	if (!update) tws_page++;
-	tw = res.statuses;
+	var tw = res.statuses;
 	if (!update && tws_page == 1)
 		$('tw2c').innerHTML = '';
 	if (tw.length == 0) return;
