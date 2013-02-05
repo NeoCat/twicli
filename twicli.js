@@ -1066,15 +1066,16 @@ function twRateLimit(limits) {
 	if (tw.errors) return error('', tw);
 	tw_limits = limits;
 	if (selected_menu.id != "misc") return;
-	var ele = document.createElement('table');
+	var ele = document.createElement('div');
 	ele.className = 'ratelimits';
-	ele.innerHTML = makeRateLimitInfo('statuses/home_timeline') +
+	ele.innerHTML = '<table>' + makeRateLimitInfo('statuses/home_timeline') +
 					makeRateLimitInfo('statuses/mentions_timeline') +
 					makeRateLimitInfo('statuses/user_timeline') +
 					makeRateLimitInfo('statuses/show/:id') +
 					makeRateLimitInfo('friendships/show') +
 					makeRateLimitInfo('search/tweets') +
-					makeRateLimitInfo('lists/statuses');
+					makeRateLimitInfo('lists/statuses') +
+					'</table>';
 	$('tw2c').innerHTML = '<div><b>API statuses:</b></div>'
 	$('tw2c').appendChild(ele);
 }
