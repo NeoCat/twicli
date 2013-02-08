@@ -99,11 +99,11 @@ function twlFollowers(res) {
 		return '<div> <a target="_blank" href="' + twitterURL + a.uri.substr(1) + '" onclick="return twlGetListStatus(\'' + a.uri.substr(1) + '\')">' + a.full_name + '</a> (' +
 				 a.member_count + ' / ' + a.subscriber_count + ')</div>';
 	}).join("");
-	xds.load_for_tab(twitterAPI + 'lists.json?seq=' + (seq++) + '&screen_name=' + last_user, twlLists);
+	xds.load_for_tab(twitterAPI + 'lists/list.json?seq=' + (seq++) + '&screen_name=' + last_user, twlLists);
 }
 function twlLists(res) {
 	if (selected_menu.id != "user") return;
-	$('tw2c').innerHTML += '<div><b>Lists by ' + last_user + ' :</b></div>' + res.lists.map(function(a){
+	$('tw2c').innerHTML += '<div><b>Lists by ' + last_user + ' :</b></div>' + res.map(function(a){
 		return '<div> <a target="_blank" href="' + twitterURL + a.uri.substr(1) + '" onclick="return twlGetListStatus(\'' + a.uri.substr(1) + '\')">' + a.full_name + '</a> (' +
 				 a.member_count + ' / ' + a.subscriber_count + ')</div>';
 	}).join("");
