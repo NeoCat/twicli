@@ -399,6 +399,7 @@ var tw_config;
 var tw_limits = {};
 var t_co_maxstr = "http://t.co/*******";
 var api_resources = ['statuses','friendships','friends','followers','users','search','lists','favorites'];
+var first_update = true;
 
 // loading表示のコントロール
 function loading(start) {
@@ -819,10 +820,16 @@ function dec_id(id_str) {
 function update() {
 	if (!myname) return auth();
 	callPlugins("update");
-	update_ele = xds.load_default(twitterAPI + 'statuses/home_timeline.json' +
+	xds.load(twitterAPI + 'statuses/home_timeline.json' +
 						'?count=' + (since_id ? 800 : max_count) +
 						'&include_entities=true&suppress_response_codes=true'
-						+ (!no_since_id && since_id ? '&since_id='+dec_id(since_id) : ''), twShow, update_ele);
+						+ (!no_since_id && since_id ? '&since_id='+dec_id(since_id) : ''),
+			twShow, function(){
+				if (first_update)
+					error(_('Cannot get TL. Please try $1logout of Twitter web site$2.', '<a href="'+twitterURL+'logout" onclick="return link(this);" target="twitter">', '</a>'));
+				else
+					twFail();
+			}, 3);
 	resetUpdateTimer();
 }
 function resetUpdateTimer() {
@@ -1130,6 +1137,7 @@ function removeLink(text) {
 	return text.replace(/https?:\/\/[^\/\s]*[\w!#$%&\'()*+,.\/:;=?~-]*[\w#\/+-]/g, '');
 }
 function twShow(tw) {
+	first_update = false;
 	if (tw.errors) return error('', tw);
 
 	tw.reverse();
