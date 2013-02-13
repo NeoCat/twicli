@@ -44,7 +44,7 @@ function setupOAuthURL(url, post) {
 	url = document.etc.URL.value;
 	if (post_agent) {
 		var sid = ['','2'][((new Date).getTime()/1000/60/60/12|0)%2];
-		url = url.replace(twitterAPI + 'statuses/update.json', 'https://tweet-agent'+sid+'.appspot.com/post');
+		url = url.replace(twitterAPI + 'statuses/update.json', (use_ssl?'https':'http')+'://tweet-agent'+sid+'.appspot.com/post');
 	}
 	return url + (!post ? serializeForm(document.request) : '');
 }
@@ -424,12 +424,9 @@ if (location.search.match(/[?&]status=(.*?)(?:&|$)/)) {
 }
 
 var re_auth = false;
+var check_ssl = false;
 function twAuth(a) {
 	if (a.errors && a.errors[0]) {
-		if (!use_ssl) {
-			use_ssl = 1;
-			return auth();
-		}
 		alert(a.errors[0].message);
 		if (a.errors[0].message == "Incorrect signature" || a.errors[0].message.indexOf("Could not authenticate") >= 0)
 			logout();
@@ -450,20 +447,25 @@ function twAuth(a) {
 	}
 	callPlugins('auth');
 }
-function twAuthFallback() {
-	if (!use_ssl) {
-		use_ssl = 1;
-		return auth();
-	}
-	// verify_credentials API is unavailable?
+function twAuthFallbackSSL() {
+	if (check_ssl) return error("Authentication failed.");
+	check_ssl = true;
+	use_ssl = 1 - use_ssl;
+	error("Authentication failed... retrying "+(use_ssl?"with":"without")+" HTTPS...");
 	re_auth = true;
-	xds.load_default(twitterAPI + "users/show.json?suppress_response_codes=true&screen_name="+myname, twAuth);
+	return auth();
+}
+function twAuthFallback() {
+	// verify_credentials API is unavailable?
+	xds.load(twitterAPI + "users/show.json?suppress_response_codes=true&screen_name="+myname, twAuth, twAuthFallbackSSL);
 }
 function auth() {
 	if (use_ssl)
 		twitterAPI = twitterAPI.replace('http', 'https');
+	else
+		twitterAPI = twitterAPI.replace('https', 'http');
 	var name = readCookie('access_user');
-	if (name) {
+	if (!myname && name) {
 		name = name.split('|');
 		myname = last_user = name[0];
 		myid = name[1];
@@ -867,7 +869,7 @@ function makeHTML(tw, no_name, pid, userdesc) {
 		Array.prototype.concat.apply(tw.entities.urls, tw.entities.media || []).map(function(_){
 			if (_.url && _.expanded_url) expanded_urls[_.url] = _.expanded_url;
 		});
-	return /*fav*/ (t.d_dir ? '' : '<img alt="☆" class="fav" src="http://assets3.twitter.com/images/icon_star_'+(!rt&&rs.favorited?'full':'empty')+'.gif" ' +
+	return /*fav*/ (t.d_dir ? '' : '<img alt="☆" class="fav" src="http://assets2.twitter.com/images/icon_star_'+(!rt&&rs.favorited?'full':'empty')+'.gif" ' +
 			'onClick="fav(this,\'' + id + '\')"' + (pid ? ' id="fav-'+eid+'"' : '') + '>')+
 		 (!no_name || (!display_as_rt && rt) ?
 			//ユーザアイコン
@@ -965,7 +967,7 @@ function setFavIcon(img, id, f) {
 	var img_re = $('fav-re-' + id);
 	var img_tw2c = $('fav-tw2c-' + id);
 	var img_url = (f==-1) ? twitterURL + 'images/icon_throbber.gif' :
-						'http://assets3.twitter.com/images/icon_star_' + (f ? 'full' : 'empty') + '.gif';
+						'http://assets2.twitter.com/images/icon_star_' + (f ? 'full' : 'empty') + '.gif';
 	img.src = img_url;
 	if (img_tl) img_tl.src = img_url;
 	if (img_re) img_re.src = img_url;
@@ -1584,7 +1586,7 @@ function setPreps(frm) {
 	footer = new String(frm.footer.value);
 	decr_enter = frm.decr_enter.checked;
 	no_geotag = !frm.geotag.checked;
-	use_ssl = frm.use_ssl.checked;
+	use_ssl = frm.use_ssl.checked?1:0;
 	post_via_agent = frm.post_via_agent.checked;
 	show_header_img = frm.show_header_img.checked;
 	resetUpdateTimer();
