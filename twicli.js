@@ -1613,6 +1613,10 @@ function setPreps(frm) {
 	writeCookie('user_style', new String(frm.user_style.value), 3652);
 	callPlugins('savePrefs', frm);
 	alert(_("Your settings are saved. Please reload to apply plugins and CSS."));
+	if (use_ssl)
+		twitterAPI = twitterAPI.replace('http', 'https');
+	else
+		twitterAPI = twitterAPI.replace('https', 'http');
 }
 // 初期化
 function init() {
