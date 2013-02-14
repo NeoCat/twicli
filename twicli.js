@@ -397,7 +397,7 @@ var update_post_check = false;
 var tweet_failed_notified = false;
 var tw_config;
 var tw_limits = {};
-var t_co_maxstr = "http://t.co/*******";
+var t_co_maxstr = "http://t.co/********";
 var api_resources = ['statuses','friendships','friends','followers','users','search','lists','favorites'];
 var first_update = true;
 
@@ -473,6 +473,7 @@ function auth() {
 		$("user").innerHTML = last_user;
 		update();
 	}
+	xds.load_default(twitterAPI + 'help/configuration.json', twConfig);
 	xds.load(twitterAPI + "account/verify_credentials.json?suppress_response_codes=true", twAuth, twAuthFallback, 1);
 }
 
@@ -1635,7 +1636,6 @@ function init() {
 	document.etc.tokenSecret.value = access_secret;
 	document.etc.consumerSecret.value = "7ypxMreeJuumgiq3ts7QtOqigl5G1sosJFfeaoKGJA";
 	setFstHeight(min_fst_height, true);
-	xds.load_default(twitterAPI + 'help/configuration.json', twConfig);
 	// 初回アップデート
 	callPlugins("init");
 	setTimeout(auth, 0);
