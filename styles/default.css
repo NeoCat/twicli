@@ -71,7 +71,7 @@ form { margin-bottom: 0; }
 #user_info_b a { color: white; }
 #user_info_b a:hover { color: white; }
 #user_info_b a:visited { color: #eff; }
-.selected { background-color: #cef !important; }
+.selected { background-color: #ffd !important; }
 .deleted > .status { text-decoration: line-through; }
 .nrFav { background-color: #3fc; font-size: smaller; }
 .skipped { background-color: #eee; font-size: smaller; text-align: center; }
