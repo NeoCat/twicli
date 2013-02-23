@@ -991,17 +991,17 @@ function follow(f) {
 // blockとunblock
 function blockUser(f) {
 	if (f && !confirm(_("Are you sure to block $1?", last_user))) return false;
-	enqueuePost(twitterAPI + 'blocks/' + (f ? 'create' : 'destroy') + '/' + last_user + '.json', switchUser);
+	enqueuePost(twitterAPI + 'blocks/' + (f ? 'create' : 'destroy') + '.json?skip_status=1&screen_name=' + last_user + '.json', switchUser);
 	return false;
 }
 function reportSpam(f) {
 	if (f && !confirm(_("Are you sure to report $1 as spam?", last_user))) return false;
-	enqueuePost(twitterAPI + 'report_spam.json?screen_name=' + last_user, switchUser);
+	enqueuePost(twitterAPI + 'users/report_spam.json?screen_name=' + last_user, switchUser);
 	return false;
 }
 // ユーザ情報を表示
 function twUserInfo(user) {
-	if (tw.errors) return error('', user);
+	if (user.errors) return error('', user);
 	var elem = $('user_info');
 	elem.innerHTML = makeUserInfoHTML(user);
 	callPlugins("newUserInfoElement", elem, user);
