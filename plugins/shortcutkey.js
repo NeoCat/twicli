@@ -23,11 +23,9 @@ var shortcutkey_plugin = {
 			selected.className = selected.className.replace(' selected', '');
 		shortcutkey_plugin.selected_div = null;
 		if (!save) delete selected_menu.last_selected;
-		console.log("deselect tab: "+selected_menu.id+" id: "+selected_menu.last_selected+"  save: "+(save?1:0))
 	},
 	// タブ切り替え時に保存したtweet選択を再設定
 	applyLastSelection: function(menu) {
-		console.log("tab: "+menu.id+"  id: "+menu.last_selected)
 		if (menu.last_selected) {
 			setTimeout(function(){
 				var ele = $(menu.last_selected);
