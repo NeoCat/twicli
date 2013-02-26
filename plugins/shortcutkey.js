@@ -6,22 +6,35 @@ var shortcutkey_plugin = {
 	repeat_check: false, // keydown,keypress両指定時のチェック
 	
 	// tweetの選択
-	selectTweet: function(ev, div) {
+	selectTweet: function(ev, div, no_scroll) {
 		if (shortcutkey_plugin.selected_div && shortcutkey_plugin.selected_div.id.indexOf('reps-') != 0)
 			shortcutkey_plugin.last_selected_div_id = shortcutkey_plugin.selected_div.id;
-		shortcutkey_plugin.deselectTweet();
+		shortcutkey_plugin.deselectTweet(true);
 		div = div || this;
 		div.className += " selected";
 		shortcutkey_plugin.selected_div = div;
-		if (div.id.indexOf('reps-') != 0)
+		if (div.id.indexOf('reps-') != 0 && !no_scroll)
 			scrollToDiv(div, $('control').clientHeight+1);
 	},
 	// tweetの選択解除
-	deselectTweet: function() {
+	deselectTweet: function(save) {
 		var selected = shortcutkey_plugin.selected_div;
 		if (selected)
 			selected.className = selected.className.replace(' selected', '');
 		shortcutkey_plugin.selected_div = null;
+		if (!save) delete selected_menu.last_selected;
+		console.log("deselect tab: "+selected_menu.id+" id: "+selected_menu.last_selected+"  save: "+(save?1:0))
+	},
+	// タブ切り替え時に保存したtweet選択を再設定
+	applyLastSelection: function(menu) {
+		console.log("tab: "+menu.id+"  id: "+menu.last_selected)
+		if (menu.last_selected) {
+			setTimeout(function(){
+				var ele = $(menu.last_selected);
+				if (ele)
+					shortcutkey_plugin.selectTweet(null, ele, true);
+			}, 0);
+		}
 	},
 	// キーボードショートカットハンドラ
 	shortCutKeyDown: function(ev) {
@@ -244,8 +257,15 @@ var shortcutkey_plugin = {
 				this.deselectTweet();
 		}
 	},
-	switchTo: function() {
-		this.deselectTweet();
+	switchTo: function(new_menu, old_menu) {
+		if (this.selected_div)
+			old_menu.last_selected = this.selected_div.id;
+		this.deselectTweet(true);
+		this.applyLastSelection(new_menu);
+	},
+	added: function(tw, tw_node, after) {
+		if (tw_node != "tw2c" || after) return;
+		this.applyLastSelection(selected_menu);
 	},
 	init: function() {
 		if (navigator.userAgent.indexOf('Opera') >= 0)

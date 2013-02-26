@@ -149,6 +149,7 @@ function twlShowListStatus(tw, update) {
 				+ '&include_entities=true&include_rts=true&per_page=' + max_count_u
 				+ '&max_id=' + tw[tw.length-1].id, twlShowListStatus);
 		}
+		if (twl_page == 1) callPlugins('switchTo', selected_menu, selected_menu);
 	}
 }
 

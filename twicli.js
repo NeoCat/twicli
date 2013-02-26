@@ -1369,6 +1369,7 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 			noticeNewReply(replies);
 	}
 	if (nr_show > 0) setFstHeight(null, true);
+	callPlugins("added", tw, tw_node.id, after);
 	return nr_show;
 }
 // 新規tweetの出現アニメーション処理
@@ -1451,7 +1452,7 @@ function switchTo(id) {
 	}
 	cur_page = 1;
 	fav_mode = 0;
-	callPlugins("switchTo", selected_menu);
+	callPlugins("switchTo", selected_menu, last_menu);
 	setTimeout(function(){ setFstHeight(null, true); }, 0);
 }
 function switchTL() {
