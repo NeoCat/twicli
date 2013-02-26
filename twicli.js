@@ -877,7 +877,7 @@ function makeHTML(tw, no_name, pid, userdesc) {
 		Array.prototype.concat.apply(tw.entities.urls, tw.entities.media || []).map(function(_){
 			if (_.url && _.expanded_url) expanded_urls[_.url] = _.expanded_url;
 		});
-	return /*fav*/ (t.d_dir ? '' : '<img alt="☆" class="fav" src="http://assets2.twitter.com/images/icon_star_'+(!rt&&rs.favorited?'full':'empty')+'.gif" ' +
+	return /*fav*/ (t.d_dir ? '' : '<img alt="☆" class="fav" src="images/icon_star_'+(!rt&&rs.favorited?'full':'empty')+'.gif" ' +
 			'onClick="fav(this,\'' + id + '\')"' + (pid ? ' id="fav-'+eid+'"' : '') + '>')+
 		 (!no_name || (!display_as_rt && rt) ?
 			//ユーザアイコン
@@ -887,7 +887,7 @@ function makeHTML(tw, no_name, pid, userdesc) {
 			 /*プロフィールの名前*/ (t.user.name!=un ? '<span class="uname">('+insertPDF(t.user.name)+')</span>' : '') + '</a>'
 		: '') +
 		 /* verified? */ (!no_name && t.user.verified ? '<img alt="verified" id="verified-' + eid + '" class="verified" src="images/verified.png">' : '') +
-		 /* protected? */ (t.user.protected ? '<img alt="lock" id="lock-' + eid + '" class="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
+		 /* protected? */ (t.user.protected ? '<img alt="lock" id="lock-' + eid + '" class="lock" src="images/icon_lock.gif">' : '') +
 		/*ダイレクトメッセージの方向*/ (t.d_dir == 1 ? '<span class="dir">→</span> ' : t.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text-" + eid + "\" class=\"status\">" +
@@ -931,7 +931,7 @@ function makeUserInfoHTML(user) {
 	return '<a class="uicona" target="twitter" href="' + twitterURL + 'account/profile_image/'+
 			user.screen_name+'"><img class="uicon2" src="' + user.profile_image_url.replace('normal.','reasonably_small.') + '" onerror="if(this.src!=\''+user.profile_image_url+'\')this.src=\''+user.profile_image_url+'\'"></a><div id="profile"><div>' +
 			(user.verified ? '<img class="verified" alt="verified" src="images/verified.png">' : '') +
-			(user.protected ? '<img class="lock" alt="lock" src="http://assets0.twitter.com/images/icon_lock.gif">' : '') +
+			(user.protected ? '<img class="lock" alt="lock" src="images/icon_lock.png">' : '') +
 			'<b>@' + user.screen_name + '</b> / <b>' + user.name + '</b></div>' +
 			'<div class="udesc">' + (user.description ? user.description : '<br>') + '</div>' +
 			'<div class="uloc">' + (user.location ? user.location + (user.url?'・':'') : '') +
@@ -975,7 +975,7 @@ function setFavIcon(img, id, f) {
 	var img_re = $('fav-re-' + id);
 	var img_tw2c = $('fav-tw2c-' + id);
 	var img_url = (f==-1) ? twitterURL + 'images/icon_throbber.gif' :
-						'http://assets2.twitter.com/images/icon_star_' + (f ? 'full' : 'empty') + '.gif';
+						'images/icon_star_' + (f ? 'full' : 'empty') + '.gif';
 	img.src = img_url;
 	if (img_tl) img_tl.src = img_url;
 	if (img_re) img_re.src = img_url;
