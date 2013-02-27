@@ -80,7 +80,7 @@ registerPlugin({
 		else if (url.match(/^(http:\/\/gyazo.com\/\w+)/)) {
 			addThumbnail(elem, 'http://gyazo-thumbnail.appspot.com/thumbnail?url='+url, url);
 		}
-		else if (url.match(/^http:\/\/(?:www\.youtube\.com\/watch\?.*v=|youtu\.be\/)([\w\-]+)/)) {
+		else if (url.match(/^https?:\/\/(?:www\.youtube\.com\/watch\?.*v=|youtu\.be\/)([\w\-]+)/)) {
 			var id = RegExp.$1;
 			addThumbnail(elem, 'http://i.ytimg.com/vi/' + id + '/default.jpg', url);
 		}
