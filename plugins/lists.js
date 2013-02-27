@@ -240,8 +240,8 @@ function twlReloadListInfo(name) {
 
 
 registerPlugin({
-	switchTo: function(m) {
-		if (!twl_update_timer) return;
+	switchTo: function(m, n) {
+		if (!twl_update_timer || m === n) return;
 		clearInterval(twl_update_timer);
 		twl_update_timer = null;
 	},
