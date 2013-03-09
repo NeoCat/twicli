@@ -49,7 +49,7 @@ form { margin-bottom: 0; }
 .retweeted .non-follower { color: #55a; }
 .button { text-decoration: none; -webkit-text-size-adjust:140%; }
 .popup { padding: 0 4px; color: #888; }
-.upopup { float: right; padding: 0 4px; color: #888; }
+.upopup { float: right; padding: 0 16px; color: #888; }
 .verified { vertical-align: -2px; }
 .lock { vertical-align: -2px; }
 .close { display: inline-block; color: red; margin: 4px; }
@@ -62,15 +62,26 @@ form { margin-bottom: 0; }
 .popup_menu a:hover { background-color: #33f; color: #fff; text-decoration: none; }
 .popup_menu a.row2 { background-color: #eee; }
 #popup_hide { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.2; filter: alpha(opacity=20); background-color: black; z-index: 5; }
-#user_info_b { margin: 1px; border: 1px solid #888; text-align: center; background-color: black; }
+#user_info_b { margin: 1px; border: 1px solid #888; text-align: center; background-color: black; position: relative; }
 #user_info { text-align: center; padding: 0; border-bottom: black solid 1px; }
-#user_info.user_header { display: inline-block; color: white; text-shadow: 0 1px 1px black, 0 0 3px black; background-position: top center; background-repeat: no-repeat; width: 520px; min-height: 260px; border-bottom: 0; }
-@media screen and (max-width: 520px) { #user_info.user_header { width: 100%; } }
-.uicona { display: inline-block; margin: 4px; padding: 4px; border-radius: 5px; background-color: white; }
-#profile { padding: 4px 8px; font-family: "Helvetica Neue",Arial,sans-serif; }
 #user_info_b a { color: white; }
 #user_info_b a:hover { color: white; }
 #user_info_b a:visited { color: #eff; }
+#user_info.user_header { display: inline-block; color: white; text-shadow: 0 1px 1px black, 0 0 3px black; width: 520px; min-height: 260px; border-bottom: 0; position: relative; }
+#user_info_hdr { background-position: top center; background-repeat: no-repeat; 	width: 520px; min-height: 260px; position: absolute; left: 50%; top: 0; margin-left: -260px; color: red; text-align: center; }
+#user_info_grad { position: absolute; width: 100%; height: 200px; bottom: 0; }
+#user_info_sl, #user_info_sr, #user_info_sb { position: absolute; width: 12px; height: 100%; }
+#user_info_sl { top: 0; left: 0; }
+#user_info_sr { top: 0; right: 0; }
+#user_info_sb { width: 100%; height: 24px; bottom: 0; left: 0; }
+@media screen and (max-width: 520px) {
+	#user_info.user_header { width: 100%; }
+	#user_info_hdr { width: 100%; margin: 0; left: 0; }
+	#user_info.user_header { width: 100%; }
+	#user_info_sl, #user_info_sr { display: none; }
+}
+.uicona { display: inline-block; margin: 4px; padding: 4px; border-radius: 5px; background-color: white; }
+#profile { padding: 4px 16px; font-family: "Helvetica Neue",Arial,sans-serif; }
 .selected { background-color: #ffb !important; }
 .deleted > .status { text-decoration: line-through; }
 .nrFav { background-color: #3fc; font-size: smaller; }

@@ -1000,15 +1000,40 @@ function reportSpam(f) {
 	return false;
 }
 // ユーザ情報を表示
+function applyLinearGrad(ele, dir, c, amax) {
+	var r = parseInt(c.substr(0,2), 16);
+	var g = parseInt(c.substr(2,2), 16);
+	var b = parseInt(c.substr(4,2), 16);
+	for (var i = 0; i < 5; i++) {
+		var prefix = ['-moz-','-webkit-','-o-','-ms-',''][i];
+		ele.style.background = prefix + 'linear-gradient(' +
+			(prefix != '' ? '' : 'to ') + dir +
+			', rgba(' + r + ',' + g + ',' + b + ',' + (prefix != '' ? '0' : amax) + 
+			') 0, rgba(' + r + ',' + g + ',' + b + ',' + (prefix != '' ? amax : '0') + 
+			') 100%)';
+	}
+}
 function twUserInfo(user) {
 	if (user.errors) return error('', user);
 	var elem = $('user_info');
 	elem.innerHTML = makeUserInfoHTML(user);
 	callPlugins("newUserInfoElement", elem, user);
 	if (show_header_img) {
-		elem.className = 'user_header'
-		elem.style.backgroundImage = user.profile_banner_url ? 'url('+user.profile_banner_url+'/web)' : 'url(https://si0.twimg.com/a/1355267558/t1/img/grey_header_web.png)';
-		$('user_info_b').style.backgroundColor = "#"+user.profile_background_color;
+		var hdr = document.createElement('div');
+		hdr.id = "user_info_hdr";
+		$('user_info_b').insertBefore(hdr, elem);
+		hdr.innerHTML = '<div id="user_info_sl"></div><div id="user_info_sr"></div><div id="user_info_sb"></div>';
+		var grad = document.createElement('div');
+		grad.id = "user_info_grad";
+		$('user_info_b').insertBefore(grad, elem);
+		elem.className = 'user_header';
+		hdr.style.backgroundImage = user.profile_banner_url ? 'url('+user.profile_banner_url+'/web)' : 'url(https://si0.twimg.com/a/1355267558/t1/img/grey_header_web.png)';
+		var bg = user.profile_background_color;
+		$('user_info_b').style.backgroundColor = "#"+bg;
+		applyLinearGrad($('user_info_grad'), 'top', '000000', 0.55);
+		applyLinearGrad(document.getElementById('user_info_sl'), 'right', bg, 1);
+		applyLinearGrad(document.getElementById('user_info_sr'), 'left', bg, 1);
+		applyLinearGrad(document.getElementById('user_info_sb'), 'top', bg, 1);
 	}
 	if (myname != user.screen_name) {
 		xds.load_for_tab(twitterAPI + 'friendships/show.json' +
