@@ -991,7 +991,7 @@ function follow(f) {
 // blockとunblock
 function blockUser(f) {
 	if (f && !confirm(_("Are you sure to block $1?", last_user))) return false;
-	enqueuePost(twitterAPI + 'blocks/' + (f ? 'create' : 'destroy') + '.json?skip_status=1&screen_name=' + last_user + '.json', switchUser);
+	enqueuePost(twitterAPI + 'blocks/' + (f ? 'create' : 'destroy') + '.json?skip_status=1&screen_name=' + last_user, switchUser);
 	return false;
 }
 function reportSpam(f) {
