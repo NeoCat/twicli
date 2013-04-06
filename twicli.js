@@ -1009,12 +1009,17 @@ function applyLinearGrad(ele, dir, c, amax) {
 	var g = parseInt(c.substr(2,2), 16);
 	var b = parseInt(c.substr(4,2), 16);
 	for (var i = 0; i < 5; i++) {
-		var prefix = ['-moz-','-webkit-','-o-','-ms-',''][i];
-		ele.style.background = prefix + 'linear-gradient(' +
-			(prefix != '' ? '' : 'to ') + dir +
-			', rgba(' + r + ',' + g + ',' + b + ',' + (prefix != '' ? '0' : amax) + 
-			') 0, rgba(' + r + ',' + g + ',' + b + ',' + (prefix != '' ? amax : '0') + 
-			') 100%)';
+		var prefix = ['-moz-','-webkit-','-o-',''][i];
+		try {
+			ele.style.background = prefix + 'linear-gradient(' +
+				(prefix != '' ? '' : 'to ') + dir +
+				', rgba(' + r + ',' + g + ',' + b + ',' + (prefix != '' ? '0' : amax) + 
+				') 0, rgba(' + r + ',' + g + ',' + b + ',' + (prefix != '' ? amax : '0') + 
+				') 100%)';
+		} catch (e) {}
+		if (document.all) {
+			ele.style.filter = "progid:DXImageTransform.Microsoft.gradient(GradientType="+(dir=="top"||dir=="bottom"?"0":"1")+", startColorstr='#"+(dir=="top"||dir=="left"?"00":"ff")+c+"',  endColorstr='#"+(dir=="top"||dir=="left"?"ff":"00")+c+"')";
+		}
 	}
 }
 function twUserInfo(user) {
