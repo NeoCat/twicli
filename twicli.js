@@ -622,6 +622,7 @@ function resetFrm() {
 	setReplyId(false);
 	if ($("counter-div").style.display == "block") updateCount();
 	setFstHeight(min_fst_height);
+	callPlugins("resetFrm");
 }
 // reply先の設定/解除
 function setReplyId(id) {
