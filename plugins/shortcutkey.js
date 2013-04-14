@@ -265,8 +265,8 @@ var shortcutkey_plugin = {
 		if (tw_node != "tw2c" || after) return;
 		this.applyLastSelection(selected_menu);
 	},
-	resetFrm: function() {
-		this.deselectTweet();
+	resetFrm: function(arg) {
+		if (arg) this.deselectTweet();
 	},
 	init: function() {
 		if (navigator.userAgent.indexOf('Opera') >= 0)

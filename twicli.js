@@ -617,12 +617,12 @@ function updateCount() {
 	$("counter").innerHTML = 140 - footer.length - s.length;
 }
 // フォームの初期化
-function resetFrm() {
+function resetFrm(arg) {
 	document.frm.reset();
 	setReplyId(false);
 	if ($("counter-div").style.display == "block") updateCount();
 	setFstHeight(min_fst_height);
-	callPlugins("resetFrm");
+	callPlugins("resetFrm", arg);
 }
 // reply先の設定/解除
 function setReplyId(id) {
@@ -1150,7 +1150,7 @@ function getReplies() {
 						(since_id_reply ? '&since_id='+since_id_reply : '') +
 						'&indclude_entities=true&suppress_response_codes=true',
 						twReplies, reply_ele2);
-		update_reply_counter = 4;
+		update_reply_counter = 2;
 }
 // 受信repliesを表示
 function twReplies(tw, fromTL) {
