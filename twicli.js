@@ -1009,7 +1009,7 @@ function applyLinearGrad(ele, dir, c, amax) {
 	var r = parseInt(c.substr(0,2), 16);
 	var g = parseInt(c.substr(2,2), 16);
 	var b = parseInt(c.substr(4,2), 16);
-	for (var i = 0; i < 5; i++) {
+	for (var i = 0; i < 4; i++) {
 		var prefix = ['-moz-','-webkit-','-o-',''][i];
 		try {
 			ele.style.background = prefix + 'linear-gradient(' +
