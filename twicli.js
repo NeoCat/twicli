@@ -300,7 +300,7 @@ if (!document.twicli_html_ver || document.twicli_html_ver < document.twicli_js_v
 
 // user-defined CSS
 var user_style = readCookie('user_style') || "";
-document.write('<style>' + user_style + '</style>');
+document.write('<style id="usercss">' + user_style + '</style>');
 
 
 // twicli用変数
@@ -1634,6 +1634,7 @@ function setPreps(frm) {
 	use_ssl = frm.use_ssl.checked?1:0;
 	post_via_agent = frm.post_via_agent.checked;
 	show_header_img = frm.show_header_img.checked;
+	$('usercss').innerHTML = user_style = frm.user_style.value;
 	resetUpdateTimer();
 	writeCookie('ver', currentCookieVer, 3652);
 	writeCookie('user_lang', user_lang, 3652);
@@ -1657,7 +1658,7 @@ function setPreps(frm) {
 	writeCookie('tw_plugins', new String(" " + frm.list.value), 3652);
 	writeCookie('user_style', new String(frm.user_style.value), 3652);
 	callPlugins('savePrefs', frm);
-	alert(_("Your settings are saved. Please reload to apply plugins and CSS."));
+	alert(_("Your settings are saved. Please reload to apply plugins."));
 	if (use_ssl)
 		twitterAPI = twitterAPI.replace('http', 'https');
 	else

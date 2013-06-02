@@ -50,7 +50,7 @@ var langResources = {
 	'Twitter API error': ['Twitter APIエラー',null],
 	'API error (Twitter may be over capacity?)': ['APIエラー(Twitter過負荷?)',null],
 	'This tweet is too long.': ['ツイートが長すぎます。','发送字数过多。'],
-	'Your settings are saved. Please reload to apply plugins and CSS.': ['設定を保存しました。プラグイン、CSSの変更を反映するにはリロードが必要です。','选项已保存。请刷新页面以应用插件以及样式表的修改。'],
+	'Your settings are saved. Please reload to apply plugins.': ['設定を保存しました。プラグインの変更を反映するにはリロードが必要です。','选项已保存。请刷新页面以应用插件的修改。'],
 	'Plugin error': ['プラグインのエラー','插件发生了错误'],
 	'Are you sure to logout? You need to re-authenticate twicli at next launch.': ['ログアウトしてもよろしいですか? 次回起動時には再認証が必要になります。','确定要注销？下次启动的时候需要重新进行认证。'],
 	'Retweet to your followers?': ['あなたのフォロワーにこのツイートをRT(リツイート)してもよろしいですか?'],
