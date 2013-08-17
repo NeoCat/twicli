@@ -560,7 +560,7 @@ function press(e) {
 				(geo && geo.coords ?  "&display_coordinates=true&lat=" + geo.coords.latitude +
 										"&long=" + geo.coords.longitude : "") +
 				(in_reply_to_status_id ? "&in_reply_to_status_id=" + in_reply_to_status_id : ""),
-				function(tw){ if (tw.errors) error('', tw); else resetFrm(); twShow([tw]) },
+				function(tw){ if (tw && tw.errors) error('', tw); else resetFrm(); twShow([tw]); },
 				function(err){ if (err) return error('', err); if (r && post_via_agent) do_post(false); },
 				retry);
 	};
