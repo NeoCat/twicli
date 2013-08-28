@@ -1578,7 +1578,7 @@ function switchMisc() {
 					_('show user info')+' : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="images/go.png"></form>' +
 					'<a id="logout" href="javascript:logout()"><b>'+_('Log out')+'</b></a><hr class="spacer">' +
 					'<div id="pref"><a href="javascript:togglePreps()">▼<b>'+_('Preferences')+'</b></a>' +
-					'<form id="preps" onSubmit="setPreps(this); return false;" style="display: none;">' +
+					'<form id="preps" onSubmit="try { setPreps(this); } catch(e) { alert(\'Cannot save preferences: \'+e) } return false;" style="display: none;">' +
 					_('language')+': <select name="user_lang">'+(['en'].concat(langList)).map(function(x){
 							return '<option value="'+x+'"'+(x==user_lang?' selected':'')+'>'+langNames[x]+'</option>';
 						})+'</select><br>' +
@@ -1634,7 +1634,13 @@ function setPreps(frm) {
 	use_ssl = frm.use_ssl.checked?1:0;
 	post_via_agent = frm.post_via_agent.checked;
 	show_header_img = frm.show_header_img.checked;
-	$('usercss').innerHTML = user_style = frm.user_style.value;
+	user_style = frm.user_style.value;
+	try {
+		$('usercss').innerHTML = user_style;
+	} catch(e) {
+		if (console && console.log)
+			console.log('Cannot set user style:' + e);
+	}
 	resetUpdateTimer();
 	writeCookie('ver', currentCookieVer, 3652);
 	writeCookie('user_lang', user_lang, 3652);
