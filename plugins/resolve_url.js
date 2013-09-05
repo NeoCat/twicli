@@ -44,7 +44,9 @@
   function setResolver(link) {
     // JSONP with callback window.replaceUrl
     var src = api + '?url=' + encodeURIComponent(link.href);
-    var script = xds.load(src, function(hash){replaceUrl(hash, link)}, null, 0);
+    setTimeout(function(){
+      var script = xds.load(src, function(hash){replaceUrl(hash, link)}, null, 0);
+    }, 0);
   }
 
   function findShortUrls(elem) {
