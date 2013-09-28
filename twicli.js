@@ -37,6 +37,11 @@ function setupOAuthURL(url, post) {
 	if (url.indexOf(twitterAPI) != 0) return url;
 	var post_agent = !post && url.indexOf(twitterAPI+'statuses/update.json') == 0;
 	url = url.split("?");
+	if (post && url[1] && url[1].match(/(^|&)(status=[^&]+)/) && RegExp.$2.indexOf('%2A') >= 0) {
+		// "*"(%2A)はPOSTデータではURLEncodeされずに送信されOAuthエラーとなるため、URL内に含める（statusにのみ対応）
+		url[0] += "?" + RegExp.$2;
+		url[1] = url[1].replace(RegExp.$1+RegExp.$2, '');
+	}
 	setupOAuthArgs(url[1]);
 	document.request.method = (post || post_agent) ? 'POST' : 'GET';
 	document.etc.URL.value = url[0];
