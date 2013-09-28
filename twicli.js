@@ -1639,7 +1639,7 @@ function setPreps(frm) {
 	try {
 		$('usercss').innerHTML = user_style;
 	} catch(e) {
-		if (console && console.log)
+		if (window.console && console.log)
 			console.log('Cannot set user style:' + e);
 	}
 	resetUpdateTimer();
