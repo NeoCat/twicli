@@ -226,12 +226,12 @@ function scrollToY(y, total, start) {
 	scroll_timer = setTimeout(function(){scrollToY(y, total, start)}, 20);
 }
 function scrollToDiv(d, top_margin) {
-	top_margin = top_margin || 0;
+	top_margin = top_margin || $('control').clientHeight+1;
 	var top = cumulativeOffset(d)[1];
 	var h = d.offsetHeight;
 	var sc_top = document.body.scrollTop || document.documentElement.scrollTop;
 	var win_h = window.innerHeight || document.documentElement.clientHeight;
-	if (top < sc_top+top_margin) scrollToY(top-top_margin);
+	if (top < sc_top-top_margin) scrollToY(top-top_margin);
 	if (sc_top+win_h < top+h) scrollToY(top+h-win_h);
 }
 // DOM Storage (or Cookie)
@@ -683,7 +683,7 @@ function dispReply(user, id, ele, cascade) {
 	d.className += ' emp';
 	setTimeout(function(){d.className = d.className.replace(' emp','')}, 2000);
 }
-// reply先をoverlay表示 (Timelineに無い場合)
+// reply先をoverlay表示
 function dispReply2(tw) {
 	if (tw.errors) return error('', tw);
 	var id = tw.id_str || tw.id;
@@ -701,7 +701,7 @@ function dispReply2(tw) {
 		$('reps').appendChild(document.createElement('hr'));
 	$('reps').appendChild(el);
 	$('rep').style.display = "block";
-	scrollToDiv($('rep'));
+	scrollToDiv(el);
 	user_pick2 = tw.user.screen_name;
 	var in_reply_to = tw.in_reply_to_status_id_str || tw.in_reply_to_status_id;
 	if (in_reply_to) {
@@ -939,8 +939,7 @@ function makeHTML(tw, no_name, pid, userdesc) {
 }
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
-	return '<a class="uicona" target="twitter" href="' + twitterURL + 'account/profile_image/'+
-			user.screen_name+'"><img class="uicon2" src="' + user.profile_image_url.replace('normal.','reasonably_small.') + '" onerror="if(this.src!=\''+user.profile_image_url+'\')this.src=\''+user.profile_image_url+'\'"></a><div id="profile"><div>' +
+	return '<a class="uicona" target="twitter" href="' + user.profile_image_url.replace('_normal', '') +'"><img class="uicon2" src="' + user.profile_image_url.replace('normal.','reasonably_small.') + '" onerror="if(this.src!=\''+user.profile_image_url+'\')this.src=\''+user.profile_image_url+'\'"></a><div id="profile"><div>' +
 			(user.verified ? '<img class="verified" alt="verified" src="images/verified.png">' : '') +
 			(user.protected ? '<img class="lock" alt="lock" src="images/icon_lock.png">' : '') +
 			'<b>@' + user.screen_name + '</b> / <b>' + user.name + '</b></div>' +
