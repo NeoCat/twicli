@@ -231,7 +231,7 @@ function scrollToDiv(d, top_margin) {
 	var h = d.offsetHeight;
 	var sc_top = document.body.scrollTop || document.documentElement.scrollTop;
 	var win_h = window.innerHeight || document.documentElement.clientHeight;
-	if (top < sc_top-top_margin) scrollToY(top-top_margin);
+	if (top < sc_top+top_margin) scrollToY(top-top_margin);
 	if (sc_top+win_h < top+h) scrollToY(top+h-win_h);
 }
 // DOM Storage (or Cookie)
