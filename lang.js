@@ -19,6 +19,8 @@ var langResources = {
 	'Follow $1':	['$1をフォロー','关注$1'],
 	'Remove $1':	['$1をリムーブ','取消关注$1'],
 	'$1 is following you!':	['$1はあなたをフォローしています!','$1正在关注你！'],
+	'Images':	['画像','图像'],
+	'Upload images':	['画像をアップロード','加载图像'],
 	'show user info':	['ユーザ情報を表示','显示用户详细信息'],
 	'Log out':	['ログアウト','注销'],
 	'Preferences':	['設定','选项'],
