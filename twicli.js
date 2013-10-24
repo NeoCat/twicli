@@ -55,7 +55,7 @@ function setupOAuthURL(url, post) {
 		}
 		document.request.enctype = 'multipart/form-data';
 	} else
-		document.request.enctype = '';
+		document.request.enctype = 'application/x-www-form-urlencoded';
 	document.request.method = (post || post_agent) ? 'POST' : 'GET';
 	document.etc.URL.value = url[0];
 	consumer.signForm(document.request, document.etc);
