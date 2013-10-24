@@ -590,7 +590,7 @@ function press(e) {
 										"&long=" + geo.coords.longitude : "") +
 				(in_reply_to_status_id ? "&in_reply_to_status_id=" + in_reply_to_status_id : ""),
 			function(tw){ if (tw && tw.errors) error('', tw); else resetFrm(); twShow([tw]); if (media && post_via_agent) setTimeout(update, 1000); },
-			function(err){ if (err) return error('', err); if (media && post_via_agent) setTimeout(update, 1000); else if (r && post_via_agent) do_post(false); },
+			function(err){ if (err) return error('', err); if (media && post_via_agent) { resetFrm(); setTimeout(update, 1000); } else if (r && post_via_agent) do_post(false); },
 				retry);
 	};
 	do_post(true);
