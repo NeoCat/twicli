@@ -375,6 +375,7 @@ var no_geotag = parseInt(readCookie('no_geotag') || "0");			// GeoTaggingを無�
 var use_ssl = parseInt(readCookie('use_ssl') || "1");				// SSLを使用
 var post_via_agent = parseInt(readCookie('post_via_agent') || "1");		// tweet-agent経由でツイート
 var show_header_img = parseInt(readCookie('show_header_img') || "1");	// ヘッダ画像表示
+var dnd_image_upload = parseInt(readCookie('dnd_image_upload') || (navigator.userAgent.indexOf('WebKit') >= 0 ? "1" : "0"));	// ドラッグ&ドロップで画像アップロード
 if (cookieVer<18) use_ssl = 1;
 // TL管理用
 var cur_page = 1;				// 現在表示中のページ
@@ -1630,6 +1631,7 @@ function switchMisc() {
 					'<input type="checkbox" name="use_ssl"' + (use_ssl?" checked":"") + '>'+_('Use HTTPS')+'<br>' +
 					'<input type="checkbox" name="post_via_agent"' + (post_via_agent?" checked":"") + '>'+_('Tweet via GAE server')+'<br>' +
 					'<input type="checkbox" name="show_header_img"' + (show_header_img?" checked":"") + '>'+_('Show header image')+'<br>' +
+					(navigator.userAgent.indexOf('WebKit') >= 0 ? '<input type="checkbox" name="dnd_image_upload"' + (dnd_image_upload?" checked":"") + '>'+_('Drag&drop image upload')+'<br>' : '') +
 					_('Footer')+': <input name="footer" size="20" value="' + footer + '"><br>' +
 					_('Plugins')+':<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>' +
 					_('user stylesheet')+':<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br>' +
@@ -1666,6 +1668,7 @@ function setPreps(frm) {
 	use_ssl = frm.use_ssl.checked?1:0;
 	post_via_agent = frm.post_via_agent.checked;
 	show_header_img = frm.show_header_img.checked;
+	dnd_image_upload = frm.dnd_image_upload.checked;
 	user_style = frm.user_style.value;
 	try {
 		$('usercss').innerHTML = user_style;
@@ -1693,6 +1696,7 @@ function setPreps(frm) {
 	writeCookie('use_ssl', use_ssl?1:0, 3652);
 	writeCookie('post_via_agent', post_via_agent?1:0, 3652);
 	writeCookie('show_header_img', show_header_img?1:0, 3652);
+	writeCookie('dnd_image_upload', dnd_image_upload?1:0, 3652);
 	writeCookie('tw_plugins', new String(" " + frm.list.value), 3652);
 	writeCookie('user_style', new String(frm.user_style.value), 3652);
 	callPlugins('savePrefs', frm);
@@ -1721,7 +1725,7 @@ function init() {
 	callPlugins("init");
 	setTimeout(auth, 0);
 	// ファイルドロップで画像投稿 - 現状ではWebKitでしかうまく動作しない
-	if (navigator.userAgent.indexOf('WebKit') < 0) return;
+	if (navigator.userAgent.indexOf('WebKit') < 0 || !dnd_image_upload) return;
 	document.ondragenter = function(e) {
 		e.preventDefault();
 		showMediaOption();

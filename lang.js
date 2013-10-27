@@ -42,6 +42,7 @@ var langResources = {
 	'Use HTTPS':	['HTTPSを使用','使用HTTPS'],
 	'Tweet via GAE server':	['GAEサーバ経由でツイート','使用GAE server'],
 	'Show header image':	['ヘッダ画像を表示','显示横幅图像'],
+	'Drag&drop image upload':	['ドラッグ&ドロップで画像を追加','由阻力添加图象'],
 	'Footer':	['フッター','加尾修饰'],
 	'Plugins':	['プラグイン','插件'],
 	'user stylesheet':	['ユーザスタイルシート','用户自定义样式表'],
