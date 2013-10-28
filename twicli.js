@@ -1709,7 +1709,7 @@ function setPreps(frm) {
 // 画像アップロードボックスの表示
 function showMediaOption() {
 	if (!$('media'))
-		$("option").innerHTML += '<form id="imgup">'+_('Images')+': <div id="media_div"><input id="media" type="file" name="media[]" multiple></div><img id="imgclr" src="images/clr.png" onclick="$(\'option\').removeChild($(\'imgup\'));setFstHeight(null,true)"></td></tr></table>';
+		$("option").innerHTML += '<form id="imgup">'+_('Images')+': <div id="media_div"><input id="media" type="file" name="media[]" multiple onclick="var m=$(\'media\').ondrop; if(m) m()"</div><img id="imgclr" src="images/clr.png" onclick="$(\'option\').removeChild($(\'imgup\'));setFstHeight(null,true)"></td></tr></table>';
 	setFstHeight(null, true);
 }
 // 初期化
@@ -1739,7 +1739,7 @@ function init() {
 		m.style.paddingTop = of[1] + "px";
 		m.ondragenter = function(e) { e.stopPropagation(); };
 		m.ondrop = function(e) {
-			e.stopPropagation();
+			if (e) e.stopPropagation();
 			m.style.position = "static";
 			m.style.width = m.style.height = "auto";
 			m.style.paddingLeft = m.style.paddingTop = 0;
