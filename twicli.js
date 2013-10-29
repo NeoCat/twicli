@@ -1668,7 +1668,7 @@ function setPreps(frm) {
 	use_ssl = frm.use_ssl.checked?1:0;
 	post_via_agent = frm.post_via_agent.checked;
 	show_header_img = frm.show_header_img.checked;
-	dnd_image_upload = frm.dnd_image_upload.checked;
+	dnd_image_upload = frm.dnd_image_upload && frm.dnd_image_upload.checked;
 	user_style = frm.user_style.value;
 	try {
 		$('usercss').innerHTML = user_style;
