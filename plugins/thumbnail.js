@@ -122,6 +122,13 @@ registerPlugin({
 						addThumbnail(elem, x.thumbnail, url);
 				});
 		}
+		else if (url.match(/^(http:\/\/(?:www\.)?amazon\.(?:co\.jp|jp|com)\/.*(?:d|dp|product|ASIN)[\/%].+)/)) {
+			xds.load("http://thumbnail-url.appspot.com/url?url=" + encodeURIComponent(RegExp.$1),
+				function(x) {
+					if (x && x.thumbnail)
+						addThumbnail(elem, x.thumbnail, x.link || url, x.title);
+				});
+		}
 	}
 });
 
@@ -137,7 +144,7 @@ function decodeBase58(snipcode) {
 	return ret;
 }
 
-function addThumbnail(elem, src, url) {
+function addThumbnail(elem, src, url, title) {
 	var thm = document.createElement('img');
 	thm.src = src;
 	thm.className = 'thumbnail-image';
@@ -145,6 +152,7 @@ function addThumbnail(elem, src, url) {
 	thm.ontouchend   = function(){ thm.style.maxWidth = '30px'; };
 	var a = document.createElement('a');
 	a.href = url;
+	if (title) a.title = title;
 	a.target = 'twitter';
 	a.className = 'thumbnail-link';
 	a.onclick = function(){ return link(a); };

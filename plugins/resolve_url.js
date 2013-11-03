@@ -1,6 +1,6 @@
 /* replace short URLs with original URLs */
 (function(){
-  var re = /^http:\/\/(t\.co|tinyurl\.com|bit\.ly|is\.gd|u\.nu|icio\.us|tr\.im|cli\.gs|twurl\.nl|url\.ie|j\.mp|ow\.ly|ff\.im|digg\.com|dlvr.it|buff\.ly|po\.st|(?:www\.)?tumblr\.com|tmblr\.co|htn\.to|goo\.gl|slidesha\.re)\/|http:\/\/p\.tl\/(?!.\/)/;
+    var re = /^http:\/\/(t\.co|tinyurl\.com|bit\.ly|is\.gd|u\.nu|icio\.us|tr\.im|cli\.gs|twurl\.nl|url\.ie|j\.mp|ow\.ly|ff\.im|digg\.com|dlvr.it|buff\.ly|po\.st|(?:www\.)?tumblr\.com|tmblr\.co|htn\.to|goo\.gl|slidesha\.re|amzn\.to)\/|http:\/\/p\.tl\/(?!.\/)/;
   var api = 'http://resolve-url.appspot.com/url';
   var remove = function(e){if (e && e.parentNode) e.parentNode.removeChild(e)};
 
