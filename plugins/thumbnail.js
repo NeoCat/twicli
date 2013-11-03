@@ -115,12 +115,12 @@ registerPlugin({
 		else if (url.match(/^(http:\/\/moby\.to\/\w+)/)) {
 			addThumbnail(elem, RegExp.$1+':thumbnail', url);
 		}
-		else if (url.match(/^http:\/\/via\.me\/-(\w+)/)) {
-			xds.load("http://thumbnail-url.appspot.com/url?url=https://api.via.me/v1/posts/" + RegExp.$1 + "%3fclient_id%3demplp4kfmy2ud072l3fbc70g",
-					function(x) {
-						if (x && x.response && x.response.post && x.response.post.thumb_url)
-							addThumbnail(elem, x.response.post.thumb_url, url);
-					});
+		else if (url.match(/^(http:\/\/www\.pixiv\.net\/member_illust\.php\?(?:.*&)*illust_id=\d+.*)/)) {
+			xds.load("http://thumbnail-url.appspot.com/url?url=" + encodeURIComponent(RegExp.$1),
+				function(x) {
+					if (x && x.thumbnail)
+						addThumbnail(elem, x.thumbnail, url);
+				});
 		}
 	}
 });
