@@ -228,6 +228,22 @@ var shortcutkey_plugin = {
 					}
 				}
 				return false;
+			case 86+lower: // v : 写真等のリンク先内容を表示(View links)
+				if (!selected) return true;
+				for (var i = 0; i < selected.childNodes.length; i++) {
+					var target = selected.childNodes[i]
+					if (target.id && target.id.substr(0,5) == 'text-') {
+						for (i = 0; i < target.childNodes.length; i++) {
+							var target2 = target.childNodes[i];
+							if (target2.tagName == 'A' && target2.className == 'button' && target2.onclick) {
+								target2.onclick();
+								break;
+							}
+						}
+						break;
+					}
+				}
+				return false;
 			case 77+lower: // m : 発言欄へ移動(Move to textarea)
 				$('fst').focus();
 				return false;
