@@ -1,9 +1,8 @@
 function dispImageFromLink(url, e) {
   if (e.parentNode.parentNode.parentNode.id != 'reps') rep_top = cumulativeOffset(e)[1] + 20;
-  $('reps').innerHTML = '<img src="' + url + '" style="max-width:90%; max-height: 90%; margin: auto; display: block;">';
+  $('reps').innerHTML = '<img src="' + url + '" style="max-width:90%; max-height: 90%; margin: auto; display: block;" onload="scrollToDiv($(\'rep\'))">';
   $('rep').style.display = 'block';
   $('rep').style.top = rep_top + 'px';
-  scrollToDiv($('reps'));
 }
 
 (function() {
