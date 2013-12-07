@@ -180,7 +180,8 @@ function postInIFrame(url, done, err, retry) {
 	pfr.src = "about:blank";
 	pfr.style.display = "none";
 	var errTimer = false;
-	// 5秒(エラー処理指定時はデフォルト3秒→10秒)で正常終了しなければエラーとみなす
+	// 一定時間内に正常終了しなければエラーとみなす
+	// 通常5秒、エラー処理指定時はデフォルト3秒→10秒、ファイル送信時は更に+30秒)
 	errTimer = setTimeout(function(){
 		loading(false);
 		if (err) err(); else done();
@@ -189,7 +190,7 @@ function postInIFrame(url, done, err, retry) {
 			postQueue.shift();
 			postNext();
 		}, 0);
-	}, retry?10000:err?postTimeout:5000);
+		}, (frm.enctype=='multipart/form-data'?30000:0) + (retry?10000:err?postTimeout:5000));
 	var cnt = 0;
 	var onload = pfr.onload = function(){
 		if (cnt++ == 0) {
