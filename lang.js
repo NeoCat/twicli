@@ -68,5 +68,6 @@ var langResources = {
 	'Cannot tweet from twicli? Please try logging out of Twitter web site...': ['もしツイートがうまくできない場合、TwitterのWebサイトからログアウトすると成功することがあります。'],
 	'Cannot get TL. Please try $1logout of Twitter web site$2.': ['TLを取得できません。$1TwitterのWebサイトからログアウト$2してみてください。'],
 	'Too many requests: Twitter API $1 is rate limited; reset in $2': ['リクエスト回数超過: Twitter API「$1」は$2後まで制限されています。'],
+	'This image is larger than $1MB.': ['この画像のサイズは$1MBを超えています。'],
 	'An old HTML file is loaded. Please reload it. If the problem is not fixed, please try erasing caches.': ['古いHTMLファイルがロードされています。リロードしてみて下さい。それでも解決しない場合はキャッシュを削除してみて下さい。']
 };

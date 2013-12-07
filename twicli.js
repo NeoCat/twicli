@@ -1707,10 +1707,18 @@ function setPreps(frm) {
 	else
 		twitterAPI = twitterAPI.replace('https', 'http');
 }
+// 画像ファイルの検証
+function checkMedia() {
+	var m = $('media');
+	if (m.files && m.files[0] && m.files[0].size > tw_config.photo_size_limit) {
+		error(_("This image is larger than $1MB.", tw_config.photo_size_limit>>20));
+		m.value = "";
+	}
+}
 // 画像アップロードボックスの表示
 function showMediaOption() {
 	if (!$('media'))
-		$("option").innerHTML += '<form id="imgup">'+_('Images')+': <div id="media_div"><input id="media" type="file" name="media[]" multiple onclick="var m=$(\'media\').ondrop; if(m) m()"</div><img id="imgclr" src="images/clr.png" onclick="$(\'option\').removeChild($(\'imgup\'));setFstHeight(null,true)"></td></tr></table>';
+		$("option").innerHTML += '<form id="imgup">'+_('Images')+': <div id="media_div"><input id="media" type="file" name="media[]" multiple onchange="checkMedia()" onclick="var m=$(\'media\').ondrop; if(m) m()"</div><img id="imgclr" src="images/clr.png" onclick="$(\'option\').removeChild($(\'imgup\'));setFstHeight(null,true)"></td></tr></table>';
 	setFstHeight(null, true);
 }
 // 初期化
