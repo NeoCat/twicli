@@ -1445,7 +1445,7 @@ function animate(elem, max, start) {
 	var t = (new Date).getTime();
 	if (start+1000 <= t)
 		return elem.style.maxHeight = 'none';
-	elem.style.maxHeight = Math.ceil(max*(1-Math.cos((t-start)/1000*Math.PI))/2);
+	elem.style.maxHeight = Math.ceil(max*(1-Math.cos((t-start)/1000*Math.PI))/2) + 'px';
 	setTimeout(function(){animate(elem, max, start)}, 20);
 }
 // 次ページ取得
