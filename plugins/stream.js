@@ -31,6 +31,7 @@ function ts_websocket_open() {
 		console.log("ws closed");
 		console.log(ws_buffer);
 		var updateInterval = parseInt(readCookie('update_interval')) || 90;
+		setTimeout(ts_websocket_open, updateInterval*1000);
 	};
 	ws.onmessage = function(e) {
 		if (e.data == 'Hello') return;
@@ -73,6 +74,9 @@ registerPlugin({
 		savePrefs: function() {
 			updateInterval = 600;
 		},
+		miscTab: function() {
+			$('preps').interval.value = parseInt(readCookie('update_interval')) || 90;
+		}
 });
 
 document.write('<style>#tw > div { border-bottom: none; }</style>');
