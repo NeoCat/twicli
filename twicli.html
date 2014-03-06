@@ -11,7 +11,7 @@
 <title>twicli</title>
 <style id="fst_css"></style>
 <!--[if lt IE 9]><script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script><![endif]-->
-<script type="text/javascript">document.twicli_html_ver = 5;</script>
+<script type="text/javascript">document.twicli_html_ver = 6;</script>
 <script type="text/javascript" src="oauth/sha1.js"></script>
 <script type="text/javascript" src="oauth/oauth.js"></script>
 <script type="text/javascript" src="oauth/consumer.js"></script>
@@ -23,7 +23,7 @@
 <div id="control">
 <!--発言フォーム-->
 <form name="frm">
-	<textarea id="fst" name="status" onkeyup="updateCount()" onkeypress="updateCount(); return press(event)" oninput="updateCount()" onfocus="updateCount()" onblur="$('counter-div').style.display='none'"></textarea>
+	<textarea id="fst" name="status" onkeyup="updateCount()" onkeypress="updateCount(); return press(event)" oninput="updateCount()" onfocus="updateCount()" onblur="$('counter-div').style.display='none';blurFst()()"></textarea>
 	<a id="go" href="javascript:void press(1)"><img alt="→" src="images/go.png"></a>
 	<a id="rst" href="javascript:void resetFrm(1)"><img alt="×" src="images/clr.png"></a>
 	<div id="loading"><img alt="loading" src="images/loading.gif" onmousedown="return false"></div>

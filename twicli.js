@@ -316,7 +316,7 @@ function _(key) {
 }
 
 // version check
-document.twicli_js_ver = 5;
+document.twicli_js_ver = 6;
 if (!document.twicli_html_ver || document.twicli_html_ver < document.twicli_js_ver) {
 	if (location.href.indexOf('?') < 0) {
 		location.href = location.href + '?' + document.twicli_js_ver;
@@ -577,8 +577,8 @@ function press(e) {
 	last_post = st.value;
 	last_in_reply_to_user = in_reply_to_user;
 	last_in_reply_to_status_id = in_reply_to_status_id;
-	if (st.value.substr(0,1) == "." || st.value.indexOf("@"+in_reply_to_user) < 0)
-		setReplyId(false); // "."で始まるか"@ユーザ名"が含まれていない時はin_reply_to指定無し
+	if (st.value.substr(0,1) == ".")
+		setReplyId(false); // "."で始まる時はin_reply_to指定無し
 	callPlugins("post", st.value);
 	st.value += footer;
 	st.select();
@@ -648,6 +648,10 @@ function updateCount() {
 			function(t) {return t_co_maxstr.replace(/^http/, t.substr(0, t.indexOf(':')))});
 	$("counter").innerHTML = 140 - footer.length - s.length;
 }
+// フォームのフォーカス解除時の処理
+function blurFst() {
+	if ($("fst").value == "") setReplyId(false);
+}
 // フォームの初期化
 function resetFrm(arg) {
 	document.frm.reset();
@@ -660,7 +664,15 @@ function resetFrm(arg) {
 }
 // reply先の設定/解除
 function setReplyId(id) {
+	if (in_reply_to_status_id) for (var i = 0; i < 3; i++) {
+		var t = $(['tw-','re-','tw2c-'][i]+in_reply_to_status_id);
+		if (t) t.className = t.className.replace(/ ?inrep/, '');
+	}
 	in_reply_to_status_id = id;
+	if (id) for (var i = 0; i < 3; i++) {
+		var t = $(['tw-','re-','tw2c-'][i]+id);
+		if (t) t.className += ' inrep';
+	}
 }
 // reply先を設定
 function replyTo(user, id, tw_id, direct) {

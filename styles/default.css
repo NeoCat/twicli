@@ -52,6 +52,8 @@ form { margin-bottom: 0; }
 .retweeted { color: #555; }
 .retweeted .non-follower { color: #55a; }
 .button { text-decoration: none; -webkit-text-size-adjust:140%; }
+.inrep .utils { margin-top: -4px; }
+.inrep .reply img { border: solid green 1px; border-radius: 5px; background-color: yellow; position: relative; top: 3px; padding-bottom: 2px; }
 .popup { padding: 0 4px; color: #888; }
 .upopup { float: right; padding: 0 16px; color: #888; }
 .verified { vertical-align: -2px; }
