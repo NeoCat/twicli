@@ -416,6 +416,7 @@ var update_direct_counter = 0;
 var last_post = null;
 var last_in_reply_to_user = null;
 var last_in_reply_to_status_id = null;
+var in_reply_to_status_id_tw = null;
 var last_direct_id = null;
 var geo = null;
 var geowatch = null;
@@ -664,14 +665,20 @@ function resetFrm(arg) {
 	callPlugins("resetFrm", arg);
 }
 // reply先の設定/解除
-function setReplyId(id) {
-	if (in_reply_to_status_id) for (var i = 0; i < 3; i++) {
-		var t = $(['tw-','re-','tw2c-'][i]+in_reply_to_status_id);
+function setReplyId(id, tw_id) {
+	var t;
+	if (in_reply_to_status_id_tw && (t = $(in_reply_to_status_id_tw)))
+		t.className = t.className.replace(/ ?inrep/, '');
+	else if (in_reply_to_status_id) for (var i = 0; i < 3; i++) {
+		t = $(['tw-','re-','tw2c-'][i]+in_reply_to_status_id);
 		if (t) t.className = t.className.replace(/ ?inrep/, '');
 	}
 	in_reply_to_status_id = id;
-	if (id) for (var i = 0; i < 3; i++) {
-		var t = $(['tw-','re-','tw2c-'][i]+id);
+	in_reply_to_status_id_tw = tw_id;
+	if (tw_id)
+		$(tw_id).className += ' inrep';
+	else if (id) for (var i = 0; i < 3; i++) {
+		t = $(['tw-','re-','tw2c-'][i]+id);
 		if (t) t.className += ' inrep';
 	}
 }
@@ -687,7 +694,7 @@ function replyTo(user, id, tw_id, direct) {
 	}
 	if (document.frm.status.value.toLowerCase().indexOf(head.toLowerCase()) !== 0) // 連続押しガード
 		document.frm.status.value = head + document.frm.status.value;
-	setReplyId(id);
+	setReplyId(id, tw_id);
 	document.frm.status.select();
 }
 // reply先を表示
