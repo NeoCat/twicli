@@ -554,6 +554,15 @@ function twFail() {
 	error('<img style="vertical-align:middle" src="images/whale.png">&nbsp;&nbsp;'+_('API error (Twitter may be over capacity?)'));
 }
 
+function sendMessage(user, text) {
+	callPlugins("sendMessage", user, text);
+	enqueuePost(twitterAPI + "direct_messages/new.json?screen_name=" + user +
+		"&text=" + text,
+		function(){ resetFrm(); },
+		function(){ resetFrm(); });
+	return false;
+}
+
 // enterキーで発言, "r"入力で再投稿, 空欄でTL更新
 function press(e) {
 	if (e != 1 && (e.keyCode != 13 && e.keyCode != 10 ||
@@ -574,6 +583,10 @@ function press(e) {
 		st.value = last_post;
 		in_reply_to_user = last_in_reply_to_user;
 		setReplyId(last_in_reply_to_status_id);
+	}
+	if (st.value.match(/^[dD]\s+(\w+)\s+([\w\W]+)/)) {
+		// DM送信
+		return sendMessage(RegExp.$1, RegExp.$2);
 	}
 	last_post = st.value;
 	last_in_reply_to_user = in_reply_to_user;
