@@ -1,7 +1,7 @@
 langResources['Hide'] =	['非表示','非表示'];
 
 var tw_notify_last = readCookie('twicli_notify_last');
-if (!parseInt(tw_notify_last)) tw_notify_last = "1384109454";
+if (!parseInt(tw_notify_last)) tw_notify_last = "297864206617825281";
 
 function twn_hide(id) {
 	ele = $('tw-'+id);
