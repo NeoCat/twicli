@@ -111,7 +111,7 @@ registerPlugin({
 	},
 	miscTab: function(ele) {
 		var e = document.createElement("div");
-		e.innerHTML = '<form onSubmit="return twsSearch($(\'search_q\').value);"><a href="http://search.twitter.com/" target="_blank">'+_('Twitter search')+'</a> : <input type="text" size="15" id="search_q"><input type="image" src="images/go.png"></form>';
+		e.innerHTML = '<form onSubmit="return twsSearch($(\'search_q\').value);"><a href="https://twitter.com/search" target="_blank">'+_('Twitter search')+'</a> : <input type="text" size="15" id="search_q"><input type="image" src="images/go.png"></form>';
 		ele.appendChild(e);
 		var hr = document.createElement("hr");
 		hr.className = "spacer";
