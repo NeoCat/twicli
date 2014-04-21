@@ -557,7 +557,7 @@ function twFail() {
 function sendMessage(user, text) {
 	callPlugins("sendMessage", user, text);
 	enqueuePost(twitterAPI + "direct_messages/new.json?screen_name=" + user +
-		"&text=" + text,
+		"&text=" + encodeURIComponent(text),
 		function(){ resetFrm(); },
 		function(){ resetFrm(); });
 	return false;
