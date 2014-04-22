@@ -39,10 +39,10 @@ function setupOAuthURL(url, post) {
 	var media_upload = url.indexOf('update_with_media.json') >= 0 && post;
 	var nosign = [];
 	url = url.split("?");
-	if (post && url[1] && url[1].match(/(^|&)(status=[^&]+)/) && RegExp.$2.indexOf('%2A') >= 0) {
-		// "*"(%2A)はPOSTデータではURLEncodeされずに送信されOAuthエラーとなるため、URL内に含める（statusにのみ対応）
-		url[0] += "?" + RegExp.$2;
+	if (post && url[1] && url[1].match(/(^|&)((?:status|text)=[^&]+)/) && RegExp.$2.indexOf('%2A') >= 0 || RegExp.$2.indexOf('*') >= 0) {
+		// "*"(%2A)はPOSTデータではURLEncodeされずに送信されOAuthエラーとなるため、URL内に含める（status,textにのみ対応）
 		url[1] = url[1].replace(RegExp.$1+RegExp.$2, '');
+		url[0] += "?" + RegExp.$2.replace(/\*/g, '%2A');
 	}
 	setupOAuthArgs(url[1]);
 	if (media_upload) {
