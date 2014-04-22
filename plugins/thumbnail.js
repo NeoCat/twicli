@@ -115,6 +115,12 @@ registerPlugin({
 		else if (url.match(/^(http:\/\/moby\.to\/\w+)/)) {
 			addThumbnail(elem, RegExp.$1+':thumbnail', url);
 		}
+		else if (url.match(/^https?:\/\/vimeo\.com\/(?:m\/)?(\d+)$/)) {
+			xds.load("http://vimeo.com/api/v2/video/" + RegExp.$1 + ".json",
+				function(x) {
+					addThumbnail(elem, x[0].thumbnail_medium, url, x[0].title);
+				});
+		}
 		else if (url.match(/^(http:\/\/www\.pixiv\.net\/member_illust\.php\?(?:.*&)*illust_id=\d+.*)/)) {
 			xds.load("http://thumbnail-url.appspot.com/url?url=" + encodeURIComponent(RegExp.$1),
 				function(x) {
