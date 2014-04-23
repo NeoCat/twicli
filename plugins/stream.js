@@ -1,5 +1,7 @@
 var last_update = new Date;
 var ws_buffer = '';
+var tw_stream_ws = null;
+var ws_reopen_timer = null;
 
 function handle_stream_data(data, tw) {
 	if (data.text) {
@@ -18,6 +20,7 @@ function handle_stream_data(data, tw) {
 }
 
 function ts_websocket_open() {
+	if (tw_stream_ws) tw_stream_ws.close();
 	var ws = new WebSocket('wss://twgateway-neocat.rhcloud.com:8443/');
 	ws.onopen = function() {
 		var orig = twitterAPI;
@@ -26,15 +29,21 @@ function ts_websocket_open() {
 		twitterAPI = orig;
 		ws.send(userstream);
 		console.log("ws opened - " + userstream);
+		tw_stream_ws = ws;
+		ws.ping_timer = setInterval(function(){ ws.send('ping'); }, 5*60*1000);
+		if (ws_reopen_timer) clearTimeout(ws_reopen_timer);
+		ws_reopen_timer = null;
 	};
 	ws.onclose = function() {
 		console.log("ws closed");
 		console.log(ws_buffer);
 		var updateInterval = parseInt(readCookie('update_interval')) || 90;
-		setTimeout(ts_websocket_open, updateInterval*1000);
+		tw_stream_ws = null;
+		clearInterval(ws.ping_timer);
+		ws_reopen_timer = setTimeout(ts_websocket_open, updateInterval*1000);
 	};
 	ws.onmessage = function(e) {
-		if (e.data == 'Hello') return;
+		if (e.data == 'Hello' || e.data == '##pong##') return;
 		ws_buffer += e.data;
 		if (ws_buffer.indexOf('\r') >= 0) {
 			ary = ws_buffer.split(/\r\n?/);
