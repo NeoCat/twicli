@@ -37,7 +37,7 @@
 						};
 						a.appendChild(document.createTextNode(RegExp.$2));
 						status.insertBefore(a, ele.nextSibling);
-						status.insertBefore(document.createTextNode(RegExp.$3), ele.nextSibling);
+						status.insertBefore(document.createTextNode(RegExp.$3), a.nextSibling);
 					}
 				}
 			}
