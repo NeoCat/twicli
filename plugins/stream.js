@@ -21,6 +21,7 @@ function handle_stream_data(data, tw) {
 		$("direct").className += " new";
 	} else if (data.event && (data.event == "favorite" || data.event == "unfavorite")) {
 		var name = data.source.name;
+		if (name == mname) return;
 		var text = data.target_object.text;
 		if (text.length > 40) text = text.substr(0, 40) + "...";
 		var msg = _("@$1 "+data.event+"d your tweet:", name);

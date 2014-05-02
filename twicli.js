@@ -563,7 +563,8 @@ function notify_show(str) {
 	$("notifyc").innerHTML = str || notify_queue.shift() || '';
 	$("notify").style.display = "block";
 	setTimeout(function(){
-		$("notify").style.top = document.body.clientHeight - $("notifyc").clientHeight + "px";
+		var win_h = window.innerHeight || document.documentElement.clientHeight;
+		$("notify").style.top = win_h - $("notifyc").clientHeight + "px";
 		notify_timer = setTimeout(clear_notify, 5000);
 	}, 0);
 }
