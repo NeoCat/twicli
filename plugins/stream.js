@@ -1,3 +1,6 @@
+langResources['@$1 favorited your tweet:'] = ['@$1 がツイートをお気に入りに追加しました:'];
+langResources['@$1 unfavorited your tweet:'] = ['@$1 がツイートをお気に入りから削除しました:'];
+
 var last_update = new Date;
 var ws_buffer = '';
 var tw_stream_ws = null;
@@ -16,6 +19,16 @@ function handle_stream_data(data, tw) {
 	} else if (data.direct_message) {
 		if ($("direct").className.indexOf('new') < 0)
 		$("direct").className += " new";
+	} else if (data.event && (data.event == "favorite" || data.event == "unfavorite")) {
+		var name = data.source.name;
+		var text = data.target_object.text;
+		if (text.length > 40) text = text.substr(0, 40) + "...";
+		var msg = _("@$1 "+data.event+"d your tweet:", name);
+		try {
+			notify(msg + "<br><small>" + text + "</small>");
+		} catch(e) {
+			console.log(e);
+		}
 	} else console.log(data);
 }
 

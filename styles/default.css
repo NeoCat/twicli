@@ -96,6 +96,8 @@ form { margin-bottom: 0; }
 #error { display: none; background-color: black; color: white; text-align: center; font-weight: bold; z-index: 10; position: fixed; top: 30%; width: 75%; left: 10%; -moz-border-radius: 16px; -webkit-border-radius: 16px; border-radius: 16px; -moz-box-shadow: 1px 1px 4px #000; -webkit-box-shadow: 1px 1px 4px #000; box-shadow: 1px 1px 4px #000; opacity: 0.80; filter: alpha(opacity=80); }
 #errorc { padding: 20px; }
 #error a { color: #cff; }
+#notify { display: none; background-color: yellow; color: black; z-index: 10; position: fixed; top: 100%; left: 0; width: 100%; box-shadow: 0 -1px 8px rgba(0,0,0,0.5); transition-property: top; transition-duration: 0.5s; transition-timing-function: ease-in-out; }
+#notifyc { padding: 4px; }
 .ratelimits th { font-weight: normal; text-align: left; font-size: x-small; }
 .ratelimits td { text-align: right; white-space: nowrap; font-size: x-small; }
 

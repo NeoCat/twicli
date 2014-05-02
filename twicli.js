@@ -316,7 +316,7 @@ function _(key) {
 }
 
 // version check
-document.twicli_js_ver = 6;
+document.twicli_js_ver = 7;
 if (!document.twicli_html_ver || document.twicli_html_ver < document.twicli_js_ver) {
 	if (location.href.indexOf('?') < 0) {
 		location.href = location.href + '?' + document.twicli_js_ver;
@@ -548,6 +548,35 @@ function clear_error() {
 		clearTimeout(err_timeout);
 		err_timeout = setTimeout(function(){ error_animate(false); }, 0);
 	}
+}
+
+var notify_queue = [];
+var notify_timer = null;
+function notify(str) {
+	if (notify_timer) {
+		notify_queue.push(str);
+		return;
+	}
+	notify_show(str);
+}
+function notify_show(str) {
+	$("notifyc").innerHTML = str || notify_queue.shift() || '';
+	$("notify").style.display = "block";
+	setTimeout(function(){
+		$("notify").style.top = document.body.clientHeight - $("notifyc").clientHeight + "px";
+		notify_timer = setTimeout(clear_notify, 5000);
+	}, 0);
+}
+function clear_notify() {
+	if (notify_timer) clearTimeout(notify_timer);
+	$("notify").style.top = "100%";
+	if (notify_queue.length)
+		notify_timer = setTimeout(notify_show, 500);
+	else
+		notify_timer = setTimeout(function(){
+			$("notify").style.display = "none";
+			notify_timer = null;
+		}, 500);
 }
 
 function twFail() {
