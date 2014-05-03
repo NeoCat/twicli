@@ -44,7 +44,10 @@ function ts_websocket_open() {
 		ws.send(userstream);
 		console.log("ws opened - " + userstream);
 		tw_stream_ws = ws;
-		ws.ping_timer = setInterval(function(){ ws.send('ping'); }, 5*60*1000);
+		ws.ping_timer = setInterval(function(){
+			ws.send('ping');
+			ws.pong_timer = setTimeout(function(){ ws.close(); }, 5000);
+		}, 5*60*1000);
 		if (ws_reopen_timer) clearTimeout(ws_reopen_timer);
 		ws_reopen_timer = null;
 	};
@@ -57,7 +60,13 @@ function ts_websocket_open() {
 		ws_reopen_timer = setTimeout(ts_websocket_open, updateInterval*1000);
 	};
 	ws.onmessage = function(e) {
-		if (e.data == 'Hello' || e.data == '##pong##') return;
+		if (e.data == 'Hello' || e.data == '##pong##') {
+			if (ws.pong_timer) {
+				clearTimeout(ws.pong_timer);
+				ws.pong_timer = null;
+			}
+			return;
+		}
 		ws_buffer += e.data;
 		if (ws_buffer.indexOf('\r') >= 0) {
 			ary = ws_buffer.split(/\r\n?/);
