@@ -1,6 +1,27 @@
+function imageLoadedFromLink(e) {
+  scrollToDiv($('rep'));
+  var img = new Image();
+  img.src = e.src;
+  if (e.width < img.width) {
+    e.style.cursor = navigator.userAgent.indexOf('AppleWebKit')>0 ? '-webkit-zoom-in' : 'zoom-in';
+    e.onclick = function() {
+      var p = e.parentNode;
+      p.removeChild(e);
+      var ifr = document.createElement("iframe");
+      ifr.style.display = 'block';
+      ifr.src = e.src;
+      var win_w = window.innerWidth || document.documentElement.clientWidth;
+      var win_h = window.innerHeight || document.documentElement.clientHeight;
+      ifr.width = Math.min(img.width, win_w*0.9-4);
+      ifr.height = Math.min(img.height, win_h*0.9-48);
+      p.appendChild(ifr);
+      scrollToDiv($('rep'));
+    }
+  }
+}
 function dispImageFromLink(url, e) {
   if (e.parentNode.parentNode.parentNode.id != 'reps') rep_top = cumulativeOffset(e)[1] + 20;
-  $('reps').innerHTML = '<img src="' + url + '" style="max-width:90%; max-height: 90%; margin: auto; display: block;" onload="scrollToDiv($(\'rep\'))">';
+  $('reps').innerHTML = '<img src="' + url + '" style="max-width:90%; max-height: 90%; margin: auto; display: block;" onload="imageLoadedFromLink(this)">';
   $('rep').style.display = 'block';
   $('rep').style.top = rep_top + 'px';
 }
