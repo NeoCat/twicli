@@ -35,6 +35,7 @@ function handle_stream_data(data, tw) {
 
 function ts_websocket_open() {
 	if (tw_stream_ws) tw_stream_ws.close();
+	console.log("ws opening ...")
 	var ws = new WebSocket('wss://twgateway-neocat.rhcloud.com:8443/');
 	ws.onopen = function() {
 		var orig = twitterAPI;
@@ -50,11 +51,12 @@ function ts_websocket_open() {
 		}, 5*60*1000);
 		if (ws_reopen_timer) clearTimeout(ws_reopen_timer);
 		ws_reopen_timer = null;
+		updateInterval = 600;
 	};
 	ws.onclose = function() {
 		console.log("ws closed");
 		console.log(ws_buffer);
-		var updateInterval = parseInt(readCookie('update_interval')) || 90;
+		updateInterval = parseInt(readCookie('update_interval')) || 90;
 		tw_stream_ws = null;
 		clearInterval(ws.ping_timer);
 		ws_reopen_timer = setTimeout(ts_websocket_open, updateInterval*1000);
@@ -100,11 +102,11 @@ function ts_websocket_open() {
 
 registerPlugin({
 		auth: function() {
-			updateInterval = 600;
 			ts_websocket_open();
 		},
 		savePrefs: function() {
-			updateInterval = 600;
+			if (tw_stream_ws)
+				updateInterval = 600;
 		},
 		miscTab: function() {
 			$('preps').interval.value = parseInt(readCookie('update_interval')) || 90;
