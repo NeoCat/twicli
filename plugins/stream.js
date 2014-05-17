@@ -21,7 +21,7 @@ function handle_stream_data(data, tw) {
 		$("direct").className += " new";
 	} else if (data.event && (data.event == "favorite" || data.event == "unfavorite")) {
 		var name = data.source.name;
-		if (name == mname) return;
+		if (name == myname) return;
 		var text = data.target_object.text;
 		if (text.length > 40) text = text.substr(0, 40) + "...";
 		var msg = _("@$1 "+data.event+"d your tweet:", name);
@@ -79,11 +79,11 @@ function ts_websocket_open() {
 				if (ary[i] == '' || ary[i] == '\n') continue;
 				try {
 					data = JSON.parse(ary[i]);
-					handle_stream_data(data, tw);
 				} catch(e) {
 					console.log('JSON parse error: ' + e);
 					console.log(">" + ary[i] + "<");
 				}
+				handle_stream_data(data, tw);
 			}
 			if (tw.length > 0) {
 				if (now - last_update > 180*1000) {
