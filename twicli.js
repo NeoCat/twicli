@@ -938,9 +938,10 @@ function resetUpdateTimer() {
 // 外部リンクを開く際のフック
 function link(a) { return true; }
 // tweetのHTML表現を生成
+var needGMT = isNaN(new Date("Wed Jan 01 00:00:00 +0000 2014").getDate());
 function d2(dig) { return (dig>9?"":"0") + dig }
 function dateFmt(d) {
-	d = new Date(typeof(d)=='string' && document.all ? d.replace('+','GMT+') : d);
+	d = new Date(typeof(d)=='string' && needGMT ? d.replace('+','GMT+') : d);
 	return (d.getMonth()+1) + "/" + d.getDate() + " " + d.getHours() + ":" + d2(d.getMinutes()) + ":" + d2(d.getSeconds());
 }
 function insertPDF(str) {
