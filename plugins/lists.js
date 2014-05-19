@@ -117,7 +117,7 @@ function twlGetListStatus(list) {
 	} else {
 		if (list_auto_update)
 			twl_update_timer = setInterval(function(){twlGetListStatusUpdate(list,true)}, 
-				1000*Math.max(updateInterval, 30));
+				1000*Math.max(parseInt(readCookie('update_interval')) || 90, 30));
 	}
 	twlGetListStatusUpdate(list);
 	return false;

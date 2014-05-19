@@ -40,7 +40,7 @@ function twsSearch(qn, no_switch, max_id) {
 	}
 	if (!no_switch) switchTo(myid);
 	if (tws_update_timer) clearInterval(tws_update_timer);
-	tws_update_timer = setInterval(function(){twsSearchUpdate(q,lang)}, 1000*Math.max(updateInterval, 30));
+	tws_update_timer = setInterval(function(){twsSearchUpdate(q,lang)}, 1000*Math.max(parseInt(readCookie('update_interval')) || 90, 30));
 	var rt_checked = exclude_rt ? "" : " checked";
 	$('tw2h').innerHTML = '<div class="tabcmd tabclose"><input id="tws-RT" type="checkbox"'+rt_checked+'><label for="tws-RT">RT</label> <a id="tws-closetab" href="#">[x] '+_('remove tab')+'</a></div>';
 	$('tws-closetab').onclick = function(){ closeSearchTab(myid); return false; };
