@@ -232,6 +232,7 @@ var scroll_duration;
 var scroll_timer = null;
 function getScrollY() { return window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop; }
 function scrollToY(y, total, start) {
+	var cont =  scroll_timer && !start;
 	if (scroll_timer) clearTimeout(scroll_timer);
 	scroll_timer = null;
 	var t = (new Date).getTime();
@@ -241,7 +242,7 @@ function scrollToY(y, total, start) {
 	if (start == t) scroll_duration = Math.min(500, Math.abs(total));
 	y += scroll_adjust;
 	scroll_adjust = 0;
-	if (start+scroll_duration <= t)
+	if (start+scroll_duration <= t || cont)
 		return scrollTo(0, y);
 	var pix = Math.ceil(total*(1-Math.cos((t-start)/scroll_duration*Math.PI))/2);
 	scrollTo(0, y-total+pix);
