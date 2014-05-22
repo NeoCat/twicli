@@ -51,7 +51,7 @@ function dispImageFromLink(url, e) {
       var script = 'dispReply(\'' + m[1] + '\',\'' + m[2] + '\',this); return false;';
       var tw = a.parentNode.parentNode.tw;
       tw = tw.retweeted_status ? tw.retweeted_status : tw;
-      if (tw && tw.user.screen_name == m[1] && tw.id_str == m[2] && a.href.indexOf('/photo/1') >= 0)
+      if (tw && tw.user.screen_name == m[1] && tw.id_str == m[2] && a.href.indexOf('/photo/1') >= 0 && tw.entities.media && tw.entities.media[0])
         script = 'dispImageFromLink(\'' + tw.entities.media[0].media_url + ':medium\', this); return false;';
       dummy.innerHTML = '<a class="button" href="#" onClick="' + script + '"><img src="images/jump.png" alt="☞" width="14" height="14"></a>';
       a.parentNode.insertBefore(dummy.firstChild, a.nextSibling);
