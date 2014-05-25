@@ -1,12 +1,13 @@
 registerPlugin({
 	newMessageElement: function(elem, tw) {
 		tw = tw.retweeted_status || tw;
-		if (tw.entities && tw.entities.media) {
-			for (var i = 0; i < tw.entities.media.length; i++) {
-				if (tw.entities.media[i].type == "photo") {
+		var entities = tw.extended_entities || tw.entities;
+		if (entities && entities.media) {
+			for (var i = 0; i < entities.media.length; i++) {
+				if (entities.media[i].type == "photo") {
 					addThumbnail(elem,
-						tw.entities.media[i].media_url + ":thumb",
-						tw.entities.media[i].expanded_url);
+						entities.media[i].media_url + ":thumb",
+						entities.media[i].expanded_url);
 				}
 			}
 		}
