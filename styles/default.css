@@ -97,7 +97,7 @@ form { margin-bottom: 0; }
 #errorc { padding: 20px; }
 #error a { color: #cff; }
 #notify { display: none; background-color: yellow; color: black; z-index: 10; position: fixed; top: 100%; left: 0; width: 100%; box-shadow: 0 -1px 8px rgba(0,0,0,0.5); transition-property: top; transition-duration: 0.5s; transition-timing-function: ease-in-out; }
-#notifyc { padding: 4px; }
+#notifyc { font-size: small; padding: 4px; }
 .ratelimits th { font-weight: normal; text-align: left; font-size: x-small; }
 .ratelimits td { text-align: right; white-space: nowrap; font-size: x-small; }
 

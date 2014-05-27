@@ -20,13 +20,13 @@ function handle_stream_data(data, tw) {
 		if ($("direct").className.indexOf('new') < 0)
 		$("direct").className += " new";
 	} else if (data.event && (data.event == "favorite" || data.event == "unfavorite")) {
-		var name = data.source.name;
+		var name = data.source.screen_name;
 		if (name == myname) return;
 		var text = data.target_object.text;
 		if (text.length > 40) text = text.substr(0, 40) + "...";
 		var msg = _("@$1 "+data.event+"d your tweet:", name);
 		try {
-			notify(msg + "<br><small>" + text + "</small>");
+			notify(msg + "<br>" + text);
 		} catch(e) {
 			console.log(e);
 		}
