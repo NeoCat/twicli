@@ -1,12 +1,13 @@
 registerPlugin({
 	newMessageElement: function(elem, tw) {
 		tw = tw.retweeted_status || tw;
-		if (tw.entities && tw.entities.media) {
-			for (var i = 0; i < tw.entities.media.length; i++) {
-				if (tw.entities.media[i].type == "photo") {
+		var entities = tw.extended_entities || tw.entities;
+		if (entities && entities.media) {
+			for (var i = 0; i < entities.media.length; i++) {
+				if (entities.media[i].type == "photo") {
 					addThumbnail(elem,
-						tw.entities.media[i].media_url + ":thumb",
-						tw.entities.media[i].expanded_url);
+						entities.media[i].media_url + ":thumb",
+						entities.media[i].expanded_url);
 				}
 			}
 		}
@@ -133,6 +134,14 @@ registerPlugin({
 				function(x) {
 					if (x && x.thumbnail)
 						addThumbnail(elem, x.thumbnail, x.link || url, x.title);
+				});
+		}
+		else if (url.match(/^http:\/\/(?:www\.|m\.)?ustream\.tv\/(channel|recorded)\/(?:id\/)?([\w\-]+)/)) {
+		    xds.load("http://api.ustream.tv/json/" + (RegExp.$1=='recorded'?'video':RegExp.$1) + "/" +
+				RegExp.$2 + "/getValueOf/imageUrl?key=8149DBC1DF1083B3F4D8F7F0A1978F57",
+				function(img) {
+					if (img && img.medium)
+						addThumbnail(elem, img.medium, url);
 				});
 		}
 	}
