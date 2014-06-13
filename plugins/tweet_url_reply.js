@@ -27,7 +27,7 @@ function dispImageFromLink(url, e) {
 }
 
 (function() {
-  var re = /^https?:\/\/twitter\.com\/(?:#!\/|#%21\/)?(\w+)\/status(?:es)?\/(\d+)/;
+  var re = /^https?:\/\/(?:mobile\.)?twitter\.com\/(?:#!\/|#%21\/)?(\w+)\/status(?:es)?\/(\d+)/;
 
   function tweetUrlReply(elem) {
     var links = elem.getElementsByTagName('a');
