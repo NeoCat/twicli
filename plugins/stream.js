@@ -46,6 +46,8 @@ function ts_websocket_open() {
 		console.log("ws opened - " + userstream);
 		tw_stream_ws = ws;
 		ws.ping_timer = setInterval(function(){
+			if (ws.readyState == ws.CLOSING || ws.readyState == ws.CLOSED)
+				return ws.onerror("closed");
 			ws.send('ping');
 			ws.pong_timer = setTimeout(function(){ ws.close(); }, 5000);
 		}, 5*60*1000);
@@ -53,6 +55,13 @@ function ts_websocket_open() {
 		ws_reopen_timer = null;
 		updateInterval = 600;
 	};
+	ws.onerror = function(e) {
+		console.log("ws error: " + e);
+		if (ws.readyState == ws.CLOSING || ws.readyState == ws.CLOSED)
+			ws.onclose();
+		else
+			ws.close();
+	}
 	ws.onclose = function() {
 		console.log("ws closed");
 		console.log(ws_buffer);
@@ -60,6 +69,7 @@ function ts_websocket_open() {
 		tw_stream_ws = null;
 		clearInterval(ws.ping_timer);
 		ws_reopen_timer = setTimeout(ts_websocket_open, updateInterval*1000);
+		update();
 	};
 	ws.onmessage = function(e) {
 		if (e.data == 'Hello' || e.data == '##pong##') {
