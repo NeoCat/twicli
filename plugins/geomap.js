@@ -94,12 +94,13 @@ function make_geo_placemap(place) {
 	if (!place.id) return;
 
 	var rendarPolygonMap = function (geoobj) {
-		if (!geoobj.geometry || geoobj.geometry.type != "Polygon") return;
-		var paths = [];
-		for (var i=0; i< geoobj.geometry.coordinates[0].length; i++)
-			paths.push(new google.maps.LatLng(
-						geoobj.geometry.coordinates[0][i][1],
-						geoobj.geometry.coordinates[0][i][0]));
+		var coords = [[]], paths = [];
+		if (geoobj.geometry && geoobj.geometry.type === "Polygon")
+			coords = geoobj.geometry.coordinates;
+		else if (geoobj.bounding_box && geoobj.bounding_box.type === "Polygon")
+			coords = geoobj.bounding_box.coordinates;
+		for (var i = 0; i < coords[0].length; i++)
+			paths.push(new google.maps.LatLng(coords[0][i][1], coords[0][i][0]));
 		var polygon = new google.maps.Polygon(mapPolygonOptions);
 		polygon.setPaths(paths);
 		polygon.setMap(map);
