@@ -116,4 +116,5 @@ form { margin-bottom: 0; }
 	#control { height: 59px; }
 	.tw { top: 59px; }
 	.button { padding: 0 3px; }
+	#reps { overflow: auto; -webkit-overflow-scrolling: touch; }
 }
