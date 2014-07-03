@@ -19,6 +19,8 @@ registerPlugin({
 		if (tw.length < 1) return;
 		for (var i = 0; i < tw.length; i++) {
 			tw[i].text += ' <a href="javascript:twn_hide(\''+tw[i].id_str+'\')">['+_('Hide')+']</a>';
+			if (new Date() - toDate(tw[i].created_at) > 180*24*60*60*1000)
+				tw[i].user = null;
 		}
 		twShowToNode(tw, $("tw"));
 	},
