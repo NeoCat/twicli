@@ -2,7 +2,7 @@
 	var res = [
 		{search: /^https?:\/\/(?:(?:www|m)\.youtube\.com\/watch\?.*v=|youtu\.be\/)([\w\-]+).*$/,
 			replace: "http://www.youtube.com/embed/$1", type: "iframe"},
-		{search: /^https?:\/\/gist\.github\.com\/(?:[A-Za-z-]+\/)?(\d+)(?:\.txt)?$/, replace: "https://gist.github.com/$1.js", type: "script"},
+		{search: /^https?:\/\/gist\.github\.com\/([A-Za-z0-9-]+\/)?([A-Za-z0-9-]+)(?:\.txt)?$/, replace: "https://gist.github.com/$1$2.js", type: "script"},
 		{search: /^https?:\/\/raw\.github\.com\/gist\/(\d+)(?:.*)$/, replace: "https://gist.github.com/$1.js", type: "script"},
 		{search: /https?:\/\/(?:nico\.ms|www\.nicovideo\.jp\/watch)\/((?!lv)(?!nw)(?!im)[a-z]{2}\d+)/, replace: "http://ext.nicovideo.jp/thumb_watch/$1", type: "script"},
 		{search: /^https?:\/\/vine\.co\/v\/(\w+)$/, replace: "https://vine.co/v/$1/embed/simple", type: "iframe"},
