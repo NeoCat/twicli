@@ -1343,6 +1343,8 @@ function twShow2(tw) {
 	}
 	if (tw[0] && selected_menu.id == "user" && last_user.indexOf(',') < 0 && !fav_mode && user_info.innerHTML == '')
 		twUserInfo(tw[0].user);
+	if (tw[0] && selected_menu.id == "user" && last_user.indexOf('id=') == 0)
+		$("user").innerHTML = last_user = tw[0].user.screen_name;
 }
 function twShow3(tw) {
 	if (tw.errors) return error('', tw);
@@ -1608,8 +1610,9 @@ function switchUser(user) {
 		$("tw2h").innerHTML = (show_header_img ? "<div id=\"user_info_b\">" : "") + "<div id=\"user_info\"></div>" + (show_header_img ? "</div>" : "");
 		if (last_user_info && last_user_info.screen_name == user)
 			twUserInfo(last_user_info);
+		var query = user.indexOf('id=') == 0 ? 'user_id=' + user.substr(3) : 'screen_name=' + user;
 		xds.load_for_tab(twitterAPI + 'statuses/user_timeline.json' +
-			'?count=' + max_count_u + '&screen_name=' + user + 
+			'?count=' + max_count_u + '&' + query +
 			'&include_rts=true&include_entities=true&suppress_response_codes=true', twShow2);
 	} else {
 		users_log = [];
