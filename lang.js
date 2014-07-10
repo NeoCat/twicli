@@ -77,5 +77,5 @@ var langResources = {
 	'Your settings are uploaded successfully.': ['設定のアップロードに成功しました。'],
 	'Failed to download settings. (Error $1)': ['設定のダウンロードに失敗しました。(エラー $1)'],
 	'Your settings are downloaded. Please reload to enable them.': ['設定がダウンロードされました。有効にするにはリロードしてください。'],
-	'Failed to download settings. (Error $1)': ['設定のアップロードに失敗しました。(エラー $1)']
+	'Failed to upload settings. (Error $1)': ['設定のアップロードに失敗しました。(エラー $1)']
 };

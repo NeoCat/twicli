@@ -348,7 +348,7 @@ function downloadSettings() {
 				alert(_('Your settings are downloaded. Please reload to enable them.'));
 			}
 			else
-				alert(_('Failed to downlaod settings. (Error $1)', xhr.status));
+				alert(_('Failed to download settings. (Error $1)', xhr.status));
 		}
 	}
 	xhr.send();
