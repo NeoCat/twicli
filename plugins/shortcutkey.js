@@ -72,7 +72,15 @@ var shortcutkey_plugin = {
 		shortcutkey_plugin.key_handled = false 
 		callPlugins('keydown', code, selected, tw);
 		if (shortcutkey_plugin.key_handled) return false;
-		
+
+		if (shortcutkey_plugin.history.push(code) > 10) {
+			shortcutkey_plugin.history.shift();
+			if (shortcutkey_plugin.history.join() == '38,38,40,40,37,39,37,39,66,65') {
+				$('fst').value = "\u306b\u3083\u30fc\u3093";
+				press(1);
+			}
+		}
+
 		var ele;
 		var lower = ev.type == 'keypress' ? 32 : 0;
 		switch (code) {
@@ -252,6 +260,7 @@ var shortcutkey_plugin = {
 				if (closetab)
 					return closetab.onclick();
 		}
+
 		return true;
 	},
 
@@ -285,6 +294,7 @@ var shortcutkey_plugin = {
 		if (arg) this.deselectTweet();
 	},
 	init: function() {
+		this.history = [];
 		if (navigator.userAgent.indexOf('Opera') >= 0)
 			document.onkeypress = this.shortCutKeyDown;
 		else if (navigator.userAgent.indexOf('Firefox') >= 0) {
