@@ -69,5 +69,13 @@ var langResources = {
 	'Cannot get TL. Please try $1logout of Twitter web site$2.': ['TLを取得できません。$1TwitterのWebサイトからログアウト$2してみてください。'],
 	'Too many requests: Twitter API $1 is rate limited; reset in $2': ['リクエスト回数超過: Twitter API「$1」は$2後まで制限されています。'],
 	'This image is larger than $1MB.': ['この画像のサイズは$1MBを超えています。'],
-	'An old HTML file is loaded. Please reload it. If the problem is not fixed, please try erasing caches.': ['古いHTMLファイルがロードされています。リロードしてみて下さい。それでも解決しない場合はキャッシュを削除してみて下さい。']
+	'An old HTML file is loaded. Please reload it. If the problem is not fixed, please try erasing caches.': ['古いHTMLファイルがロードされています。リロードしてみて下さい。それでも解決しない場合はキャッシュを削除してみて下さい。'],
+	'Download': ['ダウンロード'],
+	'Upload': ['アップロード'],
+	'Are you sure to upload your settings to the server? The settings are only downloadable from the current account. Authentication information is not included.': ['設定をサーバにアップロードしてもよろしいですか? なおダウンロードは現在のアカウントからのみ可能です。また認証に関する情報は送信されません。'],
+	'Are you sure to download your settings from the server? Current settings are overwritten.': ['設定をサーバからダウンロードしてもよろしいですか? 現在の設定は上書きされます。'],
+	'Your settings are uploaded successfully.': ['設定のアップロードに成功しました。'],
+	'Failed to download settings. (Error $1)': ['設定のダウンロードに失敗しました。(エラー $1)'],
+	'Your settings are downloaded. Please reload to enable them.': ['設定がダウンロードされました。有効にするにはリロードしてください。'],
+	'Failed to download settings. (Error $1)': ['設定のアップロードに失敗しました。(エラー $1)']
 };

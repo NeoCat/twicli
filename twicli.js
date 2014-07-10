@@ -299,6 +299,60 @@ function deleteCookie(key) {
 	document.cookie = key + "=;expires=" + sday.toGMTString();
 }
 
+function exportableKey(key) {
+	if (key.indexOf('twicli_') != 0) return false;
+	var blacklist = ['access','accounts','followers_ids','lists_users.'];
+	for (var i = 0; i < blacklist.length; i++)
+		if (key.indexOf('twicli_' + blacklist[i]) == 0) return false;
+	return true;
+}
+function serializeCookies() {
+	if (!use_local_storage || !window.localStorage) return null;
+	var ret = {};
+	for (var key in localStorage)
+		if (exportableKey(key))
+			ret[key] = localStorage[key];
+	return JSON.stringify(ret);
+}
+function deserializeCookies(json) {
+	var ret = JSON.parse(json);
+	for (var key in ret)
+		if (exportableKey(key))
+			localStorage[key] = ret[key];
+}
+
+function uploadSettings() {
+	if (!confirm(_('Are you sure to upload your settings to the server? The settings are only downloadable from the current account. Authentication information is not included.'))) return;
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST', 'save_settings.cgi', true);
+	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4) {
+			if (xhr.status == 200 && xhr.responseText == "OK\n")
+				alert(_('Your settings are uploaded successfully.'));
+			else
+				alert(_('Failed to upload settings. (Error $1)', xhr.status));
+		}
+	}
+	xhr.send('key=' + hex_sha1(access_token) + '&data=' + encodeURIComponent(serializeCookies()));
+}
+function downloadSettings() {
+	if (!confirm(_('Are you sure to download your settings from the server? Current settings are overwritten.'))) return;
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', 'settings/' + hex_sha1(access_token), true);
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4) {
+			if (xhr.status == 200) {
+				deserializeCookies(xhr.responseText);
+				alert(_('Your settings are downloaded. Please reload to enable them.'));
+			}
+			else
+				alert(_('Failed to downlaod settings. (Error $1)', xhr.status));
+		}
+	}
+	xhr.send();
+}
+
 // 言語リソースをルックアップ
 var browser_lang = navigator.browserLanguage || navigator.language || navigator.userLanguage || 'en';
 var browser_lang0 = browser_lang.split('-')[0];
@@ -1689,7 +1743,7 @@ function switchMisc() {
 					_('Footer')+': <input name="footer" size="20" value="' + footer + '"><br>' +
 					_('Plugins')+':<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>' +
 					_('user stylesheet')+':<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br>' +
-					'<input type="submit" value="'+_('Save')+'"></form></div><hr class="spacer">';
+					'<input type="submit" value="'+_('Save')+'">&nbsp;<button onclick="uploadSettings(); return false">'+_('Upload')+'</button><button onclick="downloadSettings(); return false">'+_('Download')+'</button></form></div><hr class="spacer">';
 	callPlugins("miscTab", $("tw2h"));
 	xds.load_for_tab(twitterAPI + 'application/rate_limit_status.json' +
 				'?suppress_response_codes=true&resources='+api_resources.join(','), twRateLimit);
