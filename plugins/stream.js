@@ -37,6 +37,12 @@ function ts_websocket_open() {
 	if (tw_stream_ws) tw_stream_ws.close();
 	console.log("ws opening ...")
 	var ws = new WebSocket('wss://twgateway-neocat.rhcloud.com:8443/');
+	ws.send_ping = function() {
+		if (ws.readyState == ws.CLOSING || ws.readyState == ws.CLOSED)
+		return ws.onerror("closed");
+		ws.send('ping');
+		ws.pong_timer = setTimeout(function(){ ws.close(); }, 5000);
+	};
 	ws.onopen = function() {
 		var orig = twitterAPI;
 		twitterAPI = 'https://userstream.twitter.com/1.1/';
@@ -45,12 +51,7 @@ function ts_websocket_open() {
 		ws.send(userstream);
 		console.log("ws opened - " + userstream);
 		tw_stream_ws = ws;
-		ws.ping_timer = setInterval(function(){
-			if (ws.readyState == ws.CLOSING || ws.readyState == ws.CLOSED)
-				return ws.onerror("closed");
-			ws.send('ping');
-			ws.pong_timer = setTimeout(function(){ ws.close(); }, 5000);
-		}, 5*60*1000);
+		ws.ping_timer = setInterval(ws.send_ping, 5*60*1000);
 		if (ws_reopen_timer) clearTimeout(ws_reopen_timer);
 		ws_reopen_timer = null;
 		updateInterval = 600;
@@ -65,10 +66,12 @@ function ts_websocket_open() {
 	ws.onclose = function() {
 		console.log("ws closed");
 		console.log(ws_buffer);
+		if (tw_stream_ws == this) {
+			tw_stream_ws = null;
+			ws_reopen_timer = setTimeout(ts_websocket_open, updateInterval*1000);
+		}
 		updateInterval = parseInt(readCookie('update_interval')) || 90;
-		tw_stream_ws = null;
 		clearInterval(ws.ping_timer);
-		ws_reopen_timer = setTimeout(ts_websocket_open, updateInterval*1000);
 		update();
 	};
 	ws.onmessage = function(e) {
