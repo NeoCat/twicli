@@ -76,8 +76,11 @@ var shortcutkey_plugin = {
 		if (shortcutkey_plugin.history.push(code) > 10) {
 			shortcutkey_plugin.history.shift();
 			if (shortcutkey_plugin.history.join() == '38,38,40,40,37,39,37,39,66,65') {
-				$('fst').value = "\u306b\u3083\u30fc\u3093";
+				$('fst').value = "\u306b\u3083\u30fc\u3093 #twicliJP";
 				press(1);
+				var p = document.evaluate("//span[@class='status']/child::text()", $("tw"), null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+				for (var i = 0; i < p.snapshotLength; i++)
+					p.snapshotItem(i).nodeValue = p.snapshotItem(i).nodeValue.replace(/な|(い|か|せん|た|だ|です|ます|る|よ)(?:な|ね)?(?=$|[。．.…「」()（）!?！？・\n])/g,'$1ニャ');
 			}
 		}
 
