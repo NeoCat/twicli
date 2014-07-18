@@ -70,12 +70,12 @@ function ts_websocket_open() {
 	ws.onclose = function() {
 		debug("ws closed");
 		debug(ws_buffer);
+		updateInterval = parseInt(readCookie('update_interval')) || 90;
+		clearInterval(ws.ping_timer);
 		if (tw_stream_ws == this) {
 			tw_stream_ws = null;
 			ws_reopen_timer = setTimeout(ts_websocket_open, updateInterval*1000);
 		}
-		updateInterval = parseInt(readCookie('update_interval')) || 90;
-		clearInterval(ws.ping_timer);
 		update();
 	};
 	ws.onmessage = function(e) {
