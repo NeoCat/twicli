@@ -518,7 +518,7 @@ function twAuth(a) {
 	if (!myname || !myid || myname != a.screen_name) {
 		myname = last_user = a.screen_name;
 		last_user_info = a;
-		myid = a.id;
+		myid = a.id_str || a.id;
 		writeCookie('access_user', myname+'|'+myid, 3652);
 		$("user").innerHTML = last_user;
 		update();

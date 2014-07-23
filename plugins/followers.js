@@ -22,7 +22,8 @@ registerPlugin({
 	newMessageElement: function(ele, tw) {
 		if (!display_as_rt && tw.retweeted_status && tw.retweeted_status.user)
 			tw = tw.retweeted_status;
-		if (followers_ids_list.length && myid != tw.user.id && !followers_ids[tw.user.id])
+		var uid = tw.user.id_str || tw.user.id;
+		if (followers_ids_list.length && myid != uid && !followers_ids[uid])
 			for (var i = 0; i  < ele.childNodes.length; i++)
 				if (ele.childNodes[i].className == "status")
 					ele.childNodes[i].className += " non-follower";
@@ -40,7 +41,7 @@ function twfcFollwersIDsRenew() {
 	if (status) status.innerHTML = "loading...";
 	followers_ids_list = [];
 	followers_ids = [];
-	xds.load(twitterAPI + 'followers/ids.json?cursor=-1', twfcRenew);
+	xds.load(twitterAPI + 'followers/ids.json?stringify_ids=true&cursor=-1', twfcRenew);
 }
 function twfcRenew(list) {
 	followers_ids_list = followers_ids_list.concat(list.ids);
@@ -50,5 +51,5 @@ function twfcRenew(list) {
 	var status = document.getElementById("followers_status");
 	if (status) status.innerHTML = "on (" + followers_ids_list.length + ")";
 	if (list.next_cursor)
-		xds.load(twitterAPI + 'followers/ids.json?cursor='+list.next_cursor_str, twfcRenew);
+		xds.load(twitterAPI + 'followers/ids.json?stringify_ids=true&cursor='+list.next_cursor_str, twfcRenew);
 }

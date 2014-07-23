@@ -5,6 +5,17 @@ var last_update = new Date;
 var ws_buffer = '';
 var tw_stream_ws = null;
 var ws_reopen_timer = null;
+var ws_blocked = {};
+
+function ws_blocked_get(cursor) {
+	xds.load(twitterAPI + 'blocks/ids.json?stringify_ids=true&cursor='+cursor,
+		function(blocks) {
+			for (var i = 0; i < blocks.ids.length; i++)
+				ws_blocked[blocks.ids[i]] = 1;
+			if (blocks.next_cursor)
+				ws_blocked_get(blocks.next_cursor_str);
+		});
+}
 
 function debug(msg) {
 	console.log(new Date() + ": " + msg);
@@ -12,7 +23,8 @@ function debug(msg) {
 
 function handle_stream_data(data, tw) {
 	if (data.text) {
-		tw.push(data);
+		if (!ws_blocked[data.user.id_str])
+			tw.push(data);
 	} else if (data.friends) {
 		// do nothing;
 	} else if (data['delete'] && data['delete'].status) {
@@ -34,10 +46,14 @@ function handle_stream_data(data, tw) {
 		} catch(e) {
 			debug(e);
 		}
+	} else if (data.event && data.event == "block") {
+		ws_blocked[data.target.id_str] = 1;
+	} else if (data.event && data.event == "unblock") {
+		ws_blocked[data.target.id_str] = 0;
 	} else debug(data);
 }
 
-function ts_websocket_open() {
+function ws_open() {
 	if (tw_stream_ws) tw_stream_ws.close();
 	debug("ws opening ...")
 	var ws = new WebSocket('wss://twgateway-neocat.rhcloud.com:8443/');
@@ -72,10 +88,10 @@ function ts_websocket_open() {
 		debug(ws_buffer);
 		updateInterval = parseInt(readCookie('update_interval')) || 90;
 		clearInterval(ws.ping_timer);
-		if (tw_stream_ws == this) {
+		if (tw_stream_ws == this)
 			tw_stream_ws = null;
-			ws_reopen_timer = setTimeout(ts_websocket_open, updateInterval*1000);
-		}
+		if (!tw_stream_ws)
+			ws_reopen_timer = setTimeout(ws_open, updateInterval*1000);
 		update();
 	};
 	ws.onmessage = function(e) {
@@ -119,7 +135,8 @@ function ts_websocket_open() {
 
 registerPlugin({
 		auth: function() {
-			ts_websocket_open();
+			ws_blocked_get("-1");
+			ws_open();
 		},
 		savePrefs: function() {
 			if (tw_stream_ws)
