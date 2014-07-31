@@ -21,7 +21,7 @@ function imageLoadedFromLink(e) {
 }
 function dispImageFromLink(url, e) {
   if (e.parentNode.parentNode.parentNode.id != 'reps') rep_top = cumulativeOffset(e)[1] + 20;
-  $('reps').innerHTML = '<img src="' + url + '" style="max-width:90%; max-height: 90%; margin: auto; display: block;" onload="imageLoadedFromLink(this)">';
+  $('reps').innerHTML = url.map(function(u){return '<img src="' + u + '" style="max-width:90%; max-height: 90%; margin: auto; display: block;" onload="imageLoadedFromLink(this)">'}).join('');
   $('rep').style.display = 'block';
   $('rep').style.top = rep_top + 'px';
 }
@@ -52,7 +52,7 @@ function dispImageFromLink(url, e) {
       var tw = a.parentNode.parentNode.tw;
       tw = tw.retweeted_status ? tw.retweeted_status : tw;
       if (tw && tw.user.screen_name == m[1] && tw.id_str == m[2] && a.href.indexOf('/photo/1') >= 0 && tw.entities.media && tw.entities.media[0])
-        script = 'dispImageFromLink(\'' + tw.entities.media[0].media_url + ':medium\', this); return false;';
+        script = 'dispImageFromLink([\'' + (tw.extended_entities || tw.entities).media.map(function(x){return x.media_url + ':medium'}).join('\',\'') + '\'], this); return false;';
       dummy.innerHTML = '<a class="button" href="#" onClick="' + script + '"><img src="images/jump.png" alt="☞" width="14" height="14"></a>';
       a.parentNode.insertBefore(dummy.firstChild, a.nextSibling);
     }
