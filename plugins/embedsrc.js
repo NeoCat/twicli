@@ -80,13 +80,13 @@ function dispEmbedSrc(url, link, type) {
 	}
 	$('reps').appendChild(ifr);
 	if (type == 'script') {
-		document.getElementById('embedsrc').contentWindow.document.write(
+		ifr.contentWindow.document.write(
 			'<div><scr'+'ipt type="text/javascript" src="'+url+
 				'"></scr'+'ipt></div>');
 	} else if (type == 'pin') {
-		document.getElementById('embedsrc').contentWindow.document.write(
+		ifr.contentWindow.document.write(
 			'<div><a data-pin-do="embedPin" href="' + url
-			+'"></a><scr'+'ipt type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></scr'+'ipt></div>');
+				+'"></a><scr'+'ipt type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></scr'+'ipt></div>');
 	}
 	$('rep').style.top = rep_top;
 	scrollToDiv($('rep'));
