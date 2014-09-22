@@ -318,7 +318,7 @@ function deserializeCookies(json) {
 	var ret = JSON.parse(json);
 	for (var key in ret)
 		if (exportableKey(key))
-			localStorage[key] = ret[key];
+			localStorage[key] = ret[key] || "";
 }
 
 function uploadSettings() {
