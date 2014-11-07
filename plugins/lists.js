@@ -110,13 +110,14 @@ function twlLists(res) {
 }
 
 function twlGetListStatus(list) {
+	list = list.replace('/lists/', '/');
 	twl_page = 0;
 	if (twl_update_timer) clearInterval(twl_update_timer);
 	if (selected_menu.id == "user") {
 		$("tw2c").innerHTML = "";
 	} else {
 		if (list_auto_update)
-			twl_update_timer = setInterval(function(){twlGetListStatusUpdate(list,true)}, 
+			twl_update_timer = setInterval(function(){twlGetListStatusUpdate(list,true)},
 				1000*Math.max(parseInt(readCookie('update_interval')) || 90, 30));
 	}
 	twlGetListStatusUpdate(list);
