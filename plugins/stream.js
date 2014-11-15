@@ -72,6 +72,7 @@ function ws_open() {
 		debug("ws opened - " + userstream);
 		tw_stream_ws = ws;
 		ws.ping_timer = setInterval(ws.send_ping, 5*60*1000);
+		ws.pong_timer = setTimeout(function(){ debug("hello timeout"); ws.close(); }, 10000);
 		if (ws_reopen_timer) clearTimeout(ws_reopen_timer);
 		ws_reopen_timer = null;
 		updateInterval = 600;
@@ -91,7 +92,7 @@ function ws_open() {
 		if (tw_stream_ws == this)
 			tw_stream_ws = null;
 		if (!tw_stream_ws)
-			ws_reopen_timer = setTimeout(ws_open, updateInterval*1000);
+			ws_reopen_timer = setTimeout(ws_open, updateInterval*1000 - 15000);
 		update();
 	};
 	ws.onmessage = function(e) {
