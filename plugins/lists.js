@@ -9,7 +9,6 @@ langResources['Add this user to list "$1"'] =	['ユーザをリスト"$1"に追�
 langResources['Remove this user from list "$1"'] =	['ユーザをリスト"$1"から削除', '从名单"$1"删除这个用户'];
 langResources['Update tweets in list tab automatically'] = 	['リストタブのツイートを自動更新', '自动地提取所有发言'];
 
-
 var list_auto_update = parseInt(readCookie('list_auto_update') || 0);
 var last_list = ['',''];
 var twl_page = 0;
@@ -31,9 +30,9 @@ function twlGetListInfo(name) {
 	lists_users[name] = [];
 	xds.load_for_tab(twitterAPI + 'lists/members.json?owner_screen_name=' + user + '&slug=' + slug,
 		function twlListMember (info) {
-			if (info.error) {
-				alert(info.error);
+			if (info.error || info.errors) {
 				twlUnsubscribeList(name);
+				alert(info.error || info.errors[0].message);
 				return;
 			}
 			lists_users[name] = lists_users[name].concat(info.users.map(function(u){ return u.screen_name; }));
