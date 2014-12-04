@@ -984,7 +984,9 @@ function toDate(d) {
 function d2(dig) { return (dig>9?"":"0") + dig }
 function dateFmt(d) {
 	d = toDate(d);
-	return (d.getMonth()+1) + "/" + d.getDate() + " " + d.getHours() + ":" + d2(d.getMinutes()) + ":" + d2(d.getSeconds());
+	var now = new Date();
+	var y = (d.getFullYear()*12 + d.getMonth() <= now.getFullYear()*12 + now.getMonth() - 12 ? d.getFullYear() + "/" : "")
+	return y + (d.getMonth()+1) + "/" + d.getDate() + " " + d.getHours() + ":" + d2(d.getMinutes()) + ":" + d2(d.getSeconds());
 }
 function insertPDF(str) {
 	var k = 0;
