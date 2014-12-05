@@ -49,7 +49,7 @@ var shortcutkey_plugin = {
 			return true;
 		}
 		if (shortcutkey_plugin.repeat_check) {
-			if (ev.type == 'keydown' && code != 38 && code != 40 && code != 74 && code != 75)
+			if (ev.type == 'keydown' && code != 38 && code != 40 && code != 74 && code != 75 && code != 191)
 				return true;
 			var date = ev.timeStamp || new Date(); // 連続する30ms以内のイベントは無視
 			if (shortcutkey_plugin.last_event_date && date - shortcutkey_plugin.last_event_date < 30)
@@ -88,7 +88,9 @@ var shortcutkey_plugin = {
 		var lower = ev.type == 'keypress' ? 32 : 0;
 		switch (code) {
 			case 27: // esc : ポップアップメニュー,オーバーレイ表示を閉じる/選択解除
-				if ($('popup').style.display == 'block')
+				if (shortcutkey_plugin.filter_div)
+					shortcutkey_plugin.resetInclementalSearch();
+				else if ($('popup').style.display == 'block')
 					popup_hide();
 				else if ($('rep').style.display == 'block')
 					closeRep();
@@ -133,7 +135,7 @@ var shortcutkey_plugin = {
 					ele = ele && ele.childNodes[0];
 				} else {
 					ele = selected;
-					while (ele == selected || ele && (!ele.tw || ele.style.display == 'none')) {
+					while (ele == selected || ele && (!ele.tw || ele.style.display == 'none' || !ele.offsetHeight)) {
 						if (ele.nextSibling)
 							ele = ele.nextSibling;
 						else {
@@ -159,7 +161,7 @@ var shortcutkey_plugin = {
 					ele = ele && ele.childNodes[ele.childNodes.length - 1];
 				} else {
 					ele = selected;
-					while (ele == selected || ele && (!ele.tw || ele.style.display == 'none')) {
+					while (ele == selected || ele && (!ele.tw || ele.style.display == 'none' || !ele.offsetHeight)) {
 						if (ele.previousSibling)
 							ele = ele.previousSibling;
 						else {
@@ -262,9 +264,72 @@ var shortcutkey_plugin = {
 				var closetab = $('tws-closetab') || $('regexp-closetab');
 				if (closetab)
 					return closetab.onclick();
+			case 191: // / : インクリメンタルサーチ
+				shortcutkey_plugin.resetInclementalSearch();
+				var filter_div = document.createElement('div');
+				filter_div.style.position = 'fixed';
+				filter_div.style.left = 0;
+				filter_div.style.top = 0;
+				filter_div.style.width = '100%';
+				filter_div.style.height = '3em';
+				filter_div.style.zIndex = 100;
+				filter_div.style.className = 'filter-form';
+				filter_div.innerHTML = '<div style="margin: 4px; padding: 10px; width: 95%; height: 2em; border: solid 1px grey; background-color: #ffe; box-shadow: 0 3px 5px grey; font-size: small; text-align: center;"><a style="color: red" href="javascript:void(shortcutkey_plugin.resetInclementalSearch())">[x]</a> Filter: <input id="filter-field" style="width: 75%"></div>';
+				document.body.appendChild(filter_div);
+				shortcutkey_plugin.filter_div = filter_div;
+				$('filter-field').onkeydown = $('filter-field').onkeypress = shortcutkey_plugin.startInclementalSearch;
+				$('filter-field').focus();
+				return false;
 		}
 
 		return true;
+	},
+
+	startInclementalSearch: function(ev) {
+		ev = ev || window.event;
+		if ((ev.keyCode || ev.charCode) == 27/*esc*/) return shortcutkey_plugin.resetInclementalSearch();
+		if (shortcutkey_plugin.inclemental_search_timer) clearTimeout(shortcutkey_plugin.inclemental_search_timer);
+		shortcutkey_plugin.inclemental_search_timer = setTimeout(shortcutkey_plugin.doInclementalSearch, 100);
+	},
+	doInclementalSearch: function() {
+		$('filter-field').style.backgroundColor = '';
+		var re;
+		try {
+			re = new RegExp($('filter-field').value, 'i');
+		} catch(e) {
+			$('filter-field').style.backgroundColor = '#fcc';
+			return;
+		}
+		this.inclemental_search_timer = null;
+		ele = (selected_menu.id == 'TL' ? $('tw') : selected_menu.id == 'reply' ? $('re') : $('tw2c'));
+		if (ele.className.indexOf('filtered') < 0) ele.className += ' filtered';
+		for (var i = 0; i < ele.childNodes.length; i++) {
+			for (var j = 0; j < ele.childNodes[i].childNodes.length; j++) {
+				var d = ele.childNodes[i].childNodes[j];
+				if (d.tw) {
+					if ((d.tw.user.screen_name + ' ' + d.tw.text).match(re)) {
+						if (d.className.indexOf('filter-match') < 0) d.className += ' filter-match';
+					} else d.className = d.className.replace(/ ?filter-match/g, '');
+				}
+			}
+		}
+	},
+	resetInclementalSearch: function() {
+		document.activeElement.blur();
+		if (this.inclemental_search_timer) clearTimeout(this.inclemental_search_timer);
+		this.inclemental_search_timer = null;
+		if (this.filter_div) document.body.removeChild(this.filter_div);
+		this.filter_div = null;
+		ele = (selected_menu.id == 'TL' ? $('tw') : selected_menu.id == 'reply' ? $('re') : $('tw2c'));
+		if (ele.className.indexOf('filtered') < 0) return;
+		ele.className = ele.className.replace(/ ?filtered/g, '');
+		for (var i = 0; i < ele.childNodes.length; i++) {
+			for (var j = 0; j < ele.childNodes[i].childNodes.length; j++) {
+				var d = ele.childNodes[i].childNodes[j];
+				if (d.tw) d.className = d.className.replace(/ ?filter-match/g, '');
+			}
+		}
+
 	},
 
 	newMessageElement: function(el) {
@@ -284,6 +349,7 @@ var shortcutkey_plugin = {
 		}
 	},
 	switchTo: function(new_menu, old_menu) {
+		this.resetInclementalSearch();
 		if (this.selected_div)
 			old_menu.last_selected = this.selected_div.id;
 		this.deselectTweet(true);

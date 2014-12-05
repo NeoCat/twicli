@@ -28,6 +28,8 @@ form { margin-bottom: 0; }
 #tw2 { background-color: #f8f8f8; display: none; min-height: 448px; }
 #tw > div { border-bottom: 1px solid #777; }
 .tw-parent > div > div { padding: 1px; border-bottom: 1px solid #999; }
+.tw-parent.filtered > div > div { display: none; }
+.tw-parent.filtered > div > div.filter-match { display: block; }
 .dummy { border-bottom: 0; padding: 0; height: 0; clear: both; }
 .uicon { float: left; width: 32px; height: 32px; padding-right: 1px; }
 .uicon2 { max-width: 96px; max-height: 96px; }
