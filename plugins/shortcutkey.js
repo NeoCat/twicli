@@ -4,7 +4,7 @@ var shortcutkey_plugin = {
 	key_handled: false, // 他プラグインがkeydownを処理済みか：true時はイベント処理しない
 	last_event_date: null, // 最終イベント発生時刻
 	repeat_check: false, // keydown,keypress両指定時のチェック
-	
+
 	// tweetの選択
 	selectTweet: function(ev, div, no_scroll) {
 		if (shortcutkey_plugin.selected_div && shortcutkey_plugin.selected_div.id.indexOf('reps-') != 0)
@@ -58,7 +58,7 @@ var shortcutkey_plugin = {
 		}
 		if (ev.type == 'keypress' && navigator.userAgent.indexOf('Firefox') >= 0 && ev.charCode == 0 && ev.keyCode >= 112)
 			return true; // FirefoxでFnキーを解釈しない
-		
+
 		var tw = null;
 		var id = null;
 		var user = null;
@@ -69,7 +69,7 @@ var shortcutkey_plugin = {
 			id = tw.id_str || tw.id;
 			user = tw.user.screen_name;
 		}
-		shortcutkey_plugin.key_handled = false 
+		shortcutkey_plugin.key_handled = false
 		callPlugins('keydown', code, selected, tw);
 		if (shortcutkey_plugin.key_handled) return false;
 
