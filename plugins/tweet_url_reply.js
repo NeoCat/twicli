@@ -52,7 +52,9 @@ function dispImageFromLink(url, e) {
       var tw = a.parentNode.parentNode.tw;
       tw = tw.retweeted_status ? tw.retweeted_status : tw;
       if (tw && tw.user.screen_name == m[1] && tw.id_str == m[2] && a.href.indexOf('/photo/1') >= 0 && tw.entities.media && tw.entities.media[0])
-        script = 'dispImageFromLink([\'' + (tw.extended_entities || tw.entities).media.map(function(x){return x.media_url + ':medium'}).join('\',\'') + '\'], this); return false;';
+        script = 'dispImageFromLink([\'' +
+	  Array.prototype.map.call((tw.extended_entities || tw.entities).media, function(x){return x.media_url + ':medium'}).join('\',\'') +
+	  '\'], this); return false;';
       dummy.innerHTML = '<a class="button" href="#" onClick="' + script + '"><img src="images/jump.png" alt="☞" width="14" height="14"></a>';
       a.parentNode.insertBefore(dummy.firstChild, a.nextSibling);
     }
