@@ -4,7 +4,7 @@ registerPlugin({
 		var entities = tw.extended_entities || tw.entities;
 		if (entities && entities.media) {
 			for (var i = 0; i < entities.media.length; i++) {
-				if (entities.media[i].type == "photo") {
+				if (['photo', 'animated_gif', 'video'].indexOf(entities.media[i].type) >= 0) {
 					addThumbnail(elem,
 						entities.media[i].media_url + ":thumb",
 						entities.media[i].expanded_url);
