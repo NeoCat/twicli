@@ -159,7 +159,7 @@ var xds = {
 var postQueue = [];
 function enqueuePost(url, done, err, retry) {
 	if (post_via_agent && url.indexOf(twitterAPI) == 0 && (!$('media') || !$('media').value))
-		return xds.load(url, function(){done()}, err, retry, null, true);
+		return xds.load(url, done, err, retry, null, true);
 	postQueue.push(arguments);
 	if (postQueue.length > 1) // 複数リクエストを同時に投げないようキューイング
 		return;
@@ -396,7 +396,7 @@ var myid = null;		// 自ユーザID
 var last_user = null;	// user TLに表示するユーザ名
 var last_user_info = null;	// user TLに表示するユーザ情報(TLから切替時のキャッシュ)
 // 設定値
-var currentCookieVer = 19;
+var currentCookieVer = 20;
 var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = (cookieVer>18) && parseInt(readCookie('update_interval')) || 90;
 var pluginstr = (cookieVer>6) && readCookie('tw_plugins') || ' regexp.js\nlists.js\nsearch.js\nfollowers.js\nshorten_url.js\nresolve_url.js';
@@ -430,7 +430,7 @@ var footer = readCookie('footer') || ""; 							// フッタ文字列
 var decr_enter = parseInt(readCookie('decr_enter') || "0");			// Shift/Ctrl+Enterで投稿
 var confirm_close = parseInt(readCookie('confirm_close') || "1");			// Tabを閉じるとき確認
 var no_geotag = parseInt(readCookie('no_geotag') || "0");			// GeoTaggingを無効化
-var post_via_agent = parseInt(readCookie('post_via_agent') || "1");		// tweet-agent経由でツイート
+var post_via_agent = cookieVer > 19 ? parseInt(readCookie('post_via_agent') || "1") : 1;	// tweet-agent経由でツイート
 var show_header_img = parseInt(readCookie('show_header_img') || "1");	// ヘッダ画像表示
 var dnd_image_upload = parseInt(readCookie('dnd_image_upload') || (navigator.userAgent.indexOf('WebKit') >= 0 ? "1" : "0"));	// ドラッグ&ドロップで画像アップロード
 // TL管理用
@@ -669,8 +669,7 @@ function press(e) {
 	var text = st.value;
 	var do_post = function(r){
 		var media = $('media')&&$('media').value;
-		(r && post_via_agent && !media ? xds.load : enqueuePost)(twitterAPI +
-				'statuses/update' + (media ? '_with_media' : '') + '.json?'+
+		enqueuePost(twitterAPI + 'statuses/update' + (media ? '_with_media' : '') + '.json?'+
 				'status=' + OAuth.percentEncode(st.value) +
 				(geo && geo.coords ?  "&display_coordinates=true&lat=" + geo.coords.latitude +
 										"&long=" + geo.coords.longitude : "") +
@@ -1132,18 +1131,18 @@ function setFavIcon(img, id, f) {
 // followとremove
 function follow(f) {
 	if (!f && !confirm(_("Are you sure to remove $1?", last_user))) return false;
-	enqueuePost(twitterAPI + 'friendships/' + (f ? 'create' : 'destroy') + '.json?screen_name=' + last_user, switchUser);
+	enqueuePost(twitterAPI + 'friendships/' + (f ? 'create' : 'destroy') + '.json?screen_name=' + last_user, reloadUser);
 	return false;
 }
 // blockとunblock
 function blockUser(f) {
 	if (f && !confirm(_("Are you sure to block $1?", last_user))) return false;
-	enqueuePost(twitterAPI + 'blocks/' + (f ? 'create' : 'destroy') + '.json?skip_status=1&screen_name=' + last_user, switchUser);
+	enqueuePost(twitterAPI + 'blocks/' + (f ? 'create' : 'destroy') + '.json?skip_status=1&screen_name=' + last_user, reloadUser);
 	return false;
 }
 function reportSpam(f) {
 	if (f && !confirm(_("Are you sure to report $1 as spam?", last_user))) return false;
-	enqueuePost(twitterAPI + 'users/report_spam.json?screen_name=' + last_user, switchUser);
+	enqueuePost(twitterAPI + 'users/report_spam.json?screen_name=' + last_user, reloadUser);
 	return false;
 }
 // ユーザ情報を表示
@@ -1654,6 +1653,9 @@ function switchUserTL(div, rt) {
 	if (tw.user.description)
 		last_user_info = tw.user;
 	switchUser(tw.user.screen_name);
+}
+function reloadUser() {
+	switchUser();
 }
 function switchUser(user) {
 	if (!user) {
