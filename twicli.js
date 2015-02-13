@@ -158,7 +158,7 @@ var xds = {
 // 動的にフレームを生成してPOSTを投げる(Twitter APIはOAuth認証)
 var postQueue = [];
 function enqueuePost(url, done, err, retry) {
-	if (post_via_agent && url.indexOf(twitterAPI) == 0)
+	if (post_via_agent && url.indexOf(twitterAPI) == 0 && (!$('media') || !$('media').value))
 		return xds.load(url, function(){done()}, err, retry, null, true);
 	postQueue.push(arguments);
 	if (postQueue.length > 1) // 複数リクエストを同時に投げないようキューイング
