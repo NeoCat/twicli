@@ -33,9 +33,8 @@ function setupOAuthArgs(args) {
 		}
 	}
 }
-function setupOAuthURL(url, post) {
+function setupOAuthURL(url, post, post_agent) {
 	if (url.indexOf(twitterAPI) != 0) return url;
-	var post_agent = !post && url.indexOf(twitterAPI+'statuses/update.json') == 0;
 	var media_upload = url.indexOf('update_with_media.json') >= 0 && post;
 	var nosign = [];
 	url = url.split("?");
@@ -62,7 +61,7 @@ function setupOAuthURL(url, post) {
 	url = document.etc.URL.value;
 	if (post_agent) {
 		var sid = ['','2'][((new Date).getTime()/1000/60/60/12|0)%2];
-		url = url.replace(twitterAPI + 'statuses/update.json', 'https://tweet-agent'+sid+'.appspot.com/post');
+		url = url.replace(twitterAPI, 'https://tweet-agent'+sid+'.appspot.com/1.1/');
 	}
 	for (var e = 0; e < nosign.length; e++)
 		document.request.appendChild(nosign[e]);
@@ -88,9 +87,9 @@ function loadXDomainScript(url, ele) {
 }
 // クロスドメインJavaScript呼び出し(エラー処理+リトライ付き, Twitter APIはOAuth認証)
 var xds = {
-	load: function(url, callback, onerror, retry, callback_key) {
+	load: function(url, callback, onerror, retry, callback_key, post_agent) {
 		var url2 = setupOAuthURL(url + (url.indexOf('?')<0?'?':'&') +
-								(callback_key?callback_key:'callback') + '=cb');
+								(callback_key?callback_key:'callback') + '=cb', false, post_agent);
 		if (!url2) return null;
 		loading(true);
 		var ifr = document.createElement("iframe");
@@ -159,6 +158,8 @@ var xds = {
 // 動的にフレームを生成してPOSTを投げる(Twitter APIはOAuth認証)
 var postQueue = [];
 function enqueuePost(url, done, err, retry) {
+	if (post_via_agent && url.indexOf(twitterAPI) == 0)
+		return xds.load(url, function(){done()}, err, retry, null, true);
 	postQueue.push(arguments);
 	if (postQueue.length > 1) // 複数リクエストを同時に投げないようキューイング
 		return;
