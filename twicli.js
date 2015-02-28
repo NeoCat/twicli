@@ -38,7 +38,7 @@ function setupOAuthURL(url, post, post_agent) {
 	var media_upload = url.indexOf('update_with_media.json') >= 0 && post;
 	var nosign = [];
 	url = url.split("?");
-	if (post && url[1] && url[1].match(/(^|&)((?:status|text)=[^&]+)/) && RegExp.$2.indexOf('%2A') >= 0 || RegExp.$2.indexOf('*') >= 0) {
+	if (post && !(media_upload && post_agent) && url[1] && url[1].match(/(^|&)((?:status|text)=[^&]+)/) && RegExp.$2.indexOf('%2A') >= 0 || RegExp.$2.indexOf('*') >= 0) {
 		// "*"(%2A)はPOSTデータではURLEncodeされずに送信されOAuthエラーとなるため、URL内に含める（status,textにのみ対応）
 		url[1] = url[1].replace(RegExp.$1+RegExp.$2, '');
 		url[0] += "?" + RegExp.$2.replace(/\*/g, '%2A');
@@ -155,11 +155,31 @@ var xds = {
 	},
 	ifr_tab: []
 };
+// CORSによるPOST (Agent経由)
+function corsPost(url, done, err) {
+	loading(true);
+	var url_post = setupOAuthURL(url, true, true);
+	var form = new FormData();
+	var inputs = document.request.getElementsByTagName("INPUT");
+	for (var i = 0; i < inputs.length; i++)
+		if (inputs[i].type == 'file')
+			form.append(inputs[i].name, inputs[i].files[0]);
+		else if (inputs[i].name.indexOf('oauth_') != 0)
+			form.append(inputs[i].name, inputs[i].value);
+	var xhr = new XMLHttpRequest();
+	xhr.onload = function(){ loading(false); done(); }
+	xhr.onerror = function(){ loading(false); err(); }
+	xhr.open('POST', url_post, true);
+	xhr.send(form);
+}
 // 動的にフレームを生成してPOSTを投げる(Twitter APIはOAuth認証)
 var postQueue = [];
 function enqueuePost(url, done, err, retry) {
-	if (post_via_agent && url.indexOf(twitterAPI) == 0 && (!$('media') || !$('media').value))
-		return xds.load(url, done, err, retry, null, true);
+	if (post_via_agent && url.indexOf(twitterAPI) == 0)
+		if (!$('media') || !$('media').value)
+			return xds.load(url, done, err, retry, null, true);
+		else
+			return corsPost(url, done, err);
 	postQueue.push(arguments);
 	if (postQueue.length > 1) // 複数リクエストを同時に投げないようキューイング
 		return;
@@ -674,7 +694,7 @@ function press(e) {
 				(geo && geo.coords ?  "&display_coordinates=true&lat=" + geo.coords.latitude +
 										"&long=" + geo.coords.longitude : "") +
 				(in_reply_to_status_id ? "&in_reply_to_status_id=" + in_reply_to_status_id : ""),
-			function(tw){ if (tw && tw.errors) error('', tw); else resetFrm(); twShow([tw]); if (media && post_via_agent) setTimeout(update, 1000); },
+			function(tw){ if (tw && tw.errors) error('', tw); else resetFrm(); twShow([tw]); },
 			function(err){ if (err) return error('', err); if (media && post_via_agent) { resetFrm(); setTimeout(update, 1000); } else if (r && post_via_agent) do_post(false); },
 				retry);
 	};
