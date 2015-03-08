@@ -416,7 +416,7 @@ var myid = null;		// 自ユーザID
 var last_user = null;	// user TLに表示するユーザ名
 var last_user_info = null;	// user TLに表示するユーザ情報(TLから切替時のキャッシュ)
 // 設定値
-var currentCookieVer = 20;
+var currentCookieVer = 21;
 var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = (cookieVer>18) && parseInt(readCookie('update_interval')) || 90;
 var pluginstr = (cookieVer>6) && readCookie('tw_plugins') || ' regexp.js\nlists.js\nsearch.js\nfollowers.js\nshorten_url.js\nresolve_url.js';
@@ -435,6 +435,7 @@ if (cookieVer<17) pluginstr = pluginstr.replace(/related_results\.js[\r\n]+/,'')
 if (cookieVer<18) if (pluginstr.indexOf('shortcutkey.js')<0) pluginstr+="\nshortcutkey.js";
 if (cookieVer<18) if (pluginstr.indexOf('multi_account.js')<0) pluginstr+="\nmulti_account.js";
 if (cookieVer<18) if (pluginstr.indexOf('notify.js')<0) pluginstr+="\nnotify.js";
+if (cookieVer<21) if (pluginstr.indexOf('tweets_after_rt.js')<0) pluginstr+="\ntweets_after_rt.js";
 pluginstr = pluginstr.substr(1);
 var plugins = new Array;
 var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 800);
