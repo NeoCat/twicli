@@ -614,6 +614,7 @@ function clear_error() {
 var notify_queue = [];
 var notify_timer = null;
 function notify(str) {
+	callPlugins('notify', str);
 	if (notify_timer) {
 		notify_queue.push(str);
 		return;
@@ -1262,8 +1263,10 @@ function twDirectCheck(tw) {
 	if (tw.errors) return error('', tw);
 	if (!tw || tw.length == 0) return false;
 	var id = tw[0].id_str || tw[0].id;
-	if (last_direct_id && last_direct_id != id)
-			$("direct").className += " new";
+	if (last_direct_id && last_direct_id != id) {
+		$("direct").className += " new";
+		callPlugins('notifyDM', tw, last_direct_id);
+	}
 	last_direct_id = id;
 }
 // API情報の受信

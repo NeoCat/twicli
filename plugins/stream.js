@@ -34,7 +34,8 @@ function handle_stream_data(data, tw) {
 		}
 	} else if (data.direct_message) {
 		if ($("direct").className.indexOf('new') < 0)
-		$("direct").className += " new";
+			$("direct").className += " new";
+		callPlugins('newDM', data.direct_message);
 	} else if (data.event && (data.event == "favorite" || data.event == "unfavorite")) {
 		var name = data.source.screen_name;
 		if (name == myname) return;
