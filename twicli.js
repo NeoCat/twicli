@@ -1074,7 +1074,7 @@ function makeHTML(tw, no_name, pid, userdesc) {
 		//Retweet情報
 		'<span id="rtinfo-'+eid+'" class="rtinfo">' +
 		(tw.metadata && tw.metadata.result_type=="popular" ? "<img src=\"images/popular.png\" alt=\"pop\">" : "") +
-		(!display_as_rt && rt ? "<img src=\"images/rt.png\" alt=\"RT\">by <img src=\""+tw.user.profile_image_url+"\" alt=\""+tw.user.screen_name+"\" class=\"rtuicon\"><a href=\""+twitterURL+tw.user.screen_name+"\" onclick=\"switchUserTL(this.parentNode.parentNode, true);return false\">" + tw.user.screen_name + "</a><span class=\"cnt\">" + (parseInt(tw.retweet_count) > 1 ? '& ' + (typeof(tw.retweet_count) == 'string' ? tw.retweet_count : tw.retweet_count-1) : '') : parseInt(tw.retweet_count) > 1 ? '<img src="images/rt2.png" class="rtinfoicon" alt="RT">' + tw.retweet_count : '') + '</span></span>' +
+		(!display_as_rt && rt ? "<img src=\"images/rt.png\" alt=\"RT\">by <img src=\""+tw.user.profile_image_url+"\" alt=\""+tw.user.screen_name+"\" class=\"rtuicon\"><a href=\""+twitterURL+tw.user.screen_name+"\" onclick=\"switchUserTL(this.parentNode.parentNode, true);return false\">" + tw.user.screen_name + "</a><span class=\"cnt\">" + (parseInt(tw.retweet_count) > 1 ? '& ' + (typeof(tw.retweet_count) == 'string' ? tw.retweet_count : tw.retweet_count-1) : '') : parseInt(tw.retweet_count) > 1 ? '<img src="images/rt2.png" class="rtinfoicon" alt="RT"><span class=\"cnt\">' + tw.retweet_count+'</span>' : '') + '</span></span>' +
 		//Favorited情報
 		'<span id="favinfo-'+eid+'" class="favinfo">' +
 		(parseInt(tw.favorite_count) > 0 ? "<img src=\"images/fav.png\" alt=\"Fav\" class=\"favinfoicon\"><span class=\"cnt\">" + tw.favorite_count : '')+ '</span></span>' +
