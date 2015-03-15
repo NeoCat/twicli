@@ -267,14 +267,8 @@ var shortcutkey_plugin = {
 			case 191: // / : インクリメンタルサーチ
 				shortcutkey_plugin.resetInclementalSearch();
 				var filter_div = document.createElement('div');
-				filter_div.style.position = 'fixed';
-				filter_div.style.left = 0;
-				filter_div.style.top = 0;
-				filter_div.style.width = '100%';
-				filter_div.style.height = '3em';
-				filter_div.style.zIndex = 100;
-				filter_div.style.className = 'filter-form';
-				filter_div.innerHTML = '<div style="margin: 4px; padding: 10px; width: 95%; height: 2em; border: solid 1px grey; background-color: #ffe; box-shadow: 0 3px 5px grey; font-size: small; text-align: center;"><a style="color: red" href="javascript:void(shortcutkey_plugin.resetInclementalSearch())">[x]</a> Filter: <input id="filter-field" style="width: 75%"></div>';
+				filter_div.className = 'filter-form';
+				filter_div.innerHTML = '<a href="javascript:void(shortcutkey_plugin.resetInclementalSearch())">[x]</a> Filter: <input type="text" id="filter-field">';
 				document.body.appendChild(filter_div);
 				shortcutkey_plugin.filter_div = filter_div;
 				$('filter-field').onkeydown = $('filter-field').onkeypress = shortcutkey_plugin.startInclementalSearch;

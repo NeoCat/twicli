@@ -184,13 +184,10 @@ function twlUpdateMisc() {
 		var users = lists_users[a];
 		return a != "" ? '<li><a target="twitter" href="' + twitterURL + a + '">@'+ a + '</a>' +
 			' (' + (users ? users.length : "error") + ') ' +
-			'<input onchange="twlToggleListsInTL(\''+a+'\',this)" type="checkbox" '+
-					'id="chk-lists-'+a.replace('/','-')+'"'+chk+'>'+
-			'<label for="chk-lists-'+a.replace('/','-')+'">TL</label>&nbsp;&nbsp;'+
+			'<label><input type="checkbox" onchange="twlToggleListsInTL(\''+a+'\',this)" id="chk-lists-'+a.replace('/','-')+'" '+chk+'>TL</label>&nbsp;&nbsp;'+
 			' <a class="close" href="javascript:twlUnsubscribeList(\''+a+'\')">'+
 			'<img style="position: relative; top: 2px;" src="images/clr.png"></a>'+
-			'<input type="button" onclick="twlReloadListInfo(\'' + a + '\')" '+
-					'value="'+ _('Reload') + '"></a>'+
+			'<button type="button" onclick="twlReloadListInfo(\'' + a + '\')">'+ _('Reload') + '</button></a>'+
 			'</li>' : a
 	}).join("");
 }
@@ -254,10 +251,9 @@ registerPlugin({
 			'<form id="lists_pref" style="display:none" onSubmit="twlSubscribeList($(\'newList\').value); return false;">' +
 			_('subscribing lists by twicli')+':<ul id="lists_list">' +
 			'</ul><ul><li><input type="text" size="15" id="newList" value="">' +
-			'<input type="submit" value="'+_('Add')+'"></li></ul><p>' +
-			'<input id="auto_update" type="checkbox" onchange="twlSetAutoUpdate(this.checked)"' +
-			(list_auto_update ? ' checked' : '') + '>' +
-			'<label for="auto_update">' + _('Update tweets in list tab automatically') +
+			'<button type="submit">'+_('Add')+'</button></li></ul><p>' +
+			'<label><input type="checkbox" id="auto_update" onchange="twlSetAutoUpdate(this.checked)"' +
+			(list_auto_update ? ' checked' : '') + '>'+ _('Update tweets in list tab automatically') +
 			'</label></form>';
 		$("pref").appendChild(e);
 		twlUpdateMisc();
