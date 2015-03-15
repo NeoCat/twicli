@@ -50,9 +50,9 @@ registerPlugin({
 	miscTab: function(ele) {
 		var e = document.createElement('div');
 		e.innerHTML = _('Accounts')+': <select id="accounts"></select>' +
-				' <input type="image" onclick="accounts_change(); return false" alt="switch" title="switch" src="images/go.png">' +
-				'<input type="image" onclick="accounts_delete(); return false" alt="delete" title="delete" src="images/clr.png">' +
-				' <input type="image" onclick="accounts_add(); return false" alt="add" title="add" src="images/add.png"><br>';
+				'<button type="button" class="go" onclick="accounts_change(); return false"></button>' +
+				'<button type="button" class="clr" onclick="accounts_delete(); return false"></button>' +
+				'<button type="button" class="add" onclick="accounts_add(); return false"></button><br>';
 		$('tw2h').insertBefore(e, $('logout'));
 		
 		for (var x in accounts_info) {

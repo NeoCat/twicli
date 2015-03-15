@@ -23,7 +23,7 @@ registerPlugin({
 			'<form id="sound_pref" style="display:none" onSubmit="setSoundNames([$(\'sound0\').value,$(\'sound1\').value]); return false;">' +
 			_('on TL update')+': <input type="text" size="15" id="sound0" value="'+sound_name[0]+'"><br>' +
 			_('on new Reply')+': <input type="text" size="15" id="sound1" value="'+sound_name[1]+'"><br>' +
-			'<input type="submit" value="Apply"></form>';
+			'<button type="submit">Apply</button></form>';
 		$("pref").appendChild(e);
 	},
 	noticeUpdate: function(tw, nr) {

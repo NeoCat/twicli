@@ -22,7 +22,7 @@ registerPlugin({
 			__map($("tw").childNodes, function(x){return __map(x.childNodes,function(y){return [y.tw?y.tw.id:-1,y.weak]})}) + "\n" + 
 			__map($("re").childNodes, function(x){return __map(x.childNodes,function(y){return [y.tw?y.tw.id:-1,y.weak]})}) + "\n" + 
 			'</textarea>' +
-			'<input type="submit" value="Submit debug log"></form>';
+			'<button type="submit">Submit debug log</button></form>';
 		$("pref").appendChild(e);
 	}
 });
