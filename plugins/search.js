@@ -42,7 +42,7 @@ function twsSearch(qn, no_switch, max_id) {
 	if (tws_update_timer) clearInterval(tws_update_timer);
 	tws_update_timer = setInterval(function(){twsSearchUpdate(q,lang)}, 1000*Math.max(parseInt(readCookie('update_interval')) || 90, 30));
 	var rt_checked = exclude_rt ? "" : " checked";
-	$('tw2h').innerHTML = '<div class="tabcmd tabclose"><input id="tws-RT" type="checkbox"'+rt_checked+'><label for="tws-RT">RT</label> <a id="tws-closetab" href="#">[x] '+_('remove tab')+'</a></div>';
+	$('tw2h').innerHTML = '<div class="tabcmd tabclose"><label><input type="checkbox" id="tws-RT"'+rt_checked+'>RT</label> <a id="tws-closetab" href="#">[x] '+_('remove tab')+'</a></div>';
 	$('tws-closetab').onclick = function(){ closeSearchTab(myid); return false; };
 	if (!max_id) tws_page = 0;
 	$('tws-RT').onclick = function() { twsSwitchRT(myid); };
@@ -111,7 +111,7 @@ registerPlugin({
 	},
 	miscTab: function(ele) {
 		var e = document.createElement("div");
-		e.innerHTML = '<form onSubmit="return twsSearch($(\'search_q\').value);"><a href="https://twitter.com/search" target="_blank">'+_('Twitter search')+'</a> : <input type="text" size="15" id="search_q"><input type="image" src="images/go.png"></form>';
+		e.innerHTML = '<form onSubmit="return twsSearch($(\'search_q\').value);"><a href="https://twitter.com/search" target="_blank">'+_('Twitter search')+'</a> : <input type="text" size="15" id="search_q"><button type="submit" class="go"></button></form>';
 		ele.appendChild(e);
 		var hr = document.createElement("hr");
 		hr.className = "spacer";

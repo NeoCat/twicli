@@ -159,7 +159,7 @@ initRegexp();
 registerPlugin({
 	miscTab: function(ele) {
 		var e = document.createElement("div");
-		e.innerHTML = _('Pickup Pattern')+' <small>'+_('(TabName:ID:Tweet:Filter)')+'</small> : <br><form onSubmit="setRegexp($(\'pickup_regexp\').value); return false;"><textarea cols="30" rows="4" id="pickup_regexp">' + pickup_regexp + '</textarea><br><input type="submit" value="'+_('Apply')+'"></form>';
+		e.innerHTML = _('Pickup Pattern')+' <small>'+_('(TabName:ID:Tweet:Filter)')+'</small> : <br><form onSubmit="setRegexp($(\'pickup_regexp\').value); return false;"><textarea cols="30" rows="4" id="pickup_regexp">' + pickup_regexp + '</textarea><br><button type="submit">'+_('Apply')+'</button></form>';
 		ele.appendChild(e);
 		var hr = document.createElement("hr");
 		hr.className = "spacer";

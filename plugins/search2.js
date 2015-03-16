@@ -33,7 +33,7 @@ function twsjSearchShow(res) {
 registerPlugin({
 	miscTab: function(ele) {
 		var e = document.createElement("div");
-		e.innerHTML = '<form onSubmit="twsjSearch($(\'searchj_q\').value); return false;"><a target="twitter" href="http://yats-data.com/yats/">'+_('Twitter search (yats)')+'</a>: <input type="text" size="15" id="searchj_q"><input type="image" src="images/go.png"></form>';
+		e.innerHTML = '<form onSubmit="twsjSearch($(\'searchj_q\').value); return false;"><a target="twitter" href="http://yats-data.com/yats/">'+_('Twitter search (yats)')+'</a>: <input type="text" size="15" id="searchj_q"><button type="submit" class="go"></form>';
 		ele.appendChild(e);
 		var hr = document.createElement("hr");
 		hr.className = "spacer";

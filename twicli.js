@@ -1042,8 +1042,8 @@ function makeHTML(tw, no_name, pid, userdesc) {
 		Array.prototype.concat.apply(tw.entities.urls, tw.entities.media || []).map(function(_){
 			if (_.url && _.expanded_url) expanded_urls[_.url] = _.expanded_url;
 		});
-	return /*fav*/ (t.d_dir ? '' : '<img alt="☆" class="fav" src="images/icon_star_'+(!rt&&rs.favorited?'full':'empty')+'.gif" ' +
-			'onClick="fav(this,\'' + id + '\')"' + (pid ? ' id="fav-'+eid+'"' : '') + '>')+
+	return /*fav*/ (t.d_dir ? '' : '<div class="fav"><img alt="☆" src="images/icon_star_'+(!rt&&rs.favorited?'full':'empty')+'.gif" ' +
+			'onClick="fav(this,\'' + id + '\')"' + (pid ? ' id="fav-'+eid+'"' : '') + '><span></span></div>')+
 		 (!no_name || (!display_as_rt && rt) ?
 			//ユーザアイコン
 			'<img class="uicon" src="' + t.user.profile_image_url + '" title="' + (t.user.description ? t.user.description.replace(/\"/g,'&quot;') :'') + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false">' + (t.user.url ? '</a>' : '') +
@@ -1051,8 +1051,8 @@ function makeHTML(tw, no_name, pid, userdesc) {
 			'<a href="' + twitterURL + un + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false"><span class="uid">' + un + '</span>' +
 			 /*プロフィールの名前*/ (t.user.name!=un ? '<span class="uname">('+insertPDF(t.user.name)+')</span>' : '') + '</a>'
 		: '') +
-		 /* verified? */ (!no_name && t.user.verified ? '<img alt="verified" id="verified-' + eid + '" class="verified" src="images/verified.png">' : '') +
-		 /* protected? */ (t.user.protected ? '<img alt="lock" id="lock-' + eid + '" class="lock" src="images/icon_lock.gif">' : '') +
+		 /* verified? */ (!no_name && t.user.verified ? '<div id="verified-' + eid + '" class="verified"></div>' : '') +
+		 /* protected? */ (t.user.protected ? '<div alt="lock" id="lock-' + eid + '" class="lock"></div>' : '') +
 		/*ダイレクトメッセージの方向*/ (t.d_dir == 1 ? '<span class="dir">→</span> ' : t.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text-" + eid + "\" class=\"status\">" +
@@ -1072,15 +1072,14 @@ function makeHTML(tw, no_name, pid, userdesc) {
 				return "<a href=\""+twitterURL+u+"\"  class=\"mention\" onClick=\"switchUser('"+u+"'); return false;\" >"+_+"</a>";
 			}).replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//Retweet情報
-		' <span id="rtinfo-'+eid+'" class="rtinfo">' +
+		'<span id="rtinfo-'+eid+'" class="rtinfo">' +
 		(tw.metadata && tw.metadata.result_type=="popular" ? "<img src=\"images/popular.png\" alt=\"pop\">" : "") +
-		(!display_as_rt && rt ? "<img src=\"images/rt.png\" alt=\"RT\">by <img src=\""+tw.user.profile_image_url+"\" alt=\""+tw.user.screen_name+"\" class=\"rtuicon\"><a href=\""+twitterURL+tw.user.screen_name+"\" onclick=\"switchUserTL(this.parentNode.parentNode, true);return false\">" + tw.user.screen_name + "</a> " + (parseInt(tw.retweet_count) > 1 ? '& ' + (typeof(tw.retweet_count) == 'string' ? tw.retweet_count : tw.retweet_count-1) : '') : parseInt(tw.retweet_count) > 1 ? '<small><img src="images/rt2.png" class="rtinfoicon" alt="RT">' + tw.retweet_count+'</small>' : '') + '</span>' +
+		(!display_as_rt && rt ? "<img src=\"images/rt.png\" alt=\"RT\">by <img src=\""+tw.user.profile_image_url+"\" alt=\""+tw.user.screen_name+"\" class=\"rtuicon\"><a href=\""+twitterURL+tw.user.screen_name+"\" onclick=\"switchUserTL(this.parentNode.parentNode, true);return false\">" + tw.user.screen_name + "</a><span class=\"cnt\">" + (parseInt(tw.retweet_count) > 1 ? '& ' + (typeof(tw.retweet_count) == 'string' ? tw.retweet_count : tw.retweet_count-1) : '') : parseInt(tw.retweet_count) > 1 ? '<img src="images/rt2.png" class="rtinfoicon" alt="RT"><span class=\"cnt\">' + tw.retweet_count+'</span>' : '') + '</span></span>' +
 		//Favorited情報
-		' <span id="favinfo-'+eid+'" class="favinfo">' +
-		(parseInt(tw.favorite_count) > 0 ? "<img src=\"images/fav.png\" alt=\"Fav\" class=\"favinfoicon\">" + tw.favorite_count : '')
-		+ '</span>' +
+		'<span id="favinfo-'+eid+'" class="favinfo">' +
+		(parseInt(tw.favorite_count) > 0 ? "<img src=\"images/fav.png\" alt=\"Fav\" class=\"favinfoicon\"><span class=\"cnt\">" + tw.favorite_count : '')+ '</span></span>' +
 		//日付
-		' <span id="utils-'+eid+'" class="utils">' +
+		'<span id="utils-'+eid+'" class="utils">' +
 		'<span class="prop"><a class="date" target="twitter" href="'+twitterURL+(t.d_dir ? '#!/messages' : un+'/statuses/'+id2)+'">' + dateFmt(t.created_at) + '</a>' +
 		//クライアント
 		(t.source ? '<span class="separator"> / </span><span class="source">' + t.source.replace(/<a /,'<a target="twitter"') + '</span>' : '') + '</span>' +
@@ -1108,7 +1107,7 @@ function makeUserInfoHTML(user) {
 						'<a href="' + twitterURL + user.screen_name + '/followers" onclick="switchFollower();return false;">' + user.followers_count + '<small>'+_('followers')+'</small></a>' +
 			' / <a href="' + twitterURL + user.screen_name + '" onclick="switchStatus();return false;">' + user.statuses_count + '<small>'+_('tweets')+'</small></a> / ' +
 						'<a href="' + twitterURL + user.screen_name + '/favorites" onclick="switchFav();return false;">' + user.favourites_count + '<small>'+_('favs')+'</small></a></b>' +
-			'</div><div class="clr"></div>'+
+			'</div></div>'+
 			(user.screen_name != myname ? '<a class="button upopup" href="#" onClick="userinfo_popup_menu(\'' + user.screen_name + '\',' + user.id + ', this); return false;"><small><small>▼</small></small></a>' : '')+
 			'<a target="twitter" href="' + twitterURL + user.screen_name + '">[Twitter]</a>'
 }
@@ -1126,7 +1125,7 @@ function nextButton(id, p) {
 	ret.id = id;
 	ret.className = 'get-next';
 	ret.onclick = function() { getNext(this); };
-	ret.innerHTML = '▽' + (p ? '(' + p + ')' : '');
+	ret.innerHTML = (p ? '<span>' + p + '</span>' : '');
 	return ret;
 }
 // favoriteの追加/削除
@@ -1220,8 +1219,7 @@ function twRelation(rel) {
 	var elem = $("user_info");
 	if (source.followed_by)
 		elem.innerHTML += '<a href="javascript:replyTo(\'' + rel.relationship.target.screen_name + '\',0,0,1)">[DM]</a>';
-	elem.innerHTML += '<input type="button" value="' + _(source.following ? 'Remove $1' : 'Follow $1', last_user) +
-					'" onClick="follow('+!source.following+')">';
+	elem.innerHTML += '<button type="button" onClick="follow('+!source.following+')">' + _(source.following ? 'Remove $1' : 'Follow $1', last_user) + '</button>';
 	if (source.followed_by)
 		$("profile").innerHTML += "<br><span id=\"following_you\" class=\"following_you\">" + _('$1 is following you!', rel.relationship.target.screen_name)+'</span>';
 	callPlugins("newUserRelationship", elem, rel);
@@ -1747,33 +1745,33 @@ function switchMisc() {
 	$("tw2h").innerHTML = '<br><a id="clientname" target="twitter" href="index.html"><b>twicli</b></a> : A browser-based Twitter client<br><small id="copyright">Copyright &copy; 2008-2015 NeoCat</small><hr class="spacer">' +
 	'<a href="javascript:showMediaOption()">' + _('Upload images') + '</a><br>' +
 					'<form id="switchuser" onSubmit="switchUser($(\'user_id\').value); return false;">'+
-					_('show user info')+' : @<input type="text" size="15" id="user_id" value="' + myname + '"><input type="image" src="images/go.png"></form>' +
+					_('show user info')+' : @<input type="text" size="15" id="user_id" value="' + myname + '"><button type="submit" class="go"></button></form>' +
 					'<a id="logout" href="javascript:logout()"><b>'+_('Log out')+'</b></a><hr class="spacer">' +
 					'<div id="pref"><a href="javascript:togglePreps()">▼<b>'+_('Preferences')+'</b></a>' +
 					'<form id="preps" onSubmit="try { setPreps(this); } catch(e) { alert(\'Cannot save preferences: \'+e) } return false;" style="display: none;">' +
 					_('language')+': <select name="user_lang">'+(['en'].concat(langList)).map(function(x){
 							return '<option value="'+x+'"'+(x==user_lang?' selected':'')+'>'+langNames[x]+'</option>';
 						})+'</select><br>' +
-					_('max #msgs in TL')+': <input name="limit" size="5" value="' + nr_limit + '"><br>' +
-					_('#msgs in TL on update (max=800)')+': <input name="maxc" size="3" value="' + max_count + '"><br>' +
-					_('#msgs in user on update (max=800)')+': <input name="maxu" size="3" value="' + max_count_u + '"><br>' +
-					_('update interval')+': <input name="interval" size="3" value="' + updateInterval + '"> sec<br>' +
-					'<input type="checkbox" name="since_check"' + (no_since_id?"":" checked") + '>'+_('since_id check')+'<br>' +
-					'<input type="checkbox" name="replies_in_tl"' + (replies_in_tl?" checked":"") + '>'+_('Show not-following replies in TL')+'<br>' +
-					'<input type="checkbox" name="reply_to_all"' + (reply_to_all?" checked":"") + '>'+_('Reply to all')+'<br>' +
-					'<input type="checkbox" name="display_as_rt"' + (display_as_rt?" checked":"") + '>'+_('Show retweets in "RT:" form')+'<br>' +
-					'<input type="checkbox" name="counter"' + (no_counter?"":" checked") + '>'+_('Post length counter')+'<br>' +
-					'<input type="checkbox" name="resize_fst"' + (no_resize_fst?"":" checked") + '>'+_('Auto-resize field')+'<br>' +
-					'<input type="checkbox" name="decr_enter"' + (decr_enter?" checked":"") + '>'+_('Post with ctrl/shift+enter')+'<br>' +
-					'<input type="checkbox" name="confirm_close"' + (confirm_close?" checked":"") + '>'+_('Confirm before closing tabs')+'<br>' +
-					'<input type="checkbox" name="geotag"' + (no_geotag?"":" checked") + '>'+_('Enable GeoTagging')+'<br>' +
-					'<input type="checkbox" name="post_via_agent"' + (post_via_agent?" checked":"") + '>'+_('Tweet via GAE server')+'<br>' +
-					'<input type="checkbox" name="show_header_img"' + (show_header_img?" checked":"") + '>'+_('Show header image')+'<br>' +
-					(navigator.userAgent.indexOf('WebKit') >= 0 ? '<input type="checkbox" name="dnd_image_upload"' + (dnd_image_upload?" checked":"") + '>'+_('Drag&drop image upload')+'<br>' : '') +
-					_('Footer')+': <input name="footer" size="20" value="' + footer + '"><br>' +
+					_('max #msgs in TL')+': <input type="text" name="limit" size="5" value="' + nr_limit + '"><br>' +
+					_('#msgs in TL on update (max=800)')+': <input type="text" name="maxc" size="3" value="' + max_count + '"><br>' +
+					_('#msgs in user on update (max=800)')+': <input type="text" name="maxu" size="3" value="' + max_count_u + '"><br>' +
+					_('update interval')+': <input type="text" name="interval" size="3" value="' + updateInterval + '"> sec<br>' +
+					'<label><input type="checkbox" name="since_check"' + (no_since_id?"":" checked") + '>'+_('since_id check')+'</label><br>' +
+					'<label><input type="checkbox" name="replies_in_tl"' + (replies_in_tl?" checked":"") + '>'+_('Show not-following replies in TL')+'</label><br>' +
+					'<label><input type="checkbox" name="reply_to_all"' + (reply_to_all?" checked":"") + '>'+_('Reply to all')+'</label><br>' +
+					'<label><input type="checkbox" name="display_as_rt"' + (display_as_rt?" checked":"") + '>'+_('Show retweets in "RT:" form')+'</label><br>' +
+					'<label><input type="checkbox" name="counter"' + (no_counter?"":" checked") + '>'+_('Post length counter')+'</label><br>' +
+					'<label><input type="checkbox" name="resize_fst"' + (no_resize_fst?"":" checked") + '>'+_('Auto-resize field')+'</label><br>' +
+					'<label><input type="checkbox" name="decr_enter"' + (decr_enter?" checked":"") + '>'+_('Post with ctrl/shift+enter')+'</label><br>' +
+					'<label><input type="checkbox" name="confirm_close"' + (confirm_close?" checked":"") + '>'+_('Confirm before closing tabs')+'</label><br>' +
+					'<label><input type="checkbox" name="geotag"' + (no_geotag?"":" checked") + '>'+_('Enable GeoTagging')+'</label><br>' +
+					'<label><input type="checkbox" name="post_via_agent"' + (post_via_agent?" checked":"") + '>'+_('Tweet via GAE server')+'</label><br>' +
+					'<label><input type="checkbox" name="show_header_img"' + (show_header_img?" checked":"") + '>'+_('Show header image')+'</label><br>' +
+					(navigator.userAgent.indexOf('WebKit') >= 0 ? '<label><input type="checkbox" name="dnd_image_upload"' + (dnd_image_upload?" checked":"") + '>'+_('Drag&drop image upload')+'</label><br>' : '') +
+					_('Footer')+': <input type="text" name="footer" size="20" value="' + footer + '"><br>' +
 					_('Plugins')+':<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>' +
 					_('user stylesheet')+':<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br>' +
-					'<input type="submit" value="'+_('Save')+'">&nbsp;<button onclick="uploadSettings(); return false">'+_('Upload')+'</button><button onclick="downloadSettings(); return false">'+_('Download')+'</button></form></div><hr class="spacer">';
+					'<button type="submit">'+_('Save')+'</button>&nbsp;<button onclick="uploadSettings(); return false">'+_('Upload')+'</button><button onclick="downloadSettings(); return false">'+_('Download')+'</button></form></div><hr class="spacer">';
 	callPlugins("miscTab", $("tw2h"));
 	xds.load_for_tab(twitterAPI + 'application/rate_limit_status.json' +
 				'?suppress_response_codes=true&resources='+api_resources.join(','), twRateLimit);
@@ -1849,7 +1847,7 @@ function checkMedia() {
 // 画像アップロードボックスの表示
 function showMediaOption() {
 	if (!$('media'))
-		$("option").innerHTML += '<form id="imgup">'+_('Images')+': <div id="media_div"><input id="media" type="file" name="media[]" multiple onchange="checkMedia()" onclick="var m=$(\'media\').ondrop; if(m) m()"</div><img id="imgclr" src="images/clr.png" onclick="$(\'option\').removeChild($(\'imgup\'));setFstHeight(null,true)"></td></tr></table>';
+		$("option").innerHTML += '<form id="imgup">'+_('Images')+': <div id="media_div"><input id="media" type="file" name="media[]" multiple onchange="checkMedia()" onclick="var m=$(\'media\').ondrop; if(m) m()"</div><div id="imgclr" class="clr"  onclick="$(\'option\').removeChild($(\'imgup\'));setFstHeight(null,true)">';
 	setFstHeight(null, true);
 }
 // 初期化
