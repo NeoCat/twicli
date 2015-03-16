@@ -52,6 +52,7 @@ label, button, input[type="submit"], input[type="button"], input[type="image"], 
 .userdesc > .fav { display: none; }
 .userdesc > .rtinfo { display: none; }
 .userdesc > .utils { display: none; }
+.prop { margin-left: .5em; }
 .prop, .prop a { color: #999; font-size: smaller; }
 .fromme { background-color: #cfd; }
 .tome { background-color: #ccf; }
