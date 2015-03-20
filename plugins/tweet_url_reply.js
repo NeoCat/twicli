@@ -55,7 +55,9 @@ function dispImageFromLink(url, e, type) {
       var script = 'dispReply(\'' + m[1] + '\',\'' + m[2] + '\',this); return false;';
       var tw = a.parentNode.parentNode.tw;
       tw = tw.retweeted_status ? tw.retweeted_status : tw;
-      if (tw && tw.user.screen_name == m[1] && tw.id_str == m[2] && a.href.indexOf('/photo/1') >= 0 && tw.entities.media && tw.entities.media[0]) {
+      if (tw && tw.user.screen_name == m[1] && tw.id_str == m[2] &&
+          (a.href.indexOf('/photo/1') >= 0 || a.href.indexOf('/video/1') >= 0) &&
+          tw.entities.media && tw.entities.media[0]) {
         var media = (tw.extended_entities || tw.entities).media;
         script = 'dispImageFromLink([' +
 	  Array.prototype.map.call(media, function(x){
