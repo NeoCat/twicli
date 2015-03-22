@@ -47,6 +47,9 @@ function handle_stream_data(data, tw) {
 		} catch(e) {
 			debug(e);
 		}
+		callPlugins(data.event+"d", data);
+	} else if (data.event && data.event == "follow") {
+		callPlugins("followed", data.target);
 	} else if (data.event && data.event == "block") {
 		ws_blocked[data.target.id_str] = 1;
 	} else if (data.event && data.event == "unblock") {
