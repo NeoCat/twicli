@@ -934,8 +934,8 @@ function retweetStatus(id, ele) {
 	var target_ele = ele;
 	enqueuePost(twitterAPI + 'statuses/retweet/' + id + '.json',
 		function(){
-			var img = document.createElement("img");
-			img.src = "images/rt.png";
+			var img = document.createElement("span");
+			img.className = "rtinfo";
 			target_ele.insertBefore(img, target_ele.childNodes[target_ele.childNodes.length-1]);
 		});
 	return false;
@@ -1026,6 +1026,8 @@ function makeHTML(tw, no_name, pid, userdesc) {
 	var rt = tw.retweeted_status;
 	var rs = tw.retweeted_status || tw;
 	var rt_mode = !!(display_as_rt || userdesc);
+	var rt_cnt = (typeof(tw.retweet_count) == 'string' ? parseInt(tw.retweet_count) : tw.retweet_count);
+	var fav_cnt = (typeof(tw.favorite_count) == 'string' ? parseInt(tw.favorite_count) : tw.favorite_count);
 	var t = rt_mode ? tw : rs;
 	var text = t.text;
 	var un = t.user.screen_name;
@@ -1072,14 +1074,15 @@ function makeHTML(tw, no_name, pid, userdesc) {
 				return "<a href=\""+twitterURL+u+"\"  class=\"mention\" onClick=\"switchUser('"+u+"'); return false;\" >"+_+"</a>";
 			}).replace(/\r?\n|\r/g, "<br>") + '</span>' +
 		//Retweet情報
-		'<span id="rtinfo-'+eid+'" class="rtinfo">' +
-		(tw.metadata && tw.metadata.result_type=="popular" ? "<img src=\"images/popular.png\" alt=\"pop\">" : "") +
-		(!display_as_rt && rt ? "<img src=\"images/rt.png\" alt=\"RT\">by <img src=\""+tw.user.profile_image_url+"\" alt=\""+tw.user.screen_name+"\" class=\"rtuicon\"><a href=\""+twitterURL+tw.user.screen_name+"\" onclick=\"switchUserTL(this.parentNode.parentNode, true);return false\">" + tw.user.screen_name + "</a><span class=\"cnt\">" + (parseInt(tw.retweet_count) > 1 ? '& ' + (typeof(tw.retweet_count) == 'string' ? tw.retweet_count : tw.retweet_count-1) : '') : parseInt(tw.retweet_count) > 1 ? '<img src="images/rt2.png" class="rtinfoicon" alt="RT"><span class=\"cnt\">' + tw.retweet_count+'</span>' : '') + '</span></span>' +
+		(rt_cnt>0 || rt ?
+			'<span id="rtinfo-'+eid+'" class="rtinfo'+(display_as_rt?' rtinfo-alt':'')+'">' +
+				(rt && !display_as_rt ? 'by <a href="'+twitterURL+tw.user.screen_name+'" onclick="switchUserTL(this.parentNode.parentNode, true);return false"><img src="'+tw.user.profile_image_url+'" alt="'+tw.user.screen_name+'" class="rtuicon">'+tw.user.screen_name+'</a>'+(rt_cnt>1?'& '+(rt_cnt-1):'') : rt_cnt) +
+			'</span>' : '') +
 		//Favorited情報
-		'<span id="favinfo-'+eid+'" class="favinfo">' +
-		(parseInt(tw.favorite_count) > 0 ? "<img src=\"images/fav.png\" alt=\"Fav\" class=\"favinfoicon\"><span class=\"cnt\">" + tw.favorite_count : '')+ '</span></span>' +
+		(fav_cnt > 0 ? '<span id="favinfo-'+eid+'" class="favinfo">'+fav_cnt+'</span>' : '') +
 		//日付
 		'<span id="utils-'+eid+'" class="utils">' +
+		(tw.metadata && tw.metadata.result_type=='popular' ? '<span class="popular"></span>' : '') +
 		'<span class="prop"><a class="date" target="twitter" href="'+twitterURL+(t.d_dir ? '#!/messages' : un+'/statuses/'+id2)+'">' + dateFmt(t.created_at) + '</a>' +
 		//クライアント
 		(t.source ? '<span class="separator"> / </span><span class="source">' + t.source.replace(/<a /,'<a target="twitter"') + '</span>' : '') + '</span>' +

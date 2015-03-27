@@ -46,7 +46,12 @@ label, button, input[type="submit"], input[type="button"], input[type="image"], 
 .status a.link { font-size: smaller; background-color: #eee; color: #022; border: solid 1px #cec; text-decoration: none; }
 .status a.resolved { background-color: #eef; }
 .status a.link:hover { background-color: #ff9; }
+.popular { background-image: url("../images/popular.png"); display: inline-block; width: 14px; height: 11px; }
 .rtinfo, .favinfo { text-align: right; display: inline-block; color: #999; font-size: x-small; line-height: 1; }
+.rtinfo:before, .favinfo:before { color: transparent; content: '.'; display: inline-block;}
+.rtinfo:before { background-image: url('../images/rt.png'); width: 14px; height: 10px; }
+.rtinfo-alt:before { background-image: url('../images/rt2.png'); }
+.favinfo:before { background-image: url("../images/fav.png"); width: 10px; height: 10px; }
 .favinfoicon, .rtinfoicon { padding: 1px; vertical-align: bottom; }
 .utils { text-align: right; display: inline-block; }
 .userdesc > .fav { display: none; }
