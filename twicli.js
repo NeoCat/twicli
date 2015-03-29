@@ -1044,7 +1044,7 @@ function makeHTML(tw, no_name, pid, userdesc) {
 		Array.prototype.concat.apply(tw.entities.urls, tw.entities.media || []).map(function(_){
 			if (_.url && _.expanded_url) expanded_urls[_.url] = _.expanded_url;
 		});
-	return /*fav*/ (t.d_dir ? '' : '<div class="fav"><img alt="☆" src="images/icon_star_'+(!rt&&rs.favorited?'full':'empty')+'.gif" ' +
+	return /*fav*/ (t.d_dir ? '' : '<div class="fav"><img alt="☆" src="images/icon_star_'+(rs.favorited?'full':'empty')+'.gif" ' +
 			'onClick="fav(this,\'' + id + '\')"' + (pid ? ' id="fav-'+eid+'"' : '') + '><span></span></div>')+
 		 (!no_name || (!display_as_rt && rt) ?
 			//ユーザアイコン
