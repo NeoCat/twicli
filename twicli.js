@@ -1044,7 +1044,7 @@ function makeHTML(tw, no_name, pid, userdesc) {
 		Array.prototype.concat.apply(tw.entities.urls, tw.entities.media || []).map(function(_){
 			if (_.url && _.expanded_url) expanded_urls[_.url] = _.expanded_url;
 		});
-	return /*fav*/ (t.d_dir ? '' : '<div class="fav"><img alt="☆" src="images/icon_star_'+(rs.favorited?'full':'empty')+'.gif" ' +
+	return /*fav*/ (t.d_dir ? '' : '<div class="fav"><img alt="☆" src="images/icon_star_'+(rs.favorited?'full':'empty')+'.png" ' +
 			'onClick="fav(this,\'' + id + '\')"' + (pid ? ' id="fav-'+eid+'"' : '') + '><span></span></div>')+
 		 (!no_name || (!display_as_rt && rt) ?
 			//ユーザアイコン
@@ -1133,7 +1133,7 @@ function nextButton(id, p) {
 }
 // favoriteの追加/削除
 function fav(img, id) {
-	if (img.src.indexOf('throbber') >= 0) return;
+	if (img.src.indexOf('loading') >= 0) return;
 	var f = img.src.indexOf('empty') >= 0;
 	setFavIcon(img, id, -1);
 	enqueuePost(twitterAPI + 'favorites/' + (f ? 'create' : 'destroy') + '.json?id=' + id,
@@ -1144,8 +1144,8 @@ function setFavIcon(img, id, f) {
 	var img_tl = $('fav-tw-' + id);
 	var img_re = $('fav-re-' + id);
 	var img_tw2c = $('fav-tw2c-' + id);
-	var img_url = (f==-1) ? twitterURL + 'images/icon_throbber.gif' :
-						'images/icon_star_' + (f ? 'full' : 'empty') + '.gif';
+	var img_url = (f==-1) ? 'images/icon_star_loading.png' :
+						'images/icon_star_' + (f ? 'full' : 'empty') + '.png';
 	img.src = img_url;
 	if (img_tl) img_tl.src = img_url;
 	if (img_re) img_re.src = img_url;
