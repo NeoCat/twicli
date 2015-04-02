@@ -258,7 +258,7 @@ registerPlugin({
 		$("pref").appendChild(e);
 		twlUpdateMisc();
 	},
-	auth: function() {
+	init: function() {
 		lists_to_get.map(twlGetListInfo);
 	},
 	regexp_switched: function(tab) {
