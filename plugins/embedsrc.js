@@ -1,6 +1,6 @@
 (function(){
 	var res = [
-		{search: /^https?:\/\/(?:\w+\.)?theta360\.com\/[sm]\/\w+/,
+		{search: /^https?:\/\/(?:\w+\.)?theta360\.com\/(?:[sm]\/\w+|spheres\/samples\/[a-z0-9-]+)/,
 			replace: "$&/", type: "theta"},
 		{search: /^https?:\/\/(?:\w+\.)?pinterest\.com\/pin\/\d+/,
 			replace: "$&/", type: "pin"},
