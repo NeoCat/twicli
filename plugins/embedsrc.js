@@ -1,5 +1,7 @@
 (function(){
 	var res = [
+		{search: /^https?:\/\/(?:\w+\.)?theta360\.com\/[sm]\/\w+/,
+			replace: "$&/", type: "theta"},
 		{search: /^https?:\/\/(?:\w+\.)?pinterest\.com\/pin\/\d+/,
 			replace: "$&/", type: "pin"},
 		{search: /^https?:\/\/(?:(?:www|m)\.youtube\.com\/watch\?.*v=|youtu\.be\/)([\w\-]+).*$/,
@@ -74,19 +76,34 @@ function dispEmbedSrc(url, link, type) {
 	ifr.style.width = "100%";
 	ifr.style.height = "426px";
 	ifr.style.display = "block";
-	if (type == 'iframe') {
-		ifr.src = url;
-		ifr.style.height = Math.ceil(win_h * 0.5) + "px";
-	}
-	$('reps').appendChild(ifr);
-	if (type == 'script') {
-		ifr.contentWindow.document.write(
-			'<div><scr'+'ipt type="text/javascript" src="'+url+
-				'"></scr'+'ipt></div>');
-	} else if (type == 'pin') {
-		ifr.contentWindow.document.write(
-			'<div><a data-pin-do="embedPin" href="' + url
-				+'"></a><scr'+'ipt type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></scr'+'ipt></div>');
+	switch (type) {
+		case 'iframe':
+			ifr.src = url;
+			ifr.style.height = Math.ceil(win_h * 0.5) + "px";
+			$('reps').appendChild(ifr);
+			break;
+		case 'script':
+			$('reps').appendChild(ifr);
+			ifr.contentWindow.document.write(
+					'<div><scr' + 'ipt type="text/javascript" src="' + url +
+					'"></scr' + 'ipt></div>');
+			break;
+		case 'pin':
+			$('reps').appendChild(ifr);
+			ifr.contentWindow.document.write(
+					'<div><a data-pin-do="embedPin" href="' + url
+					+ '"></a><scr'
+					+ 'ipt type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></scr'
+					+ 'ipt></div>');
+			break;
+		case 'theta':
+			$('reps').appendChild(ifr);
+			ifr.contentWindow.document.write(
+					'<div class="ricoh-theta-spherical-image" ><a href="' + url
+					+ '" target="_blank"></a></div><scr'
+					+ 'ipt async src="https://theta360.com/widgets.js" charset="utf-8"></scr'
+					+ 'ipt>');
+			break;
 	}
 	$('rep').style.top = rep_top;
 	scrollToDiv($('rep'));
