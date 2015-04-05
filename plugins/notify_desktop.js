@@ -303,6 +303,7 @@ registerPlugin({
   // フォローされ
   followed: function(data){
     if(!notification[s_flw]) return;
+    if(data.screen_name == myname) return;
     icon_img = data.profile_image_url;
     text = '';
     showNotification('Followed by @'+data.screen_name);
