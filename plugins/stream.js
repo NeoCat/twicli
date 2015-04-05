@@ -49,7 +49,7 @@ function handle_stream_data(data, tw) {
 		}
 		callPlugins(data.event+"d", data);
 	} else if (data.event && data.event == "follow") {
-		callPlugins("followed", data.target);
+		callPlugins("followed", data.source);
 	} else if (data.event && data.event == "block") {
 		ws_blocked[data.target.id_str] = 1;
 	} else if (data.event && data.event == "unblock") {
