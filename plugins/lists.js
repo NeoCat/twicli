@@ -163,7 +163,7 @@ function twlUpdateListsList() {
 		return "\\"/*supress closeTab*/ + a.substr(a.indexOf('/')+1) + "\\list#"/*info*/ + a +
 			':^' + users.join('$|^') + '$' + (l[0] == '#' ? '::1'/*don't display in TL*/ : '') +
 			"\n\\"/*supress closeTab*/ + a.substr(a.indexOf('/')+1) + "\\list#"/*info*/ + a +
-			'::\\nby @' + users.join('$|\\nby @') + '$' + (l[0] == '#' ? '::1'/*don't display in TL*/ : '');
+			'::\\nby @' + users.join('$|\\nby @') + '$' + (l[0] == '#' ? ':1'/*don't display in TL*/ : '');
 	}).join("\n");
 	if (typeof(setRegexp) == "function") {
 		setRegexp(pickup_regexp);
