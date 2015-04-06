@@ -37,8 +37,8 @@ var shortcutkey_plugin = {
 	// キーボードショートカットハンドラ
 	shortCutKeyDown: function(ev) {
 		ev = ev || window.event;
-		if (ev.shiftKey || ev.altKey || ev.ctrlKey || ev.metaKey || ev.modifiers) return true;
 		var code = ev.keyCode || ev.charCode;
+		if ((ev.shiftKey || ev.altKey || ev.ctrlKey || ev.metaKey || ev.modifiers) && !(ev.shiftKey && code == 191)) return true;
 		//$("fst").value = code;
 		if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA') {
 			// inputフォーカス時はesc以外をパススルー
