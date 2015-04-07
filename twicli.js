@@ -393,7 +393,7 @@ function _(key) {
 }
 
 // version check
-document.twicli_js_ver = 7;
+document.twicli_js_ver = 8;
 if (!document.twicli_html_ver || document.twicli_html_ver < document.twicli_js_ver) {
 	if (location.href.indexOf('?') < 0) {
 		location.href = location.href + '?' + document.twicli_js_ver;
@@ -877,7 +877,7 @@ function pickup2() {
 // ポップアップメニューの初期化
 function popup_init() {
 	var popup_id_list = ['popup_link_user', 'popup_link_status', 'popup_status_delete',
-						'popup_status_retweet', 'popup_status_quote',
+						'popup_status_retweet', 'popup_status_quote', 'popup_status_href',
 						'upopup_user_block', 'upopup_user_unblock', 'upopup_user_spam'];
 	for (var x = 0; x < popup_id_list.length; x++)
 		$(popup_id_list[x]).innerHTML = _($(popup_id_list[x]).innerHTML);
@@ -893,6 +893,7 @@ function popup_menu(user, id, ele) {
 	$('popup_status_delete').style.display = (selected_menu.id == "direct" || popup_ele.tw.user.screen_name == myname ? "block" : "none");
 	$('popup_status_retweet').style.display = (selected_menu.id != "direct" ? "block" : "none");
 	$('popup_status_quote').style.display = (selected_menu.id != "direct" ? "block" : "none");
+	$('popup_status_href').style.display = (selected_menu.id != "direct" ? "block" : "none");
 	$('popup').style.display = "block";
 	var pos = cumulativeOffset(ele);
 	$('popup').style.left = pos[0] <  $('popup').offsetWidth - ele.offsetWidth ? 0 : pos[0] - $('popup').offsetWidth + ele.offsetWidth + 'px';
@@ -949,6 +950,18 @@ function quoteStatus(id, user, ele) {
 	if ($('lock-' + ele.id) && !confirm(_("This tweet is protected; Are you sure to retweet?"))) return false;
 	var tw = !display_as_rt && ele.tw.retweeted_status || ele.tw;
 	$('fst').value = "RT @"+user+": " + charRef(tw.text);
+	$('fst').focus(); $('fst').select();
+	return false;
+}
+// 発言のURLを挿入
+function hrefStatus(id, user, ele) {
+	id = id || popup_id;
+	user = user || popup_user;
+	ele = ele || popup_ele;
+	if (!id) return false;
+	if ($('lock-' + ele.id) && !confirm(_("This tweet is protected; Are you sure to insert URL?"))) return false;
+	var tw = !display_as_rt && ele.tw.retweeted_status || ele.tw;
+	$('fst').value = $('fst').value + " https://twitter.com/" + user + "/statuses/" + id;
 	$('fst').focus(); $('fst').select();
 	return false;
 }

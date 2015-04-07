@@ -211,6 +211,10 @@ var shortcutkey_plugin = {
 				if (!selected) return true;
 				quoteStatus(id, user, selected);
 				return false;
+			case 72+lower: // h : URLを挿入(HREF)
+				if (!selected) return true;
+				hrefStatus(id, user, selected);
+				return false;
 			case 68+lower: // d : tweetを削除(Delete)
 				if (!selected) return true;
 				if (selected_menu.id != "direct" && user != myname) return true;
