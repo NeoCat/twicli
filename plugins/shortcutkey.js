@@ -264,6 +264,7 @@ var shortcutkey_plugin = {
 				var closetab = $('tws-closetab') || $('regexp-closetab');
 				if (closetab)
 					return closetab.onclick();
+				return false;
 			case 191: // / : インクリメンタルサーチ
 				shortcutkey_plugin.resetInclementalSearch();
 				var filter_div = document.createElement('div');
