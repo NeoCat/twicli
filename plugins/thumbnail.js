@@ -148,7 +148,7 @@ registerPlugin({
 });
 
 function flickrPhotoID(url) {
-	if (url.match(/^http:\/\/(?:www\.flickr\.com\/photos\/[\w\-@]+\/(\d+)|flic\.kr\/p\/(\w+)$)/))
+	if (url.match(/^https?:\/\/(?:www\.flickr\.com\/photos\/[\w\-@]+\/(\d+)|flic\.kr\/p\/(\w+)$)/))
 		return RegExp.$2 ? decodeBase58(RegExp.$2) : RegExp.$1;
 }
 function decodeBase58(snipcode) {
