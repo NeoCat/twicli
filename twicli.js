@@ -1035,7 +1035,7 @@ function insertPDF(str) {
 		str += "\u202C"
 	return str;
 }
-function makeHTML(tw, no_name, pid, userdesc) {
+function makeHTML(tw, no_name, pid, userdesc, noctl) {
 	var rt = tw.retweeted_status;
 	var rs = tw.retweeted_status || tw;
 	var rt_mode = !!(display_as_rt || userdesc);
@@ -1057,7 +1057,7 @@ function makeHTML(tw, no_name, pid, userdesc) {
 		Array.prototype.concat.apply(tw.entities.urls, tw.entities.media || []).map(function(_){
 			if (_.url && _.expanded_url) expanded_urls[_.url] = _.expanded_url;
 		});
-	return /*fav*/ (t.d_dir ? '' : '<div class="fav"><img alt="☆" src="images/icon_star_'+(rs.favorited?'full':'empty')+'.png" ' +
+	return /*fav*/ (noctl || t.d_dir ? '' : '<div class="fav"><img alt="☆" src="images/icon_star_'+(rs.favorited?'full':'empty')+'.png" ' +
 			'onClick="fav(this,\'' + id + '\')"' + (pid ? ' id="fav-'+eid+'"' : '') + '><span></span></div>')+
 		 (!no_name || (!display_as_rt && rt) ?
 			//ユーザアイコン
@@ -1074,6 +1074,10 @@ function makeHTML(tw, no_name, pid, userdesc) {
 		text.replace(/https?:\/\/[^\/\s]*[\w!#$%&\'()*+,.\/:;=?~-]*[\w#\/+-]|[@＠](\w+(?:\/[\w-]+)?)|([ -\/:-@\[-`{-~　、。！？「」（）『』｛｝［］【】]|\s|^)([#＃])([\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]+)(?=[^\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]|$)/g, function(_,u,x,h,s){
 				if (!u && !h) {
 					if (expanded_urls[_]) {
+						if (t.quoted_status && t.quoted_status_id_str &&
+						    expanded_urls[_].substring(0, twitterURL.length) == twitterURL &&
+						    expanded_urls[_].indexOf(t.quoted_status_id_str) >= 0)
+							return '<blockquote class="quoted">' + makeHTML(t.quoted_status, false, pid, null, true) + '</blockquote>';
 						t.text_replaced = (t.text_replaced || t.text).replace(_, expanded_urls[_]);
 						_ = expanded_urls[_];
 					}
@@ -1086,6 +1090,7 @@ function makeHTML(tw, no_name, pid, userdesc) {
 				if (u.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+u+"\" onclick=\"return link(this);\">"+_+"</a>";
 				return "<a href=\""+twitterURL+u+"\"  class=\"mention\" onClick=\"switchUser('"+u+"'); return false;\" >"+_+"</a>";
 			}).replace(/\r?\n|\r/g, "<br>") + '</span>' +
+		(noctl ? '' :
 		//Retweet情報
 		(rt_cnt>0 || rt ?
 			'<span id="rtinfo-'+eid+'" class="rtinfo'+(display_as_rt?' rtinfo-alt':'')+'">' +
@@ -1108,7 +1113,7 @@ function makeHTML(tw, no_name, pid, userdesc) {
 		(in_reply_to ? ' <a class="button inrep" href="#" onClick="dispReply(\'' + un + '\',\'' + in_reply_to + '\',this); return false;"><img src="images/inrep.png" alt="☞" width="14" height="14"></a>' : '') +
 		//popupメニュー表示
 		'&nbsp;&nbsp;&nbsp;<a class="button popup" href="#" onClick="popup_menu(\'' + un + "','" + id2 + '\', this); return false;"><small><small>▼</small></small></a>' +
-		'</span><div class="dummy"></div>';
+		'</span><div class="dummy"></div>');
 }
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
