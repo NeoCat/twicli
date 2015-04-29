@@ -43,7 +43,7 @@ var shortcutkey_plugin = {
 		if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA') {
 			// inputフォーカス時はesc以外をパススルー
 			if (code == 27) { // esc
-				document.activeElement.blur();
+				if (document.activeElement) document.activeElement.blur();
 				return false;
 			}
 			return true;
@@ -314,7 +314,7 @@ var shortcutkey_plugin = {
 		}
 	},
 	resetInclementalSearch: function() {
-		document.activeElement.blur();
+		if (document.activeElement) document.activeElement.blur();
 		if (this.inclemental_search_timer) clearTimeout(this.inclemental_search_timer);
 		this.inclemental_search_timer = null;
 		if (this.filter_div) document.body.removeChild(this.filter_div);
