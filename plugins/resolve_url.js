@@ -36,8 +36,11 @@
         setResolver(link);
       }
       // notify to other plugins
-      else if (link.parentNode && link.parentNode.parentNode)
-        callPlugins("replaceUrl", link.parentNode.parentNode, link, longUrl, shortUrl);
+      else if (link.parentNode && link.parentNode.parentNode) {
+        var s = link.parentNode.parentNode;
+        if (!s.tw) s = s.parentNode.parentNode;
+        callPlugins("replaceUrl", s, link, longUrl, shortUrl);
+      }
     }
   }
 
