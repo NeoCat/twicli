@@ -393,7 +393,7 @@ function _(key) {
 }
 
 // version check
-document.twicli_js_ver = 8;
+document.twicli_js_ver = 9;
 if (!document.twicli_html_ver || document.twicli_html_ver < document.twicli_js_ver) {
 	if (location.href.indexOf('?') < 0) {
 		location.href = location.href + '?' + document.twicli_js_ver;
@@ -403,6 +403,11 @@ if (!document.twicli_html_ver || document.twicli_html_ver < document.twicli_js_v
 }
 
 // user-defined CSS
+try {
+	$('theme_css').innerHTML = readCookie('theme_css') || "";
+} catch(e) {
+	console.log("Failed to apply theme_css.");
+}
 var user_style = readCookie('user_style') || "";
 document.write('<style id="usercss">' + user_style + '</style>');
 
@@ -1768,6 +1773,10 @@ function switchMisc() {
 					'<form id="switchuser" onSubmit="switchUser($(\'user_id\').value); return false;">'+
 					_('show user info')+' : @<input type="text" size="15" id="user_id" value="' + myname + '"><button type="submit" class="go"></button></form>' +
 					'<a id="logout" href="javascript:logout()"><b>'+_('Log out')+'</b></a><hr class="spacer">' +
+					'<form id="theme" onSubmit="return false;">' +
+					_('Theme') + ': <select id="themelist" onchange="changeTheme(this.value)"></select><span id="theme-loading">Loading ...</span><a href="#">' +
+					'<button type="button" style="display:none;" class="go" id="theme-link" onclick="window.open(this.href); return false"></button>' +
+					'</form>' +
 					'<div id="pref"><a href="javascript:togglePreps()">▼<b>'+_('Preferences')+'</b></a>' +
 					'<form id="preps" onSubmit="try { setPreps(this); } catch(e) { alert(\'Cannot save preferences: \'+e) } return false;" style="display: none;">' +
 					_('language')+': <select name="user_lang">'+(['en'].concat(langList)).map(function(x){
@@ -1796,6 +1805,43 @@ function switchMisc() {
 	callPlugins("miscTab", $("tw2h"));
 	xds.load_for_tab(twitterAPI + 'application/rate_limit_status.json' +
 				'?suppress_response_codes=true&resources='+api_resources.join(','), twRateLimit);
+	loadTheme();
+}
+function loadTheme() {
+	if (!window.themes)
+		return xds.load_for_tab('themes.json', function(t) { if (t) { window.themes = t; loadTheme(); }});
+	$('theme-loading').style.display = 'none';
+	$('themelist').innerHTML = '';
+	var current_theme = readCookie('theme_name') || 'default';
+	for (var i = 0; i < themes.length; i++) {
+		var t = themes[i];
+		window.themes[t.name] = t;
+		var option = document.createElement('option');
+		option.text = t.name;
+		option.value = t.name;
+		option.selected = current_theme == t.name;
+		$('themelist').add(option);
+	}
+}
+function changeTheme(t) {
+	var css = $('theme_css');
+	if (themes[t] && themes[t].type == "link") {
+		$('theme-link').href = themes[t].url;
+		$('theme-link').style.display = 'inline';
+	}
+	if (themes[t] && themes[t].type == "css") {
+		$('theme-link').style.display = 'none';
+		try {
+			css.innerHTML = themes[t].content;
+		} catch(e) {
+			alert("Couldn't apply theme. Please relaod.");
+			return;
+		}
+		setFstHeight(null, true);
+		writeCookie('theme_name', t, 3652);
+		writeCookie('theme_css', themes[t].content, 3652);
+		callPlugins('changeTheme', themes[t]);
+	}
 }
 function togglePreps() {
 	$('preps').style.display = $('preps').style.display == 'block' ? 'none' : 'block';

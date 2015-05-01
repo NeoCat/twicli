@@ -26,7 +26,7 @@ label, button, input[type="submit"], input[type="button"], input[type="image"], 
 #menu a.new { background-color: #fcc; }
 
 .tabcmd { background-color: #ccc; text-align: right; }
-.tabcmd a { size: smaller; color: green; }
+.tabcmd a { color: green; }
 .tabclose a { color: red; }
 
 .tw { position: absolute; left: 0px; top: 54px; width: 100%; font-size: smaller; }
@@ -67,6 +67,7 @@ label, button, input[type="submit"], input[type="button"], input[type="image"], 
 .non-follower { color: #008; }
 .retweeted { color: #555; }
 .retweeted .non-follower { color: #55a; }
+button { -webkit-appearance: push-button; }
 .button { text-decoration: none; -webkit-text-size-adjust:140%; }
 .reply img { padding: 0 1px; }
 .inrep .utils { margin-top: -4px; }

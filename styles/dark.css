@@ -1,0 +1,18 @@
+body {background: url(../images/dark.jpg) fixed; background-size: cover; color: white; }
+.tw-parent,#tw2 {background: rgba(30,30,30,0.75); color: white; }
+#control { background-color: rgba(0,0,0,0.75); }
+.tabcmd { background-color: black; }
+a {color:#f83;}
+.retweeted { color: #ddd; }
+.non-follower { color: #eef; }
+.retweeted .non-follower { color: #ddf; }
+.selected { background-color: rgba(192,127,1,0.33) !important }
+.status a.link { background-color: black; color: white; }
+.fromme { background-color: rgba(0,127,0,0.33); }
+.tome { background-color: rgba(0,0,255,0.33); }
+.quoted { background-color: rgba(0,0,0,0.5); }
+#menu a { background-color: #444; color: #f83; }
+#menu a.sel { background-color: #777; color: #fff; }
+#rep { background-color: #222; color: white; }
+.emp { background-color: #822; color: white; }
+textarea { background-color: rgba(0,0,0,0.25); color: white; }

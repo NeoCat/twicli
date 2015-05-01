@@ -25,6 +25,7 @@ var langResources = {
 	'show user info':	['ユーザ情報を表示','显示用户详细信息'],
 	'Log out':	['ログアウト','注销'],
 	'Preferences':	['設定','选项'],
+	'Theme':	['テーマ','主題'],
 	'language':	['言語','语言'],
 	'max #msgs in TL':	['TLの最大表示数','TL最大显示发言数'],
 	'#msgs in TL on update (max=800)':	['起動時のTL取得数(最大800)','启动后取得TL数目(最大为800条)'],
