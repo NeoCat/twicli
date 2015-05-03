@@ -421,7 +421,7 @@ var myid = null;		// 自ユーザID
 var last_user = null;	// user TLに表示するユーザ名
 var last_user_info = null;	// user TLに表示するユーザ情報(TLから切替時のキャッシュ)
 // 設定値
-var currentCookieVer = 21;
+var currentCookieVer = 22;
 var cookieVer = parseInt(readCookie('ver')) || 0;
 var updateInterval = (cookieVer>18) && parseInt(readCookie('update_interval')) || 90;
 var pluginstr = (cookieVer>6) && readCookie('tw_plugins') || ' regexp.js\nlists.js\nsearch.js\nfollowers.js\nshorten_url.js\nresolve_url.js';
@@ -458,7 +458,10 @@ var confirm_close = parseInt(readCookie('confirm_close') || "1");			// Tabを閉
 var no_geotag = parseInt(readCookie('no_geotag') || "0");			// GeoTaggingを無効化
 var post_via_agent = cookieVer > 19 ? parseInt(readCookie('post_via_agent') || "1") : 1;	// tweet-agent経由でツイート
 var show_header_img = parseInt(readCookie('show_header_img') || "1");	// ヘッダ画像表示
-var dnd_image_upload = parseInt(readCookie('dnd_image_upload') || (navigator.userAgent.indexOf('WebKit') >= 0 ? "1" : "0"));	// ドラッグ&ドロップで画像アップロード
+var dnd_image_upload_supported = navigator.userAgent.indexOf('WebKit') >= 0 ||
+	navigator.userAgent.match(/Firefox\/(\d+)/) && RegExp.$1 >= 10;
+var dnd_image_upload = cookieVer > 21 ? parseInt(readCookie('dnd_image_upload') ||
+	(dnd_image_upload_supported ? "1" : "0")) : dnd_image_upload_supported;	// ドラッグ&ドロップで画像アップロード
 // TL管理用
 var cur_page = 1;				// 現在表示中のページ
 var nr_page = 0;				// 次に取得するページ
@@ -1797,7 +1800,7 @@ function switchMisc() {
 					'<label><input type="checkbox" name="geotag"' + (no_geotag?"":" checked") + '>'+_('Enable GeoTagging')+'</label><br>' +
 					'<label><input type="checkbox" name="post_via_agent"' + (post_via_agent?" checked":"") + '>'+_('Tweet via GAE server')+'</label><br>' +
 					'<label><input type="checkbox" name="show_header_img"' + (show_header_img?" checked":"") + '>'+_('Show header image')+'</label><br>' +
-					(navigator.userAgent.indexOf('WebKit') >= 0 ? '<label><input type="checkbox" name="dnd_image_upload"' + (dnd_image_upload?" checked":"") + '>'+_('Drag&drop image upload')+'</label><br>' : '') +
+					(dnd_image_upload_supported ? '<label><input type="checkbox" name="dnd_image_upload"' + (dnd_image_upload?" checked":"") + '>'+_('Drag&drop image upload')+'</label><br>' : '') +
 					_('Footer')+': <input type="text" name="footer" size="20" value="' + footer + '"><br>' +
 					_('Plugins')+':<br><textarea cols="30" rows="4" name="list">' + pluginstr + '</textarea><br>' +
 					_('user stylesheet')+':<br><textarea cols="30" rows="4" name="user_style">' + user_style + '</textarea><br>' +
@@ -1870,7 +1873,7 @@ function setPreps(frm) {
 	no_geotag = !frm.geotag.checked;
 	post_via_agent = frm.post_via_agent.checked;
 	show_header_img = frm.show_header_img.checked;
-	dnd_image_upload = frm.dnd_image_upload && frm.dnd_image_upload.checked;
+	dnd_image_upload = dnd_image_upload_supported && frm.dnd_image_upload.checked;
 	user_style = frm.user_style.value;
 	try {
 		$('usercss').innerHTML = user_style;
@@ -1929,25 +1932,33 @@ function init() {
 	// 初回アップデート
 	callPlugins("init");
 	setTimeout(auth, 0);
-	// ファイルドロップで画像投稿 - 現状ではWebKitでしかうまく動作しない
-	if (navigator.userAgent.indexOf('WebKit') < 0 || !dnd_image_upload) return;
+	// ファイルドロップで画像投稿 - 現状ではWebKit系／Firefoxでしか動作しない
+	if (!dnd_image_upload || !dnd_image_upload_supported) return;
 	document.ondragenter = function(e) {
 		e.preventDefault();
 		showMediaOption();
 		var m = $('media');
+		if (m.style.position == 'fixed') return;
 		var of = cumulativeOffset(m);
+		var btn_w = m.clientWidth;
+		var btn_h = m.clientHeight;
+		var win_w = window.innerWidth || document.documentElement.clientWidth
+		var win_h = window.innerHeight || document.documentElement.clientHeight;
+		console.log(of);
 		m.style.position = "fixed";
 		m.style.zIndex = 20;
 		m.style.left = m.style.top = 0;
 		m.style.width = m.style.height = "100%";
 		m.style.paddingLeft = of[0] + "px";
 		m.style.paddingTop = of[1] + "px";
+		m.style.paddingRight = win_w - of[0] - btn_w + "px";
+		m.style.paddingBottom = win_h - of[1] - btn_h + "px";
 		m.ondragenter = function(e) { e.stopPropagation(); };
 		m.ondrop = function(e) {
 			if (e) e.stopPropagation();
 			m.style.position = "static";
 			m.style.width = m.style.height = "auto";
-			m.style.paddingLeft = m.style.paddingTop = 0;
+			m.style.paddingLeft = m.style.paddingTop = m.style.paddingRight = m.style.paddingBottom = 0;
 			setFstHeight(null, true);
 		};
 		m.ondragleave = function(e) {
