@@ -1698,7 +1698,7 @@ function switchReply() {
 	}
 }
 function switchUserTL(div, rt) {
-	var tw = div.tw;
+	var tw = div.tw || div.parentNode.parentNode.tw.quoted_status;
 	if (!(rt || display_as_rt))
 		tw = tw.retweeted_status || tw;
 	if (tw.user.description)
