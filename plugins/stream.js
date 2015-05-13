@@ -75,7 +75,7 @@ function ws_open() {
 	};
 	ws.renew_reconnect_timer = function() {
 		if (ws.reconnect_timer) clearTimeout(ws.reconnect_timer);
-		ws.reconnect_timer = setTimeout(function(){ debug('reconnect'); press(1); ws_open(); }, 180000);
+		ws.reconnect_timer = setTimeout(function(){ debug('reconnect'); ws_open(); }, 180000);
 	};
 	ws.onopen = function() {
 		var orig = twitterAPI;
