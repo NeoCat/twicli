@@ -18,10 +18,11 @@ function ws_blocked_get(cursor) {
 }
 
 function debug(msg) {
-	console.log(new Date() + ": " + msg);
+	console.log(typeof(msg) == 'object' ? msg : new Date() + ": " + msg);
 }
 
 function handle_stream_data(data, tw) {
+	handled = true;
 	if (data.text) {
 		if (!ws_blocked[data.user.id_str])
 			tw.push(data);
@@ -54,7 +55,12 @@ function handle_stream_data(data, tw) {
 		ws_blocked[data.target.id_str] = 1;
 	} else if (data.event && data.event == "unblock") {
 		ws_blocked[data.target.id_str] = 0;
-	} else debug(data);
+	} else {
+		handled = false;
+		debug(data);
+	}
+	if (handled)
+		tw_stream_ws.renew_reconnect_timer();
 }
 
 function ws_open() {
@@ -67,6 +73,10 @@ function ws_open() {
 		ws.send('ping');
 		ws.pong_timer = setTimeout(function(){ debug("ping timeout"); ws.close(); }, 10000);
 	};
+	ws.renew_reconnect_timer = function() {
+		if (ws.reconnect_timer) clearTimeout(ws.reconnect_timer);
+		ws.reconnect_timer = setTimeout(function(){ debug('reconnect'); press(1); ws_open(); }, 180000);
+	};
 	ws.onopen = function() {
 		var orig = twitterAPI;
 		twitterAPI = 'https://userstream.twitter.com/1.1/';
@@ -77,6 +87,7 @@ function ws_open() {
 		tw_stream_ws = ws;
 		ws.ping_timer = setInterval(ws.send_ping, 5*60*1000);
 		ws.pong_timer = setTimeout(function(){ debug("hello timeout"); ws.close(); }, 10000);
+		ws.renew_reconnect_timer();
 		if (ws_reopen_timer) clearTimeout(ws_reopen_timer);
 		ws_reopen_timer = null;
 		updateInterval = 600;
@@ -93,6 +104,7 @@ function ws_open() {
 		debug(ws_buffer);
 		updateInterval = parseInt(readCookie('update_interval')) || 90;
 		clearInterval(ws.ping_timer);
+		clearInterval(ws.reconnect_timer);
 		if (tw_stream_ws == this)
 			tw_stream_ws = null;
 		if (!tw_stream_ws)
