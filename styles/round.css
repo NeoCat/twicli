@@ -22,7 +22,7 @@ body, #tw2 { background-color: #eee; }
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
-	background-color: #eee; !important;
+	background-color: #eee !important;
 	background: -moz-linear-gradient(top, #eee, #ccc);
 	background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc));
 	box-shadow: 3px 3px 4px rgba(0,0,0,0.5), 0 0 4px rgba(255,255,255,0.8) inset;
@@ -31,13 +31,13 @@ body, #tw2 { background-color: #eee; }
 }
 
 .tw-parent > div > div.tome {
-	background-color: #eef; !important;
+	background-color: #eef !important;
 	background: -moz-linear-gradient(top, #eef, #ccf);
 	background: -webkit-gradient(linear, left top, left bottom, from(#eef), to(#ccf));
 }
 
 .tw-parent > div > div.fromme {
-	background-color: #efe; !important;
+	background-color: #efe !important;
 	background: -moz-linear-gradient(top, #efe, #cfc);
 	background: -webkit-gradient(linear, left top, left bottom, from(#efe), to(#cfc));
 }
