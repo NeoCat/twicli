@@ -879,9 +879,11 @@ function closeRep() {
 }
 // quotedStatusをoverlay表示
 function overlayQuoted(ele) {
+	ele = ele.parentNode.parentNode;
 	closeRep();
 	rep_top = cumulativeOffset(ele)[1];
-	dispReply2(ele.parentNode.parentNode.parentNode.parentNode.tw.quoted_status);
+	dispReply2(ele.parentNode.parentNode.tw.quoted_status);
+	return false;
 }
 // replyからユーザ間のタイムラインを取得
 function pickup2() {
