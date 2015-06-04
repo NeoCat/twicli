@@ -882,7 +882,8 @@ function overlayQuoted(ele) {
 	ele = ele.parentNode.parentNode;
 	closeRep();
 	rep_top = cumulativeOffset(ele)[1];
-	dispReply2(ele.parentNode.parentNode.tw.quoted_status);
+	var tw = ele.parentNode.parentNode.tw;
+	dispReply2((tw.retweeted_status || tw).quoted_status);
 	return false;
 }
 // replyからユーザ間のタイムラインを取得
