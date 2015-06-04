@@ -877,6 +877,12 @@ function closeRep() {
 	$('reps').innerHTML = '';
 	rep_trace_id = null;
 }
+// quotedStatusをoverlay表示
+function overlayQuoted(ele) {
+	closeRep();
+	rep_top = cumulativeOffset(ele)[1];
+	dispReply2(ele.parentNode.parentNode.parentNode.parentNode.tw.quoted_status);
+}
 // replyからユーザ間のタイムラインを取得
 function pickup2() {
 	if (user_pick1 && user_pick2)
@@ -1097,7 +1103,9 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 				}
 				if (u.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+u+"\" onclick=\"return link(this);\">"+_+"</a>";
 				return "<a href=\""+twitterURL+u+"\"  class=\"mention\" onClick=\"switchUser('"+u+"'); return false;\" >"+_+"</a>";
-			}).replace(/\r?\n|\r/g, "<br>") + '</span>' +
+			}).replace(/\r?\n|\r/g, "<br>") +
+		(noctl ? '<a class="button inrep overlay" href="#" onclick="return overlayQuoted(this)"><img src="images/jump.png"></a>' : '') +
+		'</span>' +
 		(noctl ? '' :
 		//Retweet情報
 		(rt_cnt>0 || rt ?
@@ -1132,7 +1140,7 @@ function makeUserInfoHTML(user) {
 			'<div class="udesc">' + (user.description ? user.description : '<br>') + '</div>' +
 			'<div class="uloc">' + (user.location ? user.location + (user.url?'・':'') : '') +
 			(user.url ? '<a target="_blank" href="' + user.url + '" onclick="return link(this);">' + user.url + '</a>' : '') + '</div>' +
-			'<b><a href="' + twitterURL + user.screen_name + '/following" onclick="switchFollowing();return false;">' + user.friends_count + '<small>'+_('following')+'</small></a> / ' + 
+			'<b><a href="' + twitterURL + user.screen_name + '/following" onclick="switchFollowing();return false;">' + user.friends_count + '<small>'+_('following')+'</small></a> / ' +
 						'<a href="' + twitterURL + user.screen_name + '/followers" onclick="switchFollower();return false;">' + user.followers_count + '<small>'+_('followers')+'</small></a>' +
 			' / <a href="' + twitterURL + user.screen_name + '" onclick="switchStatus();return false;">' + user.statuses_count + '<small>'+_('tweets')+'</small></a> / ' +
 						'<a href="' + twitterURL + user.screen_name + '/favorites" onclick="switchFav();return false;">' + user.favourites_count + '<small>'+_('favs')+'</small></a></b>' +
