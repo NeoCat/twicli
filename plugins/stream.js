@@ -52,18 +52,20 @@ function handle_stream_data(data, tw) {
 		callPlugins(data.event+"d", data);
 	} else if (data.event && data.event == "quoted_tweet") {
 		var name = data.source.screen_name;
-		var msg = _("@$1 quoted your tweet:", name);
-		var text = data.target_object.text;
-		try {
-			notify(msg + "<br>" + text);
-		} catch(e) {
-			debug(e);
-		}
-		callPlugins("quoted", data);
-		if (!text.match(new RegExp("[@＠]"+myname+"\\b","i"))) {
-			data.target_object.user = data.source;
-			twReplies([data.target_object], true);
-			noticeNewReply([data.target_object]);
+		if (name != myname) {
+			var msg = _("@$1 quoted your tweet:", name);
+			var text = data.target_object.text;
+			try {
+				notify(msg + "<br>" + text);
+			} catch(e) {
+				debug(e);
+			}
+			callPlugins("quoted", data);
+			if (!text.match(new RegExp("[@＠]"+myname+"\\b","i"))) {
+				data.target_object.user = data.source;
+				twReplies([data.target_object], true);
+				noticeNewReply([data.target_object]);
+			}
 		}
 	} else if (data.event && data.event == "follow") {
 		callPlugins("followed", data.source);
