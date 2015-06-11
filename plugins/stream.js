@@ -1,5 +1,6 @@
 langResources['@$1 favorited your tweet:'] = ['@$1 がツイートをお気に入りに追加しました:'];
 langResources['@$1 unfavorited your tweet:'] = ['@$1 がツイートをお気に入りから削除しました:'];
+langResources['@$1 quoted your tweet:'] = ['@$1 がツイートを引用しました:'];
 
 var last_update = new Date;
 var ws_buffer = '';
@@ -49,6 +50,21 @@ function handle_stream_data(data, tw) {
 			debug(e);
 		}
 		callPlugins(data.event+"d", data);
+	} else if (data.event && data.event == "quoted_tweet") {
+		var name = data.source.screen_name;
+		var msg = _("@$1 quoted your tweet:", name);
+		var text = data.target_object.text;
+		try {
+			notify(msg + "<br>" + text);
+		} catch(e) {
+			debug(e);
+		}
+		callPlugins("quoted", data);
+		if (!text.match(new RegExp("[@＠]"+myname+"\\b","i"))) {
+			data.target_object.user = data.source;
+			twReplies([data.target_object], true);
+			noticeNewReply([data.target_object]);
+		}
 	} else if (data.event && data.event == "follow") {
 		callPlugins("followed", data.source);
 	} else if (data.event && data.event == "block") {
