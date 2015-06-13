@@ -1091,7 +1091,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 		text.replace(/https?:\/\/[^\/\s]*[\w!#$%&\'()*+,.\/:;=?~-]*[\w#\/+-]|[@＠](\w+(?:\/[\w-]+)?)|([ -\/:-@\[-`{-~　、。！？「」（）『』｛｝［］【】]|\s|^)([#＃])([\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]+)(?=[^\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]|$)/g, function(_,u,x,h,s){
 				if (!u && !h) {
 					if (expanded_urls[_]) {
-						if (t.quoted_status && t.quoted_status_id_str &&
+						if (t.quoted_status && t.quoted_status.user && t.quoted_status_id_str &&
 						    expanded_urls[_].substring(0, twitterURL.length) == twitterURL &&
 						    expanded_urls[_].indexOf(t.quoted_status_id_str) >= 0)
 							return '<blockquote class="quoted">' + makeHTML(t.quoted_status, false, pid, null, true) + '</blockquote>';
