@@ -880,9 +880,9 @@ function closeRep() {
 // quotedStatusをoverlay表示
 function overlayQuoted(ele) {
 	ele = ele.parentNode.parentNode;
-	closeRep();
 	rep_top = cumulativeOffset(ele)[1];
 	var tw = ele.parentNode.parentNode.tw;
+	closeRep();
 	dispReply2((tw.retweeted_status || tw).quoted_status);
 	return false;
 }

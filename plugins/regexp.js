@@ -13,10 +13,11 @@ var pickup_tab_list = new Array();	// タブ一覧
 function execRegexp(tw, exp) {
 	var source = "\nvia " + (tw.source ? tw.source.replace(/<.*?>/g,'') : '');
 	var rtinfo = tw.retweeted_status ? "\nby @" + tw.user.screen_name : '';
+	var qinfo = tw.quoted_status && tw.quoted_status.user ? "\n" + tw.quoted_status.text + "\nby @" + tw.quoted_status.user.screen_name : '';
 	var rs = tw.retweeted_status || tw;
 	var t = display_as_rt ? tw : rs;
 	if (!t.user || !t.user.screen_name) return false;
-	var text = (t.text_replaced || t.text) + source + rtinfo;
+	var text = (t.text_replaced || t.text) + source + rtinfo + qinfo;
 	return	(!exp.id     || t.user.screen_name.match(exp.id  )) &&
 		(!exp.id_n   ||!t.user.screen_name.match(exp.id_n)) &&
 		(!exp.fn     || exp.fn.apply(tw)) &&
