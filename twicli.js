@@ -1709,7 +1709,11 @@ function switchReply() {
 	}
 }
 function switchUserTL(div, rt) {
-	var tw = div.tw || div.parentNode.parentNode.tw.quoted_status;
+	var tw = div.tw;
+	if (!tw) {
+		tw = div.parentNode.parentNode.tw;
+		tw = tw.quoted_status || tw.retweeted_status.quoted_status;
+	}
 	if (!(rt || display_as_rt))
 		tw = tw.retweeted_status || tw;
 	if (tw.user.description)
