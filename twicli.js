@@ -1092,7 +1092,8 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 				if (!u && !h) {
 					if (expanded_urls[_]) {
 						if (t.quoted_status && t.quoted_status.user && t.quoted_status_id_str &&
-						    expanded_urls[_].substring(0, twitterURL.length) == twitterURL &&
+							(expanded_urls[_].substring(0, twitterURL.length) == twitterURL ||
+							 expanded_urls[_].substring(0, twitterURL.length-1) == twitterURL.replace('https', 'http')) &&
 						    expanded_urls[_].indexOf(t.quoted_status_id_str) >= 0)
 							return '<blockquote class="quoted">' + makeHTML(t.quoted_status, false, pid, null, true) + '</blockquote>';
 						t.text_replaced = (t.text_replaced || t.text).replace(_, expanded_urls[_]);
