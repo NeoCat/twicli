@@ -219,6 +219,7 @@ var s_tl = 0,
     s_post = 5,
     s_flw = 6,
     s_cls = 7,
+    s_men = 8,
     text,
     icon_img;
 
@@ -232,9 +233,9 @@ if(len>0){
 }
 function setNotificationSettings() {
   var settings = [];
-  var elem = $('notification_pref').getElementsByTagName('input');
-  for(var i=0; i<elem.length; i++){
-    settings.push(elem[i].checked);
+  var len = $('notification_pref').getElementsByTagName('input').length;
+  for(var i=0; i<len; i++){
+    settings.push($('notification_'+i).checked);
   }
   notification = settings;
   writeCookie('notification', settings.join(","), 3652);
@@ -245,7 +246,7 @@ function getChecked(c) {
 
 registerPlugin({
   cnt: 0,
-	update: function() { this.cnt++; },
+  update: function() { this.cnt++; },
   gotNewMessage: function(tw) {
     if (this.cnt <= 1) return;
     var uname = tw.user.screen_name;
@@ -263,16 +264,20 @@ registerPlugin({
       showNotification('Timeline: @'+uname);
     }
   },
-  // リプライ
+  // リプライ・Mention
   noticeNewReply: function(replies){
-    if(!notification[s_rep]) return;
+    if(!notification[s_rep] && !notification[s_men]) return;
     for(var i=0; i<replies.length; i++){
       if(replies[i].retweeted_status) return;
       var uname = replies[i].user.screen_name;
       if(uname == myname) return;
       text = replies[i].text;
       icon_img = replies[i].user.profile_image_url;
-      showNotification('Reply by @'+uname);
+      if(notification[s_rep] && (replies[i].in_reply_to_status_id || text.charAt(0) === '@')){
+        showNotification('Reply by @'+uname);
+      }else if(notification[s_men]){
+        showNotification('Mention by @'+uname);
+      }
     }
   },
   // DM
@@ -318,6 +323,7 @@ registerPlugin({
       '<label><input type="checkbox" id="notification_'+s_rep+'" '+getChecked(notification[s_rep])+'>Reply</label>'+
       '<label><input type="checkbox" id="notification_'+s_dm+'" '+getChecked(notification[s_dm])+'>DM</label>'+
       '<label><input type="checkbox" id="notification_'+s_rt+'" '+getChecked(notification[s_rt])+'>Retweeted</label>'+
+      '<label><input type="checkbox" id="notification_'+s_men+'" '+getChecked(notification[s_men])+'>Mentioned</label>'+
       '<label><input type="checkbox" id="notification_'+s_fav+'" '+getChecked(notification[s_fav])+'>Favorited</label>'+
       '<label><input type="checkbox" id="notification_'+s_post+'" '+getChecked(notification[s_post])+'>Post</label>'+
       '<label><input type="checkbox" id="notification_'+s_flw+'" '+getChecked(notification[s_flw])+'>Followed</label><br>'+
