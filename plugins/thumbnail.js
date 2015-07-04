@@ -151,7 +151,7 @@ registerPlugin(thumbnail_plugin = {
 		}
 	},
 	changeTheme: function(theme) {
-		thumnailModeSet(theme.thumbnail_mode || 'top');
+		thumbnailModeSet(theme.thumbnail_mode || 'top');
 	},
 	miscTab: function(ele) {
 		var e = document.createElement("div");
