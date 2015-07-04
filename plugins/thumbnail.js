@@ -1,4 +1,9 @@
-registerPlugin({
+langResources['Thumbnail'] =	['サムネイル'];
+langResources['Position of thumbnail'] =	['サムネイルの位置'];
+langResources['Top'] =	['上'];
+langResources['Bottom'] = ['下'];
+
+registerPlugin(thumbnail_plugin = {
 	newMessageElement: function(elem, tw) {
 		tw = tw.retweeted_status || tw;
 		var entities = tw.extended_entities || tw.entities;
@@ -146,25 +151,38 @@ registerPlugin({
 		}
 	},
 	changeTheme: function(theme) {
-		var mode = theme.thumbnail_mode || 'top';
-		if (thumbnail_mode == mode) return;
-		thumbnail_mode = mode;
-		writeCookie('thumbnail_mode', mode, 3652);
-		var eles = document.getElementsByClassName('thumbnail-link');
-		for (var i = eles.length - 1; i >= 0; i--)
-		eles[i].parentNode.removeChild(eles[i]);
-		for (var p = 0; p < 2; p++) {
-			for (var i = 0; i < $(['tw','re'][p]).childNodes.length; i++) {
-				var tp = $(['tw','re'][p]).childNodes[i];
-				for (var j = 0; j < tp.childNodes.length; j++) {
-					var td = tp.childNodes[j];
-					if (!td.tw) continue;
-					this.newMessageElement(td, td.tw);
-				}
+		thumnailModeSet(theme.thumbnail_mode || 'top');
+	},
+	miscTab: function(ele) {
+		var e = document.createElement("div");
+	e.innerHTML = '<a href="javascript:var s = $(\'thumbnail_pref\').style; s.display = s.display==\'block\'?\'none\':\'block\';void(0)"><b>▼'+_('Thumbnail')+'</b></a>' +
+		'<form id="thumbnail_pref" style="display:none" onSubmit="return false;">' +
+		_('Position of thumbnail')+': <select id="thumbnail_pos" onchange="thumbnailModeSet(this.value)">' +
+		'<option value="top" '+ (thumbnail_mode == 'top' ? ' selected' : '') + '>' + _('Top') + '</option>' +
+		'<option value="bottom" '+ (thumbnail_mode != 'top' ? ' selected' : '') + '>' + _('Bottom') + '</option>' +
+		'</select></form>';
+		$("pref").appendChild(e);
+	}
+});
+
+function thumbnailModeSet(mode) {
+	if (thumbnail_mode == mode) return;
+	thumbnail_mode = mode;
+	writeCookie('thumbnail_mode', mode, 3652);
+	var eles = document.getElementsByClassName('thumbnail-link');
+	for (var i = eles.length - 1; i >= 0; i--)
+	eles[i].parentNode.removeChild(eles[i]);
+	for (var p = 0; p < 2; p++) {
+		for (var i = 0; i < $(['tw','re'][p]).childNodes.length; i++) {
+			var tp = $(['tw','re'][p]).childNodes[i];
+			for (var j = 0; j < tp.childNodes.length; j++) {
+				var td = tp.childNodes[j];
+				if (!td.tw) continue;
+				thumbnail_plugin.newMessageElement(td, td.tw);
 			}
 		}
 	}
-});
+}
 
 function flickrPhotoID(url) {
 	if (url.match(/^https?:\/\/(?:www\.flickr\.com\/photos\/[\w\-@]+\/(\d+)|flic\.kr\/p\/(\w+)$)/))
