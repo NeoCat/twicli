@@ -41,6 +41,7 @@ label, button, input[type="submit"], input[type="button"], input[type="image"], 
 .uicon2 { max-width: 96px; max-height: 96px; }
 .rtuicon { width: 16px; height: 16px; padding: 0 1px; vertical-align: bottom; }
 .fav { float: right; cursor: pointer; }
+.fav > img { width: 16px; height: 16px; }
 .dir { color: #679; }
 .status { text-decoration: none; }
 .status a.link { font-size: smaller; background-color: #eee; color: #022; border: solid 1px #cec; text-decoration: none; word-break: break-all; }
@@ -75,7 +76,7 @@ button { -webkit-appearance: push-button; }
 .popup { padding: 0 4px; color: #888; }
 .upopup { float: right; padding: 0 16px; color: #888; }
 .verified { background-image: url("../images/verified.png"); display: inline-block; width: 15px; height: 15px; vertical-align: -2px; }
-.lock { background-image: url("../images/icon_lock.gif"); display: inline-block; width: 7px; height: 11px; vertical-align: -2px; }
+.lock { background-image: url("../images/lock.png"); background-size: 7px,15px; display: inline-block; width: 7px; height: 11px; vertical-align: -2px; }
 .close { display: inline-block; color: red; margin: 4px; }
 .get-next { text-align: center; background-color: #999; color: #fec; cursor: pointer; }
 .get-next:before { content: '▽';}
