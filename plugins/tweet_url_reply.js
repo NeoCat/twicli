@@ -22,7 +22,7 @@ function imageLoadedFromLink(e) {
 function dispImageFromLink(url, e, type) {
   if (e.parentNode.parentNode.parentNode.id != 'reps') rep_top = cumulativeOffset(e)[1] + 20;
   if (type == "video" || type == "animated_gif")
-    $('reps').innerHTML = '<video controls style="max-width:90%; max-height: 90%; margin: auto; display: block;">' +
+	$('reps').innerHTML = '<video controls autoplay '+(type == "animated_gif" ? 'loop ' : '')+'style="max-width:90%; max-height: 90%; margin: auto; display: block;">' +
       url.map(function(u){return '<source type="' + u[0] + '" src="' + u[1] + '">'}).join('') + '</video>';
   else
     $('reps').innerHTML = url.map(function(u){return '<img src="' + u + '" style="max-width:90%; max-height: 90%; margin: auto; display: block;" onload="imageLoadedFromLink(this)">'}).join('');
