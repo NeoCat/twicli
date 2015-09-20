@@ -62,6 +62,14 @@
 							
 						});
 			}
+			else if (lng.match(/^(http:\/\/[\w\-]+\.tumblr\.com\/)post\/(\d+)/)) {
+				xds.load(RegExp.$1+'api/read/json?id='+RegExp.$2,
+					function(x) {
+						var v = x.posts[0]['video-player'];
+						if (!v) return;
+						createAnchor(link, function(){ dispEmbedSrc(v, link, 'data') });
+					})
+			}
 		}
 	});
 }());
@@ -77,6 +85,10 @@ function dispEmbedSrc(url, link, type) {
 	ifr.style.height = "426px";
 	ifr.style.display = "block";
 	switch (type) {
+		case 'data':
+			$('reps').appendChild(ifr);
+			ifr.contentWindow.document.write('<div>' + url + '</div>');
+			break;
 		case 'iframe':
 			ifr.src = url;
 			ifr.style.height = Math.ceil(win_h * 0.5) + "px";
