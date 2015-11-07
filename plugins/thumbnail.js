@@ -83,8 +83,8 @@ registerPlugin(thumbnail_plugin = {
 		else if (url.match(/^http:\/\/ow.ly\/i\/(\w+)/)) {
 			addThumbnail(elem, 'http://static.ow.ly/photos/thumb/'+RegExp.$1+".jpg", url);
 		}
-		else if (url.match(/^(http:\/\/gyazo.com\/\w+)/)) {
-			addThumbnail(elem, 'http://gyazo-thumbnail.appspot.com/thumbnail?url='+url, url);
+		else if (url.match(/^(https:\/\/gyazo.com\/\w+)/)) {
+			addThumbnail(elem, RegExp.$1+'/raw', url);
 		}
 		else if (url.match(/^https?:\/\/(?:(?:www|m)\.youtube\.com\/watch\?.*v=|youtu\.be\/)([\w\-]+)/)) {
 			var id = RegExp.$1;
