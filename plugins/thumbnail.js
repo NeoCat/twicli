@@ -64,7 +64,7 @@ registerPlugin(thumbnail_plugin = {
 		}
 		else if (flickr_id = flickrPhotoID(url)) {
 			var _url = url;
-			xds.load('http://www.flickr.com/services/rest?method=flickr.photos.getInfo'+
+			xds.load('https://www.flickr.com/services/rest?method=flickr.photos.getInfo'+
 					'&format=json&api_key=9bc57a7248847fd9a80982989e80cfd0&photo_id='+flickr_id,
 					function(x) {
 						var p = x.photo;
