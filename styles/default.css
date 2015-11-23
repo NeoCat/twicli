@@ -121,6 +121,7 @@ button { -webkit-appearance: push-button; }
 #notifyc { font-size: small; padding: 4px; }
 .ratelimits th { font-weight: normal; text-align: left; font-size: x-small; }
 .ratelimits td { text-align: right; white-space: nowrap; font-size: x-small; }
+#preps textarea { width: 99%; }
 
 #counter-div { display: none; width: 3em; position: fixed; top: 33px; right: 6%; z-index: 9; opacity: 0.80; filter: alpha(opacity=80); }
 #counter-p1 { border-top: solid 9px transparent; width: 0; height: 0; border-right: solid 5px #99f; float: left; margin-left: 8px; }
