@@ -43,7 +43,7 @@ label, button, input[type="submit"], input[type="button"], input[type="image"], 
 .fav { float: right; cursor: pointer; }
 .fav > img { width: 16px; height: 16px; }
 .dir { color: #679; }
-.status { text-decoration: none; }
+.status { text-decoration: none; white-space: pre-wrap; }
 .status a.link { font-size: smaller; background-color: #eee; color: #022; border: solid 1px #cec; text-decoration: none; word-break: break-all; }
 .status a.resolved { background-color: #eef; }
 .status a.link:hover { background-color: #ff9; }
