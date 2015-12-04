@@ -1,4 +1,4 @@
-vlangResources['Hide tweets for 1hour'] =	['1時間ツイートを隠す','遮住1小时'];
+langResources['Hide tweets for 1hour'] =	['1時間ツイートを隠す','遮住1小时'];
 
 var mute_min = 60; // minutes for mute
 
