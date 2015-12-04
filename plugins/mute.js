@@ -1,4 +1,4 @@
-langResources['Mute'] =	['ミュート','除去'];
+vlangResources['Hide tweets for 1hour'] =	['1時間ツイートを隠す','遮住1小时'];
 
 var mute_min = 60; // minutes for mute
 
@@ -84,6 +84,6 @@ function mute_hash(hash) {
 if ($('regexp_add_ID')) {
 	var a = document.createElement('a');
 	a.id = 'mute_menu';
-	a.innerHTML = _('Mute') + '... (1h)';
+	a.innerHTML = _('Hide tweets for 1hour') + '...';
 	$('popup').insertBefore(a, $('regexp_add_ID').nextSibling)
 }
