@@ -96,7 +96,7 @@ registerPlugin(thumbnail_plugin = {
 			else
 				addThumbnail(elem, 'http://tn-skr' + host + '.smilevideo.jp/smile?i=' + id, url);
 		}
-		else if (url.match(/^(https?:\/\/(?:instagr\.am|instagram\.com)\/p\/[\w\-]+)\/?$/)) {
+		else if (url.match(/^(https?:\/\/(?:www\.)?(?:instagr\.am|instagram\.com)\/p\/[\w\-]+)\/?$/)) {
 			addThumbnail(elem, RegExp.$1+'/media/?size=t', url);
 		}
 		else if (url.match(/^(http:\/\/picplz.com\/\w+)/)) {
