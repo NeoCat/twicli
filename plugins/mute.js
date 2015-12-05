@@ -1,25 +1,26 @@
-langResources['Hide tweets for 1hour'] =	['1時間ツイートを隠す','遮住1小时'];
+langResources['Isolate tweets for 1hour'] =	['1時間ツイートを隔離','隔离1小时'];
+langResources['Isolate'] =	['隔離','隔离'];
 
-var mute_min = 60; // minutes for mute
+var isolate_min = 60; // minutes for isolate
 
 registerPlugin({
 	popup: function() {
-		if (!$('mute_menu')) return;
-		$('mute_menu').href = "javascript:mute_menu('"+popup_ele.id+"')";
+		if (!$('isolate_menu')) return;
+		$('isolate_menu').href = "javascript:isolate_menu('"+popup_ele.id+"')";
 	},
 	popup_hide: function() {
-		var menu = $('mute_popup');
+		var menu = $('isolate_popup');
 		if (menu)
 			document.body.removeChild(menu);
 	}
 });
 
-function mute_menu(id) {
+function isolate_menu(id) {
 	var ele = $(id);
 	var tw = !display_as_rt && ele.tw.retweeted_status || ele.tw;
 	
 	var menu = document.createElement('div');
-	menu.id = 'mute_popup';
+	menu.id = 'isolate_popup';
 	menu.className = 'popup_menu';
 	document.body.appendChild(menu);
 	
@@ -29,61 +30,61 @@ function mute_menu(id) {
 	$('popup_hide').style.height = Math.max(document.body.scrollHeight, $("tw").offsetHeight+$("control").offsetHeight) + 'px';
 	$('popup_hide').style.display = "block";
 	
-	var mute_menu_user = function(screen_name) {
+	var isolate_menu_user = function(screen_name) {
 		screen_name = screen_name.replace(/^[@＠]/, '');
 		var a = document.createElement('a');
-		a.innerHTML = _('Mute') + ': @'+screen_name;
-		a.href = 'javascript:mute_user("'+screen_name+'")';
+		a.innerHTML = _('Isolate') + ': @'+screen_name;
+		a.href = 'javascript:isolate_user("'+screen_name+'")';
 		menu.appendChild(a);
 	}
-	var mute_menu_hash = function(hash) {
+	var isolate_menu_hash = function(hash) {
 		hash = hash.replace(/^[#＃]/, '');
 		var a = document.createElement('a');
-		a.innerHTML = _('Mute') + ': #'+hash;
-		a.href = 'javascript:mute_hash("'+hash+'")';
+		a.innerHTML = _('Isolate') + ': #'+hash;
+		a.href = 'javascript:isolate_hash("'+hash+'")';
 		menu.appendChild(a);
 	}
 	
-	mute_menu_user(tw.user.screen_name);
+	isolate_menu_user(tw.user.screen_name);
 	for (var i = 0; i < ele.childNodes.length; i++) {
 		var st = ele.childNodes[i];
 		if (st.className && st.className.indexOf('status') >= 0) {
 			for (var j = 0; j < st.childNodes.length; j++) {
 				var target = st.childNodes[j];
 				if (target.className == 'mention') {
-					mute_menu_user(target.innerHTML);
+					isolate_menu_user(target.innerHTML);
 				}
 				else if (target.className == 'hashtag') {
-					mute_menu_hash(target.innerHTML);
+					isolate_menu_hash(target.innerHTML);
 				}
 			}
 			break;
 		}
 	}
 }
-function mute_menu_hide() {
+function isolate_menu_isolate() {
 	$('popup_hide').style.display = "none";
-	var menu = $('mute_popup');
+	var menu = $('isolate_popup');
 	if (menu)
 		document.body.removeChild(menu);
 }
 
-function mute_user(user) {
-	var limit = parseInt(new Date().getTime()/1000) + mute_min * 60;
+function isolate_user(user) {
+	var limit = parseInt(new Date().getTime()/1000) + isolate_min * 60;
 	setRegexp('m:^' + user + '$::1:' + limit +'\n' +
 				'm::@' + user + ':1:' + limit + '\n' + pickup_regexp);
-	mute_menu_hide();
+	isolate_menu_isolate();
 }
-function mute_hash(hash) {
-	var limit = parseInt(new Date().getTime()/1000) + mute_min * 60;
+function isolate_hash(hash) {
+	var limit = parseInt(new Date().getTime()/1000) + isolate_min * 60;
 	setRegexp('m::#' + hash + ':1:' + limit + '\n' + pickup_regexp);
-	mute_menu_hide();
+	isolate_menu_isolate();
 }
 
 // Popup menu
 if ($('regexp_add_ID')) {
 	var a = document.createElement('a');
-	a.id = 'mute_menu';
-	a.innerHTML = _('Hide tweets for 1hour') + '...';
+	a.id = 'isolate_menu';
+	a.innerHTML = _('Isolate tweets for 1hour') + '...';
 	$('popup').insertBefore(a, $('regexp_add_ID').nextSibling)
 }
