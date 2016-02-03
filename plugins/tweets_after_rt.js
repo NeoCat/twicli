@@ -9,7 +9,7 @@ var tweets_after_rt = {
 	},
 	find_tweets_after_retweets: function(ele, user, id) {
 		rep_top = cumulativeOffset(ele)[1] + 20;
-		xds.load_for_tab(twitterAPI + 'statuses/retweets/' + id + '.json',
+		xds.load_for_tab(twitterAPI + 'statuses/retweets/' + id + '.json?count=100',
 			function(tw) {
 				var cnt = 0;
 				if (tw.errors) return error('', tw);
