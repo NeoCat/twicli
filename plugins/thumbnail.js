@@ -2,6 +2,9 @@ langResources['Thumbnail'] =	['サムネイル'];
 langResources['Position of thumbnail'] =	['サムネイルの位置'];
 langResources['Top'] =	['上'];
 langResources['Bottom'] = ['下'];
+langResources['Link for Twitter photo'] =	['Twitterの写真のリンク先'];
+langResources['Tweet page'] =	['ツイートページ'];
+langResources['Original image'] = ['オリジナル画像'];
 
 registerPlugin(thumbnail_plugin = {
 	newMessageElement: function(elem, tw) {
@@ -12,7 +15,9 @@ registerPlugin(thumbnail_plugin = {
 				if (['photo', 'animated_gif', 'video'].indexOf(entities.media[i].type) >= 0) {
 					addThumbnail(elem,
 						entities.media[i].media_url + ":thumb",
-						entities.media[i].expanded_url);
+							entities.media[i].type == 'photo' && thumbnail_twitter_photo_link == 'original' ?
+							entities.media[i].media_url + ":orig" :
+							entities.media[i].expanded_url);
 				}
 			}
 		}
@@ -164,6 +169,12 @@ registerPlugin(thumbnail_plugin = {
 		_('Position of thumbnail')+': <select id="thumbnail_pos" onchange="thumbnailModeSet(this.value)">' +
 		'<option value="top" '+ (thumbnail_mode == 'top' ? ' selected' : '') + '>' + _('Top') + '</option>' +
 		'<option value="bottom" '+ (thumbnail_mode != 'top' ? ' selected' : '') + '>' + _('Bottom') + '</option>' +
+		'</select><br>' +
+		_('Link for Twitter photo')+': <select id="twitter_photo_link" onchange="twitterPhotoLinkSet(this.value)">' +
+		'<option value="tweet" '+ (thumbnail_twitter_photo_link == 'tweet' ? ' selected' : '') + '>' +
+		_('Tweet page') + '</option>' +
+		'<option value="original" '+ (thumbnail_twitter_photo_link == 'original' ? ' selected' : '') + '>' +
+		_('Original image') + '</option>' +
 		'</select></form>';
 		$("pref").appendChild(e);
 	}
@@ -188,6 +199,11 @@ function thumbnailModeSet(mode) {
 	}
 }
 
+function twitterPhotoLinkSet(link) {
+	thumbnail_twitter_photo_link = link;
+	writeCookie('thumbnail_twitter_photo_link', link, 3652);
+}
+
 function flickrPhotoID(url) {
 	if (url.match(/^https?:\/\/(?:www\.flickr\.com\/photos\/[\w\-@]+\/(\d+)|flic\.kr\/p\/(\w+)$)/))
 		return RegExp.$2 ? decodeBase58(RegExp.$2) : RegExp.$1;
@@ -201,6 +217,7 @@ function decodeBase58(snipcode) {
 }
 
 var thumbnail_mode = readCookie('thumbnail_mode') || 'top';
+var thumbnail_twitter_photo_link = readCookie('thumbnail_twitter_photo_link') || 'tweet';
 
 function addThumbnail(elem, src, url, title) {
 	var thm = document.createElement('img');
