@@ -455,6 +455,8 @@ var reply_to_all = parseInt(readCookie('reply_to_all') || "1");	// 全員に返�
 var footer = readCookie('footer') || ""; 							// フッタ文字列
 var decr_enter = parseInt(readCookie('decr_enter') || "0");			// Shift/Ctrl+Enterで投稿
 var confirm_close = parseInt(readCookie('confirm_close') || "1");			// Tabを閉じるとき確認
+var confirm_delete = parseInt(readCookie('confirm_delete') || "1");			// ツイート削除時に確認
+var confirm_rt = parseInt(readCookie('confirm_rt') || "1");			// Retweet時に確認
 var no_geotag = parseInt(readCookie('no_geotag') || "0");			// GeoTaggingを無効化
 var post_via_agent = cookieVer > 19 ? parseInt(readCookie('post_via_agent') || "1") : 1;	// tweet-agent経由でツイート
 var show_header_img = parseInt(readCookie('show_header_img') || "1");	// ヘッダ画像表示
@@ -948,7 +950,7 @@ function retweetStatus(id, ele) {
 		error(_("This tweet is protected."));
 		return false;
 	}
-	if (!confirm(_("Retweet to your followers?"))) return false;
+	if (confirm_rt && !confirm(_("Retweet to your followers?"))) return false;
 	var target_ele = ele;
 	enqueuePost(twitterAPI + 'statuses/retweet/' + id + '.json',
 		function(){
@@ -964,7 +966,7 @@ function quoteStatus(id, user, ele) {
 	user = user || popup_user;
 	ele = ele || popup_ele;
 	if (!id) return false;
-	if ($('lock-' + ele.id) && !confirm(_("This tweet is protected; Are you sure to retweet?"))) return false;
+	if ($('lock-' + ele.id) && confirm_rt && !confirm(_("This tweet is protected; Are you sure to retweet?"))) return false;
 	var tw = !display_as_rt && ele.tw.retweeted_status || ele.tw;
 	$('fst').value = "RT @"+user+": " + charRef(tw.text);
 	$('fst').focus(); $('fst').select();
@@ -976,7 +978,7 @@ function hrefStatus(id, user, ele) {
 	user = user || popup_user;
 	ele = ele || popup_ele;
 	if (!id) return false;
-	if ($('lock-' + ele.id) && !confirm(_("This tweet is protected; Are you sure to insert URL?"))) return false;
+	if ($('lock-' + ele.id) && confirm_rt && !confirm(_("This tweet is protected; Are you sure to insert URL?"))) return false;
 	var tw = !display_as_rt && ele.tw.retweeted_status || ele.tw;
 	$('fst').value = $('fst').value + " https://twitter.com/" + user + "/statuses/" + id;
 	$('fst').focus(); $('fst').select();
@@ -986,7 +988,7 @@ function hrefStatus(id, user, ele) {
 function deleteStatus(id) {
 	id = id || popup_ele.tw.id_str || popup_ele.tw.id;
 	if (!id) return false;
-	if (!confirm(_('Are you sure to delete this tweet?'))) return false;
+	if (confirm_delete && !confirm(_('Are you sure to delete this tweet?'))) return false;
 	for (var i = 0; i < 3; i++) {
 		var target = $(['tw-','re-','tw2c-'][i]+id);
 		if (target) target.className += " deleted";
@@ -1813,6 +1815,8 @@ function switchMisc() {
 					'<label><input type="checkbox" name="resize_fst"' + (no_resize_fst?"":" checked") + '>'+_('Auto-resize field')+'</label><br>' +
 					'<label><input type="checkbox" name="decr_enter"' + (decr_enter?" checked":"") + '>'+_('Post with ctrl/shift+enter')+'</label><br>' +
 					'<label><input type="checkbox" name="confirm_close"' + (confirm_close?" checked":"") + '>'+_('Confirm before closing tabs')+'</label><br>' +
+					'<label><input type="checkbox" name="confirm_delete"' + (confirm_delete?" checked":"") + '>'+_('Confirm before deleting tweets')+'</label><br>' +
+					'<label><input type="checkbox" name="confirm_rt"' + (confirm_rt?" checked":"") + '>'+_('Confirm before retweet')+'</label><br>' +
 					'<label><input type="checkbox" name="geotag"' + (no_geotag?"":" checked") + '>'+_('Enable GeoTagging')+'</label><br>' +
 					'<label><input type="checkbox" name="post_via_agent"' + (post_via_agent?" checked":"") + '>'+_('Tweet via GAE server')+'</label><br>' +
 					'<label><input type="checkbox" name="show_header_img"' + (show_header_img?" checked":"") + '>'+_('Show header image')+'</label><br>' +
@@ -1884,6 +1888,8 @@ function setPreps(frm) {
 	reply_to_all = frm.reply_to_all.checked;
 	display_as_rt = frm.display_as_rt.checked;
 	confirm_close = frm.confirm_close.checked;
+	confirm_delete = frm.confirm_delete.checked;
+	confirm_rt = frm.confirm_rt.checked;
 	footer = new String(frm.footer.value);
 	decr_enter = frm.decr_enter.checked;
 	no_geotag = !frm.geotag.checked;
@@ -1913,6 +1919,8 @@ function setPreps(frm) {
 	writeCookie('footer', footer, 3652);
 	writeCookie('decr_enter', decr_enter?1:0, 3652);
 	writeCookie('confirm_close', confirm_close?1:0, 3652);
+	writeCookie('confirm_delete', confirm_delete?1:0, 3652);
+	writeCookie('confirm_rt', confirm_rt?1:0, 3652);
 	writeCookie('no_geotag', no_geotag?1:0, 3652);
 	writeCookie('post_via_agent', post_via_agent?1:0, 3652);
 	writeCookie('show_header_img', show_header_img?1:0, 3652);

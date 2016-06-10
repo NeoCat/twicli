@@ -40,6 +40,8 @@ var langResources = {
 	'Post length counter':	['残り文字数を表示','显示发言的剩余字数'],
 	'Post with ctrl/shift+enter':	['ctrl+enter/shift+enterで発言','敲击Ctrl+回车或Shift+回车来发言'],
 	'Confirm before closing tabs': ['タブを閉じる前に確認','确认闭标签'],
+	'Confirm before deleting tweets': ['ツイート削除の前に確認'],
+	'Confirm before retweet': ['リツイートする前に確認'],
 	'Enable GeoTagging':	['ジオタグ(位置情報)を有効に','开启地理标签（方位信息）'],
 	'Use HTTPS':	['HTTPSを使用','使用HTTPS'],
 	'Tweet via GAE server':	['GAEサーバ経由でツイート','使用GAE server'],
