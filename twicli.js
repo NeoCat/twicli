@@ -1082,7 +1082,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 			//ユーザアイコン
 			'<img class="uicon" src="' + t.user.profile_image_url + '" title="' + (t.user.description ? t.user.description.replace(/\"/g,'&quot;') :'') + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false">' + (t.user.url ? '</a>' : '') +
 			//名前
-			'<a href="' + twitterURL + un + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false"><span class="uid">' + un + '</span>' +
+			'<a href="' + twitterURL + un + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false"><span class="uid">@' + un + '</span>' +
 			 /*プロフィールの名前*/ '<span class="uname' + (t.user.name!=un ? '' : '_same') + '"><span class="uname_paren">(</span>'+insertPDF(t.user.name)+'<span class="uname_paren2">)</span></span></a>'
 		: '') +
 		 /* verified? */ (!no_name && t.user.verified ? '<div id="verified-' + eid + '" class="verified"></div>' : '') +
@@ -1116,7 +1116,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 		//Retweet情報
 		(rt_cnt>0 || rt ?
 			'<span id="rtinfo-'+eid+'" class="rtinfo'+(display_as_rt?' rtinfo-alt':'')+'">' +
-				(rt && !display_as_rt ? 'by <a href="'+twitterURL+tw.user.screen_name+'" onclick="switchUserTL(this.parentNode.parentNode, true);return false"><img src="'+tw.user.profile_image_url+'" alt="'+tw.user.screen_name+'" class="rtuicon">'+tw.user.screen_name+'</a>'+(rt_cnt>1?' & '+(rt_cnt-1):'') : rt_cnt) +
+				(rt && !display_as_rt ? 'by <a href="'+twitterURL+tw.user.screen_name+'" onclick="switchUserTL(this.parentNode.parentNode, true);return false"><img src="'+tw.user.profile_image_url+'" alt="@'+tw.user.screen_name+'" class="rtuicon">@'+tw.user.screen_name+'</a>'+(rt_cnt>1?' & '+(rt_cnt-1):'') : rt_cnt) +
 			'</span>' : '') +
 		//Favorited情報
 		(fav_cnt > 0 ? '<span id="favinfo-'+eid+'" class="favinfo">'+fav_cnt+'</span>' : '') +
