@@ -765,7 +765,7 @@ function updateCount() {
 	var s = $("fst").value.replace(
 			/https?:\/\/[^\/\s]*[\w!#$%&\'()*+,.\/:;=?~-]*[\w#\/+-]/g,
 			function(t) {return t_co_maxstr.replace(/^http/, t.substr(0, t.indexOf(':')))});
-	$("counter").innerHTML = (isMessage() ? 10000 : 140) - footer.length - s.length;
+	$("counter").innerHTML = isMessage() ? tw_config.dm_text_character_limit - RegExp.$2.length  : 140 - footer.length - s.length;
 }
 // フォームのフォーカス解除時の処理
 function blurFst() {
