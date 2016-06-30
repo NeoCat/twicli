@@ -665,6 +665,9 @@ function sendMessage(user, text) {
 	return false;
 }
 
+function isMessage() {
+	return document.frm.status.value.match(/^[dD]\s+(\w+)\s+([\w\W]+)/);
+}
 // enterキーで発言, "r"入力で再投稿, 空欄でTL更新
 function press(e) {
 	if (e != 1 && (e.keyCode != 13 && e.keyCode != 10 ||
@@ -686,7 +689,7 @@ function press(e) {
 		in_reply_to_user = last_in_reply_to_user;
 		setReplyId(last_in_reply_to_status_id);
 	}
-	if (st.value.match(/^[dD]\s+(\w+)\s+([\w\W]+)/)) {
+	if (isMessage()) {
 		// DM送信
 		return sendMessage(RegExp.$1, RegExp.$2);
 	}
@@ -762,7 +765,7 @@ function updateCount() {
 	var s = $("fst").value.replace(
 			/https?:\/\/[^\/\s]*[\w!#$%&\'()*+,.\/:;=?~-]*[\w#\/+-]/g,
 			function(t) {return t_co_maxstr.replace(/^http/, t.substr(0, t.indexOf(':')))});
-	$("counter").innerHTML = 140 - footer.length - s.length;
+	$("counter").innerHTML = (isMessage() ? 10000 : 140) - footer.length - s.length;
 }
 // フォームのフォーカス解除時の処理
 function blurFst() {
@@ -1783,9 +1786,9 @@ function switchFollower() {
 function switchDirect() {
 	switchTo("direct");
 	xds.load_for_tab(twitterAPI + 'direct_messages.json' +
-										'?suppress_response_codes=true', twDirect1);
+						'?suppress_response_codes=true&full_text=true', twDirect1);
 	xds.load_for_tab(twitterAPI + 'direct_messages/sent.json' +
-										'?suppress_response_codes=true', twDirect2);
+						'?suppress_response_codes=true&full_text=true', twDirect2);
 }
 function switchMisc() {
 	switchTo("misc");
