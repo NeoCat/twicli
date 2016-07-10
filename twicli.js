@@ -39,8 +39,8 @@ function setupOAuthURL(url, post, post_agent, multipart) {
 	if (media_upload) multipart = true;
 	var nosign = [];
 	url = url.split("?");
-	if (post && !(media_upload && post_agent) && url[1] && url[1].match(/(^|&)((?:status|text)=[^&]+)/) && RegExp.$2.indexOf('%2A') >= 0 || RegExp.$2.indexOf('*') >= 0) {
-		// "*"(%2A)はPOSTデータではURLEncodeされずに送信されOAuthエラーとなるため、URL内に含める（status,textにのみ対応）
+	if (post && !(media_upload && post_agent) && url[1] && url[1].match(/(^|&)((?:status)=[^&]+)/) && RegExp.$2.indexOf('%2A') >= 0 || RegExp.$2.indexOf('*') >= 0) {
+		// "*"(%2A)はPOSTデータではURLEncodeされずに送信されOAuthエラーとなるため、URL内に含める（statusにのみ対応）
 		url[1] = url[1].replace(RegExp.$1+RegExp.$2, '');
 		url[0] += "?" + RegExp.$2.replace(/\*/g, '%2A');
 	}
@@ -171,7 +171,10 @@ function corsPost(url, done, err) {
 	xhr.onload = function(){
 		if (xhr.readyState != 4) return;
 		loading(false);
-		done(JSON.parse(xhr.responseText));
+		if (xhr.status == 200)
+			done(JSON.parse(xhr.responseText));
+		else
+			done({'errors': [{message: xhr.responseText}]});
 	}
 	xhr.onerror = function(){ loading(false); err(); }
 	xhr.open('POST', url_post, true);
