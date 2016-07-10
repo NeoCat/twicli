@@ -33,9 +33,10 @@ function setupOAuthArgs(args) {
 		}
 	}
 }
-function setupOAuthURL(url, post, post_agent) {
+function setupOAuthURL(url, post, post_agent, multipart) {
 	if (url.indexOf(twitterAPI) != 0) return url;
 	var media_upload = url.indexOf('update_with_media.json') >= 0 && post;
+	if (media_upload) multipart = true;
 	var nosign = [];
 	url = url.split("?");
 	if (post && !(media_upload && post_agent) && url[1] && url[1].match(/(^|&)((?:status|text)=[^&]+)/) && RegExp.$2.indexOf('%2A') >= 0 || RegExp.$2.indexOf('*') >= 0) {
@@ -44,7 +45,7 @@ function setupOAuthURL(url, post, post_agent) {
 		url[0] += "?" + RegExp.$2.replace(/\*/g, '%2A');
 	}
 	setupOAuthArgs(url[1]);
-	if (media_upload) {
+	if (multipart) {
 		var cs = document.request.childNodes;
 		for (var e = cs.length - 1; e >= 0; e--) {
 			if (cs[e].tagName == 'INPUT' && cs[e].name.indexOf('oauth') < 0 || cs[e] === $('api_args')) {
@@ -71,7 +72,7 @@ function setupOAuthURL(url, post, post_agent) {
 		media.style.display = "none";
 		$("api_args").appendChild(media);
 	}
-	return url + (!post || media_upload ? serializeForm(document.request, media_upload && 'oauth') : '');
+	return url + (!post || multipart ? serializeForm(document.request, multipart && 'oauth') : '');
 }
 // クロスドメインJavaScript呼び出し(Twitter APIはOAuth認証)
 function loadXDomainScript(url, ele) {
@@ -158,7 +159,7 @@ var xds = {
 // CORSによるPOST (Agent経由)
 function corsPost(url, done, err) {
 	loading(true);
-	var url_post = setupOAuthURL(url, true, true);
+	var url_post = setupOAuthURL(url, true, true, true);
 	var form = new FormData();
 	var inputs = document.request.getElementsByTagName("INPUT");
 	for (var i = 0; i < inputs.length; i++)
@@ -167,16 +168,20 @@ function corsPost(url, done, err) {
 		else if (inputs[i].name.indexOf('oauth_') != 0)
 			form.append(inputs[i].name, inputs[i].value);
 	var xhr = new XMLHttpRequest();
-	xhr.onload = function(){ loading(false); done(); }
+	xhr.onload = function(){
+		if (xhr.readyState != 4) return;
+		loading(false);
+		done(JSON.parse(xhr.responseText));
+	}
 	xhr.onerror = function(){ loading(false); err(); }
 	xhr.open('POST', url_post, true);
 	xhr.send(form);
 }
 // 動的にフレームを生成してPOSTを投げる(Twitter APIはOAuth認証)
 var postQueue = [];
-function enqueuePost(url, done, err, retry) {
+function enqueuePost(url, done, err, retry, force_post) {
 	if (post_via_agent && url.indexOf(twitterAPI) == 0)
-		if (!$('media') || !$('media').value)
+		if ((!$('media') || !$('media').value) && !force_post)
 			return xds.load(url, done, err, retry, null, true);
 		else
 			return corsPost(url, done, err);
@@ -660,8 +665,9 @@ function sendMessage(user, text) {
 	callPlugins("sendMessage", user, text);
 	enqueuePost(twitterAPI + "direct_messages/new.json?screen_name=" + user +
 		"&text=" + encodeURIComponent(text),
-		function(){ resetFrm(); },
-		function(){ resetFrm(); });
+		function(tw){ if (tw && tw.errors) error('', tw); resetFrm(); },
+		function(){ error(_('Twitter API error')); resetFrm(); },
+		false, true);
 	return false;
 }
 
