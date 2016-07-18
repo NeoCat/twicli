@@ -28,7 +28,7 @@
 									p = p.nextSibling;
 								}
 								if (!p || !p.tw) continue;
-								if (p.tw.user.id == t.user.id && p.tw.retweeted_status) {
+								if ((p.tw.user.id_str || p.tw.user.id) == (t.user.id_str || t.user.id) && p.tw.retweeted_status) {
 									rep_top = cumulativeOffset(node)[1] + 20;
 									dispReply2(p.tw);
 									break;
@@ -36,7 +36,7 @@
 							}
 							if (!pp) {
 								xds.load_for_tab(twitterAPI + 'statuses/user_timeline.json' +
-									'?count=10&id=' + t.user.id + '&max_id=' + t.id +
+									'?count=10&id=' + (t.user.id_str || t.user.id) + '&max_id=' + t.id +
 									'&include_rts=true&include_entities=true&suppress_response_codes=true',
 									function(tw) {
 										for (var i = 0; i < tw.length; i++) {
