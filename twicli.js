@@ -1163,7 +1163,7 @@ function makeUserInfoHTML(user) {
 			' / <a href="' + twitterURL + user.screen_name + '" onclick="switchStatus();return false;">' + user.statuses_count + '<small>'+_('tweets')+'</small></a> / ' +
 						'<a href="' + twitterURL + user.screen_name + '/favorites" onclick="switchFav();return false;">' + user.favourites_count + '<small>'+_('favs')+'</small></a></b>' +
 			'</div></div>'+
-			(user.screen_name != myname ? '<a class="button upopup" href="#" onClick="userinfo_popup_menu(\'' + user.screen_name + '\',' + user.id + ', this); return false;"><small><small>▼</small></small></a>' : '')+
+			(user.screen_name != myname ? '<a class="button upopup" href="#" onClick="userinfo_popup_menu(\'' + user.screen_name + '\',' + (user.id_str || user.id) + ', this); return false;"><small><small>▼</small></small></a>' : '')+
 			'<a target="twitter" href="' + twitterURL + user.screen_name + '">[Twitter]</a>'
 }
 // Rate Limit情報のHTML表現を生成
@@ -1264,7 +1264,7 @@ function twUserInfo(user) {
 	}
 	if (myname != user.screen_name) {
 		xds.load_for_tab(twitterAPI + 'friendships/show.json' +
-					'?source_screen_name=' + myname + '&target_id=' + user.id +
+					'?source_screen_name=' + myname + '&target_id=' + (user.id_str || user.id) +
 					'&suppress_response_codes=true', twRelation);
 	}
 }
