@@ -143,7 +143,7 @@ registerPlugin(thumbnail_plugin = {
 					addThumbnail(elem, x.thumbnail, url);
 			});
 		}
-		else if (url.match(/^(http:\/\/(?:www\.)?amazon\.(?:co\.jp|jp|com)\/.*(?:d|dp|product|ASIN)[\/%].+)/)) {
+		else if (url.match(/^(https?:\/\/(?:www\.)?amazon\.(?:co\.jp|jp|com)\/.*(?:d|dp|product|ASIN)[\/%].+)/)) {
 			xds.load("http://thumbnail-url.appspot.com/url?url=" + encodeURIComponent(RegExp.$1),
 				function(x) {
 					if (x && x.thumbnail)
