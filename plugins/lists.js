@@ -1,4 +1,5 @@
 langResources['Add'] =	['追加','添加'];
+langResources['Subscribe'] =	['購読','添加'];
 langResources['get all tweets'] =	['全ツイートを取得','获取所有发言'];
 langResources['Please specify a list like "@user/list".'] =	['リストを"@user/list"の形式で指定して下さい。','请使用"@user/list"的格式指定List'];
 langResources['Lists'] =	['リスト','列表'];
@@ -15,6 +16,7 @@ var twl_page = 0;
 var twl_update_timer = null;
 var lists_to_get = readCookie("lists");
 lists_to_get = lists_to_get ? lists_to_get.split("\n") : [];
+var list_names = lists_to_get.map(function(a){ return a.substr(0, 1) == '#' ? a.substr(1) : a });
 var lists_users = {};
 function twlGetListInfo(name) {
 	if (name == "") return;
@@ -49,14 +51,13 @@ function twlSubscribeList(name) {
 	if (name.indexOf('/') < 0)
 		return alert(_('Please specify a list like "@user/list".'));
 	if (name[0] == "@") name = name.substr(1);
-	for (var i = 0; i < lists_to_get.length; i++) // avoid duplication
-		if (lists_to_get[i] == name || lists_to_get[i] == '#'+name)
-			return;
+	if (list_names.indexOf(name) >= 0) return; // avoid duplication
 	lists_to_get.push(name);
 	writeCookie("lists", lists_to_get.join("\n"), 3652);
 	twlGetListInfo(name);
 }
 function twlUnsubscribeList(name) {
+	if (name[0] == "@") name = name.substr(1);
 	for (var i = 0; i < lists_to_get.length; i++) {
 		if (lists_to_get[i] == name || lists_to_get[i] == "#"+name) {
 			lists_to_get.splice(i, 1);
@@ -86,26 +87,35 @@ function twlToggleListsInTL(a, ele) {
 	writeCookie("lists", lists_to_get.join("\n"), 3652);
 	twlUpdateListsList();
 }
-
+function twlToggleSubscribe(ele, name) {
+	if (ele.checked)
+		twlSubscribeList(name);
+	else
+		twlUnsubscribeList(name);
+}
 function twlGetLists(user) {
 	xds.load_for_tab(twitterAPI + 'lists/memberships.json?seq=' + (seq++) + '&screen_name=' + user, twlFollowers);
+}
+function twlListLink(a) {
+	return '<div> <a target="_blank" href="' + twitterURL + a.uri.substr(1) +
+		'" onclick="return twlGetListStatus(\'' + a.uri.substr(1) + '\')">' +
+		a.full_name + '</a> (' +
+		a.member_count + ' / ' + a.subscriber_count + ') '+
+		'<input type="checkbox" id="subscribe-' + a.full_name + '" ' +
+		(list_names.indexOf(a.full_name.replace('@', '')) >= 0 ? 'checked ' : '') +
+		'onclick="twlToggleSubscribe(this, \'' + a.full_name + '\')">' +
+		'<label for="subscribe-' + a.full_name +'">' + _('Subscribe') + '</label></div>';
 }
 function twlFollowers(res) {
 	if (selected_menu.id != "user") return;
 	var tmp = $("tmp");
 	if (tmp) tmp.parentNode.removeChild(tmp);
-	$('tw2c').innerHTML = '<div><b>Followed by :</b></div>' + res.lists.map(function(a){
-		return '<div> <a target="_blank" href="' + twitterURL + a.uri.substr(1) + '" onclick="return twlGetListStatus(\'' + a.uri.substr(1) + '\')">' + a.full_name + '</a> (' +
-				 a.member_count + ' / ' + a.subscriber_count + ')</div>';
-	}).join("");
+	$('tw2c').innerHTML = '<div><b>Followed by :</b></div>' + res.lists.map(twlListLink).join("");
 	xds.load_for_tab(twitterAPI + 'lists/list.json?seq=' + (seq++) + '&screen_name=' + last_user, twlLists);
 }
 function twlLists(res) {
 	if (selected_menu.id != "user") return;
-	$('tw2c').innerHTML += '<div><b>Lists by ' + last_user + ' :</b></div>' + res.map(function(a){
-		return '<div> <a target="_blank" href="' + twitterURL + a.uri.substr(1) + '" onclick="return twlGetListStatus(\'' + a.uri.substr(1) + '\')">' + a.full_name + '</a> (' +
-				 a.member_count + ' / ' + a.subscriber_count + ')</div>';
-	}).join("");
+	$('tw2c').innerHTML += '<div><b>Lists by ' + last_user + ' :</b></div>' + res.map(twlListLink).join("");
 }
 
 function twlGetListStatus(list) {
@@ -155,6 +165,7 @@ function twlShowListStatus(tw, update) {
 
 var init_failed = false;
 function twlUpdateListsList() {
+	list_names = lists_to_get.map(function(a){ return a.substr(0, 1) == '#' ? a.substr(1) : a });
 	// update tab
 	pickup_regexp_ex = lists_to_get.map(function(l){
 		var a = l[0] == '#' ? l.substr(1) : l;
