@@ -291,6 +291,48 @@ registerPlugin({
 			'CLOSINGCEREMONY': 'ClosingCeremony'
 		};
 
+		var sports = [
+			'Archery',
+			'ArtisticGymnastics',
+			'Athletics',
+			'Badminton',
+			'Basketball',
+			'BeachVolleyball',
+			'Boxing',
+			'CanoeSlalom',
+			'CanoeSprint',
+			'CyclingBMX',
+			'CyclingMountainBike',
+			'CyclingRoad',
+			'CyclingTrack',
+			'Diving',
+			'Equestrian',
+			'Fencing',
+			'Football',
+			'Golf',
+			'Handball',
+			'Hockey',
+			'Judo',
+			'MarathonSwimming',
+			'ModernPentathlon',
+			'RhythmicGymnastics',
+			'Rowing',
+			'RugbySevens',
+			'Sailing',
+			'Shooting',
+			'Swimming',
+			'SynchronisedSwimming',
+			'TableTennis',
+			'Taekwondo',
+			'Tennis',
+			'TrampolineGymnastics',
+			'Triathlon',
+			'Volleyball',
+			'WaterPolo',
+			'Weightlifting',
+			'Wrestling'
+		];
+
 		// status
 		var elStatus;
 		for (var i = 0; i < el.children.length; i++) {
@@ -318,6 +360,13 @@ registerPlugin({
 				}).join('')));
 			} else if (teams[index]) {
 				elFlag = createFlagElement(getFlagImageHTML(teams[index]));
+			} else {
+				for (var j = 0; !elFlag && j < sports.length; j++) {
+					if (sports[j].toUpperCase() === index) {
+						elFlag = createFlagElement(getFlagImageHTML(sports[j]));
+					}
+				}
+			}
 
 			elFlag && elStatus.insertBefore(elFlag, elHashtag.nextSibling);
 		}
