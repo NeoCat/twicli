@@ -283,7 +283,7 @@ registerPlugin({
 			// 'CLOSINGCEREMONY': []
 			'GOLD': ['', '', 0x1F947], // First Place Medal
 			'SILVER': ['', '', 0x1F948], // Second Place Medal
-			'BRONZE': ['', '', 0x1F949], // Third Place Medal
+			'BRONZE': ['', '', 0x1F949] // Third Place Medal
 		};
 
 		// status
