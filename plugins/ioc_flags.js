@@ -253,7 +253,7 @@ registerPlugin({
 			'TKM': ['TKM', 'TM', 0x1F1F9, 0x1F1F2], // Turkmenistan
 			'TLS': ['TLS', 'TL', 0x1F1F9, 0x1F1F1], // Timor-Leste
 			'TOG': ['TGO', 'TG', 0x1F1F9, 0x1F1EC], // Togo
-			'TPE': ['TWN', 'TW', 0x1F1F9, 0x1F1FC], // Taiwan, Province of China  TODO IOC flag
+			//     ['TWN', 'TW', 0x1F1F9, 0x1F1FC], // Taiwan, Province of China
 			'TTO': ['TTO', 'TT', 0x1F1F9, 0x1F1F9], // Trinidad and Tobago
 			'TUN': ['TUN', 'TN', 0x1F1F9, 0x1F1F3], // Tunisia
 			'TUR': ['TUR', 'TR', 0x1F1F9, 0x1F1F7], // Turkey
@@ -275,15 +275,20 @@ registerPlugin({
 			'ZAM': ['ZMB', 'ZM', 0x1F1FF, 0x1F1F2], // Zambia
 			'ZIM': ['ZWE', 'ZW', 0x1F1FF, 0x1F1FC], // Zimbabwe
 			// ---- other ----
-			// 'OLYMPICS': []
-			// 'OLYMPICGAMES': []
-			// 'RIO2016': []
-			// 'ROADTORIO': []
-			// 'OPENINGCEREMONY': []
-			// 'CLOSINGCEREMONY': []
 			'GOLD': ['', '', 0x1F947], // First Place Medal
 			'SILVER': ['', '', 0x1F948], // Second Place Medal
 			'BRONZE': ['', '', 0x1F949] // Third Place Medal
+		};
+
+		var teams = {
+			'TPE': 'Taipei',
+			'ROT': 'Refugee_Olympic_Athletes',
+			'REFUGEEOLYMPICTEAMS': 'Refugee_2',
+			'OLYMPICS': 'Olympics',
+			'OLYMPICGAMES': 'Olympics',
+			'RIO2016': 'Rio2016',
+			'OPENINGCEREMONY': 'OpeningCeremony',
+			'CLOSINGCEREMONY': 'ClosingCeremony'
 		};
 
 		// status
@@ -294,28 +299,44 @@ registerPlugin({
 		}
 
 		var elHashtag, elFlag;
-		var countryCode, flag;
+		var index, countryCode;
 		for (var i = 0; i < elStatus.children.length; i++) {
 			// hashtag
 			elHashtag = elStatus.children[i];
 			if (!elHashtag.className || elHashtag.className.indexOf('hashtag') < 0) continue;
 
 			// country-code
-			countryCode = elHashtag.innerHTML.match('[#＃]([a-zA-Z]{3,})');
+			countryCode = elHashtag.innerHTML.match(/[#＃](\w{3,})/);
 			if (!countryCode || countryCode.length < 1) continue;
 
-			// flag
-			flag = countryFlags[countryCode[1].toUpperCase()];
-			if (!flag) continue;
-
 			// Generate flag
-			elFlag = document.createElement('span');
-			elFlag.className = 'flag';
-			elFlag.innerHTML = twemoji.parse(flag.slice(2).map(function(s) {
-				return twemoji.convert.fromCodePoint(s);
-			}).join(''));
+			index = countryCode[1].toUpperCase()
+			elFlag = undefined;
+			if (countryFlags[index]) {
+				elFlag = createFlagElement(twemoji.parse(countryFlags[index].slice(2).map(function(s) {
+					return twemoji.convert.fromCodePoint(s);
+				}).join('')));
+			} else if (teams[index]) {
+				elFlag = createFlagElement(getFlagImageHTML(teams[index]));
 
-			elStatus.insertBefore(elFlag, elHashtag.nextSibling);
+			elFlag && elStatus.insertBefore(elFlag, elHashtag.nextSibling);
+		}
+
+		function getFlagImageHTML(iconName) {
+			return [
+				'<img class="emoji" draggable="false" alt="" src="//abs.twimg.com/hashflags/',
+				iconName,
+				'/',
+				iconName,
+				'.png">'
+			].join('');
+		}
+
+		function createFlagElement(innerHTML) {
+			var el = document.createElement('span');
+			el.className = 'flag';
+			el.innerHTML = innerHTML;
+			return el;
 		}
 	}
 });
