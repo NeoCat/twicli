@@ -288,6 +288,7 @@ registerPlugin({
 			'OLYMPICGAMES': 'Olympics',
 			'オリンピック': 'Olympics',
 			'RIO2016': 'Rio2016',
+			'リオ2016': 'Rio2016',
 			'ROADTORIO': 'Rio2016',
 			'OPENINGCEREMONY': 'OpeningCeremony',
 			'CLOSINGCEREMONY': 'ClosingCeremony'
