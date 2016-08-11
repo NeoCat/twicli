@@ -383,7 +383,7 @@ registerPlugin({
 			if (!elHashtag.className || elHashtag.className.indexOf('hashtag') < 0) continue;
 
 			// country-code
-			countryCode = elHashtag.innerHTML.match(/[#＃](.+)/);
+			countryCode = elHashtag.innerHTML.match(/[#＃](\S+)/);
 			if (!countryCode || countryCode.length < 1) continue;
 
 			// Generate flag
