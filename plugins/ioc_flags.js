@@ -354,7 +354,7 @@ registerPlugin({
 			if (!countryCode || countryCode.length < 1) continue;
 
 			// Generate flag
-			index = countryCode[1].toUpperCase()
+			index = countryCode[1].toUpperCase();
 			elFlag = undefined;
 			if (countryFlags[index]) {
 				elFlag = createFlagElement(twemoji.parse(countryFlags[index].slice(2).map(function(s) {
