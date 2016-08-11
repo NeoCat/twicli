@@ -286,6 +286,7 @@ registerPlugin({
 			'REFUGEEOLYMPICTEAMS': 'Refugee_2',
 			'OLYMPICS': 'Olympics',
 			'OLYMPICGAMES': 'Olympics',
+			'オリンピック': 'Olympics',
 			'RIO2016': 'Rio2016',
 			'ROADTORIO': 'Rio2016',
 			'OPENINGCEREMONY': 'OpeningCeremony',
@@ -349,7 +350,7 @@ registerPlugin({
 			if (!elHashtag.className || elHashtag.className.indexOf('hashtag') < 0) continue;
 
 			// country-code
-			countryCode = elHashtag.innerHTML.match(/[#＃](\w{3,})/);
+			countryCode = elHashtag.innerHTML.match(/[#＃](.{3,})/);
 			if (!countryCode || countryCode.length < 1) continue;
 
 			// Generate flag
