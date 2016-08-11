@@ -280,7 +280,7 @@ registerPlugin({
 			'BRONZE': ['', '', 0x1F949] // Third Place Medal
 		};
 
-		var teams = {
+		var organization = {
 			'TPE': 'Taipei',
 			'ROT': 'Refugee_Olympic_Athletes',
 			'REFUGEEOLYMPICTEAMS': 'Refugee_2',
@@ -292,51 +292,81 @@ registerPlugin({
 			'ROADTORIO': 'Rio2016',
 			'OPENINGCEREMONY': 'OpeningCeremony',
 			'CLOSINGCEREMONY': 'ClosingCeremony',
+			'ARCHERY': 'Archery',
+			'アーチェリー': 'Archery',
+			'ARTISTICGYMNASTICS': 'ArtisticGymnastics',
+			'体操': 'ArtisticGymnastics',
+			'ATHLETICS': 'Athletics',
+			'陸上': 'Athletics',
+			'BADMINTON': 'Badminton',
+			'バドミントン': 'Badminton',
+			'BASKETBALL': 'Basketball',
+			'バスケットボール': 'Basketball',
+			'BEACHVOLLEYBALL': 'BeachVolleyball',
+			'ビーチバレー': 'BeachVolleyball',
+			'BOXING': 'Boxing',
+			'ボクシング': 'Boxing',
+			'CANOESLALOM': 'CanoeSlalom',
+			'カヌースラローム': 'CanoeSlalom',
+			'CANOESPRINT': 'CanoeSprint',
+			'カヌースプリント': 'CanoeSprint',
+			'CYCLINGBMX': 'CyclingBMX',
+			'CYCLINGMOUNTAINBIKE': 'CyclingMountainBike',
+			'CYCLINGROAD': 'CyclingRoad',
+			'CYCLINGTRACK': 'CyclingTrack',
+			'自転車': 'CyclingTrack',
+			'DIVING': 'Diving',
+			'EQUESTRIAN': 'Equestrian',
+			'FENCING': 'Fencing',
+			'フェンシング': 'Fencing',
+			'FOOTBALL': 'Football',
+			'GOLF': 'Golf',
+			'ゴルフ': 'Golf',
+			'HANDBALL': 'Handball',
+			'ハンドボール': 'Handball',
+			'HOCKEY': 'Hockey',
+			'ホッケー': 'Hockey',
+			'JUDO': 'Judo',
+			'柔道': 'Judo',
+			'MARATHONSWIMMING': 'MarathonSwimming',
+			'マラソンスイミング': 'MarathonSwimming',
+			'MODERNPENTATHLON': 'ModernPentathlon',
+			'近代五種': 'ModernPentathlon',
+			'RHYTHMICGYMNASTICS': 'RhythmicGymnastics',
+			'新体操': 'RhythmicGymnastics',
+			'ROWING': 'Rowing',
+			'ボート': 'Rowing',
+			'RUGBYSEVENS': 'RugbySevens',
+			'ラグビー': 'RugbySevens',
+			'SAILING': 'Sailing',
+			'セーリング': 'Sailing',
+			'SHOOTING': 'Shooting',
+			'射撃': 'Shooting',
+			'SWIMMING': 'Swimming',
+			'競泳': 'Swimming',
+			'SYNCHRONISEDSWIMMING': 'SynchronisedSwimming',
+			'シンクロ': 'SynchronisedSwimming',
+			'TABLETENNIS': 'TableTennis',
+			'卓球': 'TableTennis',
+			'TAEKWONDO': 'Taekwondo',
+			'テコンドー': 'Taekwondo',
+			'TENNIS': 'Tennis',
+			'テニス': 'Tennis',
+			'TRAMPOLINEGYMNASTICS': 'TrampolineGymnastics',
+			'トランポリン': 'TrampolineGymnastics',
+			'TRIATHLON': 'Triathlon',
+			'トライアスロン': 'Triathlon',
+			'VOLLEYBALL': 'Volleyball',
+			'バレー': 'Volleyball',
+			'WATERPOLO': 'WaterPolo',
+			'水球': 'WaterPolo',
+			'WEIGHTLIFTING': 'Weightlifting',
+			'ウエイトリフティング': 'Weightlifting',
+			'WRESTLING': 'Wrestling',
+			'レスリング': 'Wrestling',
 			'とと姉ちゃん': 'NHKMorningDrama',
 			'高校野球': 'JapanHighSchoolBaseballEmoji'
 		};
-
-		var sports = [
-			'Archery',
-			'ArtisticGymnastics',
-			'Athletics',
-			'Badminton',
-			'Basketball',
-			'BeachVolleyball',
-			'Boxing',
-			'CanoeSlalom',
-			'CanoeSprint',
-			'CyclingBMX',
-			'CyclingMountainBike',
-			'CyclingRoad',
-			'CyclingTrack',
-			'Diving',
-			'Equestrian',
-			'Fencing',
-			'Football',
-			'Golf',
-			'Handball',
-			'Hockey',
-			'Judo',
-			'MarathonSwimming',
-			'ModernPentathlon',
-			'RhythmicGymnastics',
-			'Rowing',
-			'RugbySevens',
-			'Sailing',
-			'Shooting',
-			'Swimming',
-			'SynchronisedSwimming',
-			'TableTennis',
-			'Taekwondo',
-			'Tennis',
-			'TrampolineGymnastics',
-			'Triathlon',
-			'Volleyball',
-			'WaterPolo',
-			'Weightlifting',
-			'Wrestling'
-		];
 
 		// status
 		var elStatus;
@@ -353,7 +383,7 @@ registerPlugin({
 			if (!elHashtag.className || elHashtag.className.indexOf('hashtag') < 0) continue;
 
 			// country-code
-			countryCode = elHashtag.innerHTML.match(/[#＃](.{3,})/);
+			countryCode = elHashtag.innerHTML.match(/[#＃](.+)/);
 			if (!countryCode || countryCode.length < 1) continue;
 
 			// Generate flag
@@ -363,14 +393,8 @@ registerPlugin({
 				elFlag = createFlagElement(twemoji.parse(countryFlags[index].slice(2).map(function(s) {
 					return twemoji.convert.fromCodePoint(s);
 				}).join('')));
-			} else if (teams[index]) {
-				elFlag = createFlagElement(getFlagImageHTML(teams[index]));
-			} else {
-				for (var j = 0; !elFlag && j < sports.length; j++) {
-					if (sports[j].toUpperCase() === index) {
-						elFlag = createFlagElement(getFlagImageHTML(sports[j]));
-					}
-				}
+			} else if (organization[index]) {
+				elFlag = createFlagElement(getFlagImageHTML(organization[index]));
 			}
 
 			elFlag && elStatus.insertBefore(elFlag, elHashtag.nextSibling);
