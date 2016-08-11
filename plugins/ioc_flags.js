@@ -291,7 +291,9 @@ registerPlugin({
 			'リオ2016': 'Rio2016',
 			'ROADTORIO': 'Rio2016',
 			'OPENINGCEREMONY': 'OpeningCeremony',
-			'CLOSINGCEREMONY': 'ClosingCeremony'
+			'CLOSINGCEREMONY': 'ClosingCeremony',
+			'とと姉ちゃん': 'NHKMorningDrama',
+			'高校野球': 'JapanHighSchoolBaseballEmoji'
 		};
 
 		var sports = [
