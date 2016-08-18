@@ -1997,6 +1997,12 @@ function init() {
 			m.style.width = m.style.height = "auto";
 			m.style.paddingLeft = m.style.paddingTop = m.style.paddingRight = m.style.paddingBottom = 0;
 			setFstHeight(null, true);
+			setTimeout(function(){
+				var m = $('media');
+				if (m && !m.value)
+					$("option").removeChild($("imgup"));
+					setFstHeight(null, true);
+			}, 1);
 		};
 		m.ondragleave = function(e) {
 			e.preventDefault();
