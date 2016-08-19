@@ -1,0 +1,678 @@
+body {
+  background: fixed #ffeddb 0 -10px url(dotpink.gif) ; 
+  font: 88%/1.5 'Hiragino Kaku Gothic ProN', Meiryo; 
+}
+
+#control {
+  background: #fff; 
+  border: none; 
+}
+
+#fst {
+  border: 1px solid #dcdcdc; 
+  font: 1em 'Hiragino Kaku Gothic ProN', Meiryo; 
+  letter-spacing: 0.05em; 
+  margin-top: 2px; 
+  margin-left: 5%; 
+  padding: 5px 20px; 
+  width: 87%; 
+}
+
+input, 
+textarea {
+  background: #fff; 
+  border: 1px solid #c0c0c0; 
+  border-radius: 5px; 
+  color: #000; 
+}
+
+input:focus, 
+textarea:focus, 
+#fst:focus {
+  border: 1px solid #fbdac8; 
+  outline: none; 
+}
+
+#counter {
+  background: #ffbea8; 
+  border-radius: 5px; 
+  font: 1em/1.5 Raavi,'Gill sans'; 
+  height: 17px; 
+  margin-top: 5px;
+  position: fixed; right: 8%;   
+  width: 36px; 
+}
+
+#counter-p1, 
+#counter-p2 {
+  display: none; 
+}
+
+#go, 
+#go:hover {
+  height: 34px; 
+  margin: 2px 0px 0px 10px; 
+  overflow: hidden; 
+  position: absolute; left: 92%; top: 0; 
+  text-indent: 100%; 
+  white-space: nowrap;
+  width: 34px; 
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  transition: all  0.2s ease; 
+}
+
+#go {
+  background: url(tw-p1.png) no-repeat; 
+  background-size: contain; 
+}
+
+#go:hover {
+  background: url(tw-p2.png) no-repeat; 
+  background-size: contain; 
+}
+
+#rst {
+  display: none; 
+}
+
+#menu {
+  background: url(lace-p.gif) repeat-x 0 35px; 
+  margin-top: 3px; 
+  padding-bottom: 30px; 
+  text-align: center; 
+  width: 100%; 
+}
+
+#menu a {
+  background: #fff center  no-repeat url(b-w1.png) ; 
+  background-size: contain; 
+  border: none; 
+  color: #fff; 
+  display: inline-block; 
+  font: bold 1em/2.8 'Trebuchet MS'; 
+  height: 40px; 
+  margin-right: 2%; 
+  min-width: 40px; 
+  overflow: hidden; 
+  padding: 0; 
+  text-shadow: 1px 1px 1px #aaa; 
+  vertical-align: middle; 
+  width: auto; 
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  transition: all  0.2s ease;
+}
+
+#menu a:hover,
+#menu a.sel:hover,
+#menu a.new:hover  {
+  color: #fff; 
+  background-image: url(b-p2.png);
+  text-shadow: 1px 1px 1px #febea7; 
+}
+
+#menu a#TL, 
+#menu a#reply, 
+#menu a#direct, 
+#menu a#misc {
+  background-position: center; 
+  background-repeat: no-repeat; 
+  background-size: contain;
+  height: 38px;
+  overflow: hidden; 
+  text-indent: 100%; 
+  white-space: nowrap; 
+  width: 30px; 
+}
+
+#menu a#TL {
+  background-image: url(h-p1.png); 
+}
+
+#menu a#TL:hover {
+  background-image: url(h-p2.png); 
+}
+
+#menu a#reply {
+  background-image: url(@-p1.png); 
+}
+
+#menu a#reply:hover {
+  background-image: url(@-p2.png); 
+}
+
+#menu a#user {
+  background: center no-repeat url(b-p1.png); 
+  background-size: contain; 
+  height: 38px; 
+  line-height: 2.5; 
+  padding:  0;  
+}
+
+#menu a#user:hover {
+  background-image: url(b-p2.png); 
+  background-size: contain; 
+}
+
+#menu a#direct {
+  background-image: url(d-p1.png); 
+}
+
+#menu a#direct:hover {
+  background-image: url(d-p2.png); 
+}
+
+#menu a#misc {
+  background-image: url(m-p1.png); 
+}
+
+#menu a#misc:hover {
+  background-image: url(m-p2.png); 
+}
+
+#menu a.sel {
+  background: center no-repeat url(b-p-s.png); 
+  background-size: contain; 
+  color: #febea7; 
+  height: 40px; 
+  margin-bottom: 2px; 
+  text-shadow: 1px 1px 1px #fff;
+}
+
+#menu a.sel:hover {
+  background: center no-repeat url(b-p-s.png); 
+  background-size: contain; 
+  color: #fff; 
+  text-shadow: 1px 1px 1px #febea7;
+}
+
+#menu a#TL.sel {
+  background: center no-repeat url(h-p-s.png); 
+}
+
+#menu a#TL.sel:hover {
+  background: center no-repeat url(h-p-s2.png); 
+  background-size: contain; 
+}
+
+#menu a#reply.sel {
+  background: center no-repeat url(@-p-s.png); 
+}
+
+#menu a#reply.sel:hover {
+  background: center no-repeat url(@-p-s2.png); 
+  background-size: contain; 
+}
+
+#menu a#user.sel {
+  background: center no-repeat url(b-p-s.png); 
+  background-size: contain; 
+  color: #febea7; 
+  height: 38px; 
+}
+
+#menu a#user.sel:hover {
+  color: #fff; 
+}
+
+#menu a#direct.sel {
+  background: center no-repeat url(d-p-s.png); 
+}
+
+#menu a#direct.sel:hover {
+  background: center no-repeat url(d-p-s2.png); 
+  background-size: contain; 
+}
+
+#menu a#misc.sel {
+  background: center no-repeat url(m-p-s.png); 
+}
+
+#menu a#misc.sel:hover {
+  background: center no-repeat url(m-p-s2.png); 
+  background-size: contain; 
+}
+
+#menu a#TL.sel,
+#menu a#reply.sel,
+#menu a#direct.sel,
+#menu a#misc.sel {
+  background-size: contain; 
+  height: 38px; 
+}
+
+#menu a.new {
+  background: #fffac2 center no-repeat url(b-w1.png); 
+  background-size: contain; 
+  border-radius: 25px; 
+  height: 40px;  
+}
+
+#tw, 
+#re,
+#tw2 {
+  background: rgba(255,255,255,0.8); 
+  border-radius: 5px; 
+  font-size: 1em; 
+  margin-left: 5%; 
+  margin-top: 2px; 
+  width:90%; 
+}
+
+#tw2h {
+  background: rgba(255,255,255,0.8); 
+  border-radius: 5px; 
+  font-size: 0.85em; 
+}
+
+.status {
+  display: block; 
+  font-size: 1em; 
+  overflow: hidden; 
+  padding: 5px 10px 2px 0; 
+}
+
+a, 
+.uid.a, 
+.uname a, 
+.prop a {
+  text-decoration: none; 
+}
+
+a {
+  color: #ffbea8; 
+}
+
+.status a {
+  font: 0.9em 'Trebuchet MS', 'Hiragino Kaku Gothic ProN', Meiryo; 
+}
+
+.status a.link {
+  background: none; 
+  border: none; 
+  color: #ffbea8; 
+  font: 0.9em 'Segoe UI', 'Hiragino Kaku Gothic ProN', Meiryo; 
+}
+
+.status a:hover,
+.status a.link:hover {
+  background: none; 
+  border-bottom: dotted 1px #ffbea8; 
+}
+
+.status a.button {
+  background: #fed5c6; 
+  border-radius: 25px;  
+  display: inline-block; 
+  color: #fff; 
+  font: bold 1em/1 'Hiragino Kaku Gothic ProN', Meiryo; 
+  margin: 0 0 0 5px; 
+  height: 14px; 
+  overflow: hidden; 
+  padding: 3px ; 
+  text-align: center; 
+  vertical-align: -0.4em; 
+  width: 14px; 
+}
+
+.status a.button:before {
+  content: "\00BB"; 
+  display: block; 
+}
+
+.status a.button:hover {
+  background: #ffbea8; 
+  border: none;
+}
+
+.uicon {
+  background: #fff; 
+  border-radius: 5px; 
+  cursor:pointer; 
+  display: block; 
+  float: left; 
+  height: 48px; 
+  margin: 2px 12px 0 1px; 
+  padding: 0; 
+  width: 48px; 
+}
+
+.uid {
+  color: #808080; 
+  font: bold 0.9em 'Trebuchet MS', 'Hiragino Kaku Gothic ProN', Meiryo; 
+  padding: 10px 5px 0px 0px; 
+}
+
+.uid:hover {
+  border-bottom: dotted 1px #ffbea8; 
+  color: #ffbea8;  
+}
+
+.uname {
+  color: #808080; 
+  font: 0.85em 'Trebuchet MS', 'Hiragino Kaku Gothic ProN', Meiryo; 
+  padding-top: 10px; 
+}
+
+.lock {
+  left: 3px; 
+  position: relative; 
+  vertical-align: middle; 
+}
+
+.verified {
+  margin-left: 2px; 
+  vertical-align: -3px; 
+}
+
+.fav {
+  cursor: pointer; 
+  height: 16px; 
+  width: 16px; 
+}
+
+.prop {
+  display: block; 
+  float: none; 
+  font: 1em Raavi, 'Gill sans'; 
+  margin: 3px 0 -30px -3px; 
+  text-align: left; 
+}
+
+.separator {
+  margin: 0 -2px; 
+}
+
+.source {
+  font: 1em 'Segoe UI', 'Hiragino Kaku Gothic ProN', Meiryo; 
+}
+
+.utils {
+  display: block;
+  margin: 0 -2px 2px 5px; 
+}
+
+.utils .button {
+  background: #fed5c6; 
+  border-radius: 25px; 
+  color: #fff; 
+  display: block; 
+  float: right; 
+  font: 1.1em 'Hiragino Kaku Gothic ProN', Meiryo; 
+  height: 16px; 
+  margin: 2px 2px 4px 6px; 
+  overflow: hidden;  
+  padding: 2px; 
+  text-align: center; 
+  width: 16px; 
+}
+
+.utils .reply:before {
+  content: "\2190"; 
+  display: block; 
+  font: bold 0.9em/1.3 'Hiragino Kaku Gothic ProN', Meiryo;   
+}
+
+.utils .inrep:before {
+  content: "\00BB"; 
+  display: block; 
+  font: bold 0.9em/1.2 'Hiragino Kaku Gothic ProN', Meiryo; 
+}
+
+.utils .geomap:before {
+  content: "\3000"; 
+  background: url(https://lh3.googleusercontent.com/-Kwfb_ThDnMg/U4C3pHYKp2I/AAAAAAAAAh4/EdZ6tIsFRcI/s15/marker%252B.png) no-repeat; 
+  margin-left: 1px; 
+  text-indent: 100%; 
+  white-space: nowrap; 
+}
+
+.utils .button:hover {
+  background: #ffbea8;
+  text-decoration: none; 
+}
+
+.utils .button img {
+  opacity: 0.5; 
+  position: relative; left: -1px; top: -2px; 
+}
+
+.utils .button, .fav {
+  visibility: hidden; 
+}
+
+#tw > div > div:hover .utils .button,
+#re > div > div:hover .utils .button, 
+#tw2 > div > div > div:hover .utils .button,
+#rep .utils .button, #rep .fav {
+  visibility: visible; 
+}
+
+#tw > div > div:hover .fav,
+#re > div > div:hover .fav, 
+#tw2 > div > div > div:hover .fav {
+  visibility: visible; 
+}
+
+.fromme {
+  background: rgba(255,219,183,0.2); 
+}
+
+.tome {
+  background: rgba(255,255,103,0.2); 
+}
+
+.emp {
+  background: #ffffcc; 
+}
+
+.thumbnail-image {
+  border-radius: 8px; 
+  height: auto !important; 
+  max-height: 150px; 
+  max-width: 150px;
+  min-height:150px; 
+  min-width: 150px; 
+}
+
+.thumbnail-image:hover {
+  opacity: 0.8; 
+}
+
+.thumbnail-link {
+  border: none; 
+  display: block; 
+  float: none; 
+  margin: 4px 0 0; 
+  text-align: center; 
+}
+
+.thumbnail-link a {
+  background: #fff; 
+  border-radius: 8px; 
+  margin: 0 10px; 
+}
+
+.retweeted{
+  color: #909090; 
+}
+
+.rtuicon {
+  border-radius: 5px; 
+  height: 24px; 
+  margin-right: 5px; 
+  width: 24px; 
+}
+
+.tw-parent > div > div {
+  border-bottom: 1px dashed #ffbea8; 
+  padding: 10px 12px 5px; 
+}
+
+.get-next {
+  background: #ffbea8; 
+  color: #fff; 
+  font: bold 1em 'Hiragino Kaku Gothic ProN', Meiryo; 
+  margin-bottom: 10px; 
+  padding: 6px 0; 
+}
+
+#tw > div {
+  border:none; 
+}
+
+#rep {
+  background: #ffeddb; 
+  border: solid 3px #ffbea8;
+  border-radius: 10px; 
+  font: 1em/1.4 'Hiragino Kaku Gothic ProN', Meiryo; 
+  left: 20px; 
+  margin-left: 3%;  
+  padding: 5px 5px 8px; 
+  right: 6px; 
+  width: 90%; 
+}
+
+#rep a.close {
+  background: #fed5c6; 
+  border-radius: 25px; 
+  color: #fff; 
+  float: left; 
+  font: bold 0.9em/1.4 'Hiragino Kaku Gothic ProN', Meiryo; 
+  height: 16px; 
+  margin: 0 2px 4px 6px; 
+  overflow: hidden; 
+  padding: 2px; 
+  text-align: center; 
+  width: 16px; 
+}
+
+#rep a.close:before {
+  content: "\21d4"; 
+}
+
+#rep a.close:first-child:before {
+  content: "\00d7"; 
+}
+
+#rep a.close:hover {
+  background: #ffbea8;
+}
+
+#reps {
+  clear: left; 
+}
+
+#rep > div > div {
+  padding: 0 5px; 
+}
+
+#reps hr {
+  border: 1px dashed #ffbea8; 
+  margin: 5px 0 8px; 
+}
+
+#rep .fav, 
+#rep .utils {
+  margin-right: 2px; 
+}
+
+#popup, 
+#userinfo_popup {
+  background: #ffeddb; 
+  border: 3px solid #ffbea8; 
+  border-radius: 10px; 
+  font: 1.1em/2 'Hiragino Kaku Gothic ProN', Meiryo ; 
+  padding: 14px; 
+  width: auto; 
+}
+
+#popup a, 
+#userinfo_popup a {
+  background: #ffeddb; 
+  border: none; 
+  border-bottom: 2px dotted #ffbea8; 
+  padding: 4px; 
+}
+
+#popup a:last-child, 
+#userinfo_popup a:last-child {
+  border: none; 
+}
+
+#popup a:hover, 
+#userinfo_popup a:hover {
+  background: #ffbea8; 
+  border-radius: 25px; 
+  color: #fff; 
+}
+
+#popup hr, 
+#userinfo_popup hr {
+  display:none; 
+}
+
+#user_info {
+  background: -moz-linear-gradient(top,  rgba(255,255,255,0.5) 0%, rgba(255,245,241,1) 60%, rgba(255,238,231,1) 100%); /* FF3.6+ */
+  background: -webkit-linear-gradient(top,  rgba(255,255,255,0.5) 0%,rgba(255,245,241,1) 60%,rgba(255,238,231,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -ms-linear-gradient(top,  rgba(255,255,255,0.5) 0%,rgba(255,245,241,1) 60%,rgba(255,238,231,1) 100%); /* IE10+ */
+  border-radius: 5px; 
+  font-size: 1.2em; 
+}
+
+#user_info_grad {
+  display: none; 
+}
+
+#user_info_b {
+  border: none; 
+  border-radius: 5px; 
+  margin: 10px; 
+}
+
+#user_info_b a,
+#user_info_b a:visited,
+#user_info.user_header {
+  color: #999; 
+  text-shadow: 1px 1px 1px #fff; 
+}
+
+#user_info_b a:hover {
+  color: #999; 
+  text-decoration: underline; 
+}
+
+#user_info input {
+  cursor: pointer; 
+}
+
+.uicon2 {
+  border-radius: 5px; 
+}
+
+.tabcmd {
+  background: #fff; 
+  border-radius: 5px 5px 0 0; 
+  height: 25px; 
+  text-align: right; 
+}
+
+.tabclose a {
+  color: #ffbea8; 
+  font-size: 0.9em; 
+  padding-right: 5px; 
+}
+
+#pref textarea {
+  font-size: 1.2em; 
+}
+
+.spacer {
+  border: 1px dashed #fed5c6; 
+}
+
+.match-NG, 
+#pickup-NG {
+  display: none !important; 
+}

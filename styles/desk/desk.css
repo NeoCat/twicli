@@ -1,0 +1,583 @@
+body {
+  background: fixed url(wood.jpg);  
+  font: 88%/1.5 'Hiragino Kaku Gothic ProN', Meiryo; 
+}
+
+#control {
+  background: url(darkwood.jpg); 
+  border: none; 
+}
+
+#fst {
+  background: #6f5436; 
+  border: 1px solid #866629; 
+  font: 1em 'Hiragino Kaku Gothic ProN', Meiryo; 
+  letter-spacing: 0.05em; 
+  margin-top: 2px; 
+  margin-left: 5%; 
+  padding: 5px 20px; 
+  width: 87%; 
+}
+
+input, 
+textarea {
+  background: #fff; 
+  border: 1px solid #946c45; 
+  border-radius: 5px; 
+  color: #000; 
+}
+
+input:focus, 
+textarea:focus, 
+#fst:focus {
+  background: #fff; 
+  border: 1px solid #946c45; 
+  outline: none; 
+}
+
+#counter {
+  background: #946c45; 
+  border-radius: 5px; 
+  color: #fff; 
+  font: 1em/1.2 Century; 
+  height: 17px; 
+  margin-top: 5px;
+  position: fixed; right: 8%;   
+  width: 36px; 
+}
+
+#counter-p1, 
+#counter-p2 {
+  display: none; 
+}
+
+#go { 
+  background: rgba(165,121,77,0.6); 
+  border-radius: 5px; 
+  color: #fff; 
+  float: left; 
+  font: 1.5em/1.2 'Hiragino Kaku Gothic ProN', Meiryo; 
+  height: 24px; 
+  overflow: hidden; 
+  padding: 2px; 
+  text-align: center; 
+  width: 24px; 
+  position: absolute; left: 93%; top: 4px; 
+}
+
+#go:before {
+  content: "\2654"; 
+  display: block; 
+  padding-bottom: 6px; 
+}
+
+#go:hover {
+  background: rgba(218,196,148,0.6); 
+}
+
+#rst {
+  display: none; 
+}
+
+#menu {
+  background: url(darkwood.jpg);
+  border-bottom: 1px solid #946c45;  
+  padding: 12px 0 7px; 
+  text-align: center; 
+  width: 100%; 
+}
+
+#menu a {
+  background: none; 
+  border: none;  
+  color: #fff; 
+  font: bold 1.13em/1.6 Century; 
+  height: 30px; 
+  margin-right: 2%; 
+  min-width: 16px; 
+  padding: 0 7px; 
+}
+
+#menu a:hover {
+  background: rgba(165,121,77,0.6);  
+  border-radius: 5px; 
+  color: #fff; 
+}
+
+#menu a.sel {
+  background: rgba(165,121,77,0.6); 
+  border-radius: 5px; 
+  color: #fff; 
+  height:30px; 
+  margin-bottom: 2px; 
+}
+
+#menu a.sel:hover {
+  color: #dac494; 
+}
+
+#menu a.new {
+  background: rgba(218,196,148,0.6); 
+  border-radius: 5px; 
+  color: #fff;
+  height:30px; 
+}
+
+#menu a.new:hover {
+  background: rgba(165,121,77,0.6); 
+}
+
+#tw, 
+#re, 
+#tw2 {
+  background: url(canvas.jpg); 
+  border-radius: 5px; 
+  -webkit-box-shadow: 2px 2px 5px rgba(0,0,0,0.3); 
+  -moz-box-shadow: 2px 2px 5px rgba(0,0,0,0.3); 
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3); 
+  font-size: 0.93em;
+  margin-left: 15%; 
+  margin-top: 10px; 
+  padding: 10px 20px 0px;  
+  width:70%; 
+}
+
+#tw > div,
+#re > div,
+#tw2 > div {
+  background: url(paper.jpg); 
+  -webkit-box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+  -moz-box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+}
+
+#tw2h {
+  background-color: #fff; 
+  border-radius: 5px; 
+  font-size: 0.9em; 
+}
+
+.status {
+  display: block; 
+  font-size: 1.1em; 
+  overflow: hidden; 
+  padding: 5px 10px 5px 0; 
+}
+
+a, 
+.uid.a, 
+.uname a, 
+.prop a {
+  text-decoration: none; 
+}
+
+a {
+  color: #946c45; 
+}
+
+a:hover {
+  color: #ba926b;
+}
+
+.status a {
+  font: 0.9em 'Trebuchet MS', 'Hiragino Kaku Gothic ProN', Meiryo; 
+}
+
+.status a.link {
+  background: none; 
+  border: none; 
+  color: #946c45; 
+  font: 0.9em 'Segoe UI', 'Hiragino Kaku Gothic ProN', Meiryo; 
+}
+
+.status a.link:hover {
+  background: none; 
+  color: #ba926b; 
+  text-decolation: none; 
+}
+
+.status a.button {
+  background: #c8b69f; 
+  border-radius: 15px; 
+  display: inline-block; 
+  color: #fff; 
+  font: bold 1em/1 'Hiragino Kaku Gothic ProN', Meiryo; 
+  margin: 0 0 0 5px; 
+  height: 14px; 
+  overflow: hidden; 
+  padding: 3px; 
+  text-align: center; 
+  vertical-align: -0.4em; 
+  width: 14px; 
+}
+
+.status a.button:before {
+  content: "\00BB"; 
+  display: block; 
+}
+
+.status a.button:hover {
+  background: #ba926b; 
+}
+
+.uicon {
+  background: #fff; 
+  border-radius: 5px; 
+  cursor:pointer; 
+  display: block; 
+  float: left; 
+  height: 48px; 
+  margin: 2px 12px 0 1px;  
+  padding: 0; 
+  width: 48px; 
+}
+
+.uid {
+  color: #808080; 
+  font: bold 1em 'Trebuchet MS', 'Hiragino Kaku Gothic ProN', Meiryo; 
+  padding: 10px 5px 0px 0px; 
+}
+
+.uid:hover {
+  color: #ba926b; 
+  text-decolation: none;  
+}
+
+.uname {
+  color: #808080; 
+  font: 0.9em 'Trebuchet MS', 'Hiragino Kaku Gothic ProN', Meiryo; 
+  padding-top: 10px; 
+}
+
+.lock {
+  left: 3px; 
+  position: relative; 
+  vertical-align: middle; 
+}
+
+.verified {
+  margin-left: 2px; 
+  vertical-align: -3px; 
+}
+
+.fav {
+  cursor: pointer; 
+  height: 16px; 
+  width: 16px; 
+}
+
+.prop {
+  display: block; 
+  float: none; 
+  font: 1.1em Raavi, 'Gill sans'; 
+  margin: 3px 0 -30px -3px; 
+  text-align: left; 
+}
+
+.prop a {
+   color: #888; 
+}
+
+.separator {
+  margin: 0 -2px; 
+}
+
+.source {
+  font: 1em 'Segoe UI', 'Hiragino Kaku Gothic ProN', Meiryo; 
+}
+
+.utils {
+  display: block;
+  margin: 0 -2px 2px 5px; 
+}
+
+.utils .button {
+  background: #c8b69f; 
+  border-radius: 15px; 
+  color: #fff; 
+  display: block; 
+  float: right; 
+  font: bold 1.1em 'Hiragino Kaku Gothic ProN', Meiryo; 
+  height: 16px; 
+  margin: 2px 2px 4px 6px; 
+  overflow: hidden; 
+  padding: 2px; 
+  text-align: center; 
+  width: 16px; 
+}
+
+.utils .reply:before {
+  content: "\2190"; 
+  display: block; 
+  font: bold 0.9em/1.3 'Hiragino Kaku Gothic ProN', Meiryo;  
+}
+
+.utils .inrep:before {
+  content: "\00BB"; 
+  display: block; 
+  font: bold 0.9em/1.3 'Hiragino Kaku Gothic ProN', Meiryo; 
+}
+
+.utils .geomap:before {
+  content: "\3000"; 
+  background: url(marker.png) no-repeat; 
+  margin-left: 1px; 
+  text-indent: 100%; 
+  white-space: nowrap; 
+}
+
+.utils .button:hover {
+  background: #ba926b; 
+  text-decoration: none; 
+}
+
+.utils .button img {
+  opacity: 0.5; 
+  position: relative; left: -1px; top: -2px; 
+}
+
+.utils .button, .fav {
+  visibility: hidden; 
+}
+
+#tw > div > div:hover .utils .button,
+#re > div > div:hover .utils .button, 
+#tw2 > div > div > div:hover .utils .button,
+#rep .utils .button, #rep .fav {
+  visibility: visible; 
+}
+
+#tw > div > div:hover .fav,
+#re > div > div:hover .fav, 
+#tw2 > div > div > div:hover .fav {
+  visibility: visible; 
+}
+
+.fromme {
+  background: rgba(255,255,255,0.4);
+}
+
+.tome {
+  background: rgba(210,180,140,0.2); 
+}
+
+.emp {
+  background: #ffffcc; 
+}
+
+.thumbnail-image {
+  border-radius: 8px; 
+  height: auto !important; 
+  max-height: 150px; 
+  max-width: 150px; 
+  min-height:150px; 
+  min-width: 150px; 
+}
+
+.thumbnail-image:hover {
+  opacity: 0.8; 
+}
+
+.thumbnail-link {
+  border: none; 
+  display: block; 
+  float: none; 
+  margin: 4px 0 0; 
+  text-align: center; 
+}
+
+.thumbnail-link a {
+  background: #fff; 
+  border-radius: 8px; 
+  margin: 0 10px; 
+}
+
+.retweeted{
+  color: #888; 
+}
+
+.rtuicon {
+  border-radius: 5px; 
+  height: 24px; 
+  margin-right: 5px; 
+  width: 24px; 
+}
+
+.tw-parent > div > div {
+  border-bottom: 1px solid #d2b89f; 
+  padding: 10px 12px 5px; 
+}
+
+.get-next {
+  background: #baa386 !important; 
+  color: #fff; 
+  font: bold 1em 'Hiragino Kaku Gothic ProN', Meiryo; 
+  margin-bottom: 10px; 
+  padding: 6px 0; 
+}
+
+#tw > div {
+  border:none; 
+}
+
+#rep {
+  font: 0.93em/1.4 'Hiragino Kaku Gothic ProN', Meiryo; 
+  left: 26px; 
+  margin-left: 15%;  
+  padding: 5px 5px 8px; 
+  width: 68%; 
+}
+
+#rep, 
+#popup {
+   background: url(paper.jpg); 
+  border: 3px solid #baa386;  
+  border-radius: 1px; 
+  -webkit-box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+  -moz-box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);  
+}
+
+#rep a.close {
+  background: #c8b69f; 
+  border-radius: 15px; 
+  color: #fff; 
+  float: left; 
+  font: bold 0.9em/1.4 'Hiragino Kaku Gothic ProN', Meiryo; 
+  height: 16px; 
+  margin: 0 2px 4px 6px; 
+  overflow: hidden; 
+  padding: 2px; 
+  text-align: center; 
+  width: 16px; 
+}
+
+#rep a.close:before {
+  content: "\21d4"; 
+}
+
+#rep a.close:first-child:before {
+  content: "\00d7"; 
+}
+
+#rep a.close:hover {
+  background: #ba926b; 
+}
+
+#reps {
+  clear: left; 
+}
+
+#rep > div > div {
+  padding: 0 5px; 
+}
+
+#reps hr {
+  border: 1px solid #d2b89f; 
+  margin: 5px 0 8px; 
+}
+
+#rep .fav, 
+#rep .utils {
+  margin-right: 2px; 
+}
+
+#popup, 
+#userinfo_popup {
+  background: url(paper.jpg); 
+  border: none; 
+  border-radius: 1px; 
+  -webkit-box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+  -moz-box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+  font: 1.1em/2 'Hiragino Kaku Gothic ProN', Meiryo ; 
+  padding: 14px; 
+  width: auto; 
+}
+
+#popup a, 
+#userinfo_popup a {
+  background: none;  
+  border: none; 
+  border-bottom: 2px solid #d2b89f; 
+  padding: 4px; 
+}
+
+#popup a:last-child, 
+#userinfo_popup a:last-child {
+  border: none; 
+}
+
+#popup a:hover, 
+#userinfo_popup a:hover {
+  color: #ba926b; 
+}
+
+#popup hr, 
+#userinfo_popup hr {
+  display:none; 
+}
+
+#user_info {
+  background: -moz-linear-gradient(top,rgba(0,0,0,0) 2%,rgba(52,52,52,0) 35%,rgba(153,153,153,0.5) 100%); /* FF3.6+ */
+  background: -webkit-linear-gradient(top,rgba(0,0,0,0) 2%,rgba(52,52,52,0) 35%,rgba(153,153,153,0.5) 100%); /* Chrome10+,Safari5.1+ */ 
+  background: -ms-linear-gradient(top,rgba(0,0,0,0) 2%,rgba(52,52,52,0) 35%,rgba(153,153,153,0.5) 100%); /* IE10+ */
+  border-radius: 5px; 
+  font-size: 1.2em; 
+}
+
+#user_info_grad {
+  display: none; 
+}
+
+#user_info_b {
+  border: none; 
+  border-radius: 5px; 
+  margin: 10px; 
+}
+
+#user_info_b a:hover {
+  color: #fff; 
+  text-decoration: underline; 
+}
+
+#user_info_b a,
+#user_info_b a:visited,
+#user_info.user_header {
+  color: #fff; 
+  text-shadow: 1px 1px 1px #000; 
+}
+
+#user_info input {
+  cursor: pointer; 
+}
+
+.uicon2 {
+  border-radius: 5px; 
+}
+
+.tabcmd {
+  background: #baa386; 
+  border-radius: 5px 5px 0 0; 
+  height: 25px; 
+  text-align: right; 
+}
+
+.tabclose a {
+  color: #fff; 
+  font-size: 0.95em; 
+  padding-right: 5px; 
+}
+
+#pref textarea {
+  font-size: 1.3em; 
+}
+
+.spacer {
+  border: 1px solid #d2b89f; 
+}
+
+.match-NG, 
+#pickup-NG {
+  display: none !important; 
+}
