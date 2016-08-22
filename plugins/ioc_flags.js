@@ -365,7 +365,9 @@ registerPlugin({
 			'WRESTLING': 'Wrestling',
 			'レスリング': 'Wrestling',
 			'とと姉ちゃん': 'NHKMorningDrama',
-			'高校野球': 'JapanHighSchoolBaseballEmoji'
+			'高校野球': 'JapanHighSchoolBaseballEmoji',
+			'KHL': 'KHL_Season_Start',
+			'КХЛ': 'KHL_Season_Start'
 		};
 
 		// status
