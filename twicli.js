@@ -1067,6 +1067,8 @@ function insertPDF(str) {
 		str += "\u202C"
 	return str;
 }
+var hashtag_chars = 'A-Za-zÀ-ÖØ-öø-ÿĀ-ɏɓ-ɔɖ-ɗəɛɣɨɯɲʉʋʻ̀-ͯḀ-ỿЀ-ӿԀ-ԧⷠ-ⷿꙀ-֑ꚟ-ֿׁ-ׂׄ-ׇׅא-תװ-״﬒-ﬨשׁ-זּטּ-לּמּנּ-סּףּ-פּצּ-ﭏؐ-ؚؠ-ٟٮ-ۓە-ۜ۞-۪ۨ-ۯۺ-ۼۿݐ-ݿࢠࢢ-ࢬࣤ-ࣾﭐ-ﮱﯓ-ﴽﵐ-ﶏﶒ-ﷇﷰ-ﷻﹰ-ﹴﹶ-ﻼ‌ก-ฺเ-๎ᄀ-ᇿ㄰-ㆅꥠ-꥿가-힯ힰ-퟿ﾡ-ￜァ-ヺー-ヾｦ-ﾟｰＡ-Ｚａ-ｚぁ-ゖ゙-ゞ㐀-䶿一-鿿꜀-뜿띀-렟-﨟〃々〻';
+var regexp_links = RegExp('https?://[^/\\s]*[\\w!#$%&\'()*+,./:;=?~-]*[\\w#/+-]|[@＠](\\w+(?:/[\\w-]+)?)|([ -/:-@\\[-`{-~　、。！？「」（）『』｛｝［］【】]|\\s|^)([#＃])([' + hashtag_chars + '][0-9' + hashtag_chars + ']*)(?=[^' + hashtag_chars + ']|$)', 'g');
 function makeHTML(tw, no_name, pid, userdesc, noctl) {
 	var rt = tw.retweeted_status;
 	var rs = tw.retweeted_status || tw;
@@ -1103,7 +1105,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 		/*ダイレクトメッセージの方向*/ (t.d_dir == 1 ? '<span class="dir">→</span> ' : t.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text-" + eid + "\" class=\"status\">" +
-		text.replace(/https?:\/\/[^\/\s]*[\w!#$%&\'()*+,.\/:;=?~-]*[\w#\/+-]|[@＠](\w+(?:\/[\w-]+)?)|([ -\/:-@\[-`{-~　、。！？「」（）『』｛｝［］【】]|\s|^)([#＃])([\w々ぁ-ゖ゛-ヿㄅ-ㄬㄱ-ㆎ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]+)(?=[^\w々ぁ-ゖ゛-ヿㄅ-ㄬㄱ-ㆎ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]|$)/g, function(_,u,x,h,s){
+		text.replace(regexp_links, function(_,u,x,h,s){
 				if (!u && !h) {
 					if (expanded_urls[_]) {
 						if (t.quoted_status && t.quoted_status.user && t.quoted_status_id_str &&
