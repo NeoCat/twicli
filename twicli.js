@@ -1158,7 +1158,7 @@ function makeUserInfoHTML(user) {
 			(user.verified ? '<img class="verified" alt="verified" src="images/verified.png">' : '') +
 			(user.protected ? '<img class="lock" alt="lock" src="images/icon_lock.png">' : '') +
 			'<b>@' + user.screen_name + '</b> / <b>' + user.name + '</b></div>' +
-			'<div class="udesc">' + (user.description ? user.description : '<br>') + '</div>' +
+			'<div class="udesc">' + (user.description ? user.description.replace(/@(\w+)/g, '<a href="'+twitterURL+'$1" onclick="switchUser(\'$1\');return false;">@$1</a>') : '<br>') + '</div>' +
 			'<div class="uloc">' + (user.location ? user.location + (user.url?'・':'') : '') +
 			(user.url ? '<a target="_blank" href="' + user.url + '" onclick="return link(this);">' + user.url + '</a>' : '') + '</div>' +
 			'<b><a href="' + twitterURL + user.screen_name + '/following" onclick="switchFollowing();return false;">' + user.friends_count + '<small>'+_('following')+'</small></a> / ' +
