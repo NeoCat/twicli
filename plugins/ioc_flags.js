@@ -296,6 +296,7 @@ registerPlugin({
 			'リオ2016': 'Rio2016',
 			'ROADTORIO': 'Rio2016',
 			'OPENINGCEREMONY': 'Opening_Ceremony_Paralympics_2016',
+			'開会式': 'Opening_Ceremony_Paralympics_2016',
 			'CLOSINGCEREMONY': 'ClosingCeremony',
 			'ARCHERY': 'Archery',
 			'アーチェリー': 'Archery',
