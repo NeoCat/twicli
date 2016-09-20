@@ -13,16 +13,16 @@ var pickup_tab_list = new Array();	// タブ一覧
 function execRegexp(tw, exp) {
 	var source = "\nvia " + (tw.source ? tw.source.replace(/<.*?>/g,'') : '');
 	var rtinfo = tw.retweeted_status ? "\nby @" + tw.user.screen_name : '';
-	var qinfo = tw.quoted_status && tw.quoted_status.user ? "\n" + tw.quoted_status.text + "\nby @" + tw.quoted_status.user.screen_name : '';
+	var qinfo = tw.quoted_status && tw.quoted_status.user ? "\n" + text(tw.quoted_status) + "\nby @" + tw.quoted_status.user.screen_name : '';
 	var rs = tw.retweeted_status || tw;
 	var t = display_as_rt ? tw : rs;
 	if (!t.user || !t.user.screen_name) return false;
-	var text = (t.text_replaced || t.text) + source + rtinfo + qinfo;
+	var ttext = (t.text_replaced || text(t)) + source + rtinfo + qinfo;
 	return	(!exp.id     || t.user.screen_name.match(exp.id  )) &&
 		(!exp.id_n   ||!t.user.screen_name.match(exp.id_n)) &&
 		(!exp.fn     || exp.fn.apply(tw)) &&
-		(!exp.text   || text.match(exp.text  )) &&
-		(!exp.text_n ||!text.match(exp.text_n))
+		(!exp.text   || ttext.match(exp.text  )) &&
+		(!exp.text_n ||!ttext.match(exp.text_n))
 }
 
 // Lambda( {}で囲われたキーワード条件指定 )の関数化
@@ -202,7 +202,7 @@ registerPlugin({
 		var t = display_as_rt ? s.tw : rs;
 		var twNodeId = '';
 		try { twNodeId = s.parentNode ? s.parentNode.id : ''; } catch(e) {}
-		t.text_replaced = (t.text_replaced || t.text).replace(shortUrl, longUrl);
+		t.text_replaced = (t.text_replaced || text(t)).replace(shortUrl, longUrl);
 		this.newMessageElement(s, s.tw, twNodeId);
 	},
 	fav: function(id, f, img, img_tl) {

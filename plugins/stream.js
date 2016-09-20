@@ -24,7 +24,7 @@ function debug(msg) {
 
 function handle_stream_data(data, tw) {
 	handled = true;
-	if (data.text) {
+	if (text(data)) {
 		if (!ws_blocked[data.user.id_str])
 			tw.push(data);
 	} else if (data.friends) {
@@ -41,11 +41,11 @@ function handle_stream_data(data, tw) {
 	} else if (data.event && (data.event == "favorite" || data.event == "unfavorite")) {
 		var name = data.source.screen_name;
 		if (name == myname) return;
-		var text = data.target_object.text;
-		if (text.length > 40) text = text.substr(0, 40) + "...";
+		var ttext = text(data.target_object);
+		if (ttext.length > 40) ttext = ttext.substr(0, 40) + "...";
 		var msg = _("@$1 "+data.event+"d your tweet:", name);
 		try {
-			notify(msg + "<br>" + text);
+			notify(msg + "<br>" + ttext);
 		} catch(e) {
 			debug(e);
 		}
@@ -54,14 +54,14 @@ function handle_stream_data(data, tw) {
 		var name = data.source.screen_name;
 		if (name != myname) {
 			var msg = _("@$1 quoted your tweet:", name);
-			var text = data.target_object.text;
+			var ttext = text(data.target_object);
 			try {
-				notify(msg + "<br>" + text);
+				notify(msg + "<br>" + ttext);
 			} catch(e) {
 				debug(e);
 			}
 			callPlugins("quoted", data);
-			if (!text.match(new RegExp("[@＠]"+myname+"\\b","i"))) {
+			if (!ttext.match(new RegExp("[@＠]"+myname+"\\b","i"))) {
 				data.target_object.user = data.source;
 				twReplies([data.target_object], true);
 				noticeNewReply([data.target_object]);

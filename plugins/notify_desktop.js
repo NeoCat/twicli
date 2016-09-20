@@ -220,7 +220,7 @@ var s_tl = 0,
     s_flw = 6,
     s_cls = 7,
     s_men = 8,
-    text,
+    ttext,
     icon_img;
 
 // 設定読み書き
@@ -253,14 +253,14 @@ registerPlugin({
     // RTされ
     if(notification[s_rt] && tw.retweeted_status && tw.retweeted_status.user.screen_name == myname){
       icon_img = tw.user.profile_image_url;
-      text = tw.retweeted_status.text;
+      ttext = text(tw.retweeted_status);
       showNotification('Retweeted by @'+uname);
     // 通常のポスト
     }else{
       if(!notification[s_tl]) return;
       if(uname == myname) return;
       icon_img = tw.user.profile_image_url;
-      text = tw.text;
+      ttext = text(tw);
       showNotification('Timeline: @'+uname);
     }
   },
@@ -271,9 +271,9 @@ registerPlugin({
       if(replies[i].retweeted_status) return;
       var uname = replies[i].user.screen_name;
       if(uname == myname) return;
-      text = replies[i].text;
+      ttext = text(replies[i]);
       icon_img = replies[i].user.profile_image_url;
-      if(notification[s_rep] && (replies[i].in_reply_to_status_id || text.charAt(0) === '@')){
+      if(notification[s_rep] && (replies[i].in_reply_to_status_id || ttext.charAt(0) === '@')){
         showNotification('Reply by @'+uname);
       }else if(notification[s_men]){
         showNotification('Mention by @'+uname);
@@ -286,7 +286,7 @@ registerPlugin({
     var uname = data.sender_screen_name;
     if(uname == myname) return;
     icon_img = data.sender.profile_image_url;
-    text = data.text;
+    ttext = text(data);
     showNotification('Direct Message by @'+uname);
   },
   // ふぁぼられ
@@ -295,14 +295,14 @@ registerPlugin({
     var uname = tw.source.screen_name;
     if(uname == myname) return;
     icon_img = tw.source.profile_image_url;
-    text = tw.target_object.text;
+    ttext = text(tw.target_object);
     showNotification('Favorited by @'+uname);
   },
   // 自分のポスト
   postQueued: function(str) {
     if(!notification[s_post]) return;
     icon_img = '';
-    text = str;
+    ttext = str;
     showNotification('Post: ');
   },
   // フォローされ
@@ -310,7 +310,7 @@ registerPlugin({
     if(!notification[s_flw]) return;
     if(data.screen_name == myname) return;
     icon_img = data.profile_image_url;
-    text = '';
+    ttext = '';
     showNotification('Followed by @'+data.screen_name);
   },
   // 設定タブに要素を追加
@@ -337,7 +337,7 @@ function showNotification(title) {
   var autoClose = null;
   if(notification[s_cls]) autoClose = 3;
   var notify = new Notify(title, {
-    body: text,
+    body: ttext,
     icon: icon_img,
     timeout: autoClose
   });

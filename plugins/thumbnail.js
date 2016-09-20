@@ -9,7 +9,7 @@ langResources['Original image'] = ['オリジナル画像'];
 registerPlugin(thumbnail_plugin = {
 	newMessageElement: function(elem, tw) {
 		tw = tw.retweeted_status || tw;
-		var entities = tw.extended_entities || tw.entities;
+		var entities = ent(tw);
 		if (entities && entities.media) {
 			for (var i = 0; i < entities.media.length; i++) {
 				if (['photo', 'animated_gif', 'video'].indexOf(entities.media[i].type) >= 0) {

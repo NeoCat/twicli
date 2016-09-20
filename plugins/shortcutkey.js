@@ -306,7 +306,7 @@ var shortcutkey_plugin = {
 			for (var j = 0; j < ele.childNodes[i].childNodes.length; j++) {
 				var d = ele.childNodes[i].childNodes[j];
 				if (d.tw) {
-					if ((d.tw.user.screen_name + ' ' + d.tw.text).match(re)) {
+					if ((d.tw.user.screen_name + ' ' + text(d.tw)).match(re)) {
 						if (d.className.indexOf('filter-match') < 0) d.className += ' filter-match';
 					} else d.className = d.className.replace(/ ?filter-match/g, '');
 				}

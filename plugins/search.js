@@ -47,14 +47,14 @@ function twsSearch(qn, no_switch, max_id) {
 	if (!max_id) tws_page = 0;
 	$('tws-RT').onclick = function() { twsSwitchRT(myid); };
 	xds.load_for_tab(twitterAPI + 'search/tweets.json' +
-							'?include_entities=true' + (lang?'&lang=' + lang:'') + '&q=' + encodeURIComponent(q) +
-							(max_id ? '&max_id=' + max_id : '') +
-							'&count=' + Math.min(100, max_count_u), twsSearchShow);
+		'?' + default_api_args_tl + (lang?'&lang=' + lang:'') + '&q=' + encodeURIComponent(q) +
+		(max_id ? '&max_id=' + max_id : '') +
+		'&count=' + Math.min(100, max_count_u), twsSearchShow);
 	return false;
 }
 function twsSearchUpdate(q,lang) {
 	xds.load_for_tab(twitterAPI + 'search/tweets.json' +
-							'?include_entities=true' + (lang?'&lang=' + lang:'') + '&q=' + encodeURIComponent(q) +
+		'?' + default_api_args_tl + (lang?'&lang=' + lang:'') + '&q=' + encodeURIComponent(q) +
 							'&count=' + Math.min(100, max_count_u), twsSearchShow2);
 }
 function closeSearchTab(myid) {
