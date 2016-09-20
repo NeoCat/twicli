@@ -1040,7 +1040,7 @@ function update() {
 	callPlugins("update");
 	xds.load(twitterAPI + 'statuses/home_timeline.json' +
 						'?count=' + (since_id ? 800 : max_count) +
-						'&' + default_api_args +
+						'&' + default_api_args_tl +
 						(!no_since_id && since_id ? '&since_id='+dec_id(since_id) : ''),
 			twShow, function(){
 				if (first_update)
