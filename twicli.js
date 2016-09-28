@@ -531,8 +531,9 @@ var default_api_args_tl = default_api_args + '&include_entities=true&tweet_mode=
 function text(tw) {
 	return tw.extended_tweet && tw.extended_tweet.full_text || tw.full_text || tw.text;
 }
-function ent(tw) {
-	return tw.extended_tweet && tw.extended_tweet.entities || tw.extended_entities || tw.entities;
+function ent(tw, for_urls) {
+	return tw.extended_tweet && tw.extended_tweet.entities ||
+		!for_urls && tw.extended_entities || tw.entities;
 }
 
 // loading表示のコントロール
@@ -1100,8 +1101,9 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 	var eid = pid+'-'+id;
 	var in_reply_to = t.in_reply_to_status_id_str || t.in_reply_to_status_id;
 	var expanded_urls = {};
-	if (t.entities && (t.entities.urls || t.entities.media))
-		Array.prototype.concat.apply(t.entities.urls || [], t.entities.media || []).map(function(_){
+	var entities = ent(t, true);
+	if (entities && (entities.urls || entities.media))
+		Array.prototype.concat.apply(entities.urls || [], entities.media || []).map(function(_){
 			if (_.url && _.expanded_url) expanded_urls[_.url] = _.expanded_url;
 		});
 	return /*fav*/ (noctl || t.d_dir ? '' : '<div class="fav"><img alt="☆" src="images/icon_star_'+(rs.favorited?'full':'empty')+'.png" ' +
