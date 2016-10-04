@@ -127,7 +127,14 @@ function ws_open() {
 			tw_stream_ws = null;
 		if (!tw_stream_ws)
 			ws_reopen_timer = setTimeout(ws_open, updateInterval*1000 - 15000);
-		update();
+		var now = new Date();
+		if (last_update_time && now - last_update_time > 60*1000)
+			update();
+		else {
+			console.log("update suppressed: last update = " +
+				(now - last_update_time) / 1000 + " before");
+			resetUpdateTimer();
+		}
 	};
 	ws.onmessage = function(e) {
 		if (e.data == 'Hello' || e.data == '##pong##') {

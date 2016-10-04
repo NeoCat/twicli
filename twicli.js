@@ -525,6 +525,7 @@ var t_co_maxstr = "http://t.co/********";
 var api_resources = ['statuses','friendships','friends','followers','users','search','lists','favorites'];
 var first_update = true;
 var reset_timer = null;
+var last_update_time = null;
 var default_api_args = 'suppress_response_codes=true';
 var default_api_args_tl = default_api_args + '&include_entities=true&tweet_mode=extended';
 
@@ -1038,6 +1039,7 @@ function dec_id(id_str) {
 }
 function update() {
 	if (!myname) return auth();
+	last_update_time = new Date();
 	callPlugins("update");
 	xds.load(twitterAPI + 'statuses/home_timeline.json' +
 						'?count=' + (since_id ? 800 : max_count) +
