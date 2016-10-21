@@ -22,7 +22,7 @@ registerPlugin({
 				tw[i].full_text += ' <a href="javascript:twn_hide(\''+tw[i].id_str+'\')">['+_('Hide')+']</a>';
 			if (tw[i].text)
 				tw[i].text += ' <a href="javascript:twn_hide(\''+tw[i].id_str+'\')">['+_('Hide')+']</a>';
-			if (new Date() - toDate(tw[i].created_at) > 180*24*60*60*1000)
+			if (new Date() - toDate(tw[i].created_at) > 30*24*60*60*1000)
 				tw[i].user = null;
 		}
 		twShowToNode(tw, $("tw"));
