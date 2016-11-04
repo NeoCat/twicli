@@ -32,7 +32,10 @@ function handle_stream_data(data, tw) {
 	} else if (data['delete'] && data['delete'].status) {
 		for (var i = 0; i < 3; i++) {
 			var target = $(['tw-','re-','tw2c-'][i]+data['delete'].status.id_str);
-			if (target) target.className += " deleted";
+			if (target) {
+				target.className += " deleted";
+				target.tw.deleted = true;
+			}
 		}
 	} else if (data.direct_message) {
 		if ($("direct").className.indexOf('new') < 0)

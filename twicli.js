@@ -1020,7 +1020,10 @@ function deleteStatus(id) {
 	if (confirm_delete && !confirm(_('Are you sure to delete this tweet?'))) return false;
 	for (var i = 0; i < 3; i++) {
 		var target = $(['tw-','re-','tw2c-'][i]+id);
-		if (target) target.className += " deleted";
+		if (target) {
+			target.className += " deleted";
+			target.tw.deleted = true;
+		}
 	}
 	if (selected_menu.id == 'direct')
 		enqueuePost(twitterAPI + 'direct_messages/destroy.json?id=' + id, function(){}, function(){});
@@ -1122,7 +1125,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 		 /* protected? */ (t.user.protected ? '<div alt="lock" id="lock-' + eid + '" class="lock"></div>' : '') +
 		/*ダイレクトメッセージの方向*/ (t.d_dir == 1 ? '<span class="dir">→</span> ' : t.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
-		" <span id=\"text-" + eid + "\" class=\"status\">" +
+		" <span id=\"text-" + eid + "\" class=\"status" + (tw.deleted ? " deleted" : "") + "\">" +
 		ttext.replace(regexp_links, function(_,u,x,h,s){
 				if (!u && !h) {
 					if (expanded_urls[_]) {
