@@ -729,7 +729,8 @@ function press(e) {
 	var do_post = function(r){
 		var media = $('media')&&$('media').value;
 		enqueuePost(twitterAPI + 'statuses/update' + (media ? '_with_media' : '') + '.json?'+
-				'status=' + OAuth.percentEncode(st.value) +
+				default_api_args_tl +
+				'&status=' + OAuth.percentEncode(st.value) +
 				(geo && geo.coords ?  "&display_coordinates=true&lat=" + geo.coords.latitude +
 										"&long=" + geo.coords.longitude : "") +
 				(in_reply_to_status_id ? "&in_reply_to_status_id=" + in_reply_to_status_id : ""),
