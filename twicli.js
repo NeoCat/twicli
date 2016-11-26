@@ -278,13 +278,15 @@ function scrollToY(y, total, start) {
 	scroll_timer = setTimeout(function(){scrollToY(y, total, start)}, 20);
 }
 function scrollToDiv(d, top_margin) {
-	top_margin = top_margin || $('control').clientHeight+1;
+	top_margin = (top_margin || 0) + $('control').clientHeight+1;
 	var top = cumulativeOffset(d)[1];
 	var h = d.offsetHeight;
 	var sc_top = document.body.scrollTop || document.documentElement.scrollTop;
 	var win_h = window.innerHeight || document.documentElement.clientHeight;
 	if (top < sc_top+top_margin) scrollToY(top-top_margin);
-	if (sc_top+win_h < top+h) scrollToY(top+h-win_h);
+	if (sc_top+win_h < top+h)
+		if (win_h >= h+top_margin) scrollToY(top+h-win_h);
+		else scrollToY(top-top_margin);
 }
 // DOM Storage (or Cookie)
 var use_local_storage = true;
@@ -915,7 +917,7 @@ function overlayQuoted(ele) {
 	rep_top = cumulativeOffset(ele)[1];
 	var tw = ele.parentNode.parentNode.tw;
 	closeRep();
-	dispReply2((tw.retweeted_status || tw).quoted_status);
+	setTimeout(function(){ dispReply2((tw.retweeted_status || tw).quoted_status); }, 0);
 	return false;
 }
 // replyからユーザ間のタイムラインを取得

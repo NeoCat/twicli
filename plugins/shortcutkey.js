@@ -14,7 +14,7 @@ var shortcutkey_plugin = {
 		div.className += " selected";
 		shortcutkey_plugin.selected_div = div;
 		if (div.id.indexOf('reps-') != 0 && !no_scroll)
-			scrollToDiv(div, $('control').clientHeight+1);
+			scrollToDiv(div);
 	},
 	// tweetの選択解除
 	deselectTweet: function(save) {

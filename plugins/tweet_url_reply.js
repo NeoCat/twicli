@@ -1,5 +1,5 @@
 function imageLoadedFromLink(e) {
-  scrollToDiv($('rep'));
+  scrollToDiv($('rep'), 16);
   var img = new Image();
   img.src = e.src;
   if (e.width < img.width) {
@@ -15,7 +15,7 @@ function imageLoadedFromLink(e) {
       ifr.width = Math.min(img.width, win_w*0.9-4);
       ifr.height = Math.min(img.height, win_h*0.9-48);
       p.appendChild(ifr);
-      scrollToDiv($('rep'));
+      scrollToDiv($('rep'), 16);
     }
   }
 }
@@ -52,11 +52,11 @@ function dispImageFromLink(url, e, type) {
     if (m) {
       a.tweetUrlChecked = true;
       var dummy = document.createElement('div');
-      var script = 'dispReply(\'' + m[1] + '\',\'' + m[2] + '\',this); return false;';
+      var script = 'dispReply(\'' + m[1] + '\',\'' + m[2] + '\',this); event.preventDefault(); return false;';
       var tw = a.parentNode.parentNode.tw;
       tw = tw && tw.retweeted_status ? tw.retweeted_status : tw;
       var entities = tw && ent(tw);
-      if (tw && tw.user.screen_name == m[1] && tw.id_str == m[2] &&
+      if (tw && tw.id_str == m[2] &&
           (a.href.indexOf('/photo/1') >= 0 || a.href.indexOf('/video/1') >= 0) &&
           entities.media && entities.media[0]) {
         var media = entities.media;
@@ -66,7 +66,7 @@ function dispImageFromLink(url, e, type) {
               Array.prototype.map.call(x.video_info.variants, function(y){return '[\'' + y.content_type + '\',\'' + y.url + '\']'}) :
               '\'' + x.media_url + ':medium\''
           }).join(',') +
-	  '], this, \'' + media[0].type +'\'); return false;';
+         '], this, \'' + media[0].type +'\'); return false;';
       }
       dummy.innerHTML = '<a class="button" href="#" onClick="' + script + '"><img src="images/jump.png" alt="☞" width="14" height="14"></a>';
       a.parentNode.insertBefore(dummy.firstChild, a.nextSibling);
