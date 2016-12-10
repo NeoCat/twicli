@@ -21,7 +21,7 @@ label, button, input[type="submit"], input[type="button"], input[type="image"], 
 .add { background-image: url('../images/add.png'); }
 #imgclr { z-index: 21; }
 #menu { position: absolute; left: 0px; top: 33px; }
-#menu a { display: inline-block; font-size: 12px; height: 18px; line-height: 18px; border: 1px solid black; border-bottom: 0 none; background-color: #aaa; color: #242; padding: 0 4px; margin: 0; margin-bottom: 2px; text-decoration: none; font-family: sans-serif; -moz-border-radius: 5px 5px 0 0; -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px; border-radius: 5px 5px 0 0; margin-right: 2px; overflow: hidden; max-width: 10em; white-space: nowrap; text-overflow: ellipsis; }
+#menu a { display: inline-block; font-size: 12px; height: 18px; line-height: 18px; border: 1px solid black; border-bottom: 0 none; background-color: #aaa; color: #242; padding: 0 4px; margin: 0; margin-bottom: 2px; text-decoration: none; font-family: sans-serif; -moz-border-radius: 5px 5px 0 0; -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px; border-radius: 5px 5px 0 0; margin-right: 2px; overflow: hidden; max-width: 10em; white-space: nowrap; text-overflow: ellipsis; vertical-align: top; }
 #menu a.sel { height: 20px; margin-bottom: 0; background-color: #ffe; color: #002; border-bottom-color: #fff; }
 #menu a.new { background-color: #fcc; }
 
