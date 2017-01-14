@@ -370,7 +370,7 @@ function uploadSettings() {
 function downloadSettings() {
 	if (!confirm(_('Are you sure to download your settings from the server? Current settings are overwritten.'))) return;
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', 'settings/' + hex_sha1(access_token), true);
+	xhr.open('GET', 'settings/' + hex_sha1(access_token) + '?' + (new Date).getTime(), true);
 	xhr.responseType = 'text';
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4) {
