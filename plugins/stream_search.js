@@ -30,8 +30,10 @@ function tws_ws_open(track) {
 	ws.onopen = function() {
 		var orig = twitterAPI;
 		twitterAPI = 'https://stream.twitter.com/1.1/';
+		var lang = '';
+		track = track.replace(/\s*lang[=:](.*)\s*/, function(_, l){ lang = '&language=' + l; return ''; });
 		stream = setupOAuthURL(twitterAPI+'statuses/filter.json?track=' +
-			track.replace(/^.*:/, '').replace(/ OR /g, ',').replace(/ AND /g, ' '));
+			track.replace(/^.*:/, '').replace(/ OR /g, ',').replace(/ AND /g, ' ') + lang);
 		twitterAPI = orig;
 		ws.send(stream);
 		debug("ws opened - " + stream);
