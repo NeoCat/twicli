@@ -6,7 +6,7 @@ var langResources = {
 	'Delete tweet': ['ツイートを削除','删除该发言'],
 	'Retweet': ['リツイート','官方锐推'],
 	'Quote with RT:': ['RT:を付けて引用','加入RT:引用回复'],
-	'Insert URL': ['URLを挿入','插入URL'],
+	'Insert URL': ['URLを挿入 (コメント付きRT)','插入URL'],
 	'Block this user': ['ユーザをブロック', '加入黑名单'],
 	'Unblock this user': ['ユーザをブロック解除', '从黑名单中去除'],
 	'Report as spam': ['スパム報告', '举报垃圾信息'],
