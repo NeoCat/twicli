@@ -7,12 +7,14 @@ function debug(msg) {
 	console.log(typeof(msg) == 'object' ? msg : new Date() + ": " + msg);
 }
 
-function tws_handle_stream_data(data, tw) {
-	handled = true;
-	if (text(data)) {
+function tws_handle_stream_data(data, tw, ws) {
+	var text_data = text(data);
+	if (text_data) {
+		for (var i = 0; i < ws.filter.length; i++)
+			if (text_data.indexOf(ws.filter[i]) >= 0)
+				return;
 		tw.push(data);
 	} else {
-		handled = false;
 		debug(data);
 	}
 }
@@ -31,7 +33,12 @@ function tws_ws_open(track) {
 		var orig = twitterAPI;
 		twitterAPI = 'https://stream.twitter.com/1.1/';
 		var lang = '';
+		var filter = [];
 		track = track.replace(/\s*lang[=:](.*)\s*/, function(_, l){ lang = '&language=' + l; return ''; });
+		track = (' ' + track).replace(/\s+-(\S+)/g, function(_, f) { filter.push(f); return ''; });
+		track = track.replace(/^\s+|\s+$/g, '');
+		track = track.replace(/^\^/, function() { filter.push('RT'); return ''; });
+		ws.filter = filter;
 		stream = setupOAuthURL(twitterAPI+'statuses/filter.json?track=' +
 			track.replace(/^.*:/, '').replace(/ OR /g, ',').replace(/ AND /g, ' ') + lang);
 		twitterAPI = orig;
@@ -82,7 +89,7 @@ function tws_ws_open(track) {
 					debug(">" + ary[i] + "<");
 					if (i == 0) ws.error_msg = ary[i];
 				}
-				if (data) tws_handle_stream_data(data, tw);
+				if (data) tws_handle_stream_data(data, tw, ws);
 			}
 			if (tw.length > 0) {
 				twShowToNode(tw, $("tw2c"), false, !update && tws_page > 1, update, false, update);
