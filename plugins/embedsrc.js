@@ -1,5 +1,7 @@
 (function(){
 	var res = [
+		{search: /^(https?:\/\/www\.slideshare\.net\/)(?:mobile\/)?(slideshow\/embed_code\/(?:key\/)?[-_0-9a-zA-Z.]+)/,
+			replace: "$1$2", type: "iframe"},
 		{search: /^(https?:\/\/www\.slideshare\.net\/)(?:mobile\/)?([-_0-9a-zA-Z.]+\/[-_0-9a-zA-Z.]+)/,
 			replace: "http://www.slideshare.net/api/oembed/2?url=$1$2&format=jsonp", type: "slideshare"},
 		{search: /^(http:\/\/[\w\-]+\.tumblr\.com\/)post\/(\d+)/,
