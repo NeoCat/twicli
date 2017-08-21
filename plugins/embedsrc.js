@@ -79,47 +79,58 @@
 function dispEmbedSrc(url, link, type) {
 	rep_top = Math.max(cumulativeOffset(link)[1] + 20, $("control").offsetHeight);
 	var win_h = window.innerHeight || document.documentElement.clientHeight;
-	$('rep').style.display = "block";
-	var ifr = document.createElement("iframe");
-	ifr.id = "embedsrc";
-	ifr.style.border = "0";
-	ifr.style.width = "100%";
-	ifr.style.height = "426px";
-	ifr.style.display = "block";
+	var createIframe = function (content) {
+		var ifr = document.createElement("iframe");
+		ifr.id = "embedsrc";
+		ifr.style.border = "0";
+		ifr.style.width = "100%";
+		ifr.style.height = content.height || "426px";
+		ifr.style.display = "block";
+		$('reps').appendChild(ifr);
+		if (content.document) {
+			ifr.contentWindow.document.write(content.document);
+		} else if (content.src) {
+			ifr.src = content.src;
+		}
+		$('rep').style.display = "block";
+		$('rep').style.top = rep_top;
+		scrollToDiv($('rep'));
+		user_pick1 = user_pick2 = null;
+		return ifr;
+	};
 	switch (type) {
 		case 'data':
-			$('reps').appendChild(ifr);
-			ifr.contentWindow.document.write('<div>' + url + '</div>');
+			createIframe({
+				document: '<div>' + url + '</div>'
+			});
 			break;
 		case 'iframe':
-			ifr.src = url;
-			ifr.style.height = Math.ceil(win_h * 0.5) + "px";
-			$('reps').appendChild(ifr);
+			createIframe({
+				src: url,
+				height: Math.ceil(win_h * 0.5) + "px"
+			});
 			break;
 		case 'script':
-			$('reps').appendChild(ifr);
-			ifr.contentWindow.document.write(
-					'<div><scr' + 'ipt type="text/javascript" src="' + url +
-					'"></scr' + 'ipt></div>');
+			createIframe({
+				document: '<div><scr' + 'ipt type="text/javascript" src="' + url +
+					'"></scr' + 'ipt></div>'
+			});
 			break;
 		case 'pin':
-			$('reps').appendChild(ifr);
-			ifr.contentWindow.document.write(
-					'<div><a data-pin-do="embedPin" href="' + url
+			createIframe({
+				document: '<div><a data-pin-do="embedPin" href="' + url
 					+ '"></a><scr'
 					+ 'ipt type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></scr'
-					+ 'ipt></div>');
+					+ 'ipt></div>'
+			});
 			break;
 		case 'theta':
-			$('reps').appendChild(ifr);
-			ifr.contentWindow.document.write(
-					'<div class="ricoh-theta-spherical-image" ><a href="' + url
+			createIframe({
+				document: '<div class="ricoh-theta-spherical-image" ><a href="' + url
 					+ '" target="_blank"></a></div><scr'
 					+ 'ipt async src="https://theta360.com/widgets.js" charset="utf-8"></scr'
-					+ 'ipt>');
+					+ 'ipt>'
+			});
 			break;
 	}
-	$('rep').style.top = rep_top;
-	scrollToDiv($('rep'));
-	user_pick1 = user_pick2 = null;
 }
