@@ -4,7 +4,7 @@
 			replace: "$1$2", type: "iframe"},
 		{search: /^(https?:\/\/www\.slideshare\.net\/)(?:mobile\/)?([-_0-9a-zA-Z.]+\/[-_0-9a-zA-Z.]+)/,
 			replace: "http://www.slideshare.net/api/oembed/2?url=$1$2&format=jsonp", type: "slideshare"},
-		{search: /^(http:\/\/[\w\-]+\.tumblr\.com\/)post\/(\d+)/,
+		{search: /^(https?:\/\/[\w\-]+\.tumblr\.com\/)post\/(\d+)(?:\/.*)/,
 			replace: "$1api/read/json?id=$2", type: "tumblr"},
 		{search: /^https?:\/\/(?:\w+\.)?theta360\.com\/(?:[sm]\/\w+|spheres\/samples\/[a-z0-9-]+)/,
 			replace: "$&/", type: "theta"},
@@ -86,7 +86,7 @@ function dispEmbedSrc(url, link, type) {
 	switch (type) {
 		case 'data':
 			createIframe({
-				document: '<div>' + url + '</div>'
+				document: '<div style="text-align: center;">' + url + '</div>'
 			});
 			break;
 		case 'iframe':
@@ -125,9 +125,12 @@ function dispEmbedSrc(url, link, type) {
 			break;
 		case 'tumblr':
 			xds.load(url, function(x) {
+				var p = x.posts[0]['photo-url-500'];
 				var v = x.posts[0]['video-player'];
 				if (v) {
 					dispEmbedSrc(v, link, 'data');
+				} else if (p) {
+					dispEmbedSrc('<img src="' + p + '">', link, 'data');
 				}
 			});
 			break;
