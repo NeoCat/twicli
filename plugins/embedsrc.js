@@ -1,5 +1,7 @@
 (function(){
 	var res = [
+		{search: /^(https?:\/\/www\.slideshare\.net\/)(?:mobile\/)?([-_0-9a-zA-Z.]+\/[-_0-9a-zA-Z.]+)/,
+			replace: "http://www.slideshare.net/api/oembed/2?url=$1$2&format=jsonp", type: "slideshare"},
 		{search: /^https?:\/\/(?:\w+\.)?theta360\.com\/(?:[sm]\/\w+|spheres\/samples\/[a-z0-9-]+)/,
 			replace: "$&/", type: "theta"},
 		{search: /^https?:\/\/(?:\w+\.)?pinterest\.com\/pin\/\d+/,
@@ -51,20 +53,7 @@
 					return;
 				}
 			}
-			if (lng.match(/^((https?:\/\/www\.slideshare\.net\/)(?:mobile\/)?([-_0-9a-zA-Z.]+\/[-_0-9a-zA-Z.]+))/)) {
-				link.embedsrc = true;
-				xds.load("http://www.slideshare.net/api/oembed/2?url=" + RegExp.$2 + RegExp.$3 + "&format=jsonp",
-						function(x) {
-							createAnchor(link, function(){
-								dispEmbedSrc("http:\/\/www\.slideshare\.net\/slideshow\/embed_code\/"
-									+ x.slideshow_id,
-									link, 'iframe');
-								return false;
-							});
-							
-						});
-			}
-			else if (lng.match(/^(http:\/\/[\w\-]+\.tumblr\.com\/)post\/(\d+)/)) {
+			if (lng.match(/^(http:\/\/[\w\-]+\.tumblr\.com\/)post\/(\d+)/)) {
 				xds.load(RegExp.$1+'api/read/json?id='+RegExp.$2,
 					function(x) {
 						var v = x.posts[0]['video-player'];
@@ -130,6 +119,12 @@ function dispEmbedSrc(url, link, type) {
 					+ '" target="_blank"></a></div><scr'
 					+ 'ipt async src="https://theta360.com/widgets.js" charset="utf-8"></scr'
 					+ 'ipt>'
+			});
+			break;
+		case 'slideshare':
+			xds.load(url, function(x) {
+				dispEmbedSrc("http:\/\/www\.slideshare\.net\/slideshow\/embed_code\/"
+					+ x.slideshow_id, link, 'iframe');
 			});
 			break;
 	}
