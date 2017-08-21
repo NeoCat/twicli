@@ -2,6 +2,8 @@
 	var res = [
 		{search: /^(https?:\/\/www\.slideshare\.net\/)(?:mobile\/)?([-_0-9a-zA-Z.]+\/[-_0-9a-zA-Z.]+)/,
 			replace: "http://www.slideshare.net/api/oembed/2?url=$1$2&format=jsonp", type: "slideshare"},
+		{search: /^(http:\/\/[\w\-]+\.tumblr\.com\/)post\/(\d+)/,
+			replace: "$1api/read/json?id=$2", type: "tumblr"},
 		{search: /^https?:\/\/(?:\w+\.)?theta360\.com\/(?:[sm]\/\w+|spheres\/samples\/[a-z0-9-]+)/,
 			replace: "$&/", type: "theta"},
 		{search: /^https?:\/\/(?:\w+\.)?pinterest\.com\/pin\/\d+/,
@@ -52,14 +54,6 @@
 					});
 					return;
 				}
-			}
-			if (lng.match(/^(http:\/\/[\w\-]+\.tumblr\.com\/)post\/(\d+)/)) {
-				xds.load(RegExp.$1+'api/read/json?id='+RegExp.$2,
-					function(x) {
-						var v = x.posts[0]['video-player'];
-						if (!v) return;
-						createAnchor(link, function(){ dispEmbedSrc(v, link, 'data') });
-					})
 			}
 		}
 	});
@@ -125,6 +119,14 @@ function dispEmbedSrc(url, link, type) {
 			xds.load(url, function(x) {
 				dispEmbedSrc("http:\/\/www\.slideshare\.net\/slideshow\/embed_code\/"
 					+ x.slideshow_id, link, 'iframe');
+			});
+			break;
+		case 'tumblr':
+			xds.load(url, function(x) {
+				var v = x.posts[0]['video-player'];
+				if (v) {
+					dispEmbedSrc(v, link, 'data');
+				}
 			});
 			break;
 	}
