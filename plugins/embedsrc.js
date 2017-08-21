@@ -80,7 +80,7 @@ function dispEmbedSrc(url, link, type) {
 	rep_top = Math.max(cumulativeOffset(link)[1] + 20, $("control").offsetHeight);
 	var win_h = window.innerHeight || document.documentElement.clientHeight;
 	var createIframe = function (content) {
-		var ifr = document.createElement("iframe");
+		var ifr = document.getElementById("embedsrc") || document.createElement("iframe");
 		ifr.id = "embedsrc";
 		ifr.style.border = "0";
 		ifr.style.width = "100%";
