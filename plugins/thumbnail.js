@@ -111,8 +111,8 @@ registerPlugin(thumbnail_plugin = {
 			addThumbnail(elem, "http://art"+Math.floor(Math.random()*40+1)+".photozou.jp/bin/photo/"+
 							RegExp.$1 +"/org.bin?size=120", url);
 		}
-		else if (url.match(/^(https?:\/\/www\.slideshare\.net\/[-_0-9a-zA-Z]+\/[-_0-9a-zA-Z]+)/)) {
-			xds.load("http://www.slideshare.net/api/oembed/2?url=" + RegExp.$1 + "&format=jsonp",
+		else if (url.match(/^(https?:\/\/www\.slideshare\.net\/)(?:mobile\/)?([-_0-9a-zA-Z]+\/[-_0-9a-zA-Z]+)/)) {
+			xds.load("http://www.slideshare.net/api/oembed/2?url=" + RegExp.$1 + RegExp.$2 + "&format=jsonp",
 					function(x) {
 						addThumbnail(elem, (x.thumbnail.substr(0,2) == '//' ? 'http:' : '' )+ x.thumbnail, url);
 					});
