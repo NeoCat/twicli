@@ -22,7 +22,7 @@ function tws_handle_stream_data(data, tw, ws) {
 function tws_ws_open(track) {
 	if (tws_stream_ws) tws_stream_ws.close();
 	debug("ws opening ...");
-	var ws = new WebSocket('wss://twgateway-neocat.rhcloud.com:8443/');
+	var ws = new WebSocket('wss://twgateway-twgateway.7e14.starter-us-west-2.openshiftapps.com/');
 	ws.send_ping = function() {
 		if (ws.readyState == ws.CLOSING || ws.readyState == ws.CLOSED)
 		return ws.onerror("closed");
