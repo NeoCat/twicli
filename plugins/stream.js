@@ -128,8 +128,10 @@ function ws_open() {
 		clearInterval(ws.reconnect_timer);
 		if (tw_stream_ws == this)
 			tw_stream_ws = null;
-		if (!tw_stream_ws)
+		if (!tw_stream_ws) {
+			if (ws_reopen_timer) clearTimeout(ws_reopen_timer);
 			ws_reopen_timer = setTimeout(ws_open, updateInterval*1000 - 15000);
+		}
 		var now = new Date();
 		if (last_update_time && now - last_update_time > 60*1000)
 			update();
