@@ -704,10 +704,9 @@ function press(e) {
 		update();
 		return false;
 	}
-	if (parseInt($("counter").innerHTML,10) < 0) {
-		alert(_("This tweet is too long."));
-		return false;
-	}
+	if (parseInt($("counter").innerHTML,10) < 0)
+		if (!confirm(_("This tweet is too long.")))
+			return false;
 	var retry = 0;
 	if (st.value == "r" && last_post) {
 		retry = 1;
