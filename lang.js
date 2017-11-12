@@ -39,6 +39,7 @@ var langResources = {
 	'Auto-resize field':	['発言欄のサイズを自動調整','输入框大小自动调整'],
 	'Post length counter':	['残り文字数を表示','显示发言的剩余字数'],
 	'Post with ctrl/shift+enter':	['ctrl+enter/shift+enterで発言','敲击Ctrl+回车或Shift+回车来发言'],
+	'Confirm before posting too long tweets': ['長いツイートをする前に確認'],
 	'Confirm before closing tabs': ['タブを閉じる前に確認','确认闭标签'],
 	'Confirm before deleting tweets': ['ツイート削除の前に確認'],
 	'Confirm before retweet': ['リツイートする前に確認'],

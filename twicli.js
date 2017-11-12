@@ -469,6 +469,7 @@ var decr_enter = parseInt(readCookie('decr_enter') || "0");			// Shift/Ctrl+Ente
 var confirm_close = parseInt(readCookie('confirm_close') || "1");			// Tabを閉じるとき確認
 var confirm_delete = parseInt(readCookie('confirm_delete') || "1");			// ツイート削除時に確認
 var confirm_rt = parseInt(readCookie('confirm_rt') || "1");			// Retweet時に確認
+var confirm_too_long = parseInt(readCookie('confirm_too_long') || "1");		// 長いツイートをする前に確認
 var no_geotag = parseInt(readCookie('no_geotag') || "0");			// GeoTaggingを無効化
 var post_via_agent = cookieVer > 19 ? parseInt(readCookie('post_via_agent') || "1") : 1;	// tweet-agent経由でツイート
 var show_header_img = parseInt(readCookie('show_header_img') || "1");	// ヘッダ画像表示
@@ -705,7 +706,7 @@ function press(e) {
 		return false;
 	}
 	if (parseInt($("counter").innerHTML,10) < 0)
-		if (!confirm(_("This tweet is too long.")))
+		if (confirm_too_long && !confirm(_("This tweet is too long.")))
 			return false;
 	var retry = 0;
 	if (st.value == "r" && last_post) {
@@ -1853,6 +1854,7 @@ function switchMisc() {
 					'<label><input type="checkbox" name="counter"' + (no_counter?"":" checked") + '>'+_('Post length counter')+'</label><br>' +
 					'<label><input type="checkbox" name="resize_fst"' + (no_resize_fst?"":" checked") + '>'+_('Auto-resize field')+'</label><br>' +
 					'<label><input type="checkbox" name="decr_enter"' + (decr_enter?" checked":"") + '>'+_('Post with ctrl/shift+enter')+'</label><br>' +
+					'<label><input type="checkbox" name="confirm_too_long"' + (confirm_too_long?" checked":"") + '>'+_('Confirm before posting too long tweets')+'</label><br>' +
 					'<label><input type="checkbox" name="confirm_close"' + (confirm_close?" checked":"") + '>'+_('Confirm before closing tabs')+'</label><br>' +
 					'<label><input type="checkbox" name="confirm_delete"' + (confirm_delete?" checked":"") + '>'+_('Confirm before deleting tweets')+'</label><br>' +
 					'<label><input type="checkbox" name="confirm_rt"' + (confirm_rt?" checked":"") + '>'+_('Confirm before retweet')+'</label><br>' +
@@ -1929,6 +1931,7 @@ function setPreps(frm) {
 	confirm_close = frm.confirm_close.checked;
 	confirm_delete = frm.confirm_delete.checked;
 	confirm_rt = frm.confirm_rt.checked;
+	confirm_too_long = frm.confirm_too_long.checked;
 	footer = new String(frm.footer.value);
 	decr_enter = frm.decr_enter.checked;
 	no_geotag = !frm.geotag.checked;
@@ -1960,6 +1963,7 @@ function setPreps(frm) {
 	writeCookie('confirm_close', confirm_close?1:0, 3652);
 	writeCookie('confirm_delete', confirm_delete?1:0, 3652);
 	writeCookie('confirm_rt', confirm_rt?1:0, 3652);
+	writeCookie('confirm_too_long', confirm_too_long?1:0, 3652);
 	writeCookie('no_geotag', no_geotag?1:0, 3652);
 	writeCookie('post_via_agent', post_via_agent?1:0, 3652);
 	writeCookie('show_header_img', show_header_img?1:0, 3652);
