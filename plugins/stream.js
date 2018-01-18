@@ -87,7 +87,7 @@ function handle_stream_data(data, tw) {
 function ws_open() {
 	if (tw_stream_ws) tw_stream_ws.close();
 	debug("ws opening ...")
-	var ws = new WebSocket('wss://gw-twgateway.193b.starter-ca-central-1.openshiftapps.com/');
+	var ws = new WebSocket('wss://gw-tw-stream-gw.a3c1.starter-us-west-1.openshiftapps.com');
 	ws.send_ping = function() {
 		if (ws.readyState == ws.CLOSING || ws.readyState == ws.CLOSED)
 		return ws.onerror("closed");
