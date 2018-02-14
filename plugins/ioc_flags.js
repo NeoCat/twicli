@@ -1,6 +1,8 @@
 // [Follow the Rio 2016 @Olympics on Twitter, Vine, and Periscope | Twitter Blogs](https://blog.twitter.com/2016/follow-the-rio-2016-olympics-on-twitter-vine-and-periscope)
 // [Twitter、Vine、Periscopeで #オリンピック をより楽しみましょう | Twitter Blogs](https://blog.twitter.com/ja/2016/rio0802)
 // [Join the #Paralympics conversation on Twitter | Twitter Blogs](https://blog.twitter.com/2016/join-the-paralympics-conversation-on-twitter)
+// [Follow the 2018 Winter @Olympics on Twitter](https://blog.twitter.com/official/en_us/topics/events/2018/Follow-the-2018-Winter-Olympics-on-Twitter.html)
+// [冬季 #オリンピック](https://blog.twitter.com/official/ja_jp/topics/events/2018/0209_sports.html)
 
 var tweScript = document.createElement('script');
 tweScript.type = 'text/javascript';
@@ -277,27 +279,39 @@ registerPlugin({
 			'ZIM': ['ZWE', 'ZW', 0x1F1FF, 0x1F1FC], // Zimbabwe
 			// ---- other ----
 			'GOLD': ['', '', 0x1F947], // First Place Medal
+			'金メダル': ['', '', 0x1F947], // First Place Medal
 			'SILVER': ['', '', 0x1F948], // Second Place Medal
-			'BRONZE': ['', '', 0x1F949] // Third Place Medal
+			'銀メダル': ['', '', 0x1F948], // Second Place Medal
+			'BRONZE': ['', '', 0x1F949], // Third Place Medal
+			'銅メダル': ['', '', 0x1F949] // Third Place Medal
 		};
 
 		var organization = {
+			// ---- 団体 ----
 			'TPE': 'Taipei',
 			'ROT': 'Refugee_Olympic_Athletes',
 			'REFUGEEOLYMPICTEAMS': 'Refugee_2',
-			'OLYMPICS': 'Olympics',
+			'COR': 'COR_wo_2018',
+			// ---- オリンピック/パラリンピック ----
 			'OLYMPICGAMES': 'Olympics',
-			'オリンピック': 'Olympics',
+			'OLYMPICS': 'olympics_WO_18_v2',
+			'オリンピック': 'olympics_WO_18_v2',
 			'PARALYMPICS': 'Logo_paralympics_2016_v5',
 			'パラリンピック': 'Logo_paralympics_2016_v5',
 			'PARALYMPICFLAME': 'Rio_Records',
+			// ---- 開催国 ----
 			'RIORECORDS': 'flame_paralympics_2016',
 			'RIO2016': 'Paralympics_Rio2016___final',
 			'リオ2016': 'Rio2016',
 			'ROADTORIO': 'Rio2016',
-			'OPENINGCEREMONY': 'Opening_Ceremony_Paralympics_2016',
-			'開会式': 'Opening_Ceremony_Paralympics_2016',
-			'CLOSINGCEREMONY': 'ClosingCeremony',
+			'2018平昌': 'PyeongChang_WO_18',
+			'PYEONGCHANG2018': 'PyeongChang_WO_18',
+			// ---- 式典 ----
+			'OPENINGCEREMONY': 'openingceremony_WO_18_v2',
+			'開会式': 'openingceremony_WO_18_v2',
+			'CLOSINGCEREMONY': 'closingceremony_WO_18',
+			'閉会式': 'closingceremony_WO_18',
+			// ---- 夏季大会競技 ----
 			'ARCHERY': 'Archery',
 			'アーチェリー': 'Archery',
 			'ARTISTICGYMNASTICS': 'ArtisticGymnastics',
@@ -389,6 +403,36 @@ registerPlugin({
 			'WHEELCHAIRRUGBY': 'Wheelchair_Rugby_Fixed',
 			'WRESTLING': 'Wrestling',
 			'レスリング': 'Wrestling',
+			// ---- 冬季大会競技 ----
+			'ALPINESKIING': 'AlpineSkiing_WO_18',
+			'アルペンスキー': 'AlpineSkiing_WO_18',
+			'BIATHLON': 'Biathlon_IO_18',
+			'バイアスロン': 'Biathlon_IO_18',
+			'CROSSCOUNTRYSKIING': 'CrossCountrySkiing_IW_2018',
+			'クロスカントリースキー': 'CrossCountrySkiing_IW_2018',
+			'CURLING': 'curling_IW_18',
+			'カーリング': 'curling_IW_18',
+			'FIGURESKATING': 'figureskating_IW_18',
+			'フィギュアスケート': 'figureskating_IW_18',
+			'FREESTYLESKIING': 'FreestyleSkiing_IW_18',
+			'フリースタイルスキー': 'FreestyleSkiing_IW_18',
+			'ICEHOCKEY': 'hockey_WO_18_v2',
+			'アイスホッケー': 'hockey_WO_18_v2',
+			'LUGE': 'luge_WO_18',
+			'リュージュ': 'luge_WO_18',
+			'NORDICCOMBINED': 'nordic_WO_18',
+			'ノルディック複合': 'nordic_WO_18',
+			'SHORTTRACKSKATING': 'shorttrackski_WO_18',
+			'ショートトラックスピードスケート': 'shorttrackski_WO_18',
+			'SKELETON': 'skeleton_WO_18',
+			'スケルトン': 'skeleton_WO_18',
+			'SKIJUMPING': 'skijump_WO_18',
+			'スキージャンプ': 'skijump_WO_18',
+			'SNOWBOARD': 'snowboard_WO_18',
+			'スノーボード': 'snowboard_WO_18',
+			'SPEEDSKATING': 'speedskate_WO_18',
+			'スピードスケート': 'speedskate_WO_18',
+			// ---- その他 ----
 			'とと姉ちゃん': 'NHKMorningDrama',
 			'高校野球': 'JapanHighSchoolBaseballEmoji',
 			'KHL': 'KHL_Season_Start',
