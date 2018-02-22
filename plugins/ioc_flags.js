@@ -292,6 +292,7 @@ registerPlugin({
 			'ROT': 'Refugee_Olympic_Athletes',
 			'REFUGEEOLYMPICTEAMS': 'Refugee_2',
 			'COR': 'COR_wo_2018',
+			'OAR': 'oar_wo_2018', // Olympic Athletes from Russia
 			// ---- オリンピック/パラリンピック ----
 			'OLYMPICGAMES': 'Olympics',
 			'OLYMPICS': 'olympics_WO_18_v2',
