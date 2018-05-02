@@ -10,7 +10,7 @@
 			replace: "$&/", type: "theta"},
 		{search: /^https?:\/\/(?:\w+\.)?pinterest\.com\/pin\/\d+/,
 			replace: "$&/", type: "pin"},
-		{search: /^https?:\/\/(?:(?:www|m)\.youtube\.com\/watch\?.*v=|youtu\.be\/)([\w\-]+).*$/,
+		{search: /^https?:\/\/(?:(?:www\.|m\.|)youtube\.com\/watch\?.*v=|youtu\.be\/)([\w\-]+).*$/,
 			replace: "http://www.youtube.com/embed/$1", type: "iframe"},
 		{search: /^(https?:\/\/(?:i\.)?gyazo\.com\/[0-9a-f]+)(?:\.png)?$/,
 			replace: "$1.png", type: "iframe"},
