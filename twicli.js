@@ -36,7 +36,8 @@ function setupOAuthArgs(args) {
 function setupOAuthURL(url, post, post_agent, multipart) {
 	if (url.indexOf(twitterAPI) != 0) return url;
 	var media_upload = url.indexOf('update_with_media.json') >= 0 && post;
-	if (media_upload) multipart = true;
+	var json_post = url.indexOf('?_body=') >= 0 && post;
+	if (media_upload || json_post) multipart = true;
 	var nosign = [];
 	url = url.split("?");
 	if (post && !(media_upload && post_agent) && url[1] && url[1].match(/(^|&)((?:status)=[^&]+)/) && RegExp.$2.indexOf('%2A') >= 0 || RegExp.$2.indexOf('*') >= 0) {
@@ -45,7 +46,7 @@ function setupOAuthURL(url, post, post_agent, multipart) {
 		url[0] += "?" + RegExp.$2.replace(/\*/g, '%2A');
 	}
 	setupOAuthArgs(url[1]);
-	if (multipart) {
+	if (multipart || json_post) {
 		var cs = document.request.childNodes;
 		for (var e = cs.length - 1; e >= 0; e--) {
 			if (cs[e].tagName == 'INPUT' && cs[e].name.indexOf('oauth') < 0 || cs[e] === $('api_args')) {
@@ -495,8 +496,6 @@ var update_ele2 = null;
 var reply_ele = null;
 var reply_ele2 = null;
 var direct_ele = null;
-var direct1 = null;
-var direct2 = null;
 // UI関連
 var user_pick1 = null;			// [⇔]で表示するユーザ名1
 var user_pick2 = null;			// [⇔]で表示するユーザ名2
@@ -532,6 +531,10 @@ var reset_timer = null;
 var last_update_time = null;
 var default_api_args = 'suppress_response_codes=true';
 var default_api_args_tl = default_api_args + '&include_entities=true&tweet_mode=extended';
+var user_cache = {};
+var user_cache_by_screen_name = {};
+var user_cache_fetch_list = [];
+var user_fetch_callback = null;
 
 function text(tw) {
 	return tw.extended_tweet && tw.extended_tweet.full_text || tw.full_text || tw.text;
@@ -684,11 +687,15 @@ function twFail() {
 
 function sendMessage(user, text) {
 	callPlugins("sendMessage", user, text);
-	enqueuePost(twitterAPI + "direct_messages/new.json?screen_name=" + user +
-		"&text=" + encodeURIComponent(text),
-		function(tw){ if (tw && tw.errors) error('', tw); resetFrm(); },
-		function(){ error(_('Twitter API error')); resetFrm(); },
-		false, true);
+	fetchUserCacheByScreenName(user, function() {
+		var user_id = user_cache_by_screen_name[user].id_str;
+		enqueuePost(twitterAPI + "direct_messages/events/new.json?_body={\"event\": " +
+					"{\"type\":\"message_create\",\"message_create\":{\"target\":{\"recipient_id\":" + user_id +
+					"\},\"message_data\":{\"text\":\"" + encodeURIComponent(text) + "\"}}}}",
+			function(tw){ if (tw && tw.errors) error('', tw); resetFrm(); },
+			function(){ error(_('Twitter API error')); resetFrm(); },
+			false, true);
+	});
 	return false;
 }
 
@@ -1029,7 +1036,7 @@ function deleteStatus(id) {
 		}
 	}
 	if (selected_menu.id == 'direct')
-		enqueuePost(twitterAPI + 'direct_messages/destroy.json?id=' + id, function(){}, function(){});
+		enqueuePost(twitterAPI + 'direct_messages/events/destroy.json?_method=delete&id=' + id, function(){}, function(){});
 	else
 		enqueuePost(twitterAPI + 'statuses/destroy/' + id + '.json', function(){}, function(){});
 	return false;
@@ -1306,46 +1313,77 @@ function twRelation(rel) {
 		$("profile").innerHTML += "<br><span id=\"following_you\" class=\"following_you\">" + _('$1 is following you!', rel.relationship.target.screen_name)+'</span>';
 	callPlugins("newUserRelationship", elem, rel);
 }
+// ユーザ情報キャッシュ
+function fetchUserCache(list) {
+	for (var i = 0; i < list.length; i++) {
+		if (!list[i] || user_cache[list[i]]) continue;
+		if (user_cache_fetch_list.indexOf(list[i]) >= 0) continue;
+		user_cache_fetch_list.push(list[i]);
+		xds.load(twitterAPI + 'users/show.json?user_id=' + list[i] + '&' +
+					default_api_args, cacheUserInfo, twFail);
+	}
+}
+function fetchUserCacheByScreenName(user, callback, args) {
+	if (user_cache_by_screen_name[user]) return callback.apply(this, args);
+	xds.load(twitterAPI + 'users/show.json?screen_name=' + user + '&' +
+				default_api_args, cacheUserInfo, twFail);
+	user_fetch_callback = [callback, args];
+}
+function cacheUserInfo(u) {
+	if (tw.errors) return error('', tw);
+	user_cache[u.id_str] = u;
+	user_cache_by_screen_name[u.screen_name] = u;
+	var idx = user_cache_fetch_list.indexOf(u.id_str);
+	if (idx >= 0) user_cache_fetch_list.splice(idx, 1);
+	if (user_cache_fetch_list.length == 0 && user_fetch_callback) {
+		user_fetch_callback[0].apply(this, user_fetch_callback[1]);
+		user_fetch_callback = null;
+	}
+}
+function invokeUserFetch(callback, args) {
+	if (user_cache_fetch_list.length == 0)
+		return callback.apply(this, args);
+	user_fetch_callback = [callback, args];
+}
 // ダイレクトメッセージ一覧の受信
-function twDirect1(tw) {
+function twDirect(tw) {
 	if (tw.errors) return error('', tw);
-	direct1 = tw;
-	if (direct2)
-		twDirectShow();
+	for (var i = 0; i < tw.events.length; i++) {
+		var e = tw.events[i];
+		if (!e.message_create) continue;
+		fetchUserCache([e.message_create.sender_id, e.message_create.target.recipient_id]);
+	};
+	invokeUserFetch(twDirectList, [tw]);
 }
-function twDirect2(tw) {
-	if (tw.errors) return error('', tw);
-	direct2 = tw;
-	if (direct1)
-		twDirectShow();
-}
-function twDirectShow() {
-	var direct = direct1.concat(direct2).sort(function(a,b){return b.id - a.id});
-	direct = direct.map(function(d){
-		if (d.recipient_screen_name == myname) {
-			d.user = d.sender;
+function twDirectList(tw) {
+	tw = tw.events.map(function(e){
+		if (!e.message_create || !e.message_create.message_data) return null;
+		var d = e.message_create.message_data;
+		if (e.message_create.sender_id != myid) {
+			d.user = user_cache[e.message_create.sender_id];
 			d.d_dir = 1;
 		} else {
-			d.user = d.recipient;
+			d.user = user_cache[e.message_create.target.recipient_id];
 			d.d_dir = 2;
 		}
+		d.id_str = d.id = e.id;
+		d.created_at = new Date(+e.created_timestamp);
 		return d;
 	});
-	twShow2(direct);
-	direct1 = direct2 = false;
+	twShow2(tw);
 }
 function checkDirect() {
-	direct_ele = xds.load_default(twitterAPI + 'direct_messages.json' +
-							'?' + default_api_args, twDirectCheck, direct_ele);
+	direct_ele = xds.load_default(twitterAPI + 'direct_messages/events/list.json?' +
+								default_api_args, twDirectCheck, direct_ele);
 	update_direct_counter = 2;
 }
 function twDirectCheck(tw) {
 	if (tw.errors) return error('', tw);
-	if (!tw || tw.length == 0) return false;
-	var id = tw[0].id_str || tw[0].id;
+	if (!tw || tw.events.length == 0) return false;
+	var id = tw.events[0].id;
 	if (last_direct_id && last_direct_id != id) {
 		$("direct").className += " new";
-		callPlugins('notifyDM', tw, last_direct_id);
+		callPlugins('notifyDM', tw.events, last_direct_id);
 	}
 	last_direct_id = id;
 }
@@ -1822,10 +1860,8 @@ function switchFollower() {
 }
 function switchDirect() {
 	switchTo("direct");
-	xds.load_for_tab(twitterAPI + 'direct_messages.json' +
-						'?&full_text=true&' + default_api_args, twDirect1);
-	xds.load_for_tab(twitterAPI + 'direct_messages/sent.json' +
-						'?&full_text=true&' + default_api_args, twDirect2);
+	xds.load_for_tab(twitterAPI + 'direct_messages/events/list.json' +
+						'?&count=50&' + default_api_args, twDirect);
 }
 function switchMisc() {
 	switchTo("misc");

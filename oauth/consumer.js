@@ -9,6 +9,8 @@ function signForm(form, etc) {
                   , method: form.method
                   , parameters: []
                   };
+    if (form._method)
+        message.method = form._method.value;
     for (var e = 0; e < form.elements.length; ++e) {
         var input = form.elements[e];
         if (input.name != null && input.name != "" && input.value != null
