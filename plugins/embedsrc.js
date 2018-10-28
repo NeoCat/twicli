@@ -111,7 +111,7 @@ function dispEmbedSrc(url, link, type) {
 			break;
 		case 'theta':
 			createIframe({
-				document: '<div class="ricoh-theta-spherical-image" ><a href="' + url
+				document: '<div class="ricoh-theta-spherical-image" ><a href="' + url.split('?')[0]
 					+ '" target="_blank"></a></div><scr'
 					+ 'ipt async src="https://theta360.com/widgets.js" charset="utf-8"></scr'
 					+ 'ipt>'
