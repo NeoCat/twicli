@@ -1,6 +1,6 @@
 if (location.protocol == 'http:' && location.host == 'twicli.neocat.jp') {
   function move2https() {
-    if (!confirm('OKをクリックすると、現在の設定・Twitter認証情報をHTTPS版にコピーし、移動します。\n\n移動後に必要に応じてブックマーク等のURLを http:// から https:// に変更してください。')) return;
+    if (!confirm('OKをクリックすると、現在の設定・Twitter認証情報をHTTPS版にコピーし、移動します。\n\n(Safariでは移行時は設定で「サイト越えトラッキングを防ぐ」をOFFにしてください。)\n\n移動後に必要に応じてブックマーク等のURLを http:// から https:// に変更してください。')) return;
 
       var ifr = document.createElement('iframe');
       ifr.src = 'https://twicli.neocat.jp/config_receive.html';
