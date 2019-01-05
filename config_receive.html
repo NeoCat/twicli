@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="utf-8">
 <script>
   window.addEventListener('message', function(event) {
     if (event.origin != 'http://twicli.neocat.jp') {
@@ -11,6 +12,7 @@
     for (var key in data)
       if (key.match(/^twicli_/))
 	localStorage[key] = data[key];
+    alert("設定のコピーが完了しました。");
   }, false);
 </script>
 </head>
