@@ -1,4 +1,4 @@
-if (location.protocol == 'http:') {
+if (location.protocol == 'http:' && location.host == 'twicli.neocat.jp') {
   function move2https() {
     if (!confirm('OKをクリックすると、現在の設定・Twitter認証情報をHTTPS版にコピーし、移動します。')) return;
 
