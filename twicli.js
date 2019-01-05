@@ -1126,7 +1126,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 			'onClick="fav(this,\'' + id + '\')"' + (pid ? ' id="fav-'+eid+'"' : '') + '><span></span></div>')+
 		 (!no_name || (!display_as_rt && rt) ?
 			//ユーザアイコン
-			'<img class="uicon" src="' + t.user.profile_image_url + '" title="' + (t.user.description ? t.user.description.replace(/\"/g,'&quot;') :'') + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false">' + (t.user.url ? '</a>' : '') +
+			'<img class="uicon" src="' + t.user.profile_image_url_https + '" title="' + (t.user.description ? t.user.description.replace(/\"/g,'&quot;') :'') + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false">' + (t.user.url ? '</a>' : '') +
 			//名前
 			'<a href="' + twitterURL + un + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false"><span class="uid">@' + un + '</span>' +
 			 /*プロフィールの名前*/ '<span class="uname' + (t.user.name!=un ? '' : '_same') + '"><span class="uname_paren">(</span>'+insertPDF(t.user.name)+'<span class="uname_paren2">)</span></span></a>'
@@ -1162,7 +1162,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 		//Retweet情報
 		(rt_cnt>0 || rt ?
 			'<span id="rtinfo-'+eid+'" class="rtinfo'+(display_as_rt?' rtinfo-alt':'')+'">' +
-				(rt && !display_as_rt ? 'by <a href="'+twitterURL+tw.user.screen_name+'" onclick="switchUserTL(this.parentNode.parentNode, true);return false"><img src="'+tw.user.profile_image_url+'" alt="@'+tw.user.screen_name+'" class="rtuicon">@'+tw.user.screen_name+'</a>'+(rt_cnt>1?' & '+(rt_cnt-1):'') : rt_cnt) +
+				(rt && !display_as_rt ? 'by <a href="'+twitterURL+tw.user.screen_name+'" onclick="switchUserTL(this.parentNode.parentNode, true);return false"><img src="'+tw.user.profile_image_url_https+'" alt="@'+tw.user.screen_name+'" class="rtuicon">@'+tw.user.screen_name+'</a>'+(rt_cnt>1?' & '+(rt_cnt-1):'') : rt_cnt) +
 			'</span>' : '') +
 		//Favorited情報
 		(fav_cnt > 0 ? '<span id="favinfo-'+eid+'" class="favinfo">'+fav_cnt+'</span>' : '') +
@@ -1173,8 +1173,8 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 		//クライアント
 		(t.source ? '<span class="separator"> / </span><span class="source">' + t.source.replace(/<a /,'<a target="twitter" onclick="return link(this)"') + '</span>' : '') + '</span>' +
 		//Geolocation
-		(rs.geo && rs.geo.type == 'Point' ? '<a class="button geomap" id="geomap-' + eid + '" target="_blank" href="http://maps.google.com?q=' + rs.geo.coordinates.join(',') + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.geo.coordinates.join(',') + '"></a>' : '') +
-		(!rs.geo && rs.place ? '<a class="button geomap" id="geomap-' + eid + '" target="_blank" href="http://maps.google.com?q=' + encodeURIComponent(rs.place.full_name) + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.place.full_name.replace(/\'/g,"&apos;") + '"></a>' : '') +
+		(rs.geo && rs.geo.type == 'Point' ? '<a class="button geomap" id="geomap-' + eid + '" target="_blank" href="https://maps.google.com?q=' + rs.geo.coordinates.join(',') + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.geo.coordinates.join(',') + '"></a>' : '') +
+		(!rs.geo && rs.place ? '<a class="button geomap" id="geomap-' + eid + '" target="_blank" href="https://maps.google.com?q=' + encodeURIComponent(rs.place.full_name) + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.place.full_name.replace(/\'/g,"&apos;") + '"></a>' : '') +
 		//返信先を設定
 		' <a class="button reply" href="javascript:replyTo(\'' + un + "','" + id2 + '\',\'' + eid + '\')"><img src="images/reply.png" alt="↩" width="14" height="14"></a>' +
 		//返信元へのリンク
@@ -1185,7 +1185,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 }
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
-	return '<a class="uicona" target="twitter" href="' + user.profile_image_url.replace('_normal', '') +'"><img class="uicon2" src="' + user.profile_image_url.replace('normal.','reasonably_small.') + '" onerror="if(this.src!=\''+user.profile_image_url+'\')this.src=\''+user.profile_image_url+'\'"></a><div id="profile"><div>' +
+	return '<a class="uicona" target="twitter" href="' + user.profile_image_url_https.replace('_normal', '') +'"><img class="uicon2" src="' + user.profile_image_url_https.replace('normal.','reasonably_small.') + '" onerror="if(this.src!=\''+user.profile_image_url_https+'\')this.src=\''+user.profile_image_url_https+'\'"></a><div id="profile"><div>' +
 			(user.verified ? '<img class="verified" alt="verified" src="images/verified.png">' : '') +
 			(user.protected ? '<img class="lock" alt="lock" src="images/icon_lock.png">' : '') +
 			'<b>@' + user.screen_name + '</b> / <b>' + user.name + '</b></div>' +
@@ -1288,7 +1288,7 @@ function twUserInfo(user) {
 		grad.id = "user_info_grad";
 		$('user_info_b').insertBefore(grad, elem);
 		elem.className = 'user_header';
-		hdr.style.backgroundImage = user.profile_banner_url ? 'url('+user.profile_banner_url+'/web)' : 'url(https://si0.twimg.com/a/1355267558/t1/img/grey_header_web.png)';
+		hdr.style.backgroundImage = user.profile_banner_url_https ? 'url('+user.profile_banner_url_https+'/web)' : 'url(https://si0.twimg.com/a/1355267558/t1/img/grey_header_web.png)';
 		var bg = user.profile_background_color;
 		$('user_info_b').style.backgroundColor = "#"+bg;
 		applyLinearGrad($('user_info_grad'), 'top', '000000', 0.55);

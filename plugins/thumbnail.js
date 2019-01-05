@@ -14,9 +14,9 @@ registerPlugin(thumbnail_plugin = {
 			for (var i = 0; i < entities.media.length; i++) {
 				if (['photo', 'animated_gif', 'video'].indexOf(entities.media[i].type) >= 0) {
 					addThumbnail(elem,
-						entities.media[i].media_url + ":thumb",
+						entities.media[i].media_url_https + ":thumb",
 							entities.media[i].type == 'photo' && thumbnail_twitter_photo_link == 'original' ?
-							entities.media[i].media_url + ":orig" :
+							entities.media[i].media_url_https + ":orig" :
 							entities.media[i].expanded_url);
 				}
 			}
@@ -90,7 +90,7 @@ registerPlugin(thumbnail_plugin = {
 		}
 		else if (url.match(/^https?:\/\/(?:(?:www\.|m\.|)youtube\.com\/watch\?.*v=|youtu\.be\/)([\w\-]+)/)) {
 			var id = RegExp.$1;
-			addThumbnail(elem, 'http://i.ytimg.com/vi/' + id + '/default.jpg', url);
+			addThumbnail(elem, 'https://i.ytimg.com/vi/' + id + '/default.jpg', url);
 		}
 		else if (url.match(/^http:\/\/(?:www\.nicovideo\.jp\/watch|nico\.ms|seiga\.nicovideo\.jp\/seiga)\/([a-z][a-z])(\d+)$/)) {
 			if (RegExp.$1 == "lv" || RegExp.$1 == "nw") return; // live/news thumbnail is not supported

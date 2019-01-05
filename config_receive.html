@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+  window.addEventListener('message', function(event) {
+    if (event.origin != 'http://twicli.neocat.jp') {
+      console.log("invalid origin: " + event.origin);
+      return;
+    }
+    var data = event.data;
+    for (var key in data)
+      if (key.match(/^twicli_/))
+	localStorage[key] = data[key];
+  }, false);
+</script>
+</head>
+<body>
+</body>
+</html>
