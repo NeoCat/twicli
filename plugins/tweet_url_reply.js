@@ -64,7 +64,7 @@ function dispImageFromLink(url, e, type) {
 	  Array.prototype.map.call(media, function(x){
             return x.video_info ?
               Array.prototype.map.call(x.video_info.variants, function(y){return '[\'' + y.content_type + '\',\'' + y.url + '\']'}) :
-              '\'' + x.media_url + ':medium\''
+              '\'' + x.media_url_https + ':medium\''
           }).join(',') +
          '], this, \'' + media[0].type +'\'); return false;';
       }
