@@ -64,9 +64,6 @@ registerPlugin(thumbnail_plugin = {
 						addThumbnail(elem, p, _url);
 					});
 		}
-		else if (url.match(/^http:\/\/yfrog\.com\/\w+$/)) {
-			addThumbnail(elem, url + '.th.jpg', url);
-		}
 		else if (flickr_id = flickrPhotoID(url)) {
 			var _url = url;
 			xds.load('https://www.flickr.com/services/rest?method=flickr.photos.getInfo'+
@@ -78,9 +75,6 @@ registerPlugin(thumbnail_plugin = {
 									p.id+'_'+p.secret+'_s.jpg', _url);
 					},
 					null, 1, 'jsoncallback');
-		}
-		else if (url.match(/^(http:\/\/lockerz.com\/s\/\d+|http:\/\/plixi.com\/p\/\d+)/)) {
-			addThumbnail(elem, 'http://api.plixi.com/api/TPAPI.svc/imagefromurl?size=thumbnail&url='+url, url);
 		}
 		else if (url.match(/^http:\/\/img.ly\/(\w+)/)) {
 			addThumbnail(elem, 'http://img.ly/show/thumb/'+RegExp.$1, url);
@@ -103,9 +97,6 @@ registerPlugin(thumbnail_plugin = {
 		}
 		else if (url.match(/^(https?:\/\/(?:www\.)?(?:instagr\.am|instagram\.com)\/p\/[\w\-]+)\/?(?:\??|$)/)) {
 			addThumbnail(elem, RegExp.$1+'/media/?size=t', url);
-		}
-		else if (url.match(/^(http:\/\/picplz.com\/\w+)/)) {
-			addThumbnail(elem, url+'/thumb/150', url);
 		}
 		else if (url.match(/^http:\/\/photozou\.jp\/photo\/show\/\d+\/(\d+)/)) {
 			addThumbnail(elem, "http://art"+Math.floor(Math.random()*40+1)+".photozou.jp/bin/photo/"+
