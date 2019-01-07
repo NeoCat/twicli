@@ -1289,7 +1289,7 @@ function twUserInfo(user) {
 		grad.id = "user_info_grad";
 		$('user_info_b').insertBefore(grad, elem);
 		elem.className = 'user_header';
-		hdr.style.backgroundImage = user.profile_banner_url_https ? 'url('+user.profile_banner_url_https+'/web)' : 'url(https://si0.twimg.com/a/1355267558/t1/img/grey_header_web.png)';
+		hdr.style.backgroundImage = user.profile_banner_url ? 'url('+user.profile_banner_url+'/web)' : 'url(https://si0.twimg.com/a/1355267558/t1/img/grey_header_web.png)';
 		var bg = user.profile_background_color;
 		$('user_info_b').style.backgroundColor = "#"+bg;
 		applyLinearGrad($('user_info_grad'), 'top', '000000', 0.55);
