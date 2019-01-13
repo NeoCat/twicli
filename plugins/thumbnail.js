@@ -105,7 +105,7 @@ registerPlugin(thumbnail_plugin = {
 		else if (url.match(/^(https?:\/\/www\.slideshare\.net\/)(?!(?:mobile\/)?slideshow)(?:mobile\/)?([-_0-9a-zA-Z]+\/[-_0-9a-zA-Z]+)/)) {
 			xds.load("//www.slideshare.net/api/oembed/2?url=" + RegExp.$1 + RegExp.$2 + "&format=jsonp",
 					function(x) {
-						addThumbnail(elem, (x.thumbnail.substr(0,2) == '//' ? 'http:' : '' )+ x.thumbnail, url);
+						addThumbnail(elem, x.thumbnail, url);
 					});
 		}
 		else if (url.match(/^http:\/\/p\.twipple\.jp\/(\w+)/)) {
