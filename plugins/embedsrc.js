@@ -3,7 +3,7 @@
 		{search: /^(https?:\/\/www\.slideshare\.net\/)(?:mobile\/)?(slideshow\/embed_code\/(?:key\/)?[-_0-9a-zA-Z.]+)/,
 			replace: "$1$2", type: "iframe"},
 		{search: /^(https?:\/\/www\.slideshare\.net\/)(?:mobile\/)?([-_0-9a-zA-Z.]+\/[-_0-9a-zA-Z.\/]+)/,
-			replace: "http://www.slideshare.net/api/oembed/2?url=$1$2&format=jsonp", type: "slideshare"},
+			replace: "//www.slideshare.net/api/oembed/2?url=$1$2&format=jsonp", type: "slideshare"},
 		{search: /^(https?:\/\/[\w\-]+\.tumblr\.com\/)post\/(\d+)(?:\/.*)/,
 			replace: "$1api/read/json?id=$2", type: "tumblr"},
 		{search: /^https?:\/\/(?:\w+\.)?theta360\.com\/(?:[sm]\/\w+|spheres\/samples\/[a-z0-9-]+)/,
@@ -11,12 +11,12 @@
 		{search: /^https?:\/\/(?:\w+\.)?pinterest\.com\/pin\/\d+/,
 			replace: "$&/", type: "pin"},
 		{search: /^https?:\/\/(?:(?:www\.|m\.|)youtube\.com\/watch\?.*v=|youtu\.be\/)([\w\-]+).*$/,
-			replace: "http://www.youtube.com/embed/$1", type: "iframe"},
+			replace: "//www.youtube.com/embed/$1", type: "iframe"},
 		{search: /^(https?:\/\/(?:i\.)?gyazo\.com\/[0-9a-f]+)(?:\.png)?$/,
 			replace: "$1.png", type: "iframe"},
 		{search: /^https?:\/\/gist\.github\.com\/([A-Za-z0-9-]+\/)?([A-Za-z0-9-]+)(?:\.txt)?$/, replace: "https://gist.github.com/$1$2.js", type: "script"},
 		{search: /^https?:\/\/raw\.github\.com\/gist\/(\d+)(?:.*)$/, replace: "https://gist.github.com/$1.js", type: "script"},
-		{search: /https?:\/\/(?:nico\.ms|www\.nicovideo\.jp\/watch)\/((?!lv)(?!nw)(?!im)[a-z]{2}\d+)/, replace: "http://ext.nicovideo.jp/thumb_watch/$1", type: "script"},
+		{search: /https?:\/\/(?:nico\.ms|www\.nicovideo\.jp\/watch)\/((?!lv)(?!nw)(?!im)[a-z]{2}\d+)/, replace: "//ext.nicovideo.jp/thumb_watch/$1", type: "script"},
 		{search: /^https?:\/\/vine\.co\/v\/(\w+)$/, replace: "https://vine.co/v/$1/embed/simple", type: "iframe"},
 		{search: /^https?:\/\/vimeo\.com\/(?:m\/)?(\d+)$/, replace: "https://player.vimeo.com/video/$1", type: "iframe"}
 	];
@@ -119,7 +119,7 @@ function dispEmbedSrc(url, link, type) {
 			break;
 		case 'slideshare':
 			xds.load(url, function(x) {
-				dispEmbedSrc("http:\/\/www\.slideshare\.net\/slideshow\/embed_code\/"
+				dispEmbedSrc("\/\/www\.slideshare\.net\/slideshow\/embed_code\/"
 					+ x.slideshow_id, link, 'iframe');
 			});
 			break;
