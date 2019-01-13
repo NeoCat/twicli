@@ -27,7 +27,7 @@ registerPlugin({
 
 function translateStatus(id) {
 	window.translateTarget = $(id);
-	xds.load_for_tab("http://api.microsofttranslator.com/V2/Ajax.svc/Translate?"+
+	xds.load_for_tab("//api.microsofttranslator.com/V2/Ajax.svc/Translate?"+
 				"&appId=73B027BB51D74FB461C097BCCF841DB5678FDBB3" +
 				"&text=" + encodeURIComponent(text($(id).tw)) +
 				"&to="+translateLang, translateResult, 'oncomplete');
