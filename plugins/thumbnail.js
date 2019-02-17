@@ -95,8 +95,8 @@ registerPlugin(thumbnail_plugin = {
 			else
 				addThumbnail(elem, 'http://tn-skr' + host + '.smilevideo.jp/smile?i=' + id, url);
 		}
-		else if (url.match(/^(https?:\/\/(?:www\.)?(?:instagr\.am|instagram\.com)\/p\/[\w\-]+)\/?(?:\??|$)/)) {
-			addThumbnail(elem, RegExp.$1+'/media/?size=t', url);
+		else if (url.match(/^(https?:\/\/(?:www\.)?(?:instagr\.am|instagram\.com))(?:\/[\w]{2,30})?(\/p\/[\w\-]+)\/?(?:\??|$)/)) {
+			addThumbnail(elem, RegExp.$1 + RegExp.$2 +'/media/?size=t', url);
 		}
 		else if (url.match(/^http:\/\/photozou\.jp\/photo\/show\/\d+\/(\d+)/)) {
 			addThumbnail(elem, "http://art"+Math.floor(Math.random()*40+1)+".photozou.jp/bin/photo/"+
