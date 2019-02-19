@@ -89,7 +89,12 @@ function twsSearchShow(res, update) {
 	if (tmp) tmp.parentNode.removeChild(tmp);
 	if (res.errors) { error('', res.errors); return; }
 	if (!update) tws_page++;
-	var tw = res.statuses;
+	var tw = [];
+	for (var i = 0; i < res.statuses.length; i++) {
+		if (res.statuses[i].user.id_str in tws_blocked_users) continue;
+		if (res.statuses[i].user.id_str in tws_muted_users) continue;
+		tw.push(res.statuses[i]);
+	}
 	if (!update && tws_page == 1)
 		$('tw2c').innerHTML = '';
 	if (tw.length == 0) return;
@@ -104,6 +109,18 @@ function twsSearchShow(res, update) {
 }
 
 registerPlugin({
+	auth: function() {
+		tws_blocked_users = {};
+		tws_muted_users = {};
+		xds.load_default(twitterAPI + 'blocks/list.json?skip_status=1', function(result) {
+			for (var i = 0; i < result.users.length; i++)
+				tws_blocked_users[result.users[i].id_str] = result.users[i];
+		});
+		xds.load_default(twitterAPI + 'mutes/users/list.json?skip_status=1', function(result) {
+			for (var i = 0; i < result.users.length; i++)
+				tws_muted_users[result.users[i].id_str] = result.users[i];
+		});
+	},
 	switchTo: function(m) {
 		if (!tws_update_timer) return;
 		clearInterval(tws_update_timer);
