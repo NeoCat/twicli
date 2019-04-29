@@ -491,8 +491,10 @@ registerPlugin({
 			'世界ペンギンの日': 'WorldPenguinDay_2019',
 			'WORLODPENGUINDAY': 'WorldPenguinDay_2019',
 			// ---- 年号 ----
+			'平成を語ろう': 'NewEra_2019',
 			'平成最後': 'Heisei_2018_v2',
 			'令和': 'Reiwa_NewEra_2019',
+			'ハロー令和': 'Reiwa_NewEra_2019',
 			// ---- その他 ----
 			'とと姉ちゃん': 'NHKMorningDrama',
 			'高校野球': 'JapanHighSchoolBaseballEmoji',
