@@ -487,6 +487,7 @@ registerPlugin({
 			'満開': 'CherryBlossom_Sakura_2019',
 			'CHERRYBLOSSOM': 'CherryBlossom_Sakura_2019',
 			'サクラサク': 'CherryBlossom_Sakura_2019',
+			'木之本桜': 'CherryBlossom_Sakura_2019', // https://twitter.com/TwitterJP/status/1110195453327335424
 			// [4月25日は「#世界ペンギンの日」](https://blog.twitter.com/ja_jp/topics/events/2019/Worldpenguinday.html)
 			'世界ペンギンの日': 'WorldPenguinDay_2019',
 			'WORLODPENGUINDAY': 'WorldPenguinDay_2019',
