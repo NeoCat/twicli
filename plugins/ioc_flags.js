@@ -490,7 +490,7 @@ registerPlugin({
 			'木之本桜': 'CherryBlossom_Sakura_2019', // https://twitter.com/TwitterJP/status/1110195453327335424
 			// [4月25日は「#世界ペンギンの日」](https://blog.twitter.com/ja_jp/topics/events/2019/Worldpenguinday.html)
 			'世界ペンギンの日': 'WorldPenguinDay_2019',
-			'WORLODPENGUINDAY': 'WorldPenguinDay_2019',
+			'WORLDPENGUINDAY': 'WorldPenguinDay_2019',
 			// [#平成を語ろうハロー令和](https://blog.twitter.com/ja_jp/topics/events/2019/Hello_Reiwa.html)
 			// [Twitterで平成を振り返ろう](https://blog.twitter.com/ja_jp/topics/events/2019/letstalkHeisei_2019.html)
 			'新元号を考えてみた': 'NewEra_2019',
