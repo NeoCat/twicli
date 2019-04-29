@@ -469,6 +469,9 @@ registerPlugin({
 			'超夢': 'WBPikachu_Mewtwo',
 			'МЬЮТУ': 'WBPikachu_Mewtwo',
 			'DETECTIVEPIKACHU': 'WB_Pikachu_2018',
+			// ---- 年号 ----
+			'平成最後': 'Heisei_2018_v2',
+			'令和': 'Reiwa_NewEra_2019',
 			// ---- その他 ----
 			'とと姉ちゃん': 'NHKMorningDrama',
 			'高校野球': 'JapanHighSchoolBaseballEmoji',
