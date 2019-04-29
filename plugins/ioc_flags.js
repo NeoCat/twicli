@@ -492,6 +492,7 @@ registerPlugin({
 			'WORLODPENGUINDAY': 'WorldPenguinDay_2019',
 			// [#平成を語ろうハロー令和](https://blog.twitter.com/ja_jp/topics/events/2019/Hello_Reiwa.html)
 			// [Twitterで平成を振り返ろう](https://blog.twitter.com/ja_jp/topics/events/2019/letstalkHeisei_2019.html)
+			'新元号を考えてみた': 'NewEra_2019',
 			'平成を語ろう': 'NewEra_2019',
 			'平成最後': 'Heisei_2018_v2',
 			'令和': 'Reiwa_NewEra_2019',
