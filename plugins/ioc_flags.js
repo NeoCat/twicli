@@ -496,6 +496,8 @@ registerPlugin({
 			'令和': 'Reiwa_NewEra_2019',
 			'ハロー令和': 'Reiwa_NewEra_2019',
 			// ---- その他 ----
+			'アベンジャーズ': 'Avengers_Endgame_2019',
+			'AVENGERS': 'Avengers_Endgame_2019',
 			'とと姉ちゃん': 'NHKMorningDrama',
 			'高校野球': 'JapanHighSchoolBaseballEmoji',
 			'KHL': 'KHL_Season_Start',
