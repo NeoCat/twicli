@@ -469,7 +469,7 @@ registerPlugin({
 			'超夢': 'WBPikachu_Mewtwo',
 			'МЬЮТУ': 'WBPikachu_Mewtwo',
 			'DETECTIVEPIKACHU': 'WB_Pikachu_2018',
-			// ---- さくらの日 ----
+			// [3月27日は「#さくらの日」](https://blog.twitter.com/ja_jp/topics/events/2019/sakura_day2019.html)
 			'さくらの日': 'CherryBlossom_Sakura_2019',
 			'さくら': 'CherryBlossom_Sakura_2019',
 			'花見': 'CherryBlossom_Sakura_2019',
@@ -487,10 +487,11 @@ registerPlugin({
 			'満開': 'CherryBlossom_Sakura_2019',
 			'CHERRYBLOSSOM': 'CherryBlossom_Sakura_2019',
 			'サクラサク': 'CherryBlossom_Sakura_2019',
-			// ---- 世界ペンギンの日 ----
+			// [4月25日は「#世界ペンギンの日」](https://blog.twitter.com/ja_jp/topics/events/2019/Worldpenguinday.html)
 			'世界ペンギンの日': 'WorldPenguinDay_2019',
 			'WORLODPENGUINDAY': 'WorldPenguinDay_2019',
-			// ---- 年号 ----
+			// [#平成を語ろうハロー令和](https://blog.twitter.com/ja_jp/topics/events/2019/Hello_Reiwa.html)
+			// [Twitterで平成を振り返ろう](https://blog.twitter.com/ja_jp/topics/events/2019/letstalkHeisei_2019.html)
 			'平成を語ろう': 'NewEra_2019',
 			'平成最後': 'Heisei_2018_v2',
 			'令和': 'Reiwa_NewEra_2019',
