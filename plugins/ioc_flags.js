@@ -487,6 +487,9 @@ registerPlugin({
 			'満開': 'CherryBlossom_Sakura_2019',
 			'CHERRYBLOSSOM': 'CherryBlossom_Sakura_2019',
 			'サクラサク': 'CherryBlossom_Sakura_2019',
+			// ---- 世界ペンギンの日 ----
+			'世界ペンギンの日': 'WorldPenguinDay_2019',
+			'WORLODPENGUINDAY': 'WorldPenguinDay_2019',
 			// ---- 年号 ----
 			'平成最後': 'Heisei_2018_v2',
 			'令和': 'Reiwa_NewEra_2019',
