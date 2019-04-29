@@ -508,36 +508,21 @@ registerPlugin({
 		};
 
 		// status
-		var elStatus;
-		for (var i = 0; i < el.children.length; i++) {
-			elStatus = el.children[i];
-			if (elStatus.className && elStatus.className.indexOf('status') > -1) break;
-		}
+		Array.prototype.forEach.call(el.querySelectorAll('.status > .hashtag'), function(elHashtag) {
+			var hashtag = elHashtag.innerHTML.match(/[#＃](\S+)/);
+			if (!hashtag || hashtag.length < 1) return;
 
-		var elHashtag, elFlag;
-		var index, countryCode;
-		for (var i = 0; i < elStatus.children.length; i++) {
-			// hashtag
-			elHashtag = elStatus.children[i];
-			if (!elHashtag.className || elHashtag.className.indexOf('hashtag') < 0) continue;
-
-			// country-code
-			countryCode = elHashtag.innerHTML.match(/[#＃](\S+)/);
-			if (!countryCode || countryCode.length < 1) continue;
-
-			// Generate flag
-			index = countryCode[1].toUpperCase();
-			elFlag = undefined;
+			var elEmoji, index = hashtag[1].toUpperCase();
 			if (countryFlags[index]) {
-				elFlag = createFlagElement(twemoji.parse(countryFlags[index].slice(2).map(function(s) {
+				elEmoji = createFlagElement(twemoji.parse(countryFlags[index].slice(2).map(function(s) {
 					return twemoji.convert.fromCodePoint(s);
 				}).join('')));
 			} else if (organization[index]) {
-				elFlag = createFlagElement(getFlagImageHTML(organization[index]));
+				elEmoji = createFlagElement(getFlagImageHTML(organization[index]));
 			}
 
-			elFlag && elStatus.insertBefore(elFlag, elHashtag.nextSibling);
-		}
+			elEmoji && elHashtag.parentNode.insertBefore(elEmoji, elHashtag.nextSibling);
+		});
 
 		function getFlagImageHTML(iconName) {
 			return [
