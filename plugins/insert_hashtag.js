@@ -19,7 +19,7 @@
 
 		// Avoid duplicated hashtags
 		post: function(str) {
-			var hashtag_regexp = /([#＃][\w々ぁ-ゖァ-ヺーㄱ-ㆅ㐀-\u4DBF一-\u9FFF가-\uD7FF\uF900-\uFAFF０-９Ａ-Ｚａ-ｚｦ-ﾟ]+)/g;
+			var hashtag_regexp = new RegExp(hashtag_pattern, 'g');
 			var hashtags = str.match(hashtag_regexp);
 			var footers = footer.match(hashtag_regexp);
 			if (!hashtags || !footers) return;
