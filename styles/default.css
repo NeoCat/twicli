@@ -34,7 +34,7 @@ label, button, input[type="submit"], input[type="button"], input[type="image"], 
 #tw2 { background-color: #f8f8f8; display: none; min-height: 448px; }
 #tw > div { border-bottom: 1px solid #777; }
 .tw-parent > div > div { padding: 1px; border-bottom: 1px solid #999; }
-.tw-parent > div > div:after, .quoted > .status:after { content: ""; display: block; clear: both; }
+.tw-parent > div > div:after, .quoted > .status:after, #reps > div:after { content: ""; display: block; clear: both; }
 .tw-parent.filtered > div > div { display: none; }
 .tw-parent.filtered > div > div.filter-match { display: block; }
 .uname_same { display: none; }
