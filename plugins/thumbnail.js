@@ -25,7 +25,7 @@ registerPlugin(thumbnail_plugin = {
 		addThumbnailForEntities(ent(tw), elem);
 		tw.quoted_status && addThumbnailForEntities(ent(tw.quoted_status), elem.querySelector('.quoted') || elem);
 
-		Array.prototype.forEach.call(elem.querySelectorAll('.status > a'), function(a) {
+		Array.prototype.forEach.call(elem.querySelectorAll('.status > a.link'), function(a) {
 			this.replaceUrl(a.parentNode.parentNode, a, a.href);
 		}.bind(this));
 	},
