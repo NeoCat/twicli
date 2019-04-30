@@ -9,18 +9,22 @@ langResources['Original image'] = ['オリジナル画像'];
 registerPlugin(thumbnail_plugin = {
 	newMessageElement: function(elem, tw) {
 		tw = tw.retweeted_status || tw;
-		var entities = ent(tw);
-		if (entities && entities.media) {
-			for (var i = 0; i < entities.media.length; i++) {
-				if (['photo', 'animated_gif', 'video'].indexOf(entities.media[i].type) >= 0) {
-					addThumbnail(elem,
-						entities.media[i].media_url_https + ":thumb",
-							entities.media[i].type == 'photo' && thumbnail_twitter_photo_link == 'original' ?
-							entities.media[i].media_url_https + ":orig" :
-							entities.media[i].expanded_url);
+		var addThumbnailForEntities = function(entities, elem) {
+			if (entities && entities.media) {
+				for (var i = 0; i < entities.media.length; i++) {
+					if (['photo', 'animated_gif', 'video'].indexOf(entities.media[i].type) >= 0) {
+						addThumbnail(elem,
+							entities.media[i].media_url_https + ":thumb",
+								entities.media[i].type == 'photo' && thumbnail_twitter_photo_link == 'original' ?
+								entities.media[i].media_url_https + ":orig" :
+								entities.media[i].expanded_url);
+					}
 				}
 			}
-		}
+		};
+		addThumbnailForEntities(ent(tw), elem);
+		tw.quoted_status && addThumbnailForEntities(ent(tw.quoted_status), elem.querySelector('.quoted') || elem);
+
 		Array.prototype.forEach.call(elem.querySelectorAll('.status > a'), function(a) {
 			this.replaceUrl(a.parentNode.parentNode, a, a.href);
 		}.bind(this));
