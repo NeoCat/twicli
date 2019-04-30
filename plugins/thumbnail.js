@@ -21,16 +21,9 @@ registerPlugin(thumbnail_plugin = {
 				}
 			}
 		}
-		var status = null;
-		for(var i = 0; i < elem.childNodes.length; i++) {
-			status = elem.childNodes[i];
-			if (status.className && status.className.indexOf('status') >= 0)
-				break;
-		}
-		var links = status.getElementsByTagName('a');
-		for (var i = 0; i < links.length; i++) {
-			this.replaceUrl(elem, links[i], links[i].href);
-		}
+		Array.prototype.forEach.call(elem.querySelectorAll('.status > a'), function(a) {
+			this.replaceUrl(a.parentNode, a, a.href);
+		}.bind(this));
 	},
 	replaceUrl: function(elem, link, url) {
 		var flickr_id;
