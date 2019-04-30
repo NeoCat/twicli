@@ -36,7 +36,6 @@ label, button, input[type="submit"], input[type="button"], input[type="image"], 
 .tw-parent > div > div { padding: 1px; border-bottom: 1px solid #999; }
 .tw-parent.filtered > div > div { display: none; }
 .tw-parent.filtered > div > div.filter-match { display: block; }
-.dummy { border-bottom: 0; padding: 0; height: 0; clear: both; }
 .uname_same { display: none; }
 .uicon { float: left; width: 32px; height: 32px; padding-right: 1px; }
 .uicon2 { max-width: 96px; max-height: 96px; }
@@ -50,7 +49,7 @@ label, button, input[type="submit"], input[type="button"], input[type="image"], 
 .status a.link:hover { background-color: #ff9; }
 .quoted { font-size: smaller; border: solid 1px #888; margin: 4px 4px 4px 40px; padding: 2px; background-color: rgba(255,255,255,0.5); }
 .quoted .uicon { width: 16px; height: 16px; }
-.quoted > .status:after { content: ""; display: block; clear: both; }
+#tw2c > div > div:after, .quoted > .status:after { content: ""; display: block; clear: both; }
 .popular { background-image: url("../images/popular.png"); display: inline-block; width: 14px; height: 11px; margin: 0 .5ex; }
 .rtinfo, .favinfo { text-align: right; display: inline-block; color: #999; font-size: x-small; line-height: 1; margin: 0 .5ex; }
 .rtinfo:before, .favinfo:before { color: transparent; content: '.'; display: inline-block; margin: 0 .5ex; }
