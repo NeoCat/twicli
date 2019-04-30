@@ -497,6 +497,7 @@ registerPlugin({
 			'平成を語ろう': 'NewEra_2019',
 			'平成最後': 'Heisei_2018_v2',
 			'令和': 'Reiwa_NewEra_2019',
+			'令和元年': 'Reiwa_NewEra_2019',
 			'ハロー令和': 'Reiwa_NewEra_2019',
 			// ---- アベンジャーズ ----
 			'アベンジャーズ': 'Avengers_Endgame_2019',
