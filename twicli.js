@@ -1099,7 +1099,8 @@ function insertPDF(str) {
 	return str;
 }
 var hashtag_chars = 'A-Za-zÀ-ÖØ-öø-ÿĀ-ɏɓ-ɔɖ-ɗəɛɣɨɯɲʉʋʻ̀-ͯḀ-ỿЀ-ӿԀ-ԧⷠ-ⷿꙀ-֑ꚟ-ֿׁ-ׂׄ-ׇׅא-תװ-״﬒-ﬨשׁ-זּטּ-לּמּנּ-סּףּ-פּצּ-ﭏؐ-ؚؠ-ٟٮ-ۓە-ۜ۞-۪ۨ-ۯۺ-ۼۿݐ-ݿࢠࢢ-ࢬࣤ-ࣾﭐ-ﮱﯓ-ﴽﵐ-ﶏﶒ-ﷇﷰ-ﷻﹰ-ﹴﹶ-ﻼ‌ก-ฺเ-๎ᄀ-ᇿ㄰-ㆅꥠ-꥿가-힯ힰ-퟿ﾡ-ￜァ-ヺー-ヾｦ-ﾟｰＡ-Ｚａ-ｚぁ-ゖ゙-ゞ㐀-䶿一-鿿꜀-뜿띀-렟-﨟〃々〻';
-var regexp_links = RegExp('https?://t\\.co/\\w+|https?://[^/\\s]*[\\w!#$%&\'()*+,./:;=?~-]*[\\w#/+-]|[@＠](\\w+(?:/[\\w-]+)?)|([ -/:-@\\[-`{-~　、。！？「」（）『』｛｝［］【】]|\\s|^)([#＃])([0-9_・' + hashtag_chars + ']*?[' + hashtag_chars + '][0-9_・' + hashtag_chars + ']*)(?=[^' + hashtag_chars + ']|$)', 'g');
+var hashtag_pattern = '([#＃])([0-9_・' + hashtag_chars + ']*?[' + hashtag_chars + '][0-9_・' + hashtag_chars + ']*)(?=[^' + hashtag_chars + ']|$)';
+var regexp_links = RegExp('https?://t\\.co/\\w+|https?://[^/\\s]*[\\w!#$%&\'()*+,./:;=?~-]*[\\w#/+-]|[@＠](\\w+(?:/[\\w-]+)?)|([ -/:-@\\[-`{-~　、。！？「」（）『』｛｝［］【】]|\\s|^)' + hashtag_pattern, 'g');
 function makeHTML(tw, no_name, pid, userdesc, noctl) {
 	var rt = tw.retweeted_status;
 	var rs = tw.retweeted_status || tw;

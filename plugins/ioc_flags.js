@@ -593,10 +593,10 @@ registerPlugin({
 
 		// status
 		Array.prototype.forEach.call(el.querySelectorAll('.status > .hashtag'), function(elHashtag) {
-			var hashtag = elHashtag.innerHTML.match(/[#＃](\S+)/);
-			if (!hashtag || hashtag.length < 1) return;
+			var hashtag = elHashtag.innerHTML.match(hashtag_pattern);
+			if (!hashtag || hashtag.length < 2) return;
 
-			var elEmoji, index = hashtag[1].toUpperCase();
+			var elEmoji, index = hashtag[2].toUpperCase();
 			if (countryFlags[index]) {
 				elEmoji = createFlagElement(twemoji.parse(countryFlags[index].slice(2).map(function(s) {
 					return twemoji.convert.fromCodePoint(s);
