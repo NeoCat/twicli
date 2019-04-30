@@ -22,7 +22,7 @@ registerPlugin(thumbnail_plugin = {
 			}
 		}
 		Array.prototype.forEach.call(elem.querySelectorAll('.status > a'), function(a) {
-			this.replaceUrl(a.parentNode, a, a.href);
+			this.replaceUrl(a.parentNode.parentNode, a, a.href);
 		}.bind(this));
 	},
 	replaceUrl: function(elem, link, url) {
