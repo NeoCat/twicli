@@ -1183,7 +1183,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 		(in_reply_to ? ' <a class="button inrep" href="#" onClick="dispReply(\'' + un + '\',\'' + in_reply_to + '\',this); return false;"><img src="images/inrep.png" alt="☞" width="14" height="14"></a>' : '') +
 		//popupメニュー表示
 		'&nbsp;&nbsp;&nbsp;<a class="button popup" href="#" onClick="popup_menu(\'' + un + "','" + id2 + '\', this); return false;"><small><small>▼</small></small></a>' +
-		'</span><div class="dummy"></div>');
+		'</span>');
 }
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
