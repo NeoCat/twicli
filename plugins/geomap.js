@@ -70,41 +70,40 @@ function display_placemap(place, elem) {
 
 function make_geo_placemap(place) {
 	var box_coords = place.bounding_box.coordinates[0];
-	var la = 0,lo = 0;
-	for (var i=0; i<box_coords.length; i++) {
+	var la = 0, lo = 0;
+	for (var i = 0; i < box_coords.length; i++) {
 		lo += box_coords[i][0];
 		la += box_coords[i][1];
 	}
 	lo /= box_coords.length;
 	la /= box_coords.length;
-	var latlng = new google.maps.LatLng(la, lo);
-	var map = new google.maps.Map(document.getElementById("map_canvas"),
-		{zoom: 11, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP});
+	var latlng = L.latLng(la, lo);
+	var map = L.map('map_canvas').setView(latlng, Math.max(geomap.zoomDefault - 2, 0));
+	L.tileLayer(geomap.tileLayer, { attribution: geomap.attribution }).addTo(map);
 
 	if (!place.id) return;
 
 	var rendarPolygonMap = function (geoobj) {
 		var coords = [[]], paths = [];
-		if (geoobj.geometry && geoobj.geometry.type === "Polygon")
+		if (geoobj.geometry && geoobj.geometry.type === 'Polygon')
 			coords = geoobj.geometry.coordinates;
-		else if (geoobj.bounding_box && geoobj.bounding_box.type === "Polygon")
+		else if (geoobj.bounding_box && geoobj.bounding_box.type === 'Polygon')
 			coords = geoobj.bounding_box.coordinates;
-		for (var i = 0; i < coords[0].length; i++)
-			paths.push(new google.maps.LatLng(coords[0][i][1], coords[0][i][0]));
-		var polygon = new google.maps.Polygon(mapPolygonOptions);
-		polygon.setPaths(paths);
-		polygon.setMap(map);
+		var i, len = coords[0].length;
+		if (len > 2 && coords[0][0][1] === coords[0][len - 1][1] && coords[0][0][0] === coords[0][len - 1][0]) {
+			len--; // 始点と終点が同じならば除外
+		}
+		for (i = 0; i < len; i++)
+			paths.push(L.latLng(coords[0][i][1], coords[0][i][0]));
+		var polygon = L.polygon(paths, {
+			color: geomap.color,
+			opacity: geomap.opacity,
+			fillColor: geomap.color,
+			fillOpacity: geomap.fillOpacity
+		}).addTo(map);
 	};
 	xds.load_for_tab(twitterAPI + 'geo/id/' + place.id + '.json', rendarPolygonMap);
 }
-
-var mapPolygonOptions = {
-	fillColor:      '#f37171',
-	fillOpacity:    0.3,
-	strokeColor:    '#f37171',
-	strokeOpacity:  0.7,
-	strokeWeight:   4
-};
 
 function showMapCanvas(elem) {
 	rep_top = Math.max(cumulativeOffset(elem)[1] + 20, L.DomUtil.get('control').offsetHeight);
@@ -133,5 +132,3 @@ function loadLeaflet() {
 	script.crossOrigin = 'anonymous';
 	document.body.appendChild(script);
 }
-
-document.write('<script type="text/javascript" src="https://maps.google.com/maps/api/js"></script>');
