@@ -40,14 +40,8 @@ registerPlugin({
 });
 
 function display_map(coordinates, elem) {
-	rep_top = Math.max(cumulativeOffset(elem)[1] + 20, $("control").offsetHeight);
-	var win_h = window.innerHeight || document.documentElement.clientHeight;
-	$('reps').innerHTML = '<div id="map_canvas" style="width: 100%; height: '+Math.ceil(win_h*0.67)+'px;">';
-	$('rep').style.top = rep_top;
-	$('rep').style.display = "block";
+	showMapCanvas(elem);
 	make_geo_map(coordinates);
-	scrollToDiv($('rep'));
-	user_pick1 = user_pick2 = null;
 }
 
 function make_geo_map(coordinates) {
@@ -70,14 +64,8 @@ function make_geo_map(coordinates) {
 }
 
 function display_placemap(place, elem) {
-	rep_top = Math.max(cumulativeOffset(elem)[1] + 20, $("control").offsetHeight);
-	var win_h = window.innerHeight || document.documentElement.clientHeight;
-	$('reps').innerHTML = '<div id="map_canvas" style="width: 100%; height: '+Math.ceil(win_h*0.67)+'px;">';
-	$('rep').style.top = rep_top;
-	$('rep').style.display = "block";
+	showMapCanvas(elem);
 	make_geo_placemap(place);
-	scrollToDiv($('rep'));
-	user_pick1 = user_pick2 = null;
 }
 
 function make_geo_placemap(place) {
@@ -117,6 +105,16 @@ var mapPolygonOptions = {
 	strokeOpacity:  0.7,
 	strokeWeight:   4
 };
+
+function showMapCanvas(elem) {
+	rep_top = Math.max(cumulativeOffset(elem)[1] + 20, L.DomUtil.get('control').offsetHeight);
+	var win_h = window.innerHeight || document.documentElement.clientHeight;
+	$('reps').innerHTML = '<div id="map_canvas" style="width: 100%; height: '+Math.ceil(win_h*0.67)+'px;">';
+	$('rep').style.top = rep_top;
+	$('rep').style.display = "block";
+	scrollToDiv($('rep'));
+	user_pick1 = user_pick2 = null;
+}
 
 function loadLeaflet() {
 	var style = document.createElement('link');
