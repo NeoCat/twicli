@@ -1,7 +1,23 @@
 loadLeaflet();
 
 var geomap = {
-	button: null
+	color: '#4183c4',
+	opacity: 0.7,
+	fillOpacity: 0.3,
+	tileLayer: '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+	attribution: 'Map data © <a href="//openstreetmap.org">OpenStreetMap</a> contributors',
+	zoomDefault: 13,
+	openMap: function(coordinates, zoom) {
+		var zoom = geomap[geomap.zoom > -1 ? 'zoom' : 'zoomDefault']
+		window.open(
+			// OpenStreetMap
+			'//www.openstreetmap.org/?mlat=' + geomap.coordinates[0] + '&mlon=' + geomap.coordinates[1] +
+			'#map=' + zoom + '/' + geomap.coordinates.join('/')
+			// Google
+			// '//www.google.com/maps/place/@' + geomap.coordinates.join(',') + ',' + zoom + 'z?q=' +
+			// geomap.coordinates.join(',');
+		);
+	}
 };
 
 registerPlugin({
@@ -35,30 +51,23 @@ function display_map(coordinates, elem) {
 }
 
 function make_geo_map(coordinates) {
-	var latlng = new google.maps.LatLng(coordinates[0], coordinates[1]);
-	var map = new google.maps.Map(document.getElementById("map_canvas"),
-		{zoom: 13, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP});
-	var marker = new google.maps.Marker({position: latlng, map: map});
-
-	if (coordinates[2]) {
-		mapAccCircleOption.radius = coordinates.pop();
-		var accCircle = new google.maps.Circle(mapAccCircleOption);
-		accCircle.setCenter(latlng);
-		accCircle.setMap(map);
-	}
-
-	google.maps.event.addListener(marker, 'click', function(event) {
-		window.open('https://maps.google.com?q='+coordinates.join(","));
+	var radius = coordinates.length === 3 ? coordinates.pop() : 0;
+	var map = L.map('map_canvas').setView(coordinates, geomap.zoomDefault);
+	var marker = L.marker(coordinates).addTo(map);
+	L.tileLayer(geomap.tileLayer, { attribution: geomap.attribution }).addTo(map);
+	radius && L.circle(coordinates, {
+		color: geomap.color,
+		opacity: geomap.opacity,
+		fillColor: geomap.color,
+		fillOpacity: geomap.fillOpacity,
+		radius: radius
+	}).addTo(map);
+	geomap.coordinates = coordinates;
+	marker.on('click', geomap.openMap);
+	map.on('zoomanim', function(event) {
+		geomap.zoom = event.zoom;
 	});
 }
-
-var mapAccCircleOption = {
-	fillColor:      '#f37171',
-	fillOpacity:    0.3,
-	strokeColor:    '#f37171',
-	strokeOpacity:  0.7,
-	strokeWeight:   4
-};
 
 function display_placemap(place, elem) {
 	rep_top = Math.max(cumulativeOffset(elem)[1] + 20, $("control").offsetHeight);
