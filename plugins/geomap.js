@@ -109,10 +109,11 @@ var mapPolygonOptions = {
 function showMapCanvas(elem) {
 	rep_top = Math.max(cumulativeOffset(elem)[1] + 20, L.DomUtil.get('control').offsetHeight);
 	var win_h = window.innerHeight || document.documentElement.clientHeight;
-	$('reps').innerHTML = '<div id="map_canvas" style="width: 100%; height: '+Math.ceil(win_h*0.67)+'px;">';
-	$('rep').style.top = rep_top;
-	$('rep').style.display = "block";
-	scrollToDiv($('rep'));
+	L.DomUtil.get('reps').innerHTML = '<div id="map_canvas" style="width: 100%; height: ' + Math.ceil(win_h * 0.67) + 'px;">';
+	var rep = L.DomUtil.get('rep');
+	rep.style.top = rep_top;
+	rep.style.display = 'block';
+	scrollToDiv(rep);
 	user_pick1 = user_pick2 = null;
 }
 
