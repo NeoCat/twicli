@@ -69,32 +69,21 @@ function display_placemap(place, elem) {
 }
 
 function make_geo_placemap(place) {
-	var box_coords = place.bounding_box.coordinates[0];
-	var la = 0, lo = 0;
-	for (var i = 0; i < box_coords.length; i++) {
-		lo += box_coords[i][0];
-		la += box_coords[i][1];
-	}
-	lo /= box_coords.length;
-	la /= box_coords.length;
-	var latlng = L.latLng(la, lo);
-	var map = L.map('map_canvas').setView(latlng, Math.max(geomap.zoomDefault - 2, 0));
+	var box_coords = place.bounding_box.coordinates[0] || [];
+	var latLngBounds = box_coords.map(function(lngLat) { return L.latLng(lngLat[1], lngLat[0]); });
+	var map = L.map('map_canvas').fitBounds(L.latLngBounds(latLngBounds));
 	L.tileLayer(geomap.tileLayer, { attribution: geomap.attribution }).addTo(map);
 
 	if (!place.id) return;
 
-	var rendarPolygonMap = function (geoobj) {
-		var coords = [[]], paths = [];
+	var rendarPolygonMap = function(geoobj) {
+		var coords = [];
 		if (geoobj.geometry && geoobj.geometry.type === 'Polygon')
-			coords = geoobj.geometry.coordinates;
+			coords = geoobj.geometry.coordinates[0];
 		else if (geoobj.bounding_box && geoobj.bounding_box.type === 'Polygon')
-			coords = geoobj.bounding_box.coordinates;
-		var i, len = coords[0].length;
-		if (len > 2 && coords[0][0][1] === coords[0][len - 1][1] && coords[0][0][0] === coords[0][len - 1][0]) {
-			len--; // 始点と終点が同じならば除外
-		}
-		for (i = 0; i < len; i++)
-			paths.push(L.latLng(coords[0][i][1], coords[0][i][0]));
+			coords = box_coords;
+		var paths = coords.map(function (lngLat) { return L.latLng(lngLat[1], lngLat[0]); });
+		paths.length > 3 && paths[0].equals(paths[paths.length - 1]) && paths.pop(); // 始点と終点が同じならば除外
 		var polygon = L.polygon(paths, {
 			color: geomap.color,
 			opacity: geomap.opacity,
