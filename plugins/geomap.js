@@ -3,18 +3,7 @@ registerPlugin({
 		var rs = tw.retweeted_status || tw;
 		if (!rs.place && !(rs.geo && rs.geo.type == 'Point')) return;
 
-		var geomap = null; // find "geomap" in elem
-		for (var i = 0; i < elem.childNodes.length; i++) {
-			var util = elem.childNodes[i];
-			if (util.className != "utils") continue;
-			for (var j = 0; j < util.childNodes.length; j++) {
-				var uc = util.childNodes[j];
-				if (uc.className == 'button geomap') {
-					geomap = uc;
-					break;
-				}
-			}
-		}
+		var geomap = elem.querySelector('.utils > .button.geomap');
 		if (!geomap) return alert("geomap not found!!");
 			
 		if (rs.geo && rs.geo.type == 'Point')
