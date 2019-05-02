@@ -1,3 +1,5 @@
+loadLeaflet();
+
 registerPlugin({
 	newMessageElement: function(elem, tw) {
 		var rs = tw.retweeted_status || tw;
@@ -104,5 +106,22 @@ var mapPolygonOptions = {
 	strokeOpacity:  0.7,
 	strokeWeight:   4
 };
+
+function loadLeaflet() {
+	var style = document.createElement('link');
+	style.rel='stylesheet';
+	style.href='//unpkg.com/leaflet@1.4.0/dist/leaflet.css';
+	style.type = 'text/css';
+	style.integrity='sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==';
+	style.crossOrigin = 'anonymous';
+	document.head.appendChild(style);
+	
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.src = '//unpkg.com/leaflet@1.4.0/dist/leaflet.js';
+	script.integrity = 'sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==';
+	script.crossOrigin = 'anonymous';
+	document.body.appendChild(script);
+}
 
 document.write('<script type="text/javascript" src="https://maps.google.com/maps/api/js"></script>');
