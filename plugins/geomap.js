@@ -28,6 +28,7 @@ registerPlugin({
 		var button = elem.querySelector('.utils > .button.geomap');
 		if (!button) return alert("geomap not found!!");
 
+		button.onclick = undefined;
 		L.DomEvent.on(button, 'click', function(ev) {
 			if (rs.geo && rs.geo.type == 'Point') {
 				display_map(rs.geo.coordinates, button);
@@ -113,7 +114,7 @@ function loadLeaflet() {
 	style.integrity='sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==';
 	style.crossOrigin = 'anonymous';
 	document.head.appendChild(style);
-	
+
 	var script = document.createElement('script');
 	script.type = 'text/javascript';
 	script.src = 'https://unpkg.com/leaflet@1.4.0/dist/leaflet.js';
