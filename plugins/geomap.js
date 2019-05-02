@@ -4,17 +4,17 @@ var geomap = {
 	color: '#4183c4',
 	opacity: 0.7,
 	fillOpacity: 0.3,
-	tileLayer: '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-	attribution: 'Map data © <a href="//openstreetmap.org">OpenStreetMap</a> contributors',
+	tileLayer: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+	attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
 	zoomDefault: 13,
 	openMap: function(coordinates, zoom) {
 		var zoom = geomap[geomap.zoom > -1 ? 'zoom' : 'zoomDefault']
 		window.open(
 			// OpenStreetMap
-			'//www.openstreetmap.org/?mlat=' + geomap.coordinates[0] + '&mlon=' + geomap.coordinates[1] +
+			'https://www.openstreetmap.org/?mlat=' + geomap.coordinates[0] + '&mlon=' + geomap.coordinates[1] +
 			'#map=' + zoom + '/' + geomap.coordinates.join('/')
 			// Google
-			// '//www.google.com/maps/place/@' + geomap.coordinates.join(',') + ',' + zoom + 'z?q=' +
+			// 'https://www.google.com/maps/place/@' + geomap.coordinates.join(',') + ',' + zoom + 'z?q=' +
 			// geomap.coordinates.join(',');
 		);
 	}
@@ -108,7 +108,7 @@ function showMapCanvas(elem) {
 function loadLeaflet() {
 	var style = document.createElement('link');
 	style.rel='stylesheet';
-	style.href='//unpkg.com/leaflet@1.4.0/dist/leaflet.css';
+	style.href='https://unpkg.com/leaflet@1.4.0/dist/leaflet.css';
 	style.type = 'text/css';
 	style.integrity='sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==';
 	style.crossOrigin = 'anonymous';
@@ -116,7 +116,7 @@ function loadLeaflet() {
 	
 	var script = document.createElement('script');
 	script.type = 'text/javascript';
-	script.src = '//unpkg.com/leaflet@1.4.0/dist/leaflet.js';
+	script.src = 'https://unpkg.com/leaflet@1.4.0/dist/leaflet.js';
 	script.integrity = 'sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==';
 	script.crossOrigin = 'anonymous';
 	document.body.appendChild(script);
