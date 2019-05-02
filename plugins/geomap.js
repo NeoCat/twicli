@@ -1,23 +1,25 @@
 loadLeaflet();
 
+var geomap = {
+	button: null
+};
+
 registerPlugin({
 	newMessageElement: function(elem, tw) {
 		var rs = tw.retweeted_status || tw;
 		if (!rs.place && !(rs.geo && rs.geo.type == 'Point')) return;
 
-		var geomap = elem.querySelector('.utils > .button.geomap');
-		if (!geomap) return alert("geomap not found!!");
-			
-		if (rs.geo && rs.geo.type == 'Point')
-			geomap.onclick = function() {
-				display_map(rs.geo.coordinates, geomap);
-				return false;
-			};
-		else if (rs.place && rs.place.bounding_box)
-			geomap.onclick = function() {
-				display_placemap(rs.place, geomap);
-				return false;
-			};
+		var button = elem.querySelector('.utils > .button.geomap');
+		if (!button) return alert("geomap not found!!");
+
+		L.DomEvent.on(button, 'click', function(ev) {
+			if (rs.geo && rs.geo.type == 'Point') {
+				display_map(rs.geo.coordinates, button);
+			} else if (rs.place && rs.place.bounding_box) {
+				display_placemap(rs.place, button);
+			}
+			L.DomEvent.stop(ev);
+		});
 	}
 });
 
