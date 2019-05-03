@@ -5,7 +5,7 @@ var geomap = {
 	opacity: 0.7,
 	fillOpacity: 0.3,
 	tileLayer: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-	attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+	attribution: 'Map data © <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors',
 	zoomDefault: 13,
 	openMap: function(coordinates, zoom) {
 		var zoom = geomap[geomap.zoom > -1 ? 'zoom' : 'zoomDefault']
@@ -48,8 +48,8 @@ function display_map(coordinates, elem) {
 function make_geo_map(coordinates) {
 	var radius = coordinates.length === 3 ? coordinates.pop() : 0;
 	var map = L.map('map_canvas').setView(coordinates, geomap.zoomDefault);
-	var marker = L.marker(coordinates).addTo(map);
-	L.tileLayer(geomap.tileLayer, { attribution: geomap.attribution }).addTo(map);
+	L.marker(coordinates).on('click', geomap.openMap).addTo(map);
+	setTileLayer(map);
 	radius && L.circle(coordinates, {
 		color: geomap.color,
 		opacity: geomap.opacity,
@@ -58,7 +58,6 @@ function make_geo_map(coordinates) {
 		radius: radius
 	}).addTo(map);
 	geomap.coordinates = coordinates;
-	marker.on('click', geomap.openMap);
 	map.on('zoomanim', function(event) {
 		geomap.zoom = event.zoom;
 	});
@@ -73,7 +72,7 @@ function make_geo_placemap(place) {
 	var box_coords = place.bounding_box.coordinates[0] || [];
 	var latLngBounds = box_coords.map(function(lngLat) { return L.latLng(lngLat[1], lngLat[0]); });
 	var map = L.map('map_canvas').fitBounds(L.latLngBounds(latLngBounds));
-	L.tileLayer(geomap.tileLayer, { attribution: geomap.attribution }).addTo(map);
+	setTileLayer(map);
 
 	if (!place.id) return;
 
@@ -104,6 +103,21 @@ function showMapCanvas(elem) {
 	rep.style.display = 'block';
 	scrollToDiv(rep);
 	user_pick1 = user_pick2 = null;
+}
+
+function setTileLayer(map) {
+	L.tileLayer(geomap.tileLayer, { attribution: geomap.attribution })
+		.on('load', function() {
+			Array.prototype.forEach.call(
+				document.querySelectorAll(
+					'#map_canvas > div.leaflet-control-container .leaflet-control.leaflet-control-attribution > a[href]'
+				),
+				function(a) {
+					a.target = '_blank';
+				}
+			);
+		})
+		.addTo(map);
 }
 
 function loadLeaflet() {
