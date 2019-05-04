@@ -491,6 +491,10 @@ registerPlugin({
 			// [4月25日は「#世界ペンギンの日」](https://blog.twitter.com/ja_jp/topics/events/2019/Worldpenguinday.html)
 			'世界ペンギンの日': 'WorldPenguinDay_2019',
 			'WORLDPENGUINDAY': 'WorldPenguinDay_2019',
+			// [「#こどもの日」と「#母の日」はTwitter上で家族へ感謝の気持ちや愛を伝えませんか？](https://blog.twitter.com/ja_jp/topics/events/2019/childrensday_mothersday.html)
+			'こどもの日': 'ChildrensDay_2019',
+			'子どもの日': 'ChildrensDay_2019',
+			'親バカ部': 'ChildrensDay_2019',
 			// [#平成を語ろうハロー令和](https://blog.twitter.com/ja_jp/topics/events/2019/Hello_Reiwa.html)
 			// [Twitterで平成を振り返ろう](https://blog.twitter.com/ja_jp/topics/events/2019/letstalkHeisei_2019.html)
 			'新元号を考えてみた': 'NewEra_2019',
