@@ -495,6 +495,8 @@ registerPlugin({
 			'こどもの日': 'ChildrensDay_2019',
 			'子どもの日': 'ChildrensDay_2019',
 			'親バカ部': 'ChildrensDay_2019',
+			'母の日': '2019_MothersDay',
+			'MOTHERSDAY': '2019_MothersDay',
 			// [#平成を語ろうハロー令和](https://blog.twitter.com/ja_jp/topics/events/2019/Hello_Reiwa.html)
 			// [Twitterで平成を振り返ろう](https://blog.twitter.com/ja_jp/topics/events/2019/letstalkHeisei_2019.html)
 			'新元号を考えてみた': 'NewEra_2019',
