@@ -505,6 +505,10 @@ registerPlugin({
 			'令和': 'Reiwa_NewEra_2019',
 			'令和元年': 'Reiwa_NewEra_2019',
 			'ハロー令和': 'Reiwa_NewEra_2019',
+			// [6月16日（日）「 #父の日 」にTwitterで #お父さんありがとう を伝えよう](https://blog.twitter.com/ja_jp/topics/events/2019/fathersday2019.html)
+			'父の日': 'FathersDay_2019',
+			'FATHERSDAY': 'FathersDay_2019',
+			'お父さんありがとう': 'FathersDay_2019',
 			// ---- アベンジャーズ ----
 			'アベンジャーズ': 'Avengers_Endgame_2019',
 			'AVENGERS': 'Avengers_Endgame_2019',
