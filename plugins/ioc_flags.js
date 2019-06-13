@@ -513,7 +513,7 @@ registerPlugin({
 			'アベンジャーズ': 'Avengers_Endgame_2019',
 			'AVENGERS': 'Avengers_Endgame_2019',
 			'AVENGERSENDGAME': 'Avengers_Endgame_2019',
-			'DontSpoilTheEndgame': 'Avengers_Endgame_2019',
+			'DONTSPOILTHEENDGAME': 'Avengers_Endgame_2019',
 			'0426逆襲へ': 'Avengers_Endgame_2019',
 			'ありがとうアベンジャーズ': 'Avengers_Endgame_2019',
 			'ANTMAN': 'Avengers_Endgame_2019_AntMan',
