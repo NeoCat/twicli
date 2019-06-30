@@ -509,6 +509,10 @@ registerPlugin({
 			'父の日': 'FathersDay_2019',
 			'FATHERSDAY': 'FathersDay_2019',
 			'お父さんありがとう': 'FathersDay_2019',
+			// ---- 新海誠監督映画 ----
+			'君の名は': 'YourNameMovie_2019',
+			'YOURNAME': 'YourNameMovie_2019',
+			'天気の子': 'Toho_Tenkinoko_2019',
 			// ---- アベンジャーズ ----
 			'アベンジャーズ': 'Avengers_Endgame_2019',
 			'AVENGERS': 'Avengers_Endgame_2019',
