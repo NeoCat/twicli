@@ -638,6 +638,7 @@ registerPlugin({
 			'PRIMEDAY': 'AmazonPrimeDay_2019',
 			'PRIMEDAYAMAZON': 'AmazonHotSale2019',
 			// ---- その他 ----
+			'シノアリス': 'Sinoalice_June2019',
 			'GAMEOFTHRONES': 'GameofThrones_S8_2018_v2',
 			'とと姉ちゃん': 'NHKMorningDrama',
 			'高校野球': 'JapanHighSchoolBaseballEmoji',
