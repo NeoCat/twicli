@@ -624,6 +624,13 @@ registerPlugin({
 			'マイナビオールスターゲーム2019': 'AllStar_Baseball_Game_2019',
 			'オールスター': 'AllStar_Baseball_Game_2019',
 			'球宴': 'AllStar_Baseball_Game_2019',
+			// ---- AmazonPrimeDay_2019 ----
+			'プライムデー': 'AmazonPrimeDay_2019_Japan',
+			'プライムセール': 'AmazonPrimeDay_2019_Japan',
+			'アマゾン': 'AmazonPrimeDay_2019_Japan',
+			'AMAZON': 'AmazonPrimeDay_2019',
+			'PRIMEDAY': 'AmazonPrimeDay_2019',
+			'PRIMEDAYAMAZON': 'AmazonHotSale2019',
 			// ---- その他 ----
 			'GAMEOFTHRONES': 'GameofThrones_S8_2018_v2',
 			'とと姉ちゃん': 'NHKMorningDrama',
