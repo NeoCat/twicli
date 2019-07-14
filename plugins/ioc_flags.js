@@ -620,6 +620,10 @@ registerPlugin({
 			'GIGGLEMCDIMPLES': 'Disney_ToyStory4_DuckyBunny',
 			'いつまでも君はともだち': 'ToyStory4_Woody_Japan',
 			'トイ4の夏がきた': 'ToyStory4_Woody_Japan',
+			// ---- AllStar_Baseball_Game_2019 ----
+			'マイナビオールスターゲーム2019': 'AllStar_Baseball_Game_2019',
+			'オールスター': 'AllStar_Baseball_Game_2019',
+			'球宴': 'AllStar_Baseball_Game_2019',
 			// ---- その他 ----
 			'GAMEOFTHRONES': 'GameofThrones_S8_2018_v2',
 			'とと姉ちゃん': 'NHKMorningDrama',
