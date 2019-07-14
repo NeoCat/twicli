@@ -475,6 +475,7 @@ registerPlugin({
 			'ミュウツーの逆襲': 'Pokemon_Mew_2019_Emoji',
 			'ミュウツーの逆襲前夜祭': 'Pokemon_Mew_2019_Emoji',
 			'すべてはここからはじまった': 'Pokemon_Mew_2019_Emoji',
+			'GOSNAPSHOT': 'PokemonGoJP_GoSnapshot_2019',
 			// [3月27日は「#さくらの日」](https://blog.twitter.com/ja_jp/topics/events/2019/sakura_day2019.html)
 			'さくらの日': 'CherryBlossom_Sakura_2019',
 			'さくら': 'CherryBlossom_Sakura_2019',
