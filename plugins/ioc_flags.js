@@ -470,6 +470,11 @@ registerPlugin({
 			'超夢': 'WBPikachu_Mewtwo',
 			'МЬЮТУ': 'WBPikachu_Mewtwo',
 			'DETECTIVEPIKACHU': 'WB_Pikachu_2018',
+			'ポケモン映画': 'Pokemon_Mew_2019_Emoji',
+			'ミュウ': 'Pokemon_Mew_2019_Emoji',
+			'ミュウツーの逆襲': 'Pokemon_Mew_2019_Emoji',
+			'ミュウツーの逆襲前夜祭': 'Pokemon_Mew_2019_Emoji',
+			'すべてはここからはじまった': 'Pokemon_Mew_2019_Emoji',
 			// [3月27日は「#さくらの日」](https://blog.twitter.com/ja_jp/topics/events/2019/sakura_day2019.html)
 			'さくらの日': 'CherryBlossom_Sakura_2019',
 			'さくら': 'CherryBlossom_Sakura_2019',
