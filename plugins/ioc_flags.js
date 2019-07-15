@@ -12,7 +12,7 @@ document.getElementsByTagName('body')[0].appendChild(tweScript);
 
 var emojiStyle = document.createElement('style');
 emojiStyle.type = 'text/css';
-emojiStyle.innerHTML = 'img.emoji { margin: 0 0.3em; width: 1em; }';
+emojiStyle.innerHTML = 'img.emoji { margin: 0 0.3em; height: 1em; vertical-align: text-bottom; }';
 document.getElementsByTagName('head')[0].appendChild(emojiStyle);
 
 registerPlugin({
