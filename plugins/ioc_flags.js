@@ -6,7 +6,8 @@
 
 var tweScript = document.createElement('script');
 tweScript.type = 'text/javascript';
-tweScript.src = '//twemoji.maxcdn.com/2/twemoji.min.js';
+tweScript.src = '//twemoji.maxcdn.com/v/latest/twemoji.min.js';
+tweScript.crossorigin = 'anonymous';
 document.getElementsByTagName('body')[0].appendChild(tweScript);
 
 var emojiStyle = document.createElement('style');
@@ -613,16 +614,15 @@ registerPlugin({
 			var hashtag = elHashtag.innerHTML.match(hashtag_pattern);
 			if (!hashtag || hashtag.length < 2) return;
 
-			var emojiHtml, index = hashtag[2].toUpperCase();
+			var index = hashtag[2].toUpperCase();
 			if (countryFlags[index]) {
-				emojiHtml = twemoji.parse(countryFlags[index].slice(2).map(function(s) {
+				elHashtag.innerHTML += countryFlags[index].slice(2).map(function(s) {
 					return twemoji.convert.fromCodePoint(s);
-				}).join(''));
+				}).join('');
+				twemoji.parse(elHashtag);
 			} else if (organization[index]) {
-				emojiHtml = createFlagElement(getFlagImageHTML(organization[index]));
+				elHashtag.innerHTML += getFlagImageHTML(organization[index]);
 			}
-
-			emojiHtml && elHashtag.innerHTML += emojiHtml;
 		});
 
 		function getFlagImageHTML(iconName) {
