@@ -11,7 +11,7 @@ document.getElementsByTagName('body')[0].appendChild(tweScript);
 
 var emojiStyle = document.createElement('style');
 emojiStyle.type = 'text/css';
-emojiStyle.innerHTML = '.flag img.emoji { margin: 0 0.3em; width: 1em; }';
+emojiStyle.innerHTML = 'img.emoji { margin: 0 0.3em; width: 1em; }';
 document.getElementsByTagName('head')[0].appendChild(emojiStyle);
 
 registerPlugin({
@@ -613,16 +613,16 @@ registerPlugin({
 			var hashtag = elHashtag.innerHTML.match(hashtag_pattern);
 			if (!hashtag || hashtag.length < 2) return;
 
-			var elEmoji, index = hashtag[2].toUpperCase();
+			var emojiHtml, index = hashtag[2].toUpperCase();
 			if (countryFlags[index]) {
-				elEmoji = createFlagElement(twemoji.parse(countryFlags[index].slice(2).map(function(s) {
+				emojiHtml = twemoji.parse(countryFlags[index].slice(2).map(function(s) {
 					return twemoji.convert.fromCodePoint(s);
-				}).join('')));
+				}).join(''));
 			} else if (organization[index]) {
-				elEmoji = createFlagElement(getFlagImageHTML(organization[index]));
+				emojiHtml = createFlagElement(getFlagImageHTML(organization[index]));
 			}
 
-			elEmoji && elHashtag.appendChild(elEmoji);
+			emojiHtml && elHashtag.innerHTML += emojiHtml;
 		});
 
 		function getFlagImageHTML(iconName) {
@@ -633,13 +633,6 @@ registerPlugin({
 				iconName,
 				'.png">'
 			].join('');
-		}
-
-		function createFlagElement(innerHTML) {
-			var el = document.createElement('span');
-			el.className = 'flag';
-			el.innerHTML = innerHTML;
-			return el;
 		}
 	}
 });
