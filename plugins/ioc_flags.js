@@ -622,7 +622,7 @@ registerPlugin({
 				elEmoji = createFlagElement(getFlagImageHTML(organization[index]));
 			}
 
-			elEmoji && elHashtag.parentNode.insertBefore(elEmoji, elHashtag.nextSibling);
+			elEmoji && elHashtag.appendChild(elEmoji);
 		});
 
 		function getFlagImageHTML(iconName) {
