@@ -651,6 +651,19 @@ registerPlugin({
 			'MAGICLAMP': 'Disney_Aladdin_Lamp',
 			'魔法のランプ': 'Disney_Aladdin_Lamp',
 			'アラジンと新しい世界へ': 'Disney_Aladdin_Lamp',
+			// ---- G20Osaka_2019 ----
+			// https://twitter.com/TwitterGovJP/status/1135375663060344832
+			'G20': 'G20Osaka_2019',
+			'G20SUMMIT': 'G20Osaka_2019',
+			'G20JAPAN': 'G20Osaka_2019',
+			'G20OSAKA': 'G20Osaka_2019',
+			'G2019': 'G20Osaka_2019',
+			'G20大阪': 'G20Osaka_2019',
+			'G20大阪サミット': 'G20Osaka_2019',
+			'G20サミット': 'G20Osaka_2019',
+			'G20OSAKASUMMIT': 'G20Osaka_2019',
+			'G20INOSAKA': 'G20Osaka_2019',
+			'G20閣僚会合': 'G20Osaka_2019',
 			// [#参院選2019 Twitter上でニッポンの政治を知ろう、語ろう](https://blog.twitter.com/ja_jp/topics/company/2019/election_2019.html)
 			'選挙': 'GoVoteUpperHouseElection_2019',
 			'選挙に行こう': 'GoVoteUpperHouseElection_2019',
