@@ -651,6 +651,12 @@ registerPlugin({
 			'MAGICLAMP': 'Disney_Aladdin_Lamp',
 			'魔法のランプ': 'Disney_Aladdin_Lamp',
 			'アラジンと新しい世界へ': 'Disney_Aladdin_Lamp',
+			// [#参院選2019 Twitter上でニッポンの政治を知ろう、語ろう](https://blog.twitter.com/ja_jp/topics/company/2019/election_2019.html)
+			'選挙': 'GoVoteUpperHouseElection_2019',
+			'選挙に行こう': 'GoVoteUpperHouseElection_2019',
+			'参院選': 'GoVoteUpperHouseElection_2019',
+			'参院選2019': 'GoVoteUpperHouseElection_2019',
+			'令和初の参院選': 'GoVoteUpperHouseElection_2019',
 			// ---- その他 ----
 			'シノアリス': 'Sinoalice_June2019',
 			'GAMEOFTHRONES': 'GameofThrones_S8_2018_v2',
