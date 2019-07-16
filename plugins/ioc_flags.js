@@ -626,9 +626,10 @@ registerPlugin({
 			'GIGGLEMCDIMPLES': 'Disney_ToyStory4_DuckyBunny',
 			'いつまでも君はともだち': 'ToyStory4_Woody_Japan',
 			'トイ4の夏がきた': 'ToyStory4_Woody_Japan',
-			// ---- AllStar_Baseball_Game_2019 ----
+			// [#夢のオールスター マイナビオールスターゲーム2019](https://blog.twitter.com/ja_jp/topics/events/2019/All-star-game.html)
 			'マイナビオールスターゲーム2019': 'AllStar_Baseball_Game_2019',
 			'オールスター': 'AllStar_Baseball_Game_2019',
+			'夢のオールスター': 'AllStar_Baseball_Game_2019',
 			'球宴': 'AllStar_Baseball_Game_2019',
 			// ---- AmazonPrimeDay_2019 ----
 			'プライムデー': 'AmazonPrimeDay_2019_Japan',
