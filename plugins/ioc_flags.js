@@ -658,6 +658,9 @@ registerPlugin({
 			'参院選2019': 'GoVoteUpperHouseElection_2019',
 			'令和初の参院選': 'GoVoteUpperHouseElection_2019',
 			// ---- その他 ----
+			'午後の紅茶': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
+			'午後ティー': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
+			'ロマサガRS': 'romasaga_rs_2019',
 			'シノアリス': 'Sinoalice_June2019',
 			'GAMEOFTHRONES': 'GameofThrones_S8_2018_v2',
 			'とと姉ちゃん': 'NHKMorningDrama',
