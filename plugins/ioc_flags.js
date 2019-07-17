@@ -670,6 +670,15 @@ registerPlugin({
 			'参院選': 'GoVoteUpperHouseElection_2019',
 			'参院選2019': 'GoVoteUpperHouseElection_2019',
 			'令和初の参院選': 'GoVoteUpperHouseElection_2019',
+			// [7月17日は #世界絵文字デー](https://blog.twitter.com/ja_jp/topics/events/2019/World-Emoji-Day-2019.html)
+			'世界絵文字デー': 'WorldEmojiDay_2019',
+			'鳥取': 'WorldEmojiDay_2019',
+			'鳥取県': 'WorldEmojiDay_2019',
+			'絵文字で鳥取県': 'WorldEmojiDay_2019',
+			'おしどり': 'WorldEmojiDay_2019',
+			'絵文字': 'WorldEmojiDay_2019',
+			'EMOJI': 'WorldEmojiDay_2019',
+			'WORLDEMOJIDAY': 'WorldEmojiDay_2019',
 			// ---- その他 ----
 			'午後の紅茶': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
 			'午後ティー': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
