@@ -680,7 +680,15 @@ registerPlugin({
 			'絵文字': 'WorldEmojiDay_2019',
 			'EMOJI': 'WorldEmojiDay_2019',
 			'WORLDEMOJIDAY': 'WorldEmojiDay_2019',
+			// [#Twitterトレンド大賞 presents #Twitter夏祭り 開催が決定！](https://blog.twitter.com/ja_jp/topics/events/2019/twitter-trend-award-natsumatsuri-2019.html)
+			'TWITTER夏祭り': 'TwitterTrendAward_Summer_Emoji',
+			'TWITTERトレンド大賞': 'TwitterTrendAward_Summer_Emoji',
+			'ローソン屋台': 'TwitterTrendAward_Summer_Emoji',
+			'放置少女屋台': 'TwitterTrendAward_Summer_Emoji',
+			'サマーウォーズ屋台': 'TwitterTrendAward_Summer_Emoji',
 			// ---- その他 ----
+			'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
+			'放置少女': 'Houchishoujo_Q3_2019_v2',
 			'午後の紅茶': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
 			'午後ティー': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
 			'ロマサガRS': 'romasaga_rs_2019',
