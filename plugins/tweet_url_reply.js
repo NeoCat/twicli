@@ -31,7 +31,7 @@ function dispImageFromLink(url, e, type) {
 }
 
 (function() {
-  var re = /^https?:\/\/(?:mobile\.)?twitter\.com\/(?:#!\/|#%21\/)?(\w+)\/status(?:es)?\/(\d+)/;
+  var re = /^https?:\/\/(?:mobile\.)?twitter\.com\/(?:#!\/|#%21\/)?(?:\w+)\/status(?:es)?\/(\d+)/;
 
   function tweetUrlReply(elem) {
     var links = elem.getElementsByTagName('a');
@@ -49,28 +49,26 @@ function dispImageFromLink(url, e, type) {
   function insertInReplyTo(a) {
     if (a.tweetUrlChecked) return;
     var m = a.href.match(re);
-    if (m) {
-      a.tweetUrlChecked = true;
-      var dummy = document.createElement('div');
-      var script = 'dispReply(\'' + m[1] + '\',\'' + m[2] + '\',this); event.preventDefault(); return false;';
-      var tw = a.parentNode.parentNode.tw;
-      tw = tw && tw.retweeted_status ? tw.retweeted_status : tw;
-      var entities = tw && ent(tw);
-      if (tw && tw.id_str == m[2] &&
-          (a.href.indexOf('/photo/1') >= 0 || a.href.indexOf('/video/1') >= 0) &&
-          entities.media && entities.media[0]) {
-        var media = entities.media;
-        script = 'dispImageFromLink([' +
-	  Array.prototype.map.call(media, function(x){
-            return x.video_info ?
-              Array.prototype.map.call(x.video_info.variants, function(y){return '[\'' + y.content_type + '\',\'' + y.url + '\']'}) :
-              '\'' + x.media_url_https + ':medium\''
-          }).join(',') +
-         '], this, \'' + media[0].type +'\'); return false;';
-      }
-      dummy.innerHTML = '<a class="button" href="#" onClick="' + script + '"><img src="images/jump.png" alt="☞" width="14" height="14"></a>';
-      a.parentNode.insertBefore(dummy.firstChild, a.nextSibling);
+    if (!m) return;
+    var tw = a.parentNode.parentNode.tw;
+    if (!tw) return; // quoted tweet の場合は不要 (twicli.js 本体の makeHTML() で対応済み)
+    tw = tw.retweeted_status || tw;
+    a.tweetUrlChecked = true;
+    var entities = ent(tw);
+    if (tw.id_str == m[1] && (a.href.indexOf('/photo/1') >= 0 || a.href.indexOf('/video/1') >= 0) &&
+        entities.media && entities.media[0]) {
+      var media = entities.media;
+      var script = 'dispImageFromLink([' +
+        Array.prototype.map.call(media, function(x){
+          return x.video_info ?
+            Array.prototype.map.call(x.video_info.variants, function(y){return '[\'' + y.content_type + '\',\'' + y.url + '\']'}) :
+            '\'' + x.media_url_https + ':medium\''
+        }).join(',') +
+       '], this, \'' + media[0].type +'\'); return false;';
     }
+    var dummy = document.createElement('div');
+    dummy.innerHTML = '<a class="button" href="#" onClick="' + script + '"><img src="images/jump.png" alt="☞" width="14" height="14"></a>';
+    a.parentNode.insertBefore(dummy.firstChild, a.nextSibling);
   }
 
   registerPlugin({
