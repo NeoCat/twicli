@@ -48,14 +48,14 @@ function dispImageFromLink(url, e, type) {
 
   function insertInReplyTo(a) {
     if (a.tweetUrlChecked) return;
-    var m = a.href.match(re);
-    if (!m) return;
+    var id_str = (a.href.match(re) || [])[1];
+    if (!id_str) return;
     var tw = a.parentNode.parentNode.tw;
     if (!tw) return; // quoted tweet の場合は不要 (twicli.js 本体の makeHTML() で対応済み)
     tw = tw.retweeted_status || tw;
     a.tweetUrlChecked = true;
     var entities = ent(tw);
-    if (tw.id_str == m[1] && (a.href.indexOf('/photo/1') >= 0 || a.href.indexOf('/video/1') >= 0) &&
+    if (tw.id_str === id_str && (a.href.indexOf('/photo/1') >= 0 || a.href.indexOf('/video/1') >= 0) &&
         entities.media && entities.media[0]) {
       var media = entities.media;
       var script = 'dispImageFromLink([' +
