@@ -34,12 +34,9 @@ function dispImageFromLink(url, e, type) {
   var re = /^https?:\/\/(?:mobile\.)?twitter\.com\/(?:#!\/|#%21\/)?(?:\w+)\/status(?:es)?\/(\d+)/;
 
   function tweetUrlReply(elem) {
-    var links = elem.getElementsByTagName('a');
-    for (var i = 0, l = links.length; i < l; i++) {
-      if (/\bstatus\b/.test(links[i].parentNode.className)) {
-        insertInReplyTo(links[i]);
-      }
-    }
+    Array.prototype.forEach.call(elem.querySelectorAll('.status > a.link'), function(link) {
+      insertInReplyTo(link)
+    });
   }
 
   function urlReplaced(elem, link, lng, sht) {
