@@ -31,7 +31,7 @@ function dispImageFromLink(url, e, type) {
 }
 
 (function() {
-  var re = /^https?:\/\/(?:mobile\.)?twitter\.com\/(?:#!\/|#%21\/)?(?:\w+)\/status(?:es)?\/(\d+)/;
+  var re = /^https?:\/\/(?:mobile\.)?twitter\.com\/(?:#!\/|#%21\/)?(\w+)\/status(?:es)?\/(\d+)/;
 
   function tweetUrlReply(elem) {
     Array.prototype.forEach.call(elem.querySelectorAll('.status > a.link'), function(link) {
@@ -45,13 +45,15 @@ function dispImageFromLink(url, e, type) {
 
   function insertInReplyTo(a) {
     if (a.tweetUrlChecked) return;
-    var id_str = (a.href.match(re) || [])[1];
+    var m = a.href.match(re) || [];
+    var id_str = m[2];
     if (!id_str) return;
     var tw = a.parentNode.parentNode.tw;
     if (!tw) return; // quoted tweet の場合は不要 (twicli.js 本体の makeHTML() で対応済み)
     tw = tw.retweeted_status || tw;
     a.tweetUrlChecked = true;
     var entities = ent(tw);
+    var script = 'dispReply(\'' + m[1] + '\',\'' + m[2] + '\',this); event.preventDefault(); return false;';
     if (tw.id_str === id_str && (a.href.indexOf('/photo/1') >= 0 || a.href.indexOf('/video/1') >= 0) &&
         entities.media && entities.media[0]) {
       var media = entities.media;
