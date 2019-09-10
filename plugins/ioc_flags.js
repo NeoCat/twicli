@@ -688,6 +688,7 @@ registerPlugin({
 			'サマーウォーズ屋台': 'TwitterTrendAward_Summer_Emoji',
 			// ---- その他 ----
 			'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
+			'APPLEEVENT': 'Wasabi_Emoji_2019',
 			'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
 			'放置少女': 'Houchishoujo_Q3_2019_v2',
 			'午後の紅茶': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
