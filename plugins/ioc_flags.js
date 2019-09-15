@@ -712,10 +712,12 @@ registerPlugin({
 				elHashtag.innerHTML += countryFlags[index].slice(2).map(function(s) {
 					return twemoji.convert.fromCodePoint(s);
 				}).join('');
-				twemoji.parse(elHashtag);
 			} else if (organization[index]) {
 				elHashtag.innerHTML += getFlagImageHTML(organization[index]);
 			}
+		});
+		Array.prototype.forEach.call(el.querySelectorAll('.uname, .status'), function(unparse) {
+			twemoji.parse(unparse);
 		});
 
 		function getFlagImageHTML(iconName) {
