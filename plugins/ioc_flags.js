@@ -717,7 +717,7 @@ registerPlugin({
 			}
 		});
 		Array.prototype.forEach.call(el.querySelectorAll('.uname, .status'), function(unparse) {
-			twemoji.parse(unparse);
+			twemoji.parse(unparse, { folder: 'svg', ext: '.svg' });
 		});
 
 		function getFlagImageHTML(iconName) {
