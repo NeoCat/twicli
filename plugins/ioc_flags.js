@@ -686,6 +686,14 @@ registerPlugin({
 			'ローソン屋台': 'TwitterTrendAward_Summer_Emoji',
 			'放置少女屋台': 'TwitterTrendAward_Summer_Emoji',
 			'サマーウォーズ屋台': 'TwitterTrendAward_Summer_Emoji',
+			// [#防災の日　もしもの際に備え、災害・防災に関する様々な取り組みを実施](https://blog.twitter.com/ja_jp/topics/events/2019/lifeline_2019.html)
+			'防災の日': 'Disaster_Prevention_Day_2019_Emoji_GIF_V3',
+			'防災': 'Disaster_Prevention_Day_2019_Emoji_GIF_V3',
+			'防災豆知識': 'Disaster_Prevention_Day_2019_Emoji_GIF_V3',
+			'非常時に知っておくと役立つ便利情報': 'Disaster_Prevention_Day_2019_Emoji_GIF_V3',
+			'東京防災': 'Tokyo_Disaster_Prevention_Day_2019_Mascot_Emoji_GIF',
+			'防サイくん': 'Tokyo_Disaster_Prevention_Day_2019_Mascot_Emoji_GIF',
+			'今やろう': 'Tokyo_Disaster_Prevention_Day_2019_Mascot_Emoji_GIF',
 			// ---- その他 ----
 			'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 			'APPLEEVENT': 'Wasabi_Emoji_2019',
