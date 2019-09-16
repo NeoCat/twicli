@@ -694,6 +694,10 @@ registerPlugin({
 			'東京防災': 'Tokyo_Disaster_Prevention_Day_2019_Mascot_Emoji_GIF',
 			'防サイくん': 'Tokyo_Disaster_Prevention_Day_2019_Mascot_Emoji_GIF',
 			'今やろう': 'Tokyo_Disaster_Prevention_Day_2019_Mascot_Emoji_GIF',
+			// [Twitter、グローバルで自殺防止の取り組みを支援](https://blog.twitter.com/ja_jp/topics/company/2019/WSPD_2019.html)
+			'WORLDSUICIDEPREVENTIONDAY': 'World_Suicide_Prevention_Day_2019_Emoji',
+			'世界自殺予防デー': 'World_Suicide_Prevention_Day_2019_Emoji',
+			'自殺予防週間': 'World_Suicide_Prevention_Day_2019_Emoji',
 			// ---- その他 ----
 			'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 			'APPLEEVENT': 'Wasabi_Emoji_2019',
