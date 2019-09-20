@@ -767,6 +767,7 @@ registerPlugin({
 			'USAVTGA': 'Rugby_World_Cup_2019_EMOJI_USAvTGA',
 			'WALVURU': 'Rugby_World_Cup_2019_EMOJI_WALvURU',
 			'JPNVSCO': 'Rugby_World_Cup_2019_EMOJI_JPNvSCO',
+			'STARTSOMETHINGPRICELESS': 'StartSomethingPriceless_Rugby_World_Cup_Emoji',
 			// ---- その他 ----
 			'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 			'APPLEEVENT': 'Wasabi_Emoji_2019',
