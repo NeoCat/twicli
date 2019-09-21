@@ -419,6 +419,15 @@ try {
 } catch(e) {
 	console.log("Failed to apply theme_css.");
 }
+var dark_mode = false;
+try {
+	if (!readCookie('theme_name') && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+		document.write('<style id="dark_mode">@import url(styles/dark.css);</style>');
+		dark_mode = true;
+	}
+} catch(e) {
+	console.log("Error on dark-mode switch: " + e);
+}
 var user_style = readCookie('user_style') || "";
 document.write('<style id="usercss">' + user_style + '</style>');
 
@@ -1914,7 +1923,7 @@ function loadTheme() {
 		return xds.load_for_tab('themes.json', function(t) { if (t) { window.themes = t; loadTheme(); }});
 	$('theme-loading').style.display = 'none';
 	$('themelist').innerHTML = '';
-	var current_theme = readCookie('theme_name') || 'default';
+	var current_theme = readCookie('theme_name') || (dark_mode ? 'dark' : 'default');
 	for (var i = 0; i < themes.length; i++) {
 		var t = themes[i];
 		window.themes[t.name] = t;
@@ -1939,6 +1948,8 @@ function changeTheme(t) {
 			alert("Couldn't apply theme. Please relaod.");
 			return;
 		}
+		if (dark_mode) document.head.removeChild($('dark_mode'));
+		dark_mode = false;
 		setFstHeight(null, true);
 		writeCookie('theme_name', t, 3652);
 		writeCookie('theme_css', themes[t].content, 3652);
