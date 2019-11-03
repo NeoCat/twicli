@@ -768,6 +768,12 @@ registerPlugin({
 			'WALVURU': 'Rugby_World_Cup_2019_EMOJI_WALvURU',
 			'JPNVSCO': 'Rugby_World_Cup_2019_EMOJI_JPNvSCO',
 			'STARTSOMETHINGPRICELESS': 'StartSomethingPriceless_Rugby_World_Cup_Emoji',
+			// ---- HALLOWEEN2019 ----
+			'ハロウィン': 'Halloween2019_Emoji_GIF',
+			'トリックオアトリート': 'Halloween2019_Emoji_GIF',
+			'HALLOWEEN': 'Halloween2019_Emoji_GIF',
+			'HALLOWEEN19': 'Halloween2019_Emoji_GIF',
+			'HALLOWEEN2019': 'Halloween2019_Emoji_GIF',
 			// ---- その他 ----
 			'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 			'APPLEEVENT': 'Wasabi_Emoji_2019',
