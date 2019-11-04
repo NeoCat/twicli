@@ -774,6 +774,11 @@ registerPlugin({
 			'HALLOWEEN': 'Halloween2019_Emoji_GIF',
 			'HALLOWEEN19': 'Halloween2019_Emoji_GIF',
 			'HALLOWEEN2019': 'Halloween2019_Emoji_GIF',
+			// ---- DogDay2019 ----
+			'いぬの日': 'DogDay2019_Emoji_GIF',
+			'イヌの日': 'DogDay2019_Emoji_GIF',
+			'わんわんわんの日': 'DogDay2019_Emoji_GIF',
+			'うちの犬': 'DogDay2019_Emoji_GIF',
 			// ---- その他 ----
 			'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 			'APPLEEVENT': 'Wasabi_Emoji_2019',
