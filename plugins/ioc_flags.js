@@ -781,6 +781,7 @@ registerPlugin({
 			'うちの犬': 'DogDay2019_Emoji_GIF',
 			// ---- その他 ----
 			'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
+			'LOVETWITTER': 'LoveTwitter',
 			'APPLEEVENT': 'Wasabi_Emoji_2019',
 			'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
 			'放置少女': 'Houchishoujo_Q3_2019_v2',
