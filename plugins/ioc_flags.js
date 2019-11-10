@@ -779,6 +779,12 @@ registerPlugin({
 			'イヌの日': 'DogDay2019_Emoji_GIF',
 			'わんわんわんの日': 'DogDay2019_Emoji_GIF',
 			'うちの犬': 'DogDay2019_Emoji_GIF',
+			// https://twitter.com/TwitterJP/status/1193353369672241152
+			'即位の礼': 'EnthronementCeremony_Emoji_GIF',
+			'祝賀御列の儀': 'EnthronementCeremony_Emoji_GIF',
+			'即位礼正殿の儀': 'EnthronementCeremony_Emoji_GIF',
+			'JAPANENTHRONEMENT': 'EnthronementCeremony_Emoji_GIF',
+			'JPNENTHRONEMENT': 'EnthronementCeremony_Emoji_GIF',
 			// ---- その他 ----
 			'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 			'LOVETWITTER': 'LoveTwitter',
