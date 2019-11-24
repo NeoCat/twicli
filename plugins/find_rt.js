@@ -36,7 +36,7 @@
 							}
 							if (!pp) {
 								xds.load_for_tab(twitterAPI + 'statuses/user_timeline.json' +
-									'?count=10&id=' + (t.user.id_str || t.user.id) + '&max_id=' + t.id +
+									'?count=10&id=' + (t.user.id_str || t.user.id) + '&max_id=' + (t.id_str || t.id) +
 									'&include_rts=true&include_entities=true&suppress_response_codes=true',
 									function(tw) {
 										for (var i = 0; i < tw.length; i++) {
