@@ -1533,6 +1533,10 @@ function twOldReply(tw) {
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
 	$("re").appendChild(nextButton('get_old_re', nr_page_re));
 }
+function getTwMaxId(tw) {
+	var last_tw = tw[tw.length-1] || [];
+	return last_tw.id_str || last_tw.id || '';
+}
 function twShow2(tw) {
 	var user_info = $("user_info");
 	if ((tw.errors && tw.errors[0].message.indexOf("Not authorized") >= 0 || tw.error && tw.error.indexOf("Not authorized") >= 0 || tw.length < 1 ) && !!user_info && !fav_mode && user_info.innerHTML == '') {
@@ -1547,7 +1551,7 @@ function twShow2(tw) {
 	if (tmp && tmp.parentNode) tmp.parentNode.removeChild(tmp);
 	twShowToNode(tw, $("tw2c"), !!user_info && !fav_mode, cur_page > 1);
 	if (selected_menu.id == "reply" || selected_menu.id == "user" && last_user.indexOf(',') < 0) {
-		max_id = tw[tw.length-1].id_str;
+		max_id = getTwMaxId(tw);
 		$("tw2c").appendChild(nextButton('next'));
 		get_next_func = getNextFuncCommon;
 	}

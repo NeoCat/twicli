@@ -154,11 +154,10 @@ function twlShowListStatus(tw, update) {
 		var next = nextButton('next-list');
 		$("tw2c").appendChild(next);
 		get_next_func = function(){
-			var last_tw = tw[tw.length-1] || [], max_id = last_tw.id_str || last_tw.id || '';
 			xds.load_for_tab(twitterAPI + 'lists/statuses.json?seq=' + (seq++)
 				+ '&owner_screen_name=' + last_list[0] + '&slug=' + last_list[1]
 				+ '&&include_rts=true&per_page=' + max_count_u
-				+ '&max_id=' + max_id + '&' + default_api_args_tl, twlShowListStatus);
+				+ '&max_id=' + getTwMaxId(tw) + '&' + default_api_args_tl, twlShowListStatus);
 		}
 		if (twl_page == 1) callPlugins('switchTo', selected_menu, selected_menu);
 	}
