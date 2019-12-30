@@ -836,6 +836,14 @@ registerPlugin({
 			'相信中華': 'WBSCPremier12TeamEmoji_CHINESETAIPEI_V2',
 			'FORGLORY': 'WBSCPremier12TeamEmoji_USA_V2',
 			'PORTUSELECCIÓN': 'WBSCPremier12TeamEmoji_Venezuela',
+			// [年末年始はTwitterで 「#あけおめ」](https://blog.twitter.com/ja_jp/topics/events/2019/newyear-tweet-2019.html)
+			'あけおめ': 'NewYearCelebration_Japan2019_sunrise',
+			'謹賀新年': 'NewYearCelebration_Japan2019_sunrise',
+			'あけましておめでとう': 'NewYearCelebration_Japan2019_sunrise',
+			'初詣': 'NewYearCelebration_Japan2019_temple',
+			'富士': 'NewYearCelebration_Japan2019_mtfuji',
+			'鷹': 'NewYearCelebration_Japan2019_hawk',
+			'茄子': 'NewYearCelebration_Japan2019_eggplant',
 			// ---- その他 ----
 			'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 			'LOVETWITTER': 'LoveTwitter',
