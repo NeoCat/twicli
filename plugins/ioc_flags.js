@@ -844,6 +844,9 @@ registerPlugin({
 			'富士': 'NewYearCelebration_Japan2019_mtfuji',
 			'鷹': 'NewYearCelebration_Japan2019_hawk',
 			'茄子': 'NewYearCelebration_Japan2019_eggplant',
+			// [#全員団結 絵文字が出ます](https://blog.twitter.com/ja_jp/topics/company/2019/danketsu-olympic.html)
+			'全員団結': 'JapanOlympicBrandTogether2020',
+			'LAUSANNE2020': 'Lausanne_2020',
 			// ---- その他 ----
 			'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 			'LOVETWITTER': 'LoveTwitter',
