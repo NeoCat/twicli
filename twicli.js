@@ -1139,7 +1139,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 			//ユーザアイコン
 			'<img class="uicon" src="' + t.user.profile_image_url_https + '" title="' + (t.user.description ? t.user.description.replace(/\"/g,'&quot;') :'') + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false">' + (t.user.url ? '</a>' : '') +
 			//名前
-			'<a href="' + twitterURL + un + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false"><span class="uid">@' + un + '</span>' +
+			'<a href="' + twitterURL + un + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false" class="user"><span class="uid">@' + un + '</span>' +
 			 /*プロフィールの名前*/ '<span class="uname' + (t.user.name!=un ? '' : '_same') + '"><span class="uname_paren">(</span>'+insertPDF(t.user.name)+'<span class="uname_paren2">)</span></span></a>'
 		: '') +
 		 /* verified? */ (!no_name && t.user.verified ? '<div id="verified-' + eid + '" class="verified"></div>' : '') +
