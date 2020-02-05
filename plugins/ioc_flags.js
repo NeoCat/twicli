@@ -847,6 +847,11 @@ registerPlugin({
 			// [#全員団結 絵文字が出ます](https://blog.twitter.com/ja_jp/topics/company/2019/danketsu-olympic.html)
 			'全員団結': 'JapanOlympicBrandTogether2020',
 			'LAUSANNE2020': 'Lausanne_2020',
+			// Meiji_THEChocolate_JP_2020
+			'明治ザ・チョコレート': 'Meiji_THEChocolate_JP_2020',
+			'ザチョコレート': 'Meiji_THEChocolate_JP_2020',
+			'ザチョコ': 'Meiji_THEChocolate_JP_2020',
+			'レシート漫画': 'Meiji_THEChocolate_JP_2020',
 			// ---- その他 ----
 			'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 			'LOVETWITTER': 'LoveTwitter',
