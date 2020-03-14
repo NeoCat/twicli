@@ -856,6 +856,14 @@ registerPlugin({
 			'国際女性デー': 'IWD_2020',
 			'IWD2020': 'IWD_2020',
 			'INTERNATIONALWOMENSDAY': 'IWD_2020',
+			// [ツイートは誰かの応援になる Twitter JapanとYahoo! JAPANが三陸地方応援企画を実施](https://blog.twitter.com/ja_jp/topics/company/2019/311_sanriku.html)
+			'がんばれ三鉄': 'RootforSanrikuRailway_2020',
+			'頑張れ三鉄': 'RootforSanrikuRailway_2020',
+			'がんばれ三陸': 'RootforSanrikuRailway_2020',
+			'頑張れ三陸': 'RootforSanrikuRailway_2020',
+			'三鉄': 'RootforSanrikuRailway_2020',
+			'三陸鉄道': 'RootforSanrikuRailway_2020',
+			'三陸鉄道リアス線': 'RootforSanrikuRailway_2020',
 			// ---- その他 ----
 			'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 			'LOVETWITTER': 'LoveTwitter',
