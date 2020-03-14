@@ -852,6 +852,10 @@ registerPlugin({
 			'ザチョコレート': 'Meiji_THEChocolate_JP_2020',
 			'ザチョコ': 'Meiji_THEChocolate_JP_2020',
 			'レシート漫画': 'Meiji_THEChocolate_JP_2020',
+			// ---- 国際女性デー ----
+			'国際女性デー': 'IWD_2020',
+			'IWD2020': 'IWD_2020',
+			'INTERNATIONALWOMENSDAY': 'IWD_2020',
 			// ---- その他 ----
 			'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 			'LOVETWITTER': 'LoveTwitter',
