@@ -860,6 +860,10 @@ registerPlugin({
 			// Nintendo_AnimalCrossing_2020_v2
 			'あつまれどうぶつの森': 'Nintendo_AnimalCrossing_2020_v2',
 			'どうぶつの森': 'Nintendo_AnimalCrossing_2020_v2',
+			'ACNH': 'Nintendo_AnimalCrossing_2020_v2',
+			'ANIMALCROSSING': 'Nintendo_AnimalCrossing_2020_v2',
+			'ANIMALCROSSINGNEWHORIZONS': 'Nintendo_AnimalCrossing_2020_v2',
+			'TOMNOOK': 'Nintendo_AnimalCrossing_2020_v2',
 			// KIRINSoccerJapan_2020
 			'キリチャレの日': 'KIRINSoccerJapan_2020',
 			'届けてキリン': 'KIRINSoccerJapan_2020',
