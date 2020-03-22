@@ -852,6 +852,11 @@ registerPlugin({
 			'ザチョコレート': 'Meiji_THEChocolate_JP_2020',
 			'ザチョコ': 'Meiji_THEChocolate_JP_2020',
 			'レシート漫画': 'Meiji_THEChocolate_JP_2020',
+			// AsahiMitsuyaJapan_2020
+			'3月28日は三ツ矢の日': 'AsahiMitsuyaJapan_2020',
+			'三ツ矢サイダー': 'AsahiMitsuyaJapan_2020',
+			'嵐と三ツ矢でカンパイ': 'AsahiMitsuyaJapan_2020',
+			'日本にはおいしいサイダーがある': 'AsahiMitsuyaJapan_2020',
 			// ---- 国際女性デー ----
 			'国際女性デー': 'IWD_2020',
 			'IWD2020': 'IWD_2020',
