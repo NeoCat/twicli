@@ -857,6 +857,9 @@ registerPlugin({
 			'三ツ矢サイダー': 'AsahiMitsuyaJapan_2020',
 			'嵐と三ツ矢でカンパイ': 'AsahiMitsuyaJapan_2020',
 			'日本にはおいしいサイダーがある': 'AsahiMitsuyaJapan_2020',
+			// Nintendo_AnimalCrossing_2020_v2
+			'あつまれどうぶつの森': 'Nintendo_AnimalCrossing_2020_v2',
+			'どうぶつの森': 'Nintendo_AnimalCrossing_2020_v2',
 			// ---- 国際女性デー ----
 			'国際女性デー': 'IWD_2020',
 			'IWD2020': 'IWD_2020',
