@@ -864,12 +864,17 @@ registerPlugin({
 			'三鉄': 'RootforSanrikuRailway_2020',
 			'三陸鉄道': 'RootforSanrikuRailway_2020',
 			'三陸鉄道リアス線': 'RootforSanrikuRailway_2020',
+			// ---- 放置少女 ----
+			'放置少女': 'Houchishoujo_Q2_2020',
+			'放置少女3周年': 'Houchishoujo_Q2_2020',
+			'LOVE放置少女': 'Houchishoujo_Q2_2020',
+			'いつもあなたのそばに〜放置少女': 'Houchishoujo_Q1_2020_V2',
+			'放置し過ぎないでね〜': 'Houchishoujo_Q1_2020_V2',
 			// ---- その他 ----
 			'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 			'LOVETWITTER': 'LoveTwitter',
 			'APPLEEVENT': 'Wasabi_Emoji_2019',
 			'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
-			'放置少女': 'Houchishoujo_Q3_2019_v2',
 			'午後の紅茶': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
 			'午後ティー': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
 			'ロマサガRS': 'romasaga_rs_2019',
