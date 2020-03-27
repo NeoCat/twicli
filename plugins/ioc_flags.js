@@ -883,6 +883,13 @@ registerPlugin({
 			'三鉄': 'RootforSanrikuRailway_2020',
 			'三陸鉄道': 'RootforSanrikuRailway_2020',
 			'三陸鉄道リアス線': 'RootforSanrikuRailway_2020',
+			// https://twitter.com/TwitterJP/status/1239837709633351680
+			'手洗い': 'WHO_SafeHands_2020',
+			'手を洗おう': 'WHO_SafeHands_2020',
+			'手洗いチャレンジ': 'WHO_SafeHands_2020',
+			'HANDWASHING': 'WHO_SafeHands_2020',
+			'SAFEHANDS': 'WHO_SafeHands_2020',
+			'HANDWASHCHALLENGE': 'WHO_SafeHands_2020',
 			// ---- 放置少女 ----
 			'放置少女': 'Houchishoujo_Q2_2020',
 			'放置少女3周年': 'Houchishoujo_Q2_2020',
