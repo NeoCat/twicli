@@ -498,6 +498,10 @@ registerPlugin({
 			'夜桜': '2020_CherryBlossom',
 			'間桐桜': '2020_CherryBlossom',
 			'エア花見': '2020_CherryBlossom',
+			'TLを花でいっぱいにしよう': 'CherryBlossom_2020_add',
+			'TWITTERお花見2020': 'CherryBlossom_2020_add',
+			'TWITTERお花見会': 'CherryBlossom_2020_add',
+			'ツイッターお花見2020': 'CherryBlossom_2020_add',
 			// [4月25日は「#世界ペンギンの日」](https://blog.twitter.com/ja_jp/topics/events/2019/Worldpenguinday.html)
 			'世界ペンギンの日': 'WorldPenguinDay_2019',
 			'WORLDPENGUINDAY': 'WorldPenguinDay_2019',
