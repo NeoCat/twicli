@@ -895,9 +895,13 @@ registerPlugin({
 			'SAFEHANDS': 'WHO_SafeHands_2020',
 			'HANDWASHCHALLENGE': 'WHO_SafeHands_2020',
 			'STAYHOME': 'StayHome_2020',
+			'STAYATHOME': 'StayHome_2020',
+			'STAYATHOMESAVELIVES': 'StayHome_2020',
 			'うちで過ごそう': 'StayHome_2020',
 			'家で過ごそう': 'StayHome_2020',
 			'家にいるだけで世界は救える': 'StayHome_2020',
+			'WORLDHEALTHDAY': 'StayHome_2020_WorldHealthDay_add1',
+			'世界保健デー': 'StayHome_2020_WorldHealthDay_add1',
 			// ---- 放置少女 ----
 			'放置少女': 'Houchishoujo_Q2_2020',
 			'放置少女3周年': 'Houchishoujo_Q2_2020',
