@@ -902,6 +902,15 @@ registerPlugin({
 			'家にいるだけで世界は救える': 'StayHome_2020',
 			'WORLDHEALTHDAY': 'StayHome_2020_WorldHealthDay_add1',
 			'世界保健デー': 'StayHome_2020_WorldHealthDay_add1',
+			// ---- アースデー ----
+			'アースデー': 'EarthDay_2019_fixed',
+			'EARTHDAY': 'EarthDay_2019_fixed',
+			'EARTHDAY2020': 'EarthDay_2020_add2',
+			'TWITTERFORGOOD': 'TwitterForGood_2020',
+			'TWITTERFORGOODDAY': 'TwitterForGood_2020',
+			'TFGDAY': 'TwitterForGood_2020',
+			'TFG': 'TwitterForGood_2020',
+			'FRIDAYFORGOOD': 'TwitterForGood_2020',
 			// ---- 放置少女 ----
 			'放置少女': 'Houchishoujo_Q2_2020',
 			'放置少女3周年': 'Houchishoujo_Q2_2020',
