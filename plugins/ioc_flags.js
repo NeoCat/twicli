@@ -914,6 +914,7 @@ registerPlugin({
 			// https://twitter.com/TwitterJP/statuses/1256109065106669569
 			'世界報道自由デー': 'WorldPressFreedomDay_2020',
 			'記者に感謝': 'WorldPressFreedomDay_2020',
+			'報道の自由': 'WorldPressFreedomDay_2020',
 			'THANKAJOURNALIST': 'WorldPressFreedomDay_2020',
 			'WORLDPRESSFREEDOMDAY': 'WorldPressFreedomDay_2020',
 			'WPFD2020': 'WorldPressFreedomDay_2020',
