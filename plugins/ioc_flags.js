@@ -911,6 +911,13 @@ registerPlugin({
 			'TFGDAY': 'TwitterForGood_2020',
 			'TFG': 'TwitterForGood_2020',
 			'FRIDAYFORGOOD': 'TwitterForGood_2020',
+			// https://twitter.com/TwitterJP/statuses/1256109065106669569
+			'世界報道自由デー': 'WorldPressFreedomDay_2020',
+			'記者に感謝': 'WorldPressFreedomDay_2020',
+			'THANKAJOURNALIST': 'WorldPressFreedomDay_2020',
+			'WORLDPRESSFREEDOMDAY': 'WorldPressFreedomDay_2020',
+			'WPFD2020': 'WorldPressFreedomDay_2020',
+			'PRESSFREEDOM': 'WorldPressFreedomDay_2020',
 			// ---- 放置少女 ----
 			'放置少女': 'Houchishoujo_Q2_2020',
 			'放置少女3周年': 'Houchishoujo_Q2_2020',
