@@ -1201,6 +1201,17 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 function makeUserInfoHTML(user) {
 	function getDescripionHtml(user) {
 		if (!user.description) return '<br>';
+		var expanded_urls = {};
+		if (user.entities && user.entities.description && Array.isArray(user.entities.description.urls)) {
+			user.entities.description.urls.forEach(function(u) {
+				if (u.url && u.expanded_url) {
+					expanded_urls[u.url] = {
+						display_url: u.display_url,
+						expanded_url: u.expanded_url
+					};
+				}
+			});
+		}
 		return user.description.replace(regexp_links, function(_, u, x, h, s) {
 			if (h === "#" || h === "＃") {
 				if (s.match(/^\d+$/)) return _;
@@ -1211,7 +1222,9 @@ function makeUserInfoHTML(user) {
 				if (u.indexOf('/') > 0) return '<a target="_blank" href="' + twitterURL + u + '" onclick="return link(this);">' + _ + '</a>';
 				return '<a href="' + twitterURL + u + '"  class="mention" onClick="switchUser(\'' + u + '\'); return false;" >' + _ + '</a>';
 			}
-			return _;
+			var url = expanded_urls[_] || { display_url: _, expanded_url: _ };
+			return ('<a class="link" target="_blank" href="' + url.expanded_url.replace(/"/g, '%22') + '" onclick="return link(this);">'
+				+ url.display_url.replace(/&/g, '&amp;') + '</a>');
 		}).replace(/\r?\n|\r/g, "<br>");
 	}
 	function getWebSiteHtml(user) {
