@@ -1201,7 +1201,13 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 function makeUserInfoHTML(user) {
 	function getDescripionHtml(user) {
 		if (!user.description) return '<br>';
-		return user.description.replace(/@(\w+)/g, '<a href="'+twitterURL+'$1" onclick="switchUser(\'$1\');return false;">@$1</a>')
+		return user.description.replace(regexp_links, function(_, u, x, h, s) {
+			if (u) {
+				if (u.indexOf('/') > 0) return '<a target="_blank" href="' + twitterURL + u + '" onclick="return link(this);">' + _ + '</a>';
+				return '<a href="' + twitterURL + u + '"  class="mention" onClick="switchUser(\'' + u + '\'); return false;" >' + _ + '</a>';
+			}
+			return _;
+		}).replace(/\r?\n|\r/g, "<br>");
 	}
 	function getWebSiteHtml(user) {
 		if (!user.url) return '';
