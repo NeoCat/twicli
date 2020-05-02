@@ -1199,6 +1199,10 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 }
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
+	function getDescripionHtml(user) {
+		if (!user.description) return '<br>';
+		return user.description.replace(/@(\w+)/g, '<a href="'+twitterURL+'$1" onclick="switchUser(\'$1\');return false;">@$1</a>')
+	}
 	function getWebSiteHtml(user) {
 		if (!user.url) return '';
 		var url = {};
@@ -1212,7 +1216,7 @@ function makeUserInfoHTML(user) {
 			(user.verified ? '<img class="verified" alt="verified" src="images/verified.png">' : '') +
 			(user.protected ? '<img class="lock" alt="lock" src="images/icon_lock.png">' : '') +
 			'<b>@' + user.screen_name + '</b> / <b>' + user.name + '</b></div>' +
-			'<div class="udesc">' + (user.description ? user.description.replace(/@(\w+)/g, '<a href="'+twitterURL+'$1" onclick="switchUser(\'$1\');return false;">@$1</a>') : '<br>') + '</div>' +
+			'<div class="udesc">' + getDescripionHtml(user) + '</div>' +
 			'<div class="uloc">' + [user.location, getWebSiteHtml(user)].filter(function(u) { return !!u; }).join('・') + '</div>' +
 			'<b><a href="' + twitterURL + user.screen_name + '/following" onclick="switchFollowing();return false;">' + user.friends_count + '<small>'+_('following')+'</small></a> / ' +
 						'<a href="' + twitterURL + user.screen_name + '/followers" onclick="switchFollower();return false;">' + user.followers_count + '<small>'+_('followers')+'</small></a>' +
