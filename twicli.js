@@ -1205,7 +1205,7 @@ function makeUserInfoHTML(user) {
 			'<b>@' + user.screen_name + '</b> / <b>' + user.name + '</b></div>' +
 			'<div class="udesc">' + (user.description ? user.description.replace(/@(\w+)/g, '<a href="'+twitterURL+'$1" onclick="switchUser(\'$1\');return false;">@$1</a>') : '<br>') + '</div>' +
 			'<div class="uloc">' + (user.location ? user.location + (user.url?'・':'') : '') +
-			(user.url ? '<a target="_blank" href="' + user.url + '" onclick="return link(this);">' + user.url + '</a>' : '') + '</div>' +
+			(user.url ? '<a target="_blank" href="' + (user.entities.url.urls[0].expanded_url || user.url) + '" onclick="return link(this);">' + (user.entities.url.urls[0].display_url || user.url) + '</a>' : '') + '</div>' +
 			'<b><a href="' + twitterURL + user.screen_name + '/following" onclick="switchFollowing();return false;">' + user.friends_count + '<small>'+_('following')+'</small></a> / ' +
 						'<a href="' + twitterURL + user.screen_name + '/followers" onclick="switchFollower();return false;">' + user.followers_count + '<small>'+_('followers')+'</small></a>' +
 			' / <a href="' + twitterURL + user.screen_name + '" onclick="switchStatus();return false;">' + user.statuses_count + '<small>'+_('tweets')+'</small></a> / ' +
