@@ -1150,7 +1150,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 		/*ダイレクトメッセージの方向*/ (t.d_dir == 1 ? '<span class="dir">→</span> ' : t.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text-" + eid + "\" class=\"status" + (tw.deleted ? " deleted" : "") + "\">" +
-		ttext.replace(regexp_links, function(_,u,x,h,s){
+		(userdesc ? getDescripionHtml(tw.user) : ttext.replace(regexp_links, function(_,u,x,h,s){
 				if (!u && !h) {
 					if (expanded_urls[_]) {
 						if (t.quoted_status && t.quoted_status.user && t.quoted_status_id_str &&
@@ -1203,30 +1203,30 @@ function replaceUserAndHashtagWithLink(_, u, x, h, s) {
 	}
 	return _;
 }
+function getDescripionHtml(user) {
+	if (!user.description) return '<br>';
+	var expanded_urls = {};
+	if (user.entities && user.entities.description && Array.isArray(user.entities.description.urls)) {
+		user.entities.description.urls.forEach(function(u) {
+			if (u.url && u.expanded_url) {
+				expanded_urls[u.url] = {
+					display_url: u.display_url,
+					expanded_url: u.expanded_url
+				};
+			}
+		});
+	}
+	return user.description.replace(regexp_links, function(_, u, x, h, s) {
+		if (h === "#" || h === "＃" || u) {
+			return replaceUserAndHashtagWithLink(_, u, x, h, s);
+		}
+		var url = expanded_urls[_] || { display_url: _, expanded_url: _ };
+		return ('<a class="link" target="_blank" href="' + url.expanded_url.replace(/"/g, '%22') + '" onclick="return link(this);">'
+			+ url.display_url.replace(/&/g, '&amp;') + '</a>');
+	}).replace(/\r?\n|\r/g, "<br>");
+}
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
-	function getDescripionHtml(user) {
-		if (!user.description) return '<br>';
-		var expanded_urls = {};
-		if (user.entities && user.entities.description && Array.isArray(user.entities.description.urls)) {
-			user.entities.description.urls.forEach(function(u) {
-				if (u.url && u.expanded_url) {
-					expanded_urls[u.url] = {
-						display_url: u.display_url,
-						expanded_url: u.expanded_url
-					};
-				}
-			});
-		}
-		return user.description.replace(regexp_links, function(_, u, x, h, s) {
-			if (h === "#" || h === "＃" || u) {
-				return replaceUserAndHashtagWithLink(_, u, x, h, s);
-			}
-			var url = expanded_urls[_] || { display_url: _, expanded_url: _ };
-			return ('<a class="link" target="_blank" href="' + url.expanded_url.replace(/"/g, '%22') + '" onclick="return link(this);">'
-				+ url.display_url.replace(/&/g, '&amp;') + '</a>');
-		}).replace(/\r?\n|\r/g, "<br>");
-	}
 	function getWebSiteHtml(user) {
 		if (!user.url) return '';
 		var url = {};
