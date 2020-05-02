@@ -1199,13 +1199,21 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 }
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
+	function getWebSiteHtml(user) {
+		if (!user.url) return '';
+		var url = {};
+		if (user.entities && user.entities.url && Array.isArray(user.entities.url.urls)) {
+			url = user.entities.url.urls.filter(function(u) { return u.url === user.url; }).shift();
+			// url = user.entities.url.urls.find(function(u) { return u.url === user.url; });
+		}
+		return '<a target="_blank" href="' + (url.expanded_url || user.url) + '" onclick="return link(this);">' + (url.display_url || user.url) + '</a>';
+	}
 	return '<a class="uicona" target="twitter" href="' + user.profile_image_url_https.replace('_normal', '') +'"><img class="uicon2" src="' + user.profile_image_url_https.replace('normal.','reasonably_small.') + '" onerror="if(this.src!=\''+user.profile_image_url_https+'\')this.src=\''+user.profile_image_url_https+'\'"></a><div id="profile"><div>' +
 			(user.verified ? '<img class="verified" alt="verified" src="images/verified.png">' : '') +
 			(user.protected ? '<img class="lock" alt="lock" src="images/icon_lock.png">' : '') +
 			'<b>@' + user.screen_name + '</b> / <b>' + user.name + '</b></div>' +
 			'<div class="udesc">' + (user.description ? user.description.replace(/@(\w+)/g, '<a href="'+twitterURL+'$1" onclick="switchUser(\'$1\');return false;">@$1</a>') : '<br>') + '</div>' +
-			'<div class="uloc">' + (user.location ? user.location + (user.url?'・':'') : '') +
-			(user.url ? '<a target="_blank" href="' + (user.entities.url.urls[0].expanded_url || user.url) + '" onclick="return link(this);">' + (user.entities.url.urls[0].display_url || user.url) + '</a>' : '') + '</div>' +
+			'<div class="uloc">' + [user.location, getWebSiteHtml(user)].filter(function(u) { return !!u; }).join('・') + '</div>' +
 			'<b><a href="' + twitterURL + user.screen_name + '/following" onclick="switchFollowing();return false;">' + user.friends_count + '<small>'+_('following')+'</small></a> / ' +
 						'<a href="' + twitterURL + user.screen_name + '/followers" onclick="switchFollower();return false;">' + user.followers_count + '<small>'+_('followers')+'</small></a>' +
 			' / <a href="' + twitterURL + user.screen_name + '" onclick="switchStatus();return false;">' + user.statuses_count + '<small>'+_('tweets')+'</small></a> / ' +
