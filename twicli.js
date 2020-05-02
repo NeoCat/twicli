@@ -1163,13 +1163,8 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 					}
 					return "<a class=\"link\" target=\"_blank\" href=\""+_.replace(/\"/g, '%22')+"\" onclick=\"return link(this);\">"+_.replace(/&/g, '&amp;')+"</a>";
 				}
-				if (h == "#" || h == "＃") {
-					if (s.match(/^\d+$/)) return _;
-					return x+"<a target=\"_blank\" class=\"hashtag\" title=\"#"+s+"\" href=\"https://twitter.com/search?q="+encodeURIComponent("#"+s)+"\">"+h+s+"</a>";
-				}
-				if (u.indexOf('/') > 0) return "<a target=\"_blank\" href=\""+twitterURL+u+"\" onclick=\"return link(this);\">"+_+"</a>";
-				return "<a href=\""+twitterURL+u+"\"  class=\"mention\" onClick=\"switchUser('"+u+"'); return false;\" >"+_+"</a>";
-			}).replace(/\r?\n|\r/g, "<br>") +
+				return replaceUserAndHashtagWithLink(_, u, x, h, s);
+			}).replace(/\r?\n|\r/g, "<br>")) +
 		(noctl ? '<a class="button inrep overlay" href="#" onclick="return overlayQuoted(this)"><img src="images/jump.png"></a>' : '') +
 		'</span>' +
 		(noctl ? '' :
@@ -1197,6 +1192,17 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 		'&nbsp;&nbsp;&nbsp;<a class="button popup" href="#" onClick="popup_menu(\'' + un + "','" + id2 + '\', this); return false;"><small><small>▼</small></small></a>' +
 		'</span>');
 }
+function replaceUserAndHashtagWithLink(_, u, x, h, s) {
+	if (h === "#" || h === "＃") {
+		if (s.match(/^\d+$/)) return _;
+		return (x + '<a target="_blank" class="hashtag" title="#' + s + '" href="' + twitterURL + 'search?q='
+			+ encodeURIComponent('#' + s) + '">' + h + s + '</a>');
+	} else if (u) {
+		if (u.indexOf('/') > 0) return '<a target="_blank" href="' + twitterURL + u + '" onclick="return link(this);">' + _ + '</a>';
+		return '<a href="' + twitterURL + u + '"  class="mention" onClick="switchUser(\'' + u + '\'); return false;" >' + _ + '</a>';
+	}
+	return _;
+}
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
 	function getDescripionHtml(user) {
@@ -1213,14 +1219,9 @@ function makeUserInfoHTML(user) {
 			});
 		}
 		return user.description.replace(regexp_links, function(_, u, x, h, s) {
-			if (h === "#" || h === "＃") {
-				if (s.match(/^\d+$/)) return _;
-				return (x + '<a target="_blank" class="hashtag" title="#' + s + '" href="' + twitterURL + 'search?q='
-					+ encodeURIComponent('#' + s) + '">' + h + s + '</a>');
+			if (h === "#" || h === "＃" || u) {
+				return replaceUserAndHashtagWithLink(_, u, x, h, s);
 				// TODO plugins/search.js
-			} else if (u) {
-				if (u.indexOf('/') > 0) return '<a target="_blank" href="' + twitterURL + u + '" onclick="return link(this);">' + _ + '</a>';
-				return '<a href="' + twitterURL + u + '"  class="mention" onClick="switchUser(\'' + u + '\'); return false;" >' + _ + '</a>';
 			}
 			var url = expanded_urls[_] || { display_url: _, expanded_url: _ };
 			return ('<a class="link" target="_blank" href="' + url.expanded_url.replace(/"/g, '%22') + '" onclick="return link(this);">'
