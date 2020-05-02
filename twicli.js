@@ -1202,7 +1202,12 @@ function makeUserInfoHTML(user) {
 	function getDescripionHtml(user) {
 		if (!user.description) return '<br>';
 		return user.description.replace(regexp_links, function(_, u, x, h, s) {
-			if (u) {
+			if (h === "#" || h === "＃") {
+				if (s.match(/^\d+$/)) return _;
+				return (x + '<a target="_blank" class="hashtag" title="#' + s + '" href="' + twitterURL + 'search?q='
+					+ encodeURIComponent('#' + s) + '">' + h + s + '</a>');
+				// TODO plugins/search.js
+			} else if (u) {
 				if (u.indexOf('/') > 0) return '<a target="_blank" href="' + twitterURL + u + '" onclick="return link(this);">' + _ + '</a>';
 				return '<a href="' + twitterURL + u + '"  class="mention" onClick="switchUser(\'' + u + '\'); return false;" >' + _ + '</a>';
 			}
