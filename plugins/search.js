@@ -107,6 +107,13 @@ function twsSearchShow(res, update) {
 		}
 	}
 }
+function twsReplaceLinkWithHandler(ele) {
+	var eles = ele.querySelectorAll("span.status > a.hashtag, div.udesc > a.hashtag");
+	for (var i = 0; i < eles.length; i++) {
+		if (eles[i].className.indexOf("hashtag") >= 0)
+			(function(h){ eles[i].onclick = function(){ return twsSearch(h) } })(eles[i].title);
+	}
+}
 
 registerPlugin({
 	auth: function() {
@@ -136,21 +143,10 @@ registerPlugin({
 	},
 	newUserInfoElement: function(ele, user) {
 		ele.innerHTML += '<a href="' + twitterURL + 'search/' + user.screen_name + '" onclick="twsSearch(\'' + user.screen_name + '\'); return false;">[Search]</a>';
+		twsReplaceLinkWithHandler(ele);
 	},
-	newMessageElement: function(ele, tw) {
-		var eles = ele.getElementsByTagName("span");
-		for (var i = 0; i < eles.length; i++) {
-			var target = eles[i];
-			if (target.className == "status") {
-				eles = target.getElementsByTagName("a");
-				for (var j = 0; j < eles.length; j++) {
-					target = eles[j];
-					if (target.className.indexOf("hashtag") >= 0)
-						(function(h){ target.onclick = function(){ return twsSearch(h) } })(target.title);
-				}
-				break;
-			}
-		}
+	newMessageElement: function(ele) {
+		twsReplaceLinkWithHandler(ele);
 	}
 });
 

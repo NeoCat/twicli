@@ -1221,7 +1221,6 @@ function makeUserInfoHTML(user) {
 		return user.description.replace(regexp_links, function(_, u, x, h, s) {
 			if (h === "#" || h === "＃" || u) {
 				return replaceUserAndHashtagWithLink(_, u, x, h, s);
-				// TODO plugins/search.js
 			}
 			var url = expanded_urls[_] || { display_url: _, expanded_url: _ };
 			return ('<a class="link" target="_blank" href="' + url.expanded_url.replace(/"/g, '%22') + '" onclick="return link(this);">'
