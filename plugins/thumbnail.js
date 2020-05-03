@@ -68,7 +68,7 @@ registerPlugin(thumbnail_plugin = {
 					function(x) {
 						var p = x.photo;
 						if (!p) return;
-						addThumbnail(elem, 'http://farm'+p.farm+'.static.flickr.com/'+p.server+'/'+
+						addThumbnail(elem, '//farm'+(p.farm || 1)+'.static.flickr.com/'+p.server+'/'+
 									p.id+'_'+p.secret+'_s.jpg', _url);
 					},
 					null, 1, 'jsoncallback');
