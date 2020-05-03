@@ -1161,7 +1161,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 						t.text_replaced = (t.text_replaced || text(t)).replace(_, expanded_urls[_]);
 						_ = expanded_urls[_];
 					}
-					return "<a class=\"link\" target=\"_blank\" href=\""+_.replace(/\"/g, '%22')+"\" onclick=\"return link(this);\">"+_.replace(/&/g, '&amp;')+"</a>";
+					return "<a class=\"link\" target=\"_blank\" href=\""+_.replace(/\"/g, '%22')+"\" onclick=\"return link(this);\">"+_.replace(/^https?:\/\//, '').replace(/&/g, '&amp;')+"</a>";
 				}
 				return replaceUserAndHashtagWithLink(_, u, x, h, s);
 			}).replace(/\r?\n|\r/g, "<br>")) +
