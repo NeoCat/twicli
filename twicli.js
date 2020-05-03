@@ -1150,7 +1150,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 		/*ダイレクトメッセージの方向*/ (t.d_dir == 1 ? '<span class="dir">→</span> ' : t.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text-" + eid + "\" class=\"status" + (tw.deleted ? " deleted" : "") + "\">" +
-		(userdesc ? getDescripionHtml(tw.user) : ttext.replace(regexp_links, function(_,u,x,h,s){
+		(userdesc ? getDescripionHTML(tw.user) : ttext.replace(regexp_links, function(_,u,x,h,s){
 				if (!u && !h) {
 					if (expanded_urls[_]) {
 						if (t.quoted_status && t.quoted_status.user && t.quoted_status_id_str &&
@@ -1203,7 +1203,7 @@ function replaceUserAndHashtagWithLink(_, u, x, h, s) {
 	}
 	return _;
 }
-function getDescripionHtml(user) {
+function getDescripionHTML(user) {
 	if (!user.description) return '<br>';
 	var expanded_urls = {};
 	if (user.entities && user.entities.description && Array.isArray(user.entities.description.urls)) {
@@ -1227,21 +1227,21 @@ function getDescripionHtml(user) {
 }
 // ユーザ情報のHTML表現を生成
 function makeUserInfoHTML(user) {
-	function getWebSiteHtml(user) {
+	function getWebSiteHTML(user) {
 		if (!user.url) return '';
 		var url = {};
 		if (user.entities && user.entities.url && Array.isArray(user.entities.url.urls)) {
-			url = user.entities.url.urls.filter(function(u) { return u.url === user.url; }).shift();
-			// url = user.entities.url.urls.find(function(u) { return u.url === user.url; });
+			var cand = user.entities.url.urls.filter(function(u) { return u.url === user.url; }).shift();
+			if (cand) url = cand;
 		}
-		return '<a target="_blank" href="' + (url.expanded_url || user.url) + '" onclick="return link(this);">' + (url.display_url || user.url) + '</a>';
+		return '<a target="_blank" href="' + (url.expanded_url || user.url).replace(/"/g, '%22') + '" onclick="return link(this);">' + (url.display_url || user.url).replace(/&/g, '&amp;') + '</a>';
 	}
 	return '<a class="uicona" target="twitter" href="' + user.profile_image_url_https.replace('_normal', '') +'"><img class="uicon2" src="' + user.profile_image_url_https.replace('normal.','reasonably_small.') + '" onerror="if(this.src!=\''+user.profile_image_url_https+'\')this.src=\''+user.profile_image_url_https+'\'"></a><div id="profile"><div>' +
 			(user.verified ? '<img class="verified" alt="verified" src="images/verified.png">' : '') +
 			(user.protected ? '<img class="lock" alt="lock" src="images/icon_lock.png">' : '') +
 			'<b>@' + user.screen_name + '</b> / <b>' + user.name + '</b></div>' +
-			'<div class="udesc">' + getDescripionHtml(user) + '</div>' +
-			'<div class="uloc">' + [user.location, getWebSiteHtml(user)].filter(function(u) { return !!u; }).join('・') + '</div>' +
+			'<div class="udesc">' + getDescripionHTML(user) + '</div>' +
+			'<div class="uloc">' + [user.location, getWebSiteHTML(user)].filter(function(u) { return !!u; }).join('・') + '</div>' +
 			'<b><a href="' + twitterURL + user.screen_name + '/following" onclick="switchFollowing();return false;">' + user.friends_count + '<small>'+_('following')+'</small></a> / ' +
 						'<a href="' + twitterURL + user.screen_name + '/followers" onclick="switchFollower();return false;">' + user.followers_count + '<small>'+_('followers')+'</small></a>' +
 			' / <a href="' + twitterURL + user.screen_name + '" onclick="switchStatus();return false;">' + user.statuses_count + '<small>'+_('tweets')+'</small></a> / ' +
