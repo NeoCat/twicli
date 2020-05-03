@@ -894,6 +894,8 @@ registerPlugin({
 			'HANDWASHING': 'WHO_SafeHands_2020',
 			'SAFEHANDS': 'WHO_SafeHands_2020',
 			'HANDWASHCHALLENGE': 'WHO_SafeHands_2020',
+			'HANDWASHINGCHALLENGE': 'WHO_SafeHands_2020',
+			'WASHYOURHANDS': 'WHO_SafeHands_2020',
 			'STAYHOME': 'StayHome_2020',
 			'STAYATHOME': 'StayHome_2020',
 			'STAYATHOMESAVELIVES': 'StayHome_2020',
