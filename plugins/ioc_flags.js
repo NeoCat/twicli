@@ -897,6 +897,8 @@ registerPlugin({
 			'STAYHOME': 'StayHome_2020',
 			'STAYATHOME': 'StayHome_2020',
 			'STAYATHOMESAVELIVES': 'StayHome_2020',
+			'STAYHOMECHALLENGE': 'StayHome_2020',
+			'HEALTHYATHOME': 'StayHome_2020',
 			'うちで過ごそう': 'StayHome_2020',
 			'家で過ごそう': 'StayHome_2020',
 			'家にいるだけで世界は救える': 'StayHome_2020',
