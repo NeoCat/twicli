@@ -237,7 +237,7 @@ var shortcutkey_plugin = {
 					if (target.id && target.id.substr(0,5) == 'text-') {
 						for (i = 0; i < target.childNodes.length; i++) {
 							var target2 = target.childNodes[i];
-							if (target2.tagName == 'A' && target2.innerHTML.substr(0,4) == 'http') {
+							if (target2.tagName == 'A' && target2.className && target2.className.match(/\blink\b/)) {
 								if (link(target2)) window.open(target2.href, "_blank");
 							}
 						}
