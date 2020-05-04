@@ -13,16 +13,17 @@
       }catch(e){
         var decoded = longUrl;
       }
+      var truncated;
       if (decoded.length > 200) {
-        var truncated = decoded.slice(0,200)+'...';
+        truncated = removeScheme(decoded.slice(0,200)+'...');
       } else {
-        var truncated = decoded;
+        truncated = removeScheme(decoded);
       }
 
       link.href = longUrl;
-      if (link.textContent === shortUrl) {
+      if (removeScheme(link.textContent) === removeScheme(shortUrl)) {
         link.textContent = truncated;
-      } else if (link.innerText === shortUrl) {
+      } else if (removeScheme(link.innerText) === removeScheme(shortUrl)) {
         link.innerText = truncated;
       }
       if (link.className.indexOf('resolved') < 0);
