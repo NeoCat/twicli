@@ -929,6 +929,9 @@ function tweReplaceEmoji(el) {
 		'TOGETHERWECAN': 'MHA_TogetherWeCan_LetsTalk_2020',
 		'WECARE': 'MHA_TogetherWeCan_LetsTalk_2020',
 		'LETSTALK': 'MHA_TogetherWeCan_LetsTalk_2020',
+		// ---- SocialGoodPJ_ThankYouEveryone ----
+		'あたりまえにありがとう': 'SocialGoodPJ_ThankYouEveryone_2020',
+		'わたしたちにできること': 'SocialGoodPJ_ThankYouEveryone_2020',
 		// ---- 放置少女 ----
 		'放置少女': 'Houchishoujo_Q2_2020',
 		'放置少女3周年': 'Houchishoujo_Q2_2020',
