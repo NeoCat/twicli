@@ -952,7 +952,7 @@ function tweReplaceEmoji(el) {
 	};
 
 	// status
-	Array.prototype.forEach.call(el.querySelectorAll('.status > .hashtag'), function(elHashtag) {
+	Array.prototype.forEach.call(el.querySelectorAll('.status > .hashtag, .udesc > .hashtag'), function(elHashtag) {
 		var hashtag = elHashtag.innerHTML.match(hashtag_pattern);
 		if (!hashtag || hashtag.length < 2) return;
 
@@ -965,7 +965,7 @@ function tweReplaceEmoji(el) {
 			elHashtag.innerHTML += getFlagImageHTML(organization[index]);
 		}
 	});
-	Array.prototype.forEach.call(el.querySelectorAll('.uname, .status'), function(unparse) {
+	Array.prototype.forEach.call(el.querySelectorAll('.uname, .status, #profile > div'), function(unparse) {
 		twemoji.parse(unparse, { folder: 'svg', ext: '.svg' });
 	});
 
@@ -981,7 +981,10 @@ function tweReplaceEmoji(el) {
 }
 
 registerPlugin({
-	newMessageElement: function(el) 
+	newMessageElement: function(el) {
 		tweReplaceEmoji(el);
+	},
+	newUserInfoElement: function() {
+		tweReplaceEmoji($('profile'));
 	}
 });
