@@ -945,6 +945,7 @@ function tweReplaceEmoji(el) {
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
+		'MSBUILD': 'MSBuild_2020',
 		'APPLEEVENT': 'Wasabi_Emoji_2019',
 		'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
 		'午後の紅茶': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
