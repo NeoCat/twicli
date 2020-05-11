@@ -1131,6 +1131,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 	var eid = pid+'-'+id;
 	var in_reply_to = t.in_reply_to_status_id_str || t.in_reply_to_status_id;
 	var expanded_urls = {};
+	var quoted = false;
 	var entities = ent(t, true);
 	if (entities && (entities.urls || entities.media))
 		Array.prototype.concat.apply(entities.urls || [], entities.media || []).map(function(_){
@@ -1150,14 +1151,16 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 		/*ダイレクトメッセージの方向*/ (t.d_dir == 1 ? '<span class="dir">→</span> ' : t.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text-" + eid + "\" class=\"status" + (tw.deleted ? " deleted" : "") + "\">" +
-		(userdesc ? getDescripionHTML(tw.user) : ttext.replace(regexp_links, function(_,u,x,h,s){
+		(userdesc ? getDescripionHTML(tw.user) : ttext.replace(regexp_links, function(_,u,x,h,s) {
 				if (!u && !h) {
 					if (expanded_urls[_]) {
-						if (t.quoted_status && t.quoted_status.user && t.quoted_status_id_str &&
+						if (!quoted && t.quoted_status && t.quoted_status.user && t.quoted_status_id_str &&
 							(expanded_urls[_].substring(0, twitterURL.length) == twitterURL ||
 							 expanded_urls[_].substring(0, twitterURL.length-1) == twitterURL.replace('https', 'http')) &&
-						    expanded_urls[_].indexOf(t.quoted_status_id_str) >= 0)
+						    expanded_urls[_].indexOf(t.quoted_status_id_str) >= 0) {
+							quoted = true;
 							return '<blockquote class="quoted">' + makeHTML(t.quoted_status, false, pid, null, true) + '</blockquote>';
+						}
 						t.text_replaced = (t.text_replaced || text(t)).replace(_, expanded_urls[_]);
 						_ = expanded_urls[_];
 					}
