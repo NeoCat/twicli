@@ -912,12 +912,17 @@ function tweReplaceEmoji(el) {
 		// ---- アースデー ----
 		'アースデー': 'EarthDay_2019_fixed',
 		'EARTHDAY': 'EarthDay_2019_fixed',
+		'VOICEFORTHEPLANET': 'EarthDay_2020_add',
 		'EARTHDAY2020': 'EarthDay_2020_add2',
 		'TWITTERFORGOOD': 'TwitterForGood_2020',
 		'TWITTERFORGOODDAY': 'TwitterForGood_2020',
 		'TFGDAY': 'TwitterForGood_2020',
 		'TFG': 'TwitterForGood_2020',
 		'FRIDAYFORGOOD': 'TwitterForGood_2020',
+		'環境の日': 'EarthDay_2020_ext_v2',
+		'CLIMATEACTION': 'EarthDay_2020_ext_v2',
+		'EARTHRISE': 'EarthDay_2020_ext_v2',
+		'VOTEEARTH': 'EarthDay_2020_ext_v2',
 		// https://twitter.com/TwitterJP/statuses/1256109065106669569
 		'世界報道自由デー': 'WorldPressFreedomDay_2020',
 		'記者に感謝': 'WorldPressFreedomDay_2020',
