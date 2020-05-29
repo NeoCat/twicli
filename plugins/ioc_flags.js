@@ -923,6 +923,9 @@ function tweReplaceEmoji(el) {
 		'CLIMATEACTION': 'EarthDay_2020_ext_v2',
 		'EARTHRISE': 'EarthDay_2020_ext_v2',
 		'VOTEEARTH': 'EarthDay_2020_ext_v2',
+		'世界環境デー': 'WorldEnvironmentDay_ForNature_2020',
+		'WORLDENVIRONMENTDAY': 'WorldEnvironmentDay_ForNature_2020',
+		'FORNATURE': 'WorldEnvironmentDay_ForNature_2020',
 		// https://twitter.com/TwitterJP/statuses/1256109065106669569
 		'世界報道自由デー': 'WorldPressFreedomDay_2020',
 		'記者に感謝': 'WorldPressFreedomDay_2020',
