@@ -968,6 +968,19 @@ function tweReplaceEmoji(el) {
 		'THANKS': 'Thankful_Grateful_2020',
 		'THX': 'Thankful_Grateful_2020',
 		'THANKFUL': 'Thankful_Grateful_2020',
+		// ---- GLOBAL PRIDE ----
+		'東京レインボープライド': 'Pride_2020',
+		'TRP2020': 'Pride_2020',
+		'好きだから好き': 'Pride_2020',
+		'PRIDE': 'Pride_2020',
+		'PRIDE2020': 'Pride_2020',
+		'GLOBALPRIDE': 'Pride_2020',
+		'GLOBALPRIDE2020': 'Pride_2020',
+		'LOVEISLOVE': 'Pride_2020',
+		// ---- 移民遺産月間 ----
+		'海外移住ストーリー': 'MyImmigrantStory_2020',
+		'国外移住ストーリー': 'MyImmigrantStory_2020',
+		'MYIMMIGRANTSTORY': 'MyImmigrantStory_2020',
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
