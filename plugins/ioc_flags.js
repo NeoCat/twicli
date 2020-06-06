@@ -977,6 +977,9 @@ function tweReplaceEmoji(el) {
 		'GLOBALPRIDE': 'Pride_2020',
 		'GLOBALPRIDE2020': 'Pride_2020',
 		'LOVEISLOVE': 'Pride_2020',
+		'常に誇りを': 'Pride_2020_AlwaysProud',
+		'ALWAYSPROUD': 'Pride_2020_AlwaysProud',
+		'PRIDEMONTH': 'Pride_2020_AlwaysProud',
 		// ---- 移民遺産月間 ----
 		'海外移住ストーリー': 'MyImmigrantStory_2020',
 		'国外移住ストーリー': 'MyImmigrantStory_2020',
