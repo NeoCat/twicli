@@ -987,6 +987,8 @@ function tweReplaceEmoji(el) {
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
+		'METOO': 'MeToo_v3',
+		'BLACKLIVESMATTER': 'BlackHistoryMonth',
 		'MSBUILD': 'MSBuild_2020',
 		'APPLEEVENT': 'Wasabi_Emoji_2019',
 		'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
