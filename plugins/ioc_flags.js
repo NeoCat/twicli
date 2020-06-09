@@ -677,10 +677,13 @@ function tweReplaceEmoji(el) {
 		'G20閣僚会合': 'G20Osaka_2019',
 		// [#参院選2019 Twitter上でニッポンの政治を知ろう、語ろう](https://blog.twitter.com/ja_jp/topics/company/2019/election_2019.html)
 		'選挙': 'GoVoteUpperHouseElection_2019',
-		'選挙に行こう': 'GoVoteUpperHouseElection_2019',
 		'参院選': 'GoVoteUpperHouseElection_2019',
 		'参院選2019': 'GoVoteUpperHouseElection_2019',
 		'令和初の参院選': 'GoVoteUpperHouseElection_2019',
+		'東京都知事選挙': '2020_TokyoGubernatorialElection',
+		'東京都知事選': '2020_TokyoGubernatorialElection',
+		'都知事選': '2020_TokyoGubernatorialElection',
+		'選挙に行こう': '2020_TokyoGubernatorialElection',
 		// [7月17日は #世界絵文字デー](https://blog.twitter.com/ja_jp/topics/events/2019/World-Emoji-Day-2019.html)
 		'世界絵文字デー': 'WorldEmojiDay_2019',
 		'鳥取': 'WorldEmojiDay_2019',
