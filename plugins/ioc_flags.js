@@ -987,6 +987,10 @@ function tweReplaceEmoji(el) {
 		'海外移住ストーリー': 'MyImmigrantStory_2020',
 		'国外移住ストーリー': 'MyImmigrantStory_2020',
 		'MYIMMIGRANTSTORY': 'MyImmigrantStory_2020',
+		// ---- PlayStationPS5 ----
+		'PLAYSTATION5': 'PlayStationPS5_2020',
+		'PS5': 'PlayStationPS5_2020',
+		'PS5REVEAL': 'PlayStationPS5_2020_add',
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
