@@ -1130,13 +1130,61 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 	var id2 = t.id_str || t.id;
 	var eid = pid+'-'+id;
 	var in_reply_to = t.in_reply_to_status_id_str || t.in_reply_to_status_id;
-	var expanded_urls = {};
 	var quoted = false;
 	var entities = ent(t, true);
-	if (entities && (entities.urls || entities.media))
-		Array.prototype.concat.apply(entities.urls || [], entities.media || []).map(function(_){
-			if (_.url && _.expanded_url) expanded_urls[_.url] = _.expanded_url;
+
+	function replaceEntitiesWithLink(ttext, entities, tw) {
+		var expandedTweetText = ttext;
+		[{
+			entities: entities.hashtags,
+			prefix: '#＃',
+			key: 'text',
+			callback: function(p, s) {
+				return '<a target="_blank" class="hashtag" title="#' + s + '" href="' + twitterURL + 'search?q='
+					+ encodeURIComponent('#' + s) + '">' + p + s + '</a>';
+			}
+		}, {
+			entities: entities.user_mentions,
+			prefix: '@＠',
+			key: 'screen_name',
+			callback: function(p, s) {
+				return '<a href="' + twitterURL + s + '" class="mention" onClick="switchUser(\'' + s + '\'); return false;" >'
+					+ p + s + '</a>';
+			}
+		}, {
+			entities: Array.prototype.concat.apply(entities.urls || [], entities.media || []),
+			key: 'url',
+			expandedKey: 'expanded_url',
+			callback: function(p, s, e) {
+				if (!quoted && tw.quoted_status && tw.quoted_status.user && tw.quoted_status_id_str
+					&& (e.indexOf(twitterURL) === 0 || e.indexOf(twitterURL.replace(/^https:/, 'http:')) === 0)
+					&& e.indexOf(tw.quoted_status_id_str) > -1) {
+					quoted = true;
+					return '<blockquote class="quoted">' + makeHTML(tw.quoted_status, false, pid, null, true) + '</blockquote>';
+				}
+				return '<a class="link" target="_blank" href="' + e.replace(/\"/g, '%22') + '" onclick="return link(this);">'
+					+ removeScheme(e).replace(/&/g, '&amp;') + '</a>';
+			}
+		}].forEach(function(a) {
+			var ttextWithLink = '';
+			var startWith = 0;
+			Array.isArray(a.entities) && a.entities.forEach(function(s) {
+				var startWithBefore = startWith;
+				var prefixList = (a.prefix || '').split('');
+				s[a.key] && (prefixList.length ? prefixList : ['']).forEach(function(p) {;
+					if (startWithBefore < startWith) return; // already replaced
+					var index = expandedTweetText.indexOf(p + s[a.key], startWith);
+					if (index < startWith) return; // entitiy not found in rest of text
+					ttextWithLink += expandedTweetText.substring(startWith, index);
+					ttextWithLink += a.callback(p, s[a.key], s[a.expandedKey || a.key]);
+					startWith = index + (p + s[a.key]).length;
+				});
+			});
+			expandedTweetText = ttextWithLink + expandedTweetText.substring(startWith);
 		});
+		return expandedTweetText;
+	}
+
 	return /*fav*/ (noctl || t.d_dir ? '' : '<div class="fav"><img alt="☆" src="images/icon_star_'+(rs.favorited?'full':'empty')+'.png" ' +
 			'onClick="fav(this,\'' + id + '\')"' + (pid ? ' id="fav-'+eid+'"' : '') + '><span></span></div>')+
 		 (!no_name || (!display_as_rt && rt) ?
@@ -1151,23 +1199,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 		/*ダイレクトメッセージの方向*/ (t.d_dir == 1 ? '<span class="dir">→</span> ' : t.d_dir == 2 ? '<span class="dir">←</span> ' : '') +
 		//本文 (https〜をリンクに置換 + @を本家リンク+JavaScriptに置換)
 		" <span id=\"text-" + eid + "\" class=\"status" + (tw.deleted ? " deleted" : "") + "\">" +
-		(userdesc ? getDescripionHTML(tw.user) : ttext.replace(regexp_links, function(_,u,x,h,s) {
-				if (!u && !h) {
-					if (expanded_urls[_]) {
-						if (!quoted && t.quoted_status && t.quoted_status.user && t.quoted_status_id_str &&
-							(expanded_urls[_].substring(0, twitterURL.length) == twitterURL ||
-							 expanded_urls[_].substring(0, twitterURL.length-1) == twitterURL.replace('https', 'http')) &&
-						    expanded_urls[_].indexOf(t.quoted_status_id_str) >= 0) {
-							quoted = true;
-							return '<blockquote class="quoted">' + makeHTML(t.quoted_status, false, pid, null, true) + '</blockquote>';
-						}
-						t.text_replaced = (t.text_replaced || text(t)).replace(_, expanded_urls[_]);
-						_ = expanded_urls[_];
-					}
-					return "<a class=\"link\" target=\"_blank\" href=\""+_.replace(/\"/g, '%22')+"\" onclick=\"return link(this);\">"+removeScheme(_).replace(/&/g, '&amp;')+"</a>";
-				}
-				return replaceUserAndHashtagWithLink(_, u, x, h, s);
-			}).replace(/\r?\n|\r/g, "<br>")) +
+		(userdesc ? getDescripionHTML(tw.user) : replaceEntitiesWithLink(ttext, entities, t).replace(/\r?\n|\r/g, "<br>")) +
 		(noctl ? '<a class="button inrep overlay" href="#" onclick="return overlayQuoted(this)"><img src="images/jump.png"></a>' : '') +
 		'</span>' +
 		(noctl ? '' :
