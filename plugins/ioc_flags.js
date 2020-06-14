@@ -1017,10 +1017,7 @@ function tweReplaceEmoji(el) {
 
 	// status
 	Array.prototype.forEach.call(el.querySelectorAll('.status > .hashtag, .udesc > .hashtag'), function(elHashtag) {
-		var hashtag = elHashtag.innerHTML.match(hashtag_pattern);
-		if (!hashtag || hashtag.length < 2) return;
-
-		var index = hashtag[2].toUpperCase();
+		var index = elHashtag.innerHTML.replace(/^[#＃]/, '').toUpperCase();
 		if (countryFlags[index]) {
 			elHashtag.innerHTML += countryFlags[index].slice(2).map(function(s) {
 				return twemoji.convert.fromCodePoint(s);
