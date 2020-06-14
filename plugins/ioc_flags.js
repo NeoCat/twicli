@@ -991,6 +991,11 @@ function tweReplaceEmoji(el) {
 		'PLAYSTATION5': 'PlayStationPS5_2020',
 		'PS5': 'PlayStationPS5_2020',
 		'PS5REVEAL': 'PlayStationPS5_2020_add',
+		// ---- 世界難民の日 ----
+		'世界難民の日': 'WorldRefugees2020',
+		'WORLDREFUGEEDAY': 'WorldRefugees2020',
+		'REFUGEEDAY': 'WorldRefugees2020',
+		'WITHREFUGEES': 'WorldRefugees2020',
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
