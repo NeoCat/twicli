@@ -523,9 +523,10 @@ function tweReplaceEmoji(el) {
 		'令和元年': 'Reiwa_NewEra_2019',
 		'ハロー令和': 'Reiwa_NewEra_2019',
 		// [6月16日（日）「 #父の日 」にTwitterで #お父さんありがとう を伝えよう](https://blog.twitter.com/ja_jp/topics/events/2019/fathersday2019.html)
-		'父の日': 'FathersDay_2019',
-		'FATHERSDAY': 'FathersDay_2019',
-		'お父さんありがとう': 'FathersDay_2019',
+		'父の日': 'Fathers_Day_2020',
+		'FATHERSDAY': 'Fathers_Day_2020',
+		'お父さんありがとう': 'Fathers_Day_2020',
+		'HAPPYFATHERSDAY': 'Fathers_Day_2020',
 		// ---- 新海誠監督映画 ----
 		'君の名は': 'YourNameMovie_2019',
 		'YOURNAME': 'YourNameMovie_2019',
