@@ -1004,7 +1004,7 @@ function tweReplaceEmoji(el) {
 		'BLACKLIVESMATTER': 'BlackHistoryMonth',
 		'MSBUILD': 'MSBuild_2020',
 		'APPLEEVENT': 'Wasabi_Emoji_2019',
-		'WWDC20': 'WWDC_2020_V2',
+		'WWDC20': 'WWDC_2020_V[1-6]',
 		'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
 		'午後の紅茶': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
 		'午後ティー': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
@@ -1033,6 +1033,14 @@ function tweReplaceEmoji(el) {
 	});
 
 	function getFlagImageHTML(iconName) {
+		iconName = (function(name) {
+			var pattern = /\[(\d+)-(\d+)\]/;
+			var range = name.match(pattern);
+			return range ? name.replace(pattern, (function(min, max) {
+				var l = parseInt(min, 10), h = parseInt(max, 10);
+				return parseInt(l + Math.random() * (h + 1 - l), 10);
+			})(range[1], range[2])) : name;
+		})(iconName);
 		return [
 			'<img class="emoji" draggable="false" alt="" src="//abs.twimg.com/hashflags/',
 			iconName,
