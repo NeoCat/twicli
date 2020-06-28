@@ -84,7 +84,7 @@ function make_geo_placemap(place) {
 			coords = box_coords;
 		var paths = coords.map(function (lngLat) { return L.latLng(lngLat[1], lngLat[0]); });
 		paths.length > 3 && paths[0].equals(paths[paths.length - 1]) && paths.pop(); // 始点と終点が同じならば除外
-		var polygon = L.polygon(paths, {
+		L.polygon(paths, {
 			color: geomap.color,
 			opacity: geomap.opacity,
 			fillColor: geomap.color,
@@ -123,16 +123,16 @@ function setTileLayer(map) {
 function loadLeaflet() {
 	var style = document.createElement('link');
 	style.rel='stylesheet';
-	style.href='https://unpkg.com/leaflet@1.4.0/dist/leaflet.css';
+	style.href='https://unpkg.com/leaflet@1.6.0/dist/leaflet.css';
 	style.type = 'text/css';
-	style.integrity='sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==';
+	style.integrity='sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==';
 	style.crossOrigin = 'anonymous';
 	document.head.appendChild(style);
 
 	var script = document.createElement('script');
 	script.type = 'text/javascript';
-	script.src = 'https://unpkg.com/leaflet@1.4.0/dist/leaflet.js';
-	script.integrity = 'sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==';
+	script.src = 'https://unpkg.com/leaflet@1.6.0/dist/leaflet.js';
+	script.integrity = 'sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==';
 	script.crossOrigin = 'anonymous';
 	document.body.appendChild(script);
 }
