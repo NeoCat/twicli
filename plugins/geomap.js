@@ -84,7 +84,7 @@ function make_geo_placemap(place) {
 			coords = box_coords;
 		var paths = coords.map(function (lngLat) { return L.latLng(lngLat[1], lngLat[0]); });
 		paths.length > 3 && paths[0].equals(paths[paths.length - 1]) && paths.pop(); // 始点と終点が同じならば除外
-		var polygon = L.polygon(paths, {
+		L.polygon(paths, {
 			color: geomap.color,
 			opacity: geomap.opacity,
 			fillColor: geomap.color,
