@@ -117,22 +117,12 @@ registerPlugin(thumbnail_plugin = {
 					addThumbnail(elem, x[0].thumbnail_medium, url, x[0].title);
 				});
 		}
-		else if (url.match(/^(http:\/\/www\.pixiv\.net\/member_illust\.php\?(?:.*&)*illust_id=\d+.*)/)) {
-			xds.load("//thumbnail-url.appspot.com/url?url=" + encodeURIComponent(RegExp.$1),
-				function(x) {
-					if (x && x.thumbnail)
-						addThumbnail(elem, x.thumbnail, url);
-				});
+		else if (url.match(/^https?:\/\/(?:i\.)?gyazo\.com\/([0-9a-f]+)(?:\.png|\.jpg)?/)) {
+			var gyazo_prefix = 'https://i.gyazo.com/thumb/400/';
+			addThumbnail(elem, [gyazo_prefix + RegExp.$1 + '-png.jpg', gyazo_prefix + RegExp.$1 + '-jpg.jpg'], url);
 		}
-		else if (url.match(/^(https?:\/\/(?:i\.)?gyazo\.com\/[0-9a-f]+)(?:\.png)?/)) {
-			xds.load("//thumbnail-url.appspot.com/url?url=" + encodeURIComponent(RegExp.$1),
-				function(x) {
-					if (x && x.thumbnail)
-					addThumbnail(elem, x.thumbnail, url);
-			});
-		}
-		else if (url.match(/^(https?:\/\/(?:www\.)?amazon\.(?:co\.jp|jp|com)\/.*(?:d|dp|product|ASIN)[\/%].+)/)) {
-			xds.load("//thumbnail-url.appspot.com/url?url=" + encodeURIComponent(RegExp.$1),
+		else if (url.match(/^(https?:\/\/(?:www\.)?amazon\.(?:co\.jp|jp|com)\/.*(?:d|dp|product|ASIN)[\/%][^?]+)\??/)) {
+			xds.load("//thumbnail-url-t2yaxfegmq-uw.a.run.app/url?url=" + encodeURIComponent(RegExp.$1),
 				function(x) {
 					if (x && x.thumbnail)
 						addThumbnail(elem, x.thumbnail, x.link || url, x.title);
@@ -209,7 +199,12 @@ var thumbnail_twitter_photo_link = readCookie('thumbnail_twitter_photo_link') ||
 
 function addThumbnail(elem, src, url, title) {
 	var thm = document.createElement('img');
-	thm.src = src;
+	if (typeof(src) == 'string')
+	  thm.src = src;
+	else {
+		thm.src = src[0];
+		thm.onerror = function() { thm.onerror = null; thm.src = src[1]; };
+	}
 	thm.className = 'thumbnail-image';
 	thm.ontouchstart = function(){ thm.style.maxWidth = '200px'; };
 	thm.ontouchend   = function(){ thm.style.maxWidth = '30px'; };
