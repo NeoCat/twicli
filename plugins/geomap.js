@@ -34,6 +34,8 @@ registerPlugin({
 				display_map(rs.geo.coordinates, button);
 			} else if (rs.place && rs.place.bounding_box) {
 				display_placemap(rs.place, button);
+			} else {
+				return link(ev.currentTarget);
 			}
 			L.DomEvent.stop(ev);
 		});
