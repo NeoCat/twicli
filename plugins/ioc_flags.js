@@ -695,7 +695,7 @@ function tweReplaceEmoji(el) {
 		'EMOJI': 'WorldEmojiDay_2019',
 		'WORLDEMOJIDAY': 'WorldEmojiDay_2019',
 		// [#Twitterトレンド大賞 presents #Twitter夏祭り 開催が決定！](https://blog.twitter.com/ja_jp/topics/events/2019/twitter-trend-award-natsumatsuri-2019.html)
-		'TWITTER夏祭り': 'TwitterTrendAward_Summer_Emoji',
+		'TWITTER夏祭り': 'SummerFestival_2020',
 		'TWITTERトレンド大賞': '2019TwitterTrendAward_Emoji_V2',
 		'ローソン屋台': 'TwitterTrendAward_Summer_Emoji',
 		'放置少女屋台': 'TwitterTrendAward_Summer_Emoji',
@@ -871,13 +871,13 @@ function tweReplaceEmoji(el) {
 		'三ツ矢サイダー': 'AsahiMitsuyaJapan_2020',
 		'嵐と三ツ矢でカンパイ': 'AsahiMitsuyaJapan_2020',
 		'日本にはおいしいサイダーがある': 'AsahiMitsuyaJapan_2020',
-		// Nintendo_AnimalCrossing_2020_v2
-		'あつまれどうぶつの森': 'Nintendo_AnimalCrossing_2020_v2',
-		'どうぶつの森': 'Nintendo_AnimalCrossing_2020_v2',
-		'ACNH': 'Nintendo_AnimalCrossing_2020_v2',
-		'ANIMALCROSSING': 'Nintendo_AnimalCrossing_2020_v2',
-		'ANIMALCROSSINGNEWHORIZONS': 'Nintendo_AnimalCrossing_2020_v2',
-		'TOMNOOK': 'Nintendo_AnimalCrossing_2020_v2',
+		// AnimalCrossing_Nintendo_2020_NewArtwork
+		'あつまれどうぶつの森': 'AnimalCrossing_Nintendo_2020_NewArtwork',
+		'どうぶつの森': 'AnimalCrossing_Nintendo_2020_NewArtwork',
+		'ACNH': 'AnimalCrossing_Nintendo_2020_NewArtwork',
+		'ANIMALCROSSING': 'AnimalCrossing_Nintendo_2020_NewArtwork',
+		'ANIMALCROSSINGNEWHORIZONS': 'AnimalCrossing_Nintendo_2020_NewArtwork',
+		'TOMNOOK': 'AnimalCrossing_Nintendo_2020_NewArtwork',
 		// KIRINSoccerJapan_2020
 		'キリチャレの日': 'KIRINSoccerJapan_2020',
 		'届けてキリン': 'KIRINSoccerJapan_2020',
