@@ -7,7 +7,7 @@ var geomap = {
 	tileLayer: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 	attribution: 'Map data © <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors',
 	zoomDefault: 13,
-	openMap: function(coordinates, zoom) {
+	openMap: function() {
 		var zoom = geomap[geomap.zoom > -1 ? 'zoom' : 'zoomDefault']
 		window.open(
 			// OpenStreetMap
