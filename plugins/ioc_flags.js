@@ -465,7 +465,6 @@ function tweReplaceEmoji(el) {
 		'ミュウツー': 'WBPikachu_Mewtwo',
 		'MEWTWO': 'WBPikachu_Mewtwo',
 		'MEWTU': 'WBPikachu_Mewtwo',
-		'MEWTWO': 'WBPikachu_Mewtwo',
 		'뮤츠': 'WBPikachu_Mewtwo',
 		'超梦': 'WBPikachu_Mewtwo',
 		'超夢': 'WBPikachu_Mewtwo',
