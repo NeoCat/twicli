@@ -15,6 +15,8 @@ emojiStyle.type = 'text/css';
 emojiStyle.innerHTML = 'img.emoji { margin: 0 0.3em; height: 1em; vertical-align: text-bottom; }';
 document.getElementsByTagName('head')[0].appendChild(emojiStyle);
 
+/* global twemoji */
+
 function tweReplaceEmoji(el) {
 	// IOC: [ ISO-3166-1 Alpha-3, ISO-3166-1 Alpha-2, Unicode, ...], // Country Name
 	var countryFlags = {

@@ -92,7 +92,10 @@
       }
     },
     {
-      "files": "plugins/geomap.js",
+      "files": [
+        "plugins/geomap.js",
+        "plugins/ioc_flags.js"
+      ],
       "extends": "eslint:recommended"
     },
     {
