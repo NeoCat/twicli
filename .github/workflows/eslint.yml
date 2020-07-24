@@ -1,0 +1,11 @@
+name: ESLint
+on: [push]
+jobs:
+  ESLint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: yarn global add eslint
+      name: Install ESLint
+    - run: $(yarn global bin)/eslint .
+      name: Run ESLint
