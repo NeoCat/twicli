@@ -15,6 +15,8 @@ emojiStyle.type = 'text/css';
 emojiStyle.innerHTML = 'img.emoji { margin: 0 0.3em; height: 1em; vertical-align: text-bottom; }';
 document.getElementsByTagName('head')[0].appendChild(emojiStyle);
 
+/* global twemoji */
+
 function tweReplaceEmoji(el) {
 	// IOC: [ ISO-3166-1 Alpha-3, ISO-3166-1 Alpha-2, Unicode, ...], // Country Name
 	var countryFlags = {
@@ -463,7 +465,6 @@ function tweReplaceEmoji(el) {
 		'ミュウツー': 'WBPikachu_Mewtwo',
 		'MEWTWO': 'WBPikachu_Mewtwo',
 		'MEWTU': 'WBPikachu_Mewtwo',
-		'MEWTWO': 'WBPikachu_Mewtwo',
 		'뮤츠': 'WBPikachu_Mewtwo',
 		'超梦': 'WBPikachu_Mewtwo',
 		'超夢': 'WBPikachu_Mewtwo',
@@ -700,7 +701,7 @@ function tweReplaceEmoji(el) {
 		'ローソン屋台': 'TwitterTrendAward_Summer_Emoji',
 		'放置少女屋台': 'TwitterTrendAward_Summer_Emoji',
 		'サマーウォーズ屋台': 'TwitterTrendAward_Summer_Emoji',
-		// [#防災の日　もしもの際に備え、災害・防災に関する様々な取り組みを実施](https://blog.twitter.com/ja_jp/topics/events/2019/lifeline_2019.html)
+		// [#防災の日 もしもの際に備え、災害・防災に関する様々な取り組みを実施](https://blog.twitter.com/ja_jp/topics/events/2019/lifeline_2019.html)
 		'防災の日': 'Disaster_Prevention_Day_2019_Emoji_GIF_V3',
 		'防災': 'Disaster_Prevention_Day_2019_Emoji_GIF_V3',
 		'防災豆知識': 'Disaster_Prevention_Day_2019_Emoji_GIF_V3',
@@ -1004,7 +1005,7 @@ function tweReplaceEmoji(el) {
 		'BLACKLIVESMATTER': 'BlackHistoryMonth',
 		'MSBUILD': 'MSBuild_2020',
 		'APPLEEVENT': 'Wasabi_Emoji_2019',
-		'WWDC20': 'WWDC_2020_V[1-11]',
+		'WWDC20': 'WWDC_2020_V11',
 		'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
 		'午後の紅茶': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
 		'午後ティー': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
