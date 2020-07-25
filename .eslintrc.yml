@@ -2,14 +2,15 @@
 env:
   browser: true
 ignorePatterns:
+  # build from plugins_source
   - plugins/autocomplete.js
-globals:
+globals: # defined at lang.js
   langList: readonly
   langNames: readonly
   langResources: readonly
 overrides:
 - files: plugins/*.js
-  globals:
+  globals: # defined at twicli.js
     "$": readonly
     _: readonly
     callPlugins: readonly
@@ -59,7 +60,6 @@ overrides:
     removeScheme: readonly
     rep_top: writable
     rep_trace_id: writable
-    replaceUrl: readonly
     replies_in_tl: readonly
     replyTo: readonly
     retweetStatus: readonly
@@ -77,7 +77,6 @@ overrides:
     switchUserTL: readonly
     text: readonly
     toDate: readonly
-    translateStatus: readonly
     twShow2: readonly
     twShowToNode: readonly
     twitterAPI: readonly
@@ -88,6 +87,7 @@ overrides:
     writeCookie: readonly
     xds: readonly
 - files:
+  # - plugins/*.js
   - plugins/geomap.js
   - plugins/ioc_flags.js
   extends: eslint:recommended
@@ -95,4 +95,14 @@ overrides:
   env:
     es6: true
     node: true
-
+- files:
+  - plugins/shortcutkey.js
+  globals:
+    # defined at plugins/regexp.js
+    addIDRegexp: readonly
+    # defined at plugins/translate.js
+    translateStatus: readonly
+- files:
+  - plugins/resolve_url.js
+  globals: # defined by itself
+    replaceUrl: readonly
