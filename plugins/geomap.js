@@ -7,7 +7,7 @@ var geomap = {
 	tileLayer: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 	attribution: 'Map data © <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors',
 	zoomDefault: 13,
-	openMap: function(coordinates, zoom) {
+	openMap: function() {
 		var zoom = geomap[geomap.zoom > -1 ? 'zoom' : 'zoomDefault']
 		window.open(
 			// OpenStreetMap
@@ -137,4 +137,6 @@ function loadLeaflet() {
 	script.integrity = 'sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==';
 	script.crossOrigin = 'anonymous';
 	document.body.appendChild(script);
+
+	/* global L */
 }
