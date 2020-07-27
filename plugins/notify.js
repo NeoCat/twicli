@@ -4,7 +4,7 @@ var tw_notify_last = readCookie('twicli_notify_last');
 if (!parseInt(tw_notify_last)) tw_notify_last = "297864206617825281";
 
 function twn_hide(id) {
-	ele = $('tw-'+id);
+	var ele = $('tw-'+id);
 	if (!ele || !ele.tw) return;
 	ele.style.display = 'none';
 	if (parseInt(tw_notify_last) > ele.tw.id) return;

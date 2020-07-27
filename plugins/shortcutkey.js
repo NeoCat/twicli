@@ -300,7 +300,7 @@ var shortcutkey_plugin = {
 			return;
 		}
 		this.inclemental_search_timer = null;
-		ele = (selected_menu.id == 'TL' ? $('tw') : selected_menu.id == 'reply' ? $('re') : $('tw2c'));
+		var ele = (selected_menu.id == 'TL' ? $('tw') : selected_menu.id == 'reply' ? $('re') : $('tw2c'));
 		if (ele.className.indexOf('filtered') < 0) ele.className += ' filtered';
 		for (var i = 0; i < ele.childNodes.length; i++) {
 			for (var j = 0; j < ele.childNodes[i].childNodes.length; j++) {
@@ -319,7 +319,7 @@ var shortcutkey_plugin = {
 		this.inclemental_search_timer = null;
 		if (this.filter_div) document.body.removeChild(this.filter_div);
 		this.filter_div = null;
-		ele = (selected_menu.id == 'TL' ? $('tw') : selected_menu.id == 'reply' ? $('re') : $('tw2c'));
+		var ele = (selected_menu.id == 'TL' ? $('tw') : selected_menu.id == 'reply' ? $('re') : $('tw2c'));
 		if (ele.className.indexOf('filtered') < 0) return;
 		ele.className = ele.className.replace(/ ?filtered/g, '');
 		for (var i = 0; i < ele.childNodes.length; i++) {

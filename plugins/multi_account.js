@@ -55,6 +55,7 @@ registerPlugin({
 				'<button type="button" class="add" onclick="accounts_add(); return false"></button><br>';
 		$('tw2h').insertBefore(e, $('logout'));
 		
+		var opt;
 		for (var x in accounts_info) {
 			opt = document.createElement('option');
 			opt.innerHTML = accounts_info[x].split('|')[0];

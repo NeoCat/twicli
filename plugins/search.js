@@ -115,10 +115,10 @@ function twsReplaceLinkWithHandler(ele) {
 	}
 }
 
+var tws_blocked_users = {};
+var tws_muted_users = {};
 registerPlugin({
 	auth: function() {
-		tws_blocked_users = {};
-		tws_muted_users = {};
 		xds.load_default(twitterAPI + 'blocks/list.json?skip_status=1', function(result) {
 			for (var i = 0; i < result.users.length; i++)
 				tws_blocked_users[result.users[i].id_str] = result.users[i];
