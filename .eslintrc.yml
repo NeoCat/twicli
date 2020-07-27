@@ -4,6 +4,9 @@ env:
 ignorePatterns:
   # build from plugins_source
   - plugins/autocomplete.js
+  # out-of-date
+  - plugins/related_results.js
+  - plugins/stream_search.js
 globals: # defined at lang.js
   langList: readonly
   langNames: readonly
@@ -88,6 +91,7 @@ overrides:
     xds: readonly
 - files:
   - ./*.js
+  - plugins/*.js
   rules:
     no-global-assign: error
     no-undef: error
@@ -98,7 +102,41 @@ overrides:
     consumer: readonly # defined at oauth/consumer.js
     hex_sha1: readonly # defined by oauth/sha1.js
 - files:
-  # - plugins/*.js
+  - plugins/debug.js
+  globals:
+    auto_update: readonly # obsolated parameter
+- files:
+  - plugins/lists.js
+  - plugins/mute.js
+  globals:
+    setRegexp: readonly # defined at plugins/regexp.js
+    pickup_regexp: readonly # defined at plugins/regexp.js
+    pickup_regexp_ex: writable # defined at plugins/regexp.js
+- files:
+  - plugins/notify_desktop.js
+  env:
+    amd: true
+    commonjs: true
+  globals:
+    Notify: readonly # defined by itself
+- files:
+  - plugins/resolve_url.js
+  globals:
+    replaceUrl: readonly # defined by itself
+- files:
+  - plugins/shortcutkey.js
+  globals:
+    addIDRegexp: readonly # defined at plugins/regexp.js
+    translateStatus: readonly # defined at plugins/translate.js
+- files:
+  - plugins/tweets_after_rt.js
+  globals:
+    twFavPlugin: readonly # defined at plugins/favotter.js
+- files:
+  - plugins/thumbnail.js
+  globals:
+    thumbnail_plugin: writable # defined by itself
+- files:
   - plugins/geomap.js
   - plugins/ioc_flags.js
   extends: eslint:recommended
@@ -106,14 +144,3 @@ overrides:
   env:
     es6: true
     node: true
-- files:
-  - plugins/shortcutkey.js
-  globals:
-    # defined at plugins/regexp.js
-    addIDRegexp: readonly
-    # defined at plugins/translate.js
-    translateStatus: readonly
-- files:
-  - plugins/resolve_url.js
-  globals: # defined by itself
-    replaceUrl: readonly
