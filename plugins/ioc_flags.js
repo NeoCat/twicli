@@ -998,6 +998,9 @@ function tweReplaceEmoji(el) {
 		'WORLDREFUGEEDAY': 'WorldRefugees2020',
 		'REFUGEEDAY': 'WorldRefugees2020',
 		'WITHREFUGEES': 'WorldRefugees2020',
+		// ---- https://twitter.com/TwitterJP/statuses/1289367947610267649 ----
+		'花火': 'JP_FireworksDay_2020_BH',
+		'HANABI': 'JP_FireworksDay_2020_BH',
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
