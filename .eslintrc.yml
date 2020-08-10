@@ -93,6 +93,7 @@ overrides:
   - ./*.js
   - plugins/*.js
   rules:
+    no-extra-semi: error
     no-global-assign: error
     no-undef: error
 - files:

@@ -467,7 +467,7 @@ if (cookieVer<25) if (pluginstr.indexOf('move2https.js')<0) pluginstr+="\nmove2h
 pluginstr = pluginstr.substr(1);
 var plugins = new Array;
 var max_count = Math.min((cookieVer>3) && parseInt(readCookie('max_count')) || 50, 800);
-var max_count_u = Math.min(parseInt(readCookie('max_count_u')) || 50, 800);;
+var max_count_u = Math.min(parseInt(readCookie('max_count_u')) || 50, 800);
 var nr_limit = Math.max(max_count*2.5, parseInt(readCookie('limit')) || 500);		// 表示する発言数の上限
 var no_since_id = parseInt(readCookie('no_since_id') || "0");		// since_idを使用しない
 var no_counter = parseInt(readCookie('no_counter') || "0");			// 発言文字数カウンタを無効化
@@ -1171,7 +1171,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 			Array.isArray(a.entities) && a.entities.forEach(function(s) {
 				var startWithBefore = startWith;
 				var prefixList = (a.prefix || '').split('');
-				s[a.key] && (prefixList.length ? prefixList : ['']).forEach(function(p) {;
+				s[a.key] && (prefixList.length ? prefixList : ['']).forEach(function(p) {
 					if (startWithBefore < startWith) return; // already replaced
 					var index = expandedTweetText.indexOf(p + s[a.key], startWith);
 					if (index < startWith) return; // entitiy not found in rest of text
@@ -1440,7 +1440,7 @@ function twDirect(tw) {
 		var e = tw.events[i];
 		if (!e.message_create) continue;
 		fetchUserCache([e.message_create.sender_id, e.message_create.target.recipient_id]);
-	};
+	}
 	invokeUserFetch(twDirectList, [tw]);
 }
 function twDirectList(tw) {

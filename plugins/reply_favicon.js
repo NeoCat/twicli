@@ -17,7 +17,7 @@ if (/Chrome/.test(navigator.userAgent)) {
  iframe.src = 'about:blank';
  iframe.style.display = 'none';
  document.body.appendChild(iframe);
-};
+}
 
 function changeFavicon(src) {
  var link = document.createElement('link'),
@@ -27,12 +27,12 @@ function changeFavicon(src) {
  link.href = src;
  if (oldLink) {
   document.head.removeChild(oldLink);
- };
+ }
  document.head.appendChild(link);
  if (isChrome) {
   iframe.src += '';
- };
-};
+ }
+}
 
   // original code from here
   var favicon_status = 'normal';

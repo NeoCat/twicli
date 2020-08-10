@@ -7,8 +7,7 @@ function __map(obj,fun) {
 		if (i in obj)
 			res[i] = fun.call(obj, obj[i]);
 	return res;
-};
-
+}
 
 registerPlugin({
 	noticeNewReply: function(replies) {
