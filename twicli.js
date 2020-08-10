@@ -303,7 +303,7 @@ function readCookie(key) {
 	} catch(e) { return null; }
 	key += "=";
 	var scookie = document.cookie + ";";
-	start = scookie.indexOf(key);
+	var start = scookie.indexOf(key);
 	if (start >= 0) {
 		var end = scookie.indexOf(";", start);
 		return unescape(scookie.substring(start + key.length, end));
@@ -1418,7 +1418,7 @@ function fetchUserCacheByScreenName(user, callback, args) {
 	user_fetch_callback = [callback, args];
 }
 function cacheUserInfo(u) {
-	if (tw.errors) return error('', tw);
+	if (u.errors) return error('', u);
 	user_cache[u.id_str] = u;
 	user_cache_by_screen_name[u.screen_name] = u;
 	var idx = user_cache_fetch_list.indexOf(u.id_str);
@@ -1483,7 +1483,7 @@ function twConfig(config) {
 			t_co_maxstr += "*";
 }
 function twRateLimit(limits) {
-	if (tw.errors) return error('', tw);
+	if (limits.errors) return error('', limits);
 	tw_limits = limits;
 	if (selected_menu.id != "misc") return;
 	var ele = document.createElement('div');
@@ -1503,7 +1503,7 @@ function updateRateLimit(callback) {
 	xds.load(twitterAPI + 'application/rate_limit_status.json' +
 				'?resources='+api_resources.join(',') + '&' + default_api_args,
 		function(limits){
-			if (tw.errors) return error('Cannot update rate limit status', tw);
+			if (limits.errors) return error('Cannot update rate limit status', limits);
 			tw_limits = limits;
 			callback(limits);
 		});
@@ -2005,8 +2005,8 @@ function loadTheme() {
 	$('theme-loading').style.display = 'none';
 	$('themelist').innerHTML = '';
 	var current_theme = readCookie('theme_name') || (dark_mode ? 'dark' : 'default');
-	for (var i = 0; i < themes.length; i++) {
-		var t = themes[i];
+	for (var i = 0; i < window.themes.length; i++) {
+		var t = window.themes[i];
 		window.themes[t.name] = t;
 		var option = document.createElement('option');
 		option.text = t.name;
@@ -2017,6 +2017,7 @@ function loadTheme() {
 }
 function changeTheme(t) {
 	var css = $('theme_css');
+	var themes = window.themes;
 	if (themes[t] && themes[t].type == "link") {
 		$('theme-link').href = themes[t].url;
 		$('theme-link').style.display = 'inline';

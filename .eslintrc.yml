@@ -87,6 +87,17 @@ overrides:
     writeCookie: readonly
     xds: readonly
 - files:
+  - ./*.js
+  rules:
+    no-global-assign: error
+    no-undef: error
+- files:
+  - ./twicli.js
+  globals:
+    OAuth: readonly # defined at oauth/oauth.js
+    consumer: readonly # defined at oauth/consumer.js
+    hex_sha1: readonly # defined by oauth/sha1.js
+- files:
   # - plugins/*.js
   - plugins/geomap.js
   - plugins/ioc_flags.js
