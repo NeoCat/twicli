@@ -92,21 +92,35 @@ overrides:
 - files:
   - ./*.js
   - plugins/*.js
+  extends: eslint:recommended
   rules:
-    no-extra-semi: error
-    no-global-assign: error
-    no-irregular-whitespace: error
-    no-undef: error
+    no-empty:
+      - error
+      - allowEmptyCatch: true
+    no-mixed-spaces-and-tabs:
+      - error
+      - smart-tabs
+    no-redeclare: off
+    no-unused-vars: off
+    no-useless-escape: off
 - files:
   - ./twicli.js
   globals:
     OAuth: readonly # defined at oauth/oauth.js
     consumer: readonly # defined at oauth/consumer.js
     hex_sha1: readonly # defined by oauth/sha1.js
+  rules:
+    no-constant-condition: off # for IE
 - files:
   - plugins/debug.js
   globals:
     auto_update: readonly # obsolated parameter
+- files:
+  - plugins/find_rt.js
+  rules:
+    no-constant-condition:
+      - error
+      - checkLoops: false
 - files:
   - plugins/lists.js
   - plugins/mute.js
@@ -115,16 +129,28 @@ overrides:
     pickup_regexp: readonly # defined at plugins/regexp.js
     pickup_regexp_ex: writable # defined at plugins/regexp.js
 - files:
+  - plugins/multi_account.js
+  rules:
+    no-self-assign: off
+- files:
+  - plugins/move2https.js
+  rules:
+    no-inner-declarations: off
+- files:
   - plugins/notify_desktop.js
   env:
     amd: true
     commonjs: true
   globals:
     Notify: readonly # defined by itself
+  rules:
+    no-prototype-builtins: off
 - files:
   - plugins/resolve_url.js
   globals:
     replaceUrl: readonly # defined by itself
+  rules:
+    no-prototype-builtins: off
 - files:
   - plugins/shortcutkey.js
   globals:
@@ -138,10 +164,8 @@ overrides:
   - plugins/thumbnail.js
   globals:
     thumbnail_plugin: writable # defined by itself
-- files:
-  - plugins/geomap.js
-  - plugins/ioc_flags.js
-  extends: eslint:recommended
+  rules:
+    no-cond-assign: off
 - files: plugins_source/**/*.js
   env:
     es6: true
