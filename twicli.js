@@ -303,7 +303,7 @@ function readCookie(key) {
 	} catch(e) { return null; }
 	key += "=";
 	var scookie = document.cookie + ";";
-	start = scookie.indexOf(key);
+	var start = scookie.indexOf(key);
 	if (start >= 0) {
 		var end = scookie.indexOf(";", start);
 		return unescape(scookie.substring(start + key.length, end));
@@ -2005,8 +2005,8 @@ function loadTheme() {
 	$('theme-loading').style.display = 'none';
 	$('themelist').innerHTML = '';
 	var current_theme = readCookie('theme_name') || (dark_mode ? 'dark' : 'default');
-	for (var i = 0; i < themes.length; i++) {
-		var t = themes[i];
+	for (var i = 0; i < window.themes.length; i++) {
+		var t = window.themes[i];
 		window.themes[t.name] = t;
 		var option = document.createElement('option');
 		option.text = t.name;
@@ -2017,6 +2017,7 @@ function loadTheme() {
 }
 function changeTheme(t) {
 	var css = $('theme_css');
+	var themes = window.themes;
 	if (themes[t] && themes[t].type == "link") {
 		$('theme-link').href = themes[t].url;
 		$('theme-link').style.display = 'inline';
