@@ -867,7 +867,7 @@ function dispReply(user, id, ele, cascade) {
 	var td = $((selected_menu.id == "TL" ? "tw" : selected_menu.id == "reply" ? "re" : "tw2c") + "-" + id);
 	if (td && td.style.display == "none") td = null;
 	var rd = $('reps-' + id);
-	// 通常　　  → 反転表示 (rdあり) or オーバーレイ表示
+	// 通常      → 反転表示 (rdあり) or オーバーレイ表示
 	// shiftキー → 反転表示 (td優先) or オーバーレイ表示(td/rdなし)
 	var d = shiftkey ? td || rd : rd || td;
 	if (!shiftkey && !rd || shiftkey && !d || cascade) {

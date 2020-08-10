@@ -95,6 +95,7 @@ overrides:
   rules:
     no-extra-semi: error
     no-global-assign: error
+    no-irregular-whitespace: error
     no-undef: error
 - files:
   - ./twicli.js
