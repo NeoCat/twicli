@@ -1418,7 +1418,7 @@ function fetchUserCacheByScreenName(user, callback, args) {
 	user_fetch_callback = [callback, args];
 }
 function cacheUserInfo(u) {
-	if (tw.errors) return error('', tw);
+	if (u.errors) return error('', u);
 	user_cache[u.id_str] = u;
 	user_cache_by_screen_name[u.screen_name] = u;
 	var idx = user_cache_fetch_list.indexOf(u.id_str);
@@ -1483,7 +1483,7 @@ function twConfig(config) {
 			t_co_maxstr += "*";
 }
 function twRateLimit(limits) {
-	if (tw.errors) return error('', tw);
+	if (limits.errors) return error('', limits);
 	tw_limits = limits;
 	if (selected_menu.id != "misc") return;
 	var ele = document.createElement('div');
@@ -1503,7 +1503,7 @@ function updateRateLimit(callback) {
 	xds.load(twitterAPI + 'application/rate_limit_status.json' +
 				'?resources='+api_resources.join(',') + '&' + default_api_args,
 		function(limits){
-			if (tw.errors) return error('Cannot update rate limit status', tw);
+			if (limits.errors) return error('Cannot update rate limit status', limits);
 			tw_limits = limits;
 			callback(limits);
 		});
