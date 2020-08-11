@@ -11,7 +11,7 @@
       try{
         var decoded = decodeURI(longUrl);
       }catch(e){
-        var decoded = longUrl;
+        decoded = longUrl;
       }
       var truncated;
       if (decoded.length > 200) {

@@ -14,6 +14,11 @@ globals: # defined at lang.js
   langNames: readonly
   langResources: readonly
 overrides:
+- files: lang.js
+  globals:
+    langNames: off
+    langList: off
+    langResources: off
 - files: plugins/*.js
   globals: # defined at twicli.js
     "$": readonly
@@ -115,6 +120,11 @@ overrides:
     hex_sha1: readonly # defined by oauth/sha1.js
   rules:
     no-constant-condition: off # for IE
+- files:
+  - oauth/consumer.js
+  globals:
+    OAuth: readonly # defined at oauth/oauth.js
+    consumer: off
 - files:
   - plugins/debug.js
   globals:

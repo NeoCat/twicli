@@ -8,7 +8,7 @@
 				if (status.className && status.className.indexOf('status') >= 0)
 					break;
 			}
-			for (var i = 0; i < status.childNodes.length; i++) {
+			for (i = 0; i < status.childNodes.length; i++) {
 				var ele = status.childNodes[i];
 				if (ele.nodeType == 3) {// text node
 					if (ele.nodeValue.match(/([\s\S]*)((?:>|＞|→)\s*RT)([\s\S]*)/)) {

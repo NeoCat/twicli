@@ -165,7 +165,7 @@ var shortcutkey_plugin = {
 						if (ele.previousSibling)
 							ele = ele.previousSibling;
 						else {
-							var pele = ele.parentNode.previousSibling;
+							pele = ele.parentNode.previousSibling;
 							ele = null;
 							while (!ele && pele) {
 								ele = pele.childNodes[0] && pele.childNodes[0].tw &&
@@ -232,7 +232,7 @@ var shortcutkey_plugin = {
 				return false;
 			case 79+lower: // o : リンクを開く(Open links)
 				if (!selected) return true;
-				for (var i = 0; i < selected.childNodes.length; i++) {
+				for (i = 0; i < selected.childNodes.length; i++) {
 					var target = selected.childNodes[i]
 					if (target.id && target.id.substr(0,5) == 'text-') {
 						for (i = 0; i < target.childNodes.length; i++) {
@@ -247,11 +247,11 @@ var shortcutkey_plugin = {
 				return false;
 			case 86+lower: // v : 写真等のリンク先内容を表示(View links)
 				if (!selected) return true;
-				for (var i = 0; i < selected.childNodes.length; i++) {
-					var target = selected.childNodes[i]
+				for (i = 0; i < selected.childNodes.length; i++) {
+					target = selected.childNodes[i]
 					if (target.id && target.id.substr(0,5) == 'text-') {
 						for (i = 0; i < target.childNodes.length; i++) {
-							var target2 = target.childNodes[i];
+							target2 = target.childNodes[i];
 							if (target2.tagName == 'A' && target2.className == 'button' && target2.onclick) {
 								target2.onclick();
 								break;

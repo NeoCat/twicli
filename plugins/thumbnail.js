@@ -30,30 +30,30 @@ registerPlugin(thumbnail_plugin = {
 		}.bind(this));
 	},
 	replaceUrl: function(elem, link, url) {
-		var flickr_id;
+		var flickr_id, id, _url;
 		if (link.thumbnailed && link.thumbnailed == url) return;
 		link.thumbnailed = url;
 		if (url.indexOf(twitterURL) == 0 || url.indexOf("javascript:") == 0)
 			return; // skip @... or #...
 		if (url.match(/^http:\/\/twitpic\.com\/(\w+)/)) {
-			var id = RegExp.$1;
+			id = RegExp.$1;
 			addThumbnail(elem, 'http://twitpic.com/show/thumb/' + id, url);
 		}
 		else if (url.match(/^http:\/\/movapic\.com\/pic\/(\w+)$/)) {
-			var id = RegExp.$1;
+			id = RegExp.$1;
 			addThumbnail(elem, 'http://image.movapic.com/pic/t_' + id + '.jpeg', url);
 		}
 		else if (url.match(/^http:\/\/f\.hatena\.ne\.jp\/([\w\-]+)\/(\d{8})(\w+)$/)) {
 			var user = RegExp.$1;
 			var date = RegExp.$2;
-			var id = RegExp.$3;
+			id = RegExp.$3;
 			addThumbnail(elem,
 					'http://f.hatena.ne.jp/images/fotolife/' + user[0] + '/' + user +
 					'/' + date + '/' + date + id + '_120.jpg',
 					url);
 		}
 		else if (url.match(/^(http:\/\/[\w\-]+\.tumblr\.com\/)post\/(\d+)/)) {
-			var _url = url;
+			_url = url;
 			xds.load(RegExp.$1+'api/read/json?id='+RegExp.$2,
 					function(x) {
 						var p = x.posts[0]['photo-url-75'];
@@ -62,7 +62,7 @@ registerPlugin(thumbnail_plugin = {
 					});
 		}
 		else if (flickr_id = flickrPhotoID(url)) {
-			var _url = url;
+			_url = url;
 			xds.load('https://www.flickr.com/services/rest?method=flickr.photos.getInfo'+
 					'&format=json&api_key=9bc57a7248847fd9a80982989e80cfd0&photo_id='+flickr_id,
 					function(x) {
@@ -80,12 +80,12 @@ registerPlugin(thumbnail_plugin = {
 			addThumbnail(elem, 'http://static.ow.ly/photos/thumb/'+RegExp.$1+".jpg", url);
 		}
 		else if (url.match(/^https?:\/\/(?:(?:www\.|m\.|)youtube\.com\/watch\?.*v=|youtu\.be\/)([\w\-]+)/)) {
-			var id = RegExp.$1;
+			id = RegExp.$1;
 			addThumbnail(elem, 'https://i.ytimg.com/vi/' + id + '/default.jpg', url);
 		}
 		else if (url.match(/^http:\/\/(?:www\.nicovideo\.jp\/watch|nico\.ms|seiga\.nicovideo\.jp\/seiga)\/([a-z][a-z])(\d+)$/)) {
 			if (RegExp.$1 == "lv" || RegExp.$1 == "nw") return; // live/news thumbnail is not supported
-			var id = RegExp.$2;
+			id = RegExp.$2;
 			var host = parseInt(id)%4 + 1;
 			if (RegExp.$1 == "im")
 				addThumbnail(elem, 'http://lohas.nicoseiga.jp/thumb/' + id, url);
@@ -166,7 +166,7 @@ function thumbnailModeSet(mode) {
 	for (var i = eles.length - 1; i >= 0; i--)
 	eles[i].parentNode.removeChild(eles[i]);
 	for (var p = 0; p < 2; p++) {
-		for (var i = 0; i < $(['tw','re'][p]).childNodes.length; i++) {
+		for (i = 0; i < $(['tw','re'][p]).childNodes.length; i++) {
 			var tp = $(['tw','re'][p]).childNodes[i];
 			for (var j = 0; j < tp.childNodes.length; j++) {
 				var td = tp.childNodes[j];

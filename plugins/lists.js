@@ -77,7 +77,7 @@ function twlToggleListsInTL(a, ele) {
 			}
 		}
 	} else {
-		for (var i = 0; i < lists_to_get.length; i++) {
+		for (i = 0; i < lists_to_get.length; i++) {
 			if (lists_to_get[i] == a) {
 				lists_to_get[i] = '#'+a;
 				break;
@@ -214,7 +214,7 @@ function twlUpdateUserPopup(target_ele, user) {
 	var hr = document.createElement('hr');
 	hr.id = 'edit_list_user_hr';
 	target_ele.appendChild(hr);
-	for (var i = 0; i < lists_to_get.length; i++) {
+	for (i = 0; i < lists_to_get.length; i++) {
 		var list = lists_to_get[i];
 		list = list[0] == '#' ? list.substr(1) : list;
 		var a = document.createElement("a");

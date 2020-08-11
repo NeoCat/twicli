@@ -40,7 +40,7 @@
 			}
 			var links = status.getElementsByTagName('a');
 			var url;
-			for (var i = 0; i < links.length; i++) {
+			for (i = 0; i < links.length; i++) {
 				if (links[i].className.indexOf('thumbnail-link') >= 0) return;
 				url = links[i].href;
 				this.replaceUrl(null, links[i], url, url);

@@ -65,7 +65,7 @@ function setupOAuthURL(url, post, post_agent, multipart) {
 		var sid = ['','2'][((new Date).getTime()/1000/60/60/12|0)%2];
 		url = url.replace(twitterAPI, 'https://tweet-agent'+sid+'.appspot.com/1.1/');
 	}
-	for (var e = 0; e < nosign.length; e++)
+	for (e = 0; e < nosign.length; e++)
 		document.request.appendChild(nosign[e]);
 	if (media_upload) {
 		var media = $("media");
@@ -838,7 +838,7 @@ function setReplyId(id, tw_id) {
 	in_reply_to_status_id_tw = tw_id;
 	if (tw_id)
 		$(tw_id).className += ' inrep';
-	else if (id) for (var i = 0; i < 3; i++) {
+	else if (id) for (i = 0; i < 3; i++) {
 		t = $(['tw-','re-','tw2c-'][i]+id);
 		if (t) t.className += ' inrep';
 	}
@@ -1757,7 +1757,7 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 			tw_node.removeChild(last_node);
 		}
 		var tl_oldest_id = 0; // 削除に伴いoldest_id更新
-		for (var i = 0; i < 3 && i < tw_node.childNodes.length; i++) { // 最大3要素スキャン
+		for (i = 0; i < 3 && i < tw_node.childNodes.length; i++) { // 最大3要素スキャン
 			var target_block = tw_node.childNodes[tw_node.childNodes.length-i-1].childNodes;
 			var target_ele = target_block[target_block.length-1];
 			if (!target_ele.weak && target_ele.tw && (target_ele.tw.id < tl_oldest_id || !tl_oldest_id))
@@ -1765,7 +1765,7 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 		}
 		tw_node.oldest_id = tl_oldest_id;
 	}
-	for (var i = 0; check_since && i < len; i++) {
+	for (i = 0; check_since && i < len; i++) {
 		if (tw[i].user.screen_name != myname) {
 			since_id = tw[i].id_str || tw[i].id;
 			break;

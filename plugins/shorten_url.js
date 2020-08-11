@@ -18,12 +18,12 @@
       if (startpos >= 0) {
         var standard = ('selectionStart' in fst);
         var ie = ('createTextRange' in fst); // IE and Opera < 10.5
-        var cursorpos;
+        var cursorpos, range;
         // get cursor position before replace
         if (standard) {
           cursorpos = fst.selectionStart;
         } else if (ie) {
-          var range = document.selection.createRange();
+          range = document.selection.createRange();
           range.moveStart('character', -fst.value.length); // move start to 0
           cursorpos = range.text.replace(/\n/g, '').length; // when doing move() later, CRLF is counted as 1. take care of it here.
         }
@@ -36,7 +36,7 @@
         if (standard) {
           fst.setSelectionRange(cursorpos, cursorpos);
         } else if (ie) {
-          var range = fst.createTextRange();
+          range = fst.createTextRange();
           range.move('character', -fst.value.length);
           range.move('character', cursorpos);
           range.select();
