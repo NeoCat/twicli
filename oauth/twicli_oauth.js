@@ -11,7 +11,7 @@ function readCookie(key) {
 	} catch(e) { return null; }
 	key += "=";
 	var scookie = document.cookie + ";";
-	start = scookie.indexOf(key);
+	var start = scookie.indexOf(key);
 	if (start >= 0) {
 		var end = scookie.indexOf(";", start);
 		return unescape(scookie.substring(start + key.length, end));

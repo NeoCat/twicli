@@ -2,6 +2,8 @@
 env:
   browser: true
 ignorePatterns:
+  # copy from other libraries
+  - oauth/oauth.js
   # build from plugins_source
   - plugins/autocomplete.js
   # out-of-date
@@ -91,6 +93,7 @@ overrides:
     xds: readonly
 - files:
   - ./*.js
+  - oauth/*.js
   - plugins/*.js
   extends: eslint:recommended
   rules:
@@ -105,6 +108,7 @@ overrides:
     no-useless-escape: off
 - files:
   - ./twicli.js
+  - oauth/consumer.js
   globals:
     OAuth: readonly # defined at oauth/oauth.js
     consumer: readonly # defined at oauth/consumer.js
