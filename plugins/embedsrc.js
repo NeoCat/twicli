@@ -2,15 +2,15 @@
 	var res = [
 		{search: /^(https?:\/\/www\.slideshare\.net\/)(?:mobile\/)?(slideshow\/embed_code\/(?:key\/)?[-_0-9a-zA-Z.]+)/,
 			replace: "$1$2", type: "iframe"},
-		{search: /^(https?:\/\/www\.slideshare\.net\/)(?:mobile\/)?([-_0-9a-zA-Z.]+\/[-_0-9a-zA-Z.\/]+)/,
+		{search: /^(https?:\/\/www\.slideshare\.net\/)(?:mobile\/)?([-_0-9a-zA-Z.]+\/[-_0-9a-zA-Z./]+)/,
 			replace: "//www.slideshare.net/api/oembed/2?url=$1$2&format=jsonp", type: "slideshare"},
-		{search: /^(https?:\/\/[\w\-]+\.tumblr\.com\/)post\/(\d+)(?:\/.*)/,
+		{search: /^(https?:\/\/[\w-]+\.tumblr\.com\/)post\/(\d+)(?:\/.*)/,
 			replace: "$1api/read/json?id=$2", type: "tumblr"},
 		{search: /^https?:\/\/(?:\w+\.)?theta360\.com\/(?:[sm]\/\w+|spheres\/samples\/[a-z0-9-]+)/,
 			replace: "$&/", type: "theta"},
 		{search: /^https?:\/\/(?:\w+\.)?pinterest\.com\/pin\/\d+/,
 			replace: "$&/", type: "pin"},
-		{search: /^https?:\/\/(?:(?:www\.|m\.|)youtube\.com\/watch\?.*v=|youtu\.be\/)([\w\-]+).*$/,
+		{search: /^https?:\/\/(?:(?:www\.|m\.|)youtube\.com\/watch\?.*v=|youtu\.be\/)([\w-]+).*$/,
 			replace: "//www.youtube.com/embed/$1", type: "iframe"},
 		{search: /^(https?:\/\/(?:i\.)?gyazo\.com\/[0-9a-f]+)(?:\.png)?$/,
 			replace: "$1.png", type: "iframe"},
@@ -120,7 +120,7 @@ function dispEmbedSrc(url, link, type) {
 			break;
 		case 'slideshare':
 			xds.load(url, function(x) {
-				dispEmbedSrc("\/\/www\.slideshare\.net\/slideshow\/embed_code\/"
+				dispEmbedSrc("//www.slideshare.net/slideshow/embed_code/"
 					+ x.slideshow_id, link, 'iframe');
 			});
 			break;

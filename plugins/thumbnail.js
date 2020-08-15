@@ -43,7 +43,7 @@ registerPlugin(thumbnail_plugin = {
 			id = RegExp.$1;
 			addThumbnail(elem, 'http://image.movapic.com/pic/t_' + id + '.jpeg', url);
 		}
-		else if (url.match(/^http:\/\/f\.hatena\.ne\.jp\/([\w\-]+)\/(\d{8})(\w+)$/)) {
+		else if (url.match(/^http:\/\/f\.hatena\.ne\.jp\/([\w-]+)\/(\d{8})(\w+)$/)) {
 			var user = RegExp.$1;
 			var date = RegExp.$2;
 			id = RegExp.$3;
@@ -52,7 +52,7 @@ registerPlugin(thumbnail_plugin = {
 					'/' + date + '/' + date + id + '_120.jpg',
 					url);
 		}
-		else if (url.match(/^(http:\/\/[\w\-]+\.tumblr\.com\/)post\/(\d+)/)) {
+		else if (url.match(/^(http:\/\/[\w-]+\.tumblr\.com\/)post\/(\d+)/)) {
 			_url = url;
 			xds.load(RegExp.$1+'api/read/json?id='+RegExp.$2,
 					function(x) {
@@ -79,7 +79,7 @@ registerPlugin(thumbnail_plugin = {
 		else if (url.match(/^http:\/\/ow.ly\/i\/(\w+)/)) {
 			addThumbnail(elem, 'http://static.ow.ly/photos/thumb/'+RegExp.$1+".jpg", url);
 		}
-		else if (url.match(/^https?:\/\/(?:(?:www\.|m\.|)youtube\.com\/watch\?.*v=|youtu\.be\/)([\w\-]+)/)) {
+		else if (url.match(/^https?:\/\/(?:(?:www\.|m\.|)youtube\.com\/watch\?.*v=|youtu\.be\/)([\w-]+)/)) {
 			id = RegExp.$1;
 			addThumbnail(elem, 'https://i.ytimg.com/vi/' + id + '/default.jpg', url);
 		}
@@ -92,7 +92,7 @@ registerPlugin(thumbnail_plugin = {
 			else
 				addThumbnail(elem, 'http://tn-skr' + host + '.smilevideo.jp/smile?i=' + id, url);
 		}
-		else if (url.match(/^(https?:\/\/(?:www\.)?(?:instagr\.am|instagram\.com))(?:\/[\w]{2,30})?(\/p\/[\w\-]+)\/?(?:\??|$)/)) {
+		else if (url.match(/^(https?:\/\/(?:www\.)?(?:instagr\.am|instagram\.com))(?:\/[\w]{2,30})?(\/p\/[\w-]+)\/?(?:\??|$)/)) {
 			addThumbnail(elem, RegExp.$1 + RegExp.$2 +'/media/?size=t', url);
 		}
 		else if (url.match(/^http:\/\/photozou\.jp\/photo\/show\/\d+\/(\d+)/)) {
@@ -121,14 +121,14 @@ registerPlugin(thumbnail_plugin = {
 			var gyazo_prefix = 'https://i.gyazo.com/thumb/400/';
 			addThumbnail(elem, [gyazo_prefix + RegExp.$1 + '-png.jpg', gyazo_prefix + RegExp.$1 + '-jpg.jpg'], url);
 		}
-		else if (url.match(/^(https?:\/\/(?:www\.)?amazon\.(?:co\.jp|jp|com)\/.*(?:d|dp|product|ASIN)[\/%][^?]+)\??/)) {
+		else if (url.match(/^(https?:\/\/(?:www\.)?amazon\.(?:co\.jp|jp|com)\/.*(?:d|dp|product|ASIN)[/%][^?]+)\??/)) {
 			xds.load("//thumbnail-url-t2yaxfegmq-uw.a.run.app/url?url=" + encodeURIComponent(RegExp.$1),
 				function(x) {
 					if (x && x.thumbnail)
 						addThumbnail(elem, x.thumbnail, x.link || url, x.title);
 				});
 		}
-		else if (url.match(/^http:\/\/(?:www\.|m\.)?ustream\.tv\/(channel|recorded)\/(?:id\/)?([\w\-]+)/)) {
+		else if (url.match(/^http:\/\/(?:www\.|m\.)?ustream\.tv\/(channel|recorded)\/(?:id\/)?([\w-]+)/)) {
 		    xds.load("http://api.ustream.tv/json/" + (RegExp.$1=='recorded'?'video':RegExp.$1) + "/" +
 				RegExp.$2 + "/getValueOf/imageUrl?key=8149DBC1DF1083B3F4D8F7F0A1978F57",
 				function(img) {

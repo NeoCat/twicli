@@ -701,7 +701,7 @@ function sendMessage(user, text) {
 		var user_id = user_cache_by_screen_name[user].id_str;
 		enqueuePost(twitterAPI + "direct_messages/events/new.json?_body={\"event\": " +
 					"{\"type\":\"message_create\",\"message_create\":{\"target\":{\"recipient_id\":" + user_id +
-					"\},\"message_data\":{\"text\":\"" + encodeURIComponent(text) + "\"}}}}",
+					"},\"message_data\":{\"text\":\"" + encodeURIComponent(text) + "\"}}}}",
 			function(tw){ if (tw && tw.errors) error('', tw); resetFrm(); },
 			function(){ error(_('Twitter API error')); resetFrm(); },
 			false, true);
@@ -807,7 +807,7 @@ function updateCount() {
 	
 	// for calculate length with shorten URL.
 	var s = $("fst").value.replace(
-			/https?:\/\/[^\/\s]*[\w!#$%&\'()*+,.\/:;=?~-]*[\w#\/+-]/g,
+			/https?:\/\/[^/\s]*[\w!#$%&'()*+,./:;=?~-]*[\w#/+-]/g,
 			function(t) {return t_co_maxstr.replace(/^http/, t.substr(0, t.indexOf(':')))});
 	$("counter").innerHTML = isMessage() ? tw_config.dm_text_character_limit - RegExp.$2.length  : 140 - footer.length - s.length;
 }
@@ -1162,7 +1162,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 					quoted = true;
 					return '<blockquote class="quoted">' + makeHTML(tw.quoted_status, false, pid, null, true) + '</blockquote>';
 				}
-				return '<a class="link" target="_blank" href="' + e.replace(/\"/g, '%22') + '" onclick="return link(this);">'
+				return '<a class="link" target="_blank" href="' + e.replace(/"/g, '%22') + '" onclick="return link(this);">'
 					+ removeScheme(e).replace(/&/g, '&amp;') + '</a>';
 			}
 		}].forEach(function(a) {
@@ -1189,7 +1189,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 			'onClick="fav(this,\'' + id + '\')"' + (pid ? ' id="fav-'+eid+'"' : '') + '><span></span></div>')+
 		 (!no_name || (!display_as_rt && rt) ?
 			//ユーザアイコン
-			'<img class="uicon" src="' + t.user.profile_image_url_https + '" title="' + (t.user.description ? t.user.description.replace(/\"/g,'&quot;') :'') + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false">' + (t.user.url ? '</a>' : '') +
+			'<img class="uicon" src="' + t.user.profile_image_url_https + '" title="' + (t.user.description ? t.user.description.replace(/"/g,'&quot;') :'') + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false">' + (t.user.url ? '</a>' : '') +
 			//名前
 			'<a href="' + twitterURL + un + '" onClick="switchUserTL(this.parentNode,'+rt_mode+');return false" class="user"><span class="uid">@' + un + '</span>' +
 			 /*プロフィールの名前*/ '<span class="uname' + (t.user.name!=un ? '' : '_same') + '"><span class="uname_paren">(</span>'+insertPDF(t.user.name)+'<span class="uname_paren2">)</span></span></a>'
@@ -1218,7 +1218,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 		(t.source ? '<span class="separator"> / </span><span class="source">' + t.source.replace(/<a /,'<a target="twitter" onclick="return link(this)"') + '</span>' : '') + '</span>' +
 		//Geolocation
 		(rs.geo && rs.geo.type == 'Point' ? '<a class="button geomap" id="geomap-' + eid + '" target="_blank" href="https://maps.google.com?q=' + rs.geo.coordinates.join(',') + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.geo.coordinates.join(',') + '"></a>' : '') +
-		(!rs.geo && rs.place ? '<a class="button geomap" id="geomap-' + eid + '" target="_blank" href="https://maps.google.com?q=' + encodeURIComponent(rs.place.full_name) + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.place.full_name.replace(/\'/g,"&apos;") + '"></a>' : '') +
+		(!rs.geo && rs.place ? '<a class="button geomap" id="geomap-' + eid + '" target="_blank" href="https://maps.google.com?q=' + encodeURIComponent(rs.place.full_name) + '" onclick="return link(this);"><img src="images/marker.png" alt="geolocation" title="' + rs.place.full_name.replace(/'/g,"&apos;") + '"></a>' : '') +
 		//返信先を設定
 		' <a class="button reply" href="javascript:replyTo(\'' + un + "','" + id2 + '\',\'' + eid + '\')"><img src="images/reply.png" alt="↩" width="14" height="14"></a>' +
 		//返信元へのリンク
@@ -1541,7 +1541,7 @@ function twReplies(tw, fromTL) {
 }
 // 受信tweetを表示
 function removeLink(text) {
-	return text.replace(/https?:\/\/[^\/\s]*[\w!#$%&\'()*+,.\/:;=?~-]*[\w#\/+-]/g, '');
+	return text.replace(/https?:\/\/[^/\s]*[\w!#$%&'()*+,./:;=?~-]*[\w#/+-]/g, '');
 }
 function twShow(tw) {
 	first_update = false;
@@ -2192,7 +2192,7 @@ function loadPlugins() {
 		var ps = pluginstr.split(/[\r\n]+/);
 		var pss = "";
 		for (var i = 0; i < ps.length; i++) {
-			pss += '<scr'+'ipt type="text/javascript">plugin_name="'+ps[i].replace(/[\\\"]/g,'')+'"</scr'+'ipt>';
+			pss += '<scr'+'ipt type="text/javascript">plugin_name="'+ps[i].replace(/[\\"]/g,'')+'"</scr'+'ipt>';
 			pss += '<scr'+'ipt type="text/javascript" src="' + (ps[i].indexOf("/") >= 0 ? ps[i] : 'plugins/'+ps[i]+'?'+document.twicli_js_ver) + '"></scr'+'ipt>';
 		}
 		document.write(pss);

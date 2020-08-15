@@ -29,8 +29,8 @@ function execRegexp(tw, exp) {
 function evalFnStr(str) {
 	if (!str || !str.match(/^\{(.*)\}$/)) return null;
 	// {〜}の対応チェック
-	var check_str = RegExp.$1.replace(/\\\\/g,'').replace(/\\[\"\']/g,'')
-			.replace(/\'.*?\'/g, '').replace(/\".*?\"/g, ''); // 文字列を除外
+	var check_str = RegExp.$1.replace(/\\\\/g,'').replace(/\\["']/g,'')
+			.replace(/'.*?'/g, '').replace(/".*?"/g, ''); // 文字列を除外
 	var s = 0;
 	var depth_list = check_str.split('{').map(function(x){return s=s-x.split('}').length+2});
 	if (depth_list[depth_list.length-1] != 1) return alert("{ and } are not matched"); // {と}の個数不一致

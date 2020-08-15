@@ -18,7 +18,7 @@ function readCookie(key) {
 	}
 	return null;
 }
-var cpath = location.pathname.replace(/\/oauth\/[^\/]+$/,'/');
+var cpath = location.pathname.replace(/\/oauth\/[^/]+$/,'/');
 function writeCookie(key, val) {
 	if (use_local_storage && window.localStorage)
 		try {
