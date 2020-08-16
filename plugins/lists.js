@@ -256,7 +256,7 @@ registerPlugin({
 	newUserInfoElement: function(ele, user) {
 		ele.innerHTML += '<a href="' + twitterURL + user.screen_name + '/lists/memberships" onclick="twlGetLists(\'' + user.screen_name + '\'); return false;">[Lists]</a>';
 	},
-	miscTab: function(ele) {
+	miscTab: function() {
 		var e = document.createElement("div");
 		e.innerHTML = '<a href="javascript:var s = $(\'lists_pref\').style; s.display = s.display==\'block\'?\'none\':\'block\';void(0)"><b>▼'+_('Lists')+'</b></a>' +
 			'<form id="lists_pref" style="display:none" onSubmit="twlSubscribeList($(\'newList\').value); return false;">' +
@@ -280,7 +280,7 @@ registerPlugin({
 		else
 			$('tw2h').innerHTML = '<div class="tabcmd"><a id="list_get_all" href="'+twitterURL+a+'" onclick="twlGetListStatus(\''+a+'\');return false">'+_('get all tweets')+'</a></div>';
 	},
-	userinfo_popup: function(ele, user, id) {
+	userinfo_popup: function(ele, user) {
 		twlUpdateUserPopup(ele, user);
 	}
 });

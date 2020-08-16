@@ -109,7 +109,9 @@ overrides:
       - error
       - smart-tabs
     no-redeclare: off
-    no-unused-vars: off
+    no-unused-vars:
+      - error
+      - vars: local
 - files:
   - ./twicli.js
   - oauth/consumer.js
@@ -157,6 +159,7 @@ overrides:
   globals:
     Notify: readonly # defined by itself
   rules:
+    no-unused-vars: off
     no-prototype-builtins: off
 - files:
   - plugins/resolve_url.js

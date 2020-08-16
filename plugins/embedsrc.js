@@ -46,7 +46,7 @@
 				this.replaceUrl(null, links[i], url, url);
 			}
 		},
-		replaceUrl : function(elem, link, lng, sht) {
+		replaceUrl : function(elem, link, lng) {
 			if (link.embedsrc) return;
 			for (var i = 0; i < res.length; i++) {
 				if (res[i].search.test(lng)) {

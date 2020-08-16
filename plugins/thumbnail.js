@@ -140,7 +140,7 @@ registerPlugin(thumbnail_plugin = {
 	changeTheme: function(theme) {
 		thumbnailModeSet(theme.thumbnail_mode || 'top');
 	},
-	miscTab: function(ele) {
+	miscTab: function() {
 		var e = document.createElement("div");
 	e.innerHTML = '<a href="javascript:var s = $(\'thumbnail_pref\').style; s.display = s.display==\'block\'?\'none\':\'block\';void(0)"><b>▼'+_('Thumbnail')+'</b></a>' +
 		'<form id="thumbnail_pref" style="display:none" onSubmit="return false;">' +

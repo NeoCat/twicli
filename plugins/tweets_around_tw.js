@@ -12,7 +12,6 @@ var tweets_around_tw = {
 		xds.load_for_tab(twitterAPI + 'statuses/show.json?id=' + id,
 			function(tw) {
 				if (tw.errors) return error('', tw);
-					var twid = tw.id_str;
 					// 10分前後までのtweetを取得 (snowflake ID (63bit)の上位41bit分が時刻(ms))
 					var max_id = tw.id + 600000 * (1 << 22);
 					var min_id = tw.id - 600000 * (1 << 22);

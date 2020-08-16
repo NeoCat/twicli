@@ -13,7 +13,7 @@
 			if(footerSetting.length > 0) footer +=" " + footerSetting;
 			footerModified = footer;
 		},
-		savePrefs: function(frm) {
+		savePrefs: function() {
 			footerSetting = footer;
 		},
 

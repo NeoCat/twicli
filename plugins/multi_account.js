@@ -47,14 +47,14 @@ function accounts_add() {
 
 
 registerPlugin({
-	miscTab: function(ele) {
+	miscTab: function() {
 		var e = document.createElement('div');
 		e.innerHTML = _('Accounts')+': <select id="accounts"></select>' +
 				'<button type="button" class="go" onclick="accounts_change(); return false"></button>' +
 				'<button type="button" class="clr" onclick="accounts_delete(); return false"></button>' +
 				'<button type="button" class="add" onclick="accounts_add(); return false"></button><br>';
 		$('tw2h').insertBefore(e, $('logout'));
-		
+
 		var opt;
 		for (var x in accounts_info) {
 			opt = document.createElement('option');

@@ -2,7 +2,6 @@
 (function(){
     var re = /^https?:\/\/((tinyurl\.com|bit\.ly|is\.gd|u\.nu|icio\.us|tr\.im|cli\.gs|twurl\.nl|url\.ie|j\.mp|ow\.ly|ff\.im|digg\.com|dlvr\.it|buff\.ly|po\.st|(?:www\.)?tumblr\.com|tmblr\.co|htn\.to|goo\.gl|slidesha\.re|amzn\.to|ustre\.am|ift\.tt|fb\.me|urx\.nu|wp\.me)\/|b\.hatena\.ne\.jp\/-\/redirect?)|http:\/\/p\.tl\/(?!.\/)/;
   var api = 'https://resolve-url.appspot.com/url';
-  var remove = function(e){if (e && e.parentNode) e.parentNode.removeChild(e)};
 
   window.replaceUrl = function(hash, link) {
     for (var shortUrl in hash) if (hash.hasOwnProperty(shortUrl)) {
@@ -49,7 +48,7 @@
     // JSONP with callback window.replaceUrl
     var src = api + '?url=' + encodeURIComponent(link.href);
     setTimeout(function(){
-      var script = xds.load(src, function(hash){replaceUrl(hash, link)}, null, 0);
+      xds.load(src, function(hash){replaceUrl(hash, link)}, null, 0);
     }, 0);
   }
 

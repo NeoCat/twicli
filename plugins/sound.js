@@ -17,7 +17,7 @@ function setSoundNames(names) {
 }
 
 registerPlugin({
-	miscTab: function(ele) {
+	miscTab: function() {
 		var e = document.createElement("div");
 		e.innerHTML = '<a href="javascript:var s = $(\'sound_pref\').style; s.display = s.display==\'block\'?\'none\':\'block\';void(0)"><b>▼'+_('Sound')+'</b></a>' +
 			'<form id="sound_pref" style="display:none" onSubmit="setSoundNames([$(\'sound0\').value,$(\'sound1\').value]); return false;">' +

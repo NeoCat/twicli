@@ -128,7 +128,7 @@ registerPlugin({
 				tws_muted_users[result.users[i].id_str] = result.users[i];
 		});
 	},
-	switchTo: function(m) {
+	switchTo: function() {
 		if (!tws_update_timer) return;
 		clearInterval(tws_update_timer);
 		tws_update_timer = null;

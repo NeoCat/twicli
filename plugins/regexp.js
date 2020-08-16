@@ -205,7 +205,7 @@ registerPlugin({
 		t.text_replaced = (t.text_replaced || text(t)).replace(shortUrl, longUrl);
 		this.newMessageElement(s, s.tw, twNodeId);
 	},
-	fav: function(id, f, img, img_tl) {
+	fav: function(id, f) {
 		var s = $('tw-' + id);
 		if (s && s.tw && f != -1)
 			s.tw.favorited = !!f;
@@ -230,7 +230,7 @@ function expireRegexp() {
 expireRegexp();
 
 // Popup menu
-function addIDRegexp(user, id) {
+function addIDRegexp(user) {
 	setRegexp(user + ':^' + user + '$\n' + user + '::@' + user + '\n' + pickup_regexp);
 	switchRegexp(pickup_tab_list[0]);
 }

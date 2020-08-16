@@ -39,7 +39,7 @@ function dispImageFromLink(url, e, type) {
     });
   }
 
-  function urlReplaced(elem, link, lng, sht) {
+  function urlReplaced(elem, link) {
     insertInReplyTo(link);
   }
 

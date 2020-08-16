@@ -1028,7 +1028,6 @@ function hrefStatus(id, user, ele) {
 	ele = ele || popup_ele;
 	if (!id) return false;
 	if ($('lock-' + ele.id) && confirm_rt && !confirm(_("This tweet is protected; Are you sure to insert URL?"))) return false;
-	var tw = !display_as_rt && ele.tw.retweeted_status || ele.tw;
 	$('fst').value = $('fst').value + " https://twitter.com/" + user + "/statuses/" + id;
 	$('fst').focus(); $('fst').select();
 	return false;
@@ -1082,7 +1081,7 @@ function resetUpdateTimer() {
 	update_timer = setInterval(update, Math.max(parseInt(updateInterval||5)*1000, 5000));
 }
 // 外部リンクを開く際のフック
-function link(a) { return true; }
+function link() { return true; }
 // tweetのHTML表現を生成
 var needGMT = isNaN(new Date("Wed Jan 01 00:00:00 +0000 2014").getDate());
 function toDate(d) {

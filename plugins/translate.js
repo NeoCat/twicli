@@ -11,7 +11,7 @@ function setTranslateLang(lang) {
 }
 
 registerPlugin({
-	miscTab: function(ele) {
+	miscTab: function() {
 		var e = document.createElement("div");
 		e.innerHTML = '<a href="javascript:var s = $(\'translate_pref\').style; s.display = s.display==\'block\'?\'none\':\'block\';void(0)"><b>▼'+_('Translate')+'</b></a>' +
 			'<form id="translate_pref" style="display:none" onSubmit="setTranslateLang($(\'translateLang\').value); return false;">' +
