@@ -7,8 +7,11 @@ ignorePatterns:
   # build from plugins_source
   - plugins/autocomplete.js
   # out-of-date
+  - plugins/outputz.js
   - plugins/related_results.js
+  - plugins/search2.js
   - plugins/stream_search.js
+  - plugins/worldcup-2010.js
 globals: # defined at lang.js
   langList: readonly
   langNames: readonly
