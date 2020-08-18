@@ -56,9 +56,8 @@
   }
 
   function findShortUrls(elem) {
-    var links = elem.getElementsByTagName('a');
-    for (var i = 0; i < links.length; i++) (function(a){
-      if (a.parentNode.className.indexOf('status') >= 0 && re.test(a.href)) {
+    Array.prototype.forEach.call(elem.querySelectorAll('.status a.link:not(.resolved)'), function(a){
+      if (re.test(a.href)) {
         if (RegExp.$1 == 'tumblr.com') { // Specialization for tumblr.com
           a.href = a.href.replace('tumblr.com','www.tumblr.com');
           a.innerHTML = a.innerHTML.replace('tumblr.com','www.tumblr.com');
@@ -67,7 +66,7 @@
         return;
       }
       a.innerHTML = makeHumanFriendlyURL(a.innerHTML);
-    })(links[i]);
+    });
   }
 
   registerPlugin({
