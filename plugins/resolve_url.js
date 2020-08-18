@@ -6,12 +6,7 @@
   window.replaceUrl = function(hash, link) {
     for (var shortUrl in hash) if (hash.hasOwnProperty(shortUrl)) {
       var longUrl = hash[shortUrl];
-      // make human friendly URL
-      try{
-        var decoded = decodeURI(longUrl);
-      }catch(e){
-        decoded = longUrl;
-      }
+      var decoded = makeHumanFriendlyURL(longUrl);
       var truncated;
       if (decoded.length > 200) {
         truncated = removeScheme(decoded.slice(0,200)+'...');
@@ -52,6 +47,14 @@
     }, 0);
   }
 
+  function makeHumanFriendlyURL(url) {
+    try {
+      return decodeURI(url);
+    } catch (e) {
+      return url;
+    }
+  }
+
   function findShortUrls(elem) {
     var links = elem.getElementsByTagName('a');
     for (var i = 0; i < links.length; i++) (function(a){
@@ -61,7 +64,9 @@
           a.innerHTML = a.innerHTML.replace('tumblr.com','www.tumblr.com');
         }
         setResolver(a);
+        return;
       }
+      a.innerHTML = makeHumanFriendlyURL(a.innerHTML);
     })(links[i]);
   }
 
@@ -70,4 +75,3 @@
   });
 
 })()
-
