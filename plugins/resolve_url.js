@@ -6,22 +6,7 @@
   window.replaceUrl = function(hash, link) {
     for (var shortUrl in hash) if (hash.hasOwnProperty(shortUrl)) {
       var longUrl = hash[shortUrl];
-      var decoded = makeHumanFriendlyURL(longUrl);
-      var truncated;
-      if (decoded.length > 200) {
-        truncated = removeScheme(decoded.slice(0,200)+'...');
-      } else {
-        truncated = removeScheme(decoded);
-      }
-
-      link.href = longUrl;
-      if (removeScheme(link.textContent) === removeScheme(shortUrl)) {
-        link.textContent = truncated;
-      } else if (removeScheme(link.innerText) === removeScheme(shortUrl)) {
-        link.innerText = truncated;
-      }
-      if (link.className.indexOf('resolved') < 0);
-        link.className += ' resolved';
+      updateAnchorElement(link, shortUrl, longUrl);
       link.resolved = link.resolved ? link.resolved+1 : 1;
       if (link.resolved <= 3 && re.test(link.href)) {// resolve multiply-shortened URL
         if (RegExp.$1 == 'tumblr.com') { // Specialization for tumblr.com
@@ -47,11 +32,21 @@
     }, 0);
   }
 
-  function makeHumanFriendlyURL(url) {
-    try {
-      return decodeURI(url);
-    } catch (e) {
-      return url;
+  function updateAnchorElement(elem, shortUrl, longUrl) {
+    if (removeScheme(longUrl) !== removeScheme(shortUrl)) {
+      elem.href = longUrl;
+      elem.className += (elem.className.indexOf('resolved') < 0) ? ' resolved' : '';
+    }
+    if (removeScheme(elem.textContent) === removeScheme(shortUrl)) {
+      var decoded, textNode = elem.hasChildNodes() && elem.childNodes[0];
+      if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+        try {
+          decoded = decodeURI(longUrl);
+        } catch (e) {
+          decoded = longUrl;
+        }
+        textNode.textContent = removeScheme((decoded.length > 200) ? decoded.slice(0, 200) + '...' : decoded);
+      }
     }
   }
 
@@ -65,7 +60,7 @@
         setResolver(a);
         return;
       }
-      a.innerHTML = makeHumanFriendlyURL(a.innerHTML);
+      updateAnchorElement(a, a.textContent, a.textContent);
     });
   }
 
