@@ -6,27 +6,7 @@
   window.replaceUrl = function(hash, link) {
     for (var shortUrl in hash) if (hash.hasOwnProperty(shortUrl)) {
       var longUrl = hash[shortUrl];
-      // make human friendly URL
-      try{
-        var decoded = decodeURI(longUrl);
-      }catch(e){
-        decoded = longUrl;
-      }
-      var truncated;
-      if (decoded.length > 200) {
-        truncated = removeScheme(decoded.slice(0,200)+'...');
-      } else {
-        truncated = removeScheme(decoded);
-      }
-
-      link.href = longUrl;
-      if (removeScheme(link.textContent) === removeScheme(shortUrl)) {
-        link.textContent = truncated;
-      } else if (removeScheme(link.innerText) === removeScheme(shortUrl)) {
-        link.innerText = truncated;
-      }
-      if (link.className.indexOf('resolved') < 0);
-        link.className += ' resolved';
+      updateAnchorElement(link, shortUrl, longUrl);
       link.resolved = link.resolved ? link.resolved+1 : 1;
       if (link.resolved <= 3 && re.test(link.href)) {// resolve multiply-shortened URL
         if (RegExp.$1 == 'tumblr.com') { // Specialization for tumblr.com
@@ -52,17 +32,36 @@
     }, 0);
   }
 
+  function updateAnchorElement(elem, shortUrl, longUrl) {
+    if (removeScheme(longUrl) !== removeScheme(shortUrl)) {
+      elem.href = longUrl;
+      elem.className += (elem.className.indexOf('resolved') < 0) ? ' resolved' : '';
+    }
+    if (removeScheme(elem.textContent) === removeScheme(shortUrl)) {
+      var decoded, textNode = elem.hasChildNodes() && elem.childNodes[0];
+      if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+        try {
+          decoded = decodeURI(longUrl);
+        } catch (e) {
+          decoded = longUrl;
+        }
+        textNode.textContent = removeScheme((decoded.length > 200) ? decoded.slice(0, 200) + '...' : decoded);
+      }
+    }
+  }
+
   function findShortUrls(elem) {
-    var links = elem.getElementsByTagName('a');
-    for (var i = 0; i < links.length; i++) (function(a){
-      if (a.parentNode.className.indexOf('status') >= 0 && re.test(a.href)) {
+    Array.prototype.forEach.call(elem.querySelectorAll('.status a.link:not(.resolved)'), function(a){
+      if (re.test(a.href)) {
         if (RegExp.$1 == 'tumblr.com') { // Specialization for tumblr.com
           a.href = a.href.replace('tumblr.com','www.tumblr.com');
           a.innerHTML = a.innerHTML.replace('tumblr.com','www.tumblr.com');
         }
         setResolver(a);
+        return;
       }
-    })(links[i]);
+      updateAnchorElement(a, a.textContent, a.textContent);
+    });
   }
 
   registerPlugin({
@@ -70,4 +69,3 @@
   });
 
 })()
-
