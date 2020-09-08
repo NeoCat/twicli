@@ -1015,7 +1015,7 @@ function tweReplaceEmoji(el) {
 		'METOO': 'MeToo_v3',
 		'BLACKLIVESMATTER': 'BlackHistoryMonth',
 		'MSBUILD': 'MSBuild_2020',
-		'APPLEEVENT': 'Wasabi_Emoji_2019',
+		'APPLEEVENT': 'AppleEvent2020',
 		'WWDC20': 'WWDC_2020_V11',
 		'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
 		'午後の紅茶': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
