@@ -1009,6 +1009,9 @@ function tweReplaceEmoji(el) {
 		// ---- https://twitter.com/TwitterJP/statuses/1289367947610267649 ----
 		'花火': 'JP_FireworksDay_2020_BH',
 		'HANABI': 'JP_FireworksDay_2020_BH',
+		// ---- マスクをしよう ----
+		'マスクをしよう': 'WearAMask_2020_H2_2020',
+		'WEARAMASK': 'WearAMask_2020_H2_2020',
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
