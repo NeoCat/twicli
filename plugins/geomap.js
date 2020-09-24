@@ -104,7 +104,7 @@ function showMapCanvas(elem) {
 	rep.style.top = rep_top;
 	rep.style.display = 'block';
 	scrollToDiv(rep);
-	user_pick1 = user_pick2 = null;
+	user_picks = [];
 }
 
 function setTileLayer(map) {

@@ -43,7 +43,7 @@ function translateResult(result) {
 		$('reps').textContent = result;
 	$('rep').style.display = "block";
 	$('rep').style.top = rep_top;
-	user_pick1 = user_pick2 = null;
+	user_picks = [];
 }
 
 // Popup menu
