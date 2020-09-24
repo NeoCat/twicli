@@ -507,8 +507,7 @@ var reply_ele = null;
 var reply_ele2 = null;
 var direct_ele = null;
 // UI関連
-var user_pick1 = null;			// [⇔]で表示するユーザ名1
-var user_pick2 = null;			// [⇔]で表示するユーザ名2
+var user_picks = [];			// [⇔]で表示するユーザ名
 var popup_user = null;			// ポップアップメニューが選択されたユーザ名
 var popup_id = null;			// ポップアップメニューが選択された発言ID
 var popup_ele = null;			// ポップアップメニューが選択された発言ノード
@@ -861,7 +860,7 @@ function replyTo(user, id, tw_id, direct) {
 }
 // reply先を表示
 function dispReply(user, id, ele, cascade) {
-	user_pick1 = user;
+	user_picks.push(user);
 	var e = !cascade && (window.event || arguments.callee.caller.arguments[0]);
 	var shiftkey = e && (e.shiftKey || e.modifiers & 4);
 	var td = $((selected_menu.id == "TL" ? "tw" : selected_menu.id == "reply" ? "re" : "tw2c") + "-" + id);
@@ -913,7 +912,7 @@ function dispReply2(tw) {
 	$('reps').appendChild(el);
 	$('rep').style.display = "block";
 	scrollToDiv(el);
-	user_pick2 = tw.user.screen_name;
+	user_picks.push(tw.user.screen_name);
 	var in_reply_to = tw.in_reply_to_status_id_str || tw.in_reply_to_status_id;
 	if (in_reply_to) {
 		var d = $("tw-" + in_reply_to) || $("re-" + in_reply_to) || $("tw2c-" + in_reply_to);
@@ -927,6 +926,7 @@ function closeRep() {
 	$('rep').style.display = 'none';
 	$('reps').innerHTML = '';
 	rep_trace_id = null;
+	user_picks = [];
 }
 // quotedStatusをoverlay表示
 function overlayQuoted(ele) {
@@ -939,8 +939,9 @@ function overlayQuoted(ele) {
 }
 // replyからユーザ間のタイムラインを取得
 function pickup2() {
-	if (user_pick1 && user_pick2)
-		switchUser(user_pick1 + "," + user_pick2);
+	user_picks = user_picks.uniq();
+	if (user_picks.length < 2) return;
+	switchUser(user_picks.join());
 }
 // ポップアップメニューの初期化
 function popup_init() {
