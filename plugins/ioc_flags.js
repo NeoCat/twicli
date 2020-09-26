@@ -309,6 +309,8 @@ function tweReplaceEmoji(el) {
 		'ROADTORIO': 'Rio2016',
 		'2018平昌': 'PyeongChang_WO_18',
 		'PYEONGCHANG2018': 'PyeongChang_WO_18',
+		'東京2020':'Tokyo2020_Olympics_add',
+		'TOKYO2020':'Tokyo2020_Olympics_add',
 		// ---- 式典 ----
 		'OPENINGCEREMONY': 'openingceremony_WO_18_v2',
 		'開会式': 'openingceremony_WO_18_v2',
