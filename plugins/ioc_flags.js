@@ -646,13 +646,18 @@ function tweReplaceEmoji(el) {
 		'オールスター': 'AllStar_Baseball_Game_2019',
 		'夢のオールスター': 'AllStar_Baseball_Game_2019',
 		'球宴': 'AllStar_Baseball_Game_2019',
-		// ---- AmazonPrimeDay_2019 ----
-		'プライムデー': 'AmazonPrimeDay_2019_Japan',
-		'プライムセール': 'AmazonPrimeDay_2019_Japan',
-		'アマゾン': 'AmazonPrimeDay_2019_Japan',
+		// ---- Amazon PrimeDay ----
 		'AMAZON': 'AmazonPrimeDay_2019',
-		'PRIMEDAY': 'AmazonPrimeDay_2019',
 		'PRIMEDAYAMAZON': 'AmazonHotSale2019',
+		'プライムデー': 'PrimeDay_2020_JP',
+		'プライムデイ': 'PrimeDay_2020_JP',
+		'プライムセール': 'PrimeDay_2020_JP',
+		'アマゾン': 'PrimeDay_2020_JP',
+		'PRIMEDAY': 'Amazon_PrimeDay_2020_CA_Brasil',
+		'PRIMEDAY2020': 'Amazon_PrimeDay_2020_CA_Brasil',
+		'PRIMEDAY20': 'Amazon_PrimeDay_2020_CA_Brasil',
+		'PRIMEDAYBRASIL': 'Amazon_PrimeDay_2020_CA_Brasil',
+		'AMAZONPRIMEDAY': 'Amazon_PrimeDay_2020_CA_Brasil',
 		// ---- Disney_Aladdin_2019 ----
 		'ALADDIN': 'Disney_Aladdin_2019',
 		'アラジン': 'Disney_Aladdin_2019',
