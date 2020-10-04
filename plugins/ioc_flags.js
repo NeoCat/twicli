@@ -1014,11 +1014,16 @@ function tweReplaceEmoji(el) {
 		// ---- マスクをしよう ----
 		'マスクをしよう': 'WearAMask_2020_H2_2020',
 		'WEARAMASK': 'WearAMask_2020_H2_2020',
+		// ---- BLM ----
+		'BLACKLIVESMATTER': 'BlackHistoryMonth',
+		'BLACKHISTORYMONTH': 'BlackHistoryMonth',
+		'BHM' :'BlackHistoryMonth',
+		'BLACKHISTORYMONTHUK': 'BlackHistoryMonthUK_BHMUK_2020',
+		'BHMUK': 'BlackHistoryMonthUK_BHMUK_2020',
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
 		'METOO': 'MeToo_v3',
-		'BLACKLIVESMATTER': 'BlackHistoryMonth',
 		'MSBUILD': 'MSBuild_2020',
 		'APPLEEVENT': 'AppleEvent2020',
 		'WWDC20': 'WWDC_2020_V11',
