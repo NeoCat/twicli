@@ -1147,6 +1147,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 			entities: entities.user_mentions,
 			prefix: '@＠',
 			key: 'screen_name',
+			ignoreCase: true,
 			callback: function(p, s) {
 				return '<a href="' + twitterURL + s + '" class="mention" onClick="switchUser(\'' + s + '\'); return false;" >'
 					+ p + s + '</a>';
@@ -1173,11 +1174,16 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 				var prefixList = (a.prefix || '').split('');
 				s[a.key] && (prefixList.length ? prefixList : ['']).forEach(function(p) {
 					if (startWithBefore < startWith) return; // already replaced
-					var index = expandedTweetText.indexOf(p + s[a.key], startWith);
+					var toBeReplaced = p + s[a.key];
+					var index = a.ignoreCase
+						? expandedTweetText.toLowerCase().indexOf(toBeReplaced.toLowerCase(), startWith)
+						: expandedTweetText.indexOf(toBeReplaced, startWith);
 					if (index < startWith) return; // entitiy not found in rest of text
+					var nextStartWith = index + toBeReplaced.length
+					var toBeReplacedWithoutPrefix = expandedTweetText.substring(index + p.length, nextStartWith);
 					ttextWithLink += expandedTweetText.substring(startWith, index);
-					ttextWithLink += a.callback(p, s[a.key], s[a.expandedKey || a.key]);
-					startWith = index + (p + s[a.key]).length;
+					ttextWithLink += a.callback(p, toBeReplacedWithoutPrefix, s[a.expandedKey || a.key]);
+					startWith = nextStartWith;
 				});
 			});
 			expandedTweetText = ttextWithLink + expandedTweetText.substring(startWith);
