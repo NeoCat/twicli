@@ -1061,6 +1061,9 @@ function tweReplaceEmoji(el) {
 		'BHM' :'BlackHistoryMonth',
 		'BLACKHISTORYMONTHUK': 'BlackHistoryMonthUK_BHMUK_2020',
 		'BHMUK': 'BlackHistoryMonthUK_BHMUK_2020',
+		// ---- Day Of The Girl ----
+		'国際ガールズデー': 'DayOfTheGirl_2020',
+		'DAYOFTHEGIRL': 'DayOfTheGirl_2020',
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
