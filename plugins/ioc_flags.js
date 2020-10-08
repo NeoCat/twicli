@@ -1029,6 +1029,13 @@ function tweReplaceEmoji(el) {
 		'LGBTHISTORYMONTH': 'LGBTHistoryMonth_2020',
 		'LGBTHM2020': 'LGBTHistoryMonth_2020',
 		'LGBTHM20': 'LGBTHistoryMonth_2020',
+		// ---- National Coming Out Day ----
+		'COMINGOUTDAY': 'NationalComingOutDay_2020',
+		'COMINGOUTDAY2020': 'NationalComingOutDay_2020',
+		'NATIONALCOMINGOUTDAY': 'NationalComingOutDay_2020',
+		'NATIONALCOMINGOUTDAY2020': 'NationalComingOutDay_2020',
+		'COMINGOUT': 'NationalComingOutDay_2020',
+		'MYCOMINGOUTSTORY': 'NationalComingOutDay_2020',
 		// ---- 移民遺産月間 ----
 		'海外移住ストーリー': 'MyImmigrantStory_2020',
 		'国外移住ストーリー': 'MyImmigrantStory_2020',
