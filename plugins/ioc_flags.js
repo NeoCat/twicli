@@ -1029,6 +1029,13 @@ function tweReplaceEmoji(el) {
 		'LGBTHISTORYMONTH': 'LGBTHistoryMonth_2020',
 		'LGBTHM2020': 'LGBTHistoryMonth_2020',
 		'LGBTHM20': 'LGBTHistoryMonth_2020',
+		// ---- National Coming Out Day ----
+		'COMINGOUTDAY': 'NationalComingOutDay_2020',
+		'COMINGOUTDAY2020': 'NationalComingOutDay_2020',
+		'NATIONALCOMINGOUTDAY': 'NationalComingOutDay_2020',
+		'NATIONALCOMINGOUTDAY2020': 'NationalComingOutDay_2020',
+		'COMINGOUT': 'NationalComingOutDay_2020',
+		'MYCOMINGOUTSTORY': 'NationalComingOutDay_2020',
 		// ---- 移民遺産月間 ----
 		'海外移住ストーリー': 'MyImmigrantStory_2020',
 		'国外移住ストーリー': 'MyImmigrantStory_2020',
@@ -1054,12 +1061,15 @@ function tweReplaceEmoji(el) {
 		'BHM' :'BlackHistoryMonth',
 		'BLACKHISTORYMONTHUK': 'BlackHistoryMonthUK_BHMUK_2020',
 		'BHMUK': 'BlackHistoryMonthUK_BHMUK_2020',
+		// ---- Day Of The Girl ----
+		'国際ガールズデー': 'DayOfTheGirl_2020',
+		'DAYOFTHEGIRL': 'DayOfTheGirl_2020',
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
 		'METOO': 'MeToo_v3',
 		'MSBUILD': 'MSBuild_2020',
-		'APPLEEVENT': 'AppleEvent2020',
+		'APPLEEVENT': 'AppleEvent_Oct_2020',
 		'WWDC20': 'WWDC_2020_V11',
 		'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
 		'午後の紅茶': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
