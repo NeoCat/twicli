@@ -1179,7 +1179,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 						? expandedTweetText.toLowerCase().indexOf(toBeReplaced.toLowerCase(), startWith)
 						: expandedTweetText.indexOf(toBeReplaced, startWith);
 					if (index < startWith) return; // entitiy not found in rest of text
-					var nextStartWith = index + toBeReplaced.length
+					var nextStartWith = index + toBeReplaced.length;
 					var toBeReplacedWithoutPrefix = expandedTweetText.substring(index + p.length, nextStartWith);
 					ttextWithLink += expandedTweetText.substring(startWith, index);
 					ttextWithLink += a.callback(p, toBeReplacedWithoutPrefix, s[a.expandedKey || a.key]);
