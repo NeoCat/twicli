@@ -1,6 +1,6 @@
 /* replace short URLs with original URLs */
 (function(){
-    var re = /^https?:\/\/((tinyurl\.com|bit\.ly|is\.gd|u\.nu|icio\.us|tr\.im|cli\.gs|twurl\.nl|url\.ie|j\.mp|ow\.ly|ff\.im|digg\.com|dlvr\.it|buff\.ly|po\.st|(?:www\.)?tumblr\.com|tmblr\.co|htn\.to|goo\.gl|slidesha\.re|amzn\.to|ustre\.am|ift\.tt|fb\.me|urx\.nu|wp\.me)\/|b\.hatena\.ne\.jp\/-\/redirect?)|http:\/\/p\.tl\/(?!.\/)/;
+    var re = /^https?:\/\/((tinyurl\.com|bit\.ly|is\.gd|u\.nu|icio\.us|tr\.im|cli\.gs|twurl\.nl|url\.ie|j\.mp|ow\.ly|ff\.im|digg\.com|dlvr\.it|buff\.ly|po\.st|(?:www\.)?tumblr\.com|tmblr\.co|htn\.to|goo\.gl|slidesha\.re|amzn\.to|ustre\.am|ift\.tt|fb\.me|urx\.nu|wp\.me)\/|b\.hatena\.ne\.jp\/-\/redirect?)|http:\/\/p\.tl\/(?!.\/)|https:\/\/t\.co\/\w+\?\w+/;
   var api = 'https://resolve-url.appspot.com/url';
 
   window.replaceUrl = function(hash, link) {
