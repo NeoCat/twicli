@@ -92,9 +92,6 @@ registerPlugin(thumbnail_plugin = {
 			else
 				addThumbnail(elem, 'http://tn-skr' + host + '.smilevideo.jp/smile?i=' + id, url);
 		}
-		else if (url.match(/^(https?:\/\/(?:www\.)?(?:instagr\.am|instagram\.com))(?:\/[\w]{2,30})?(\/p\/[\w-]+)\/?(?:\??|$)/)) {
-			addThumbnail(elem, RegExp.$1 + RegExp.$2 +'/media/?size=t', url);
-		}
 		else if (url.match(/^http:\/\/photozou\.jp\/photo\/show\/\d+\/(\d+)/)) {
 			addThumbnail(elem, "http://art"+Math.floor(Math.random()*40+1)+".photozou.jp/bin/photo/"+
 							RegExp.$1 +"/org.bin?size=120", url);
@@ -104,9 +101,6 @@ registerPlugin(thumbnail_plugin = {
 					function(x) {
 						addThumbnail(elem, x.thumbnail, url);
 					});
-		}
-		else if (url.match(/^http:\/\/p\.twipple\.jp\/(\w+)/)) {
-			addThumbnail(elem, 'http://p.twipple.jp/show/thumb/' + RegExp.$1, url);
 		}
 		else if (url.match(/^https?:(\/\/moby\.to\/\w+)/)) {
 			addThumbnail(elem, RegExp.$1+':thumbnail', url);
@@ -126,14 +120,6 @@ registerPlugin(thumbnail_plugin = {
 				function(x) {
 					if (x && x.thumbnail)
 						addThumbnail(elem, x.thumbnail, x.link || url, x.title);
-				});
-		}
-		else if (url.match(/^http:\/\/(?:www\.|m\.)?ustream\.tv\/(channel|recorded)\/(?:id\/)?([\w-]+)/)) {
-		    xds.load("http://api.ustream.tv/json/" + (RegExp.$1=='recorded'?'video':RegExp.$1) + "/" +
-				RegExp.$2 + "/getValueOf/imageUrl?key=8149DBC1DF1083B3F4D8F7F0A1978F57",
-				function(img) {
-					if (img && img.medium)
-						addThumbnail(elem, img.medium, url);
 				});
 		}
 	},
