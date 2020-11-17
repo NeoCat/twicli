@@ -704,7 +704,8 @@ function tweReplaceEmoji(el) {
 		'WORLDEMOJIDAY': 'WorldEmojiDay_2019',
 		// [#Twitterトレンド大賞 presents #Twitter夏祭り 開催が決定！](https://blog.twitter.com/ja_jp/topics/events/2019/twitter-trend-award-natsumatsuri-2019.html)
 		'TWITTER夏祭り': 'SummerFestival_2020',
-		'TWITTERトレンド大賞': '2019TwitterTrendAward_Emoji_V2',
+		'TWITTERトレンド大賞': 'TwitterTrendAward_2020',
+		'TWITTERTRENDAWARD': 'TwitterTrendAward_2020',
 		'ローソン屋台': 'TwitterTrendAward_Summer_Emoji',
 		'放置少女屋台': 'TwitterTrendAward_Summer_Emoji',
 		'サマーウォーズ屋台': 'TwitterTrendAward_Summer_Emoji',
