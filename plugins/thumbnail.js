@@ -35,11 +35,7 @@ registerPlugin(thumbnail_plugin = {
 		link.thumbnailed = url;
 		if (url.indexOf(twitterURL) == 0 || url.indexOf("javascript:") == 0)
 			return; // skip @... or #...
-		if (url.match(/^http:\/\/twitpic\.com\/(\w+)/)) {
-			id = RegExp.$1;
-			addThumbnail(elem, 'http://twitpic.com/show/thumb/' + id, url);
-		}
-		else if (url.match(/^http:\/\/movapic\.com\/pic\/(\w+)$/)) {
+		if (url.match(/^http:\/\/movapic\.com\/pic\/(\w+)$/)) {
 			id = RegExp.$1;
 			addThumbnail(elem, 'http://image.movapic.com/pic/t_' + id + '.jpeg', url);
 		}
