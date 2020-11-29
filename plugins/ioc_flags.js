@@ -1074,6 +1074,13 @@ function tweReplaceEmoji(el) {
 		// ---- Day Of The Girl ----
 		'国際ガールズデー': 'DayOfTheGirl_2020',
 		'DAYOFTHEGIRL': 'DayOfTheGirl_2020',
+		// ---- Christmas ----
+		'クリスマス': 'Christmas_2020',
+		'CHRISTMAS': 'Christmas_2020',
+		'ハッピークリスマス': 'Christmas_2020',
+		'HAPPYCHRISTMAS': 'Christmas_2020',
+		'メリークリスマス': 'Christmas_2020',
+		'MERRYCHRISTMAS': 'Christmas_2020',
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
