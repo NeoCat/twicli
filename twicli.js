@@ -1169,7 +1169,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 		}].forEach(function(a) {
 			var ttextWithLink = '';
 			var startWith = 0;
-			Array.isArray(a.entities) && a.entities.forEach(function(s) {
+			Array.isArray(a.entities) && a.entities.sort(function(a, b) { return a.indices[0] - b.indices[0] }).forEach(function(s) {
 				var startWithBefore = startWith;
 				var prefixList = (a.prefix || '').split('');
 				s[a.key] && (prefixList.length ? prefixList : ['']).forEach(function(p) {
