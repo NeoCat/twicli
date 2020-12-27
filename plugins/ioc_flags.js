@@ -1081,6 +1081,13 @@ function tweReplaceEmoji(el) {
 		'HAPPYCHRISTMAS': 'Christmas_2020',
 		'メリークリスマス': 'Christmas_2020',
 		'MERRYCHRISTMAS': 'Christmas_2020',
+		// ---- 世界人権デー ----
+		'世界人権デー': 'HumanRightsDay_2020',
+		'人権デー': 'HumanRightsDay_2020',
+		'人権': 'HumanRightsDay_2020',
+		'HUMANRIGHTSDAY': 'HumanRightsDay_2020',
+		'HUMANRIGHTS': 'HumanRightsDay_2020',
+		'STANDUP4HUMANRIGHTS': 'HumanRightsDay_2020',
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
