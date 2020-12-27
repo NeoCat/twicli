@@ -1088,6 +1088,10 @@ function tweReplaceEmoji(el) {
 		'HUMANRIGHTSDAY': 'HumanRightsDay_2020',
 		'HUMANRIGHTS': 'HumanRightsDay_2020',
 		'STANDUP4HUMANRIGHTS': 'HumanRightsDay_2020',
+		// [Twitter上で2020年を共に過ごした皆さんへ](https://blog.twitter.com/ja_jp/topics/company/2020/thishappened-in-2020-ja.html)
+		'今年のできごと2020': 'ThisHappened2020',
+		'THISHAPPENED2020': 'ThisHappened2020',
+		'THISHAPPENED': 'ThisHappened2020',
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
