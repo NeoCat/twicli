@@ -1092,6 +1092,12 @@ function tweReplaceEmoji(el) {
 		'今年のできごと2020': 'ThisHappened2020',
 		'THISHAPPENED2020': 'ThisHappened2020',
 		'THISHAPPENED': 'ThisHappened2020',
+		// [Twitter上で #宇宙の初日の出 を迎えましょう](https://blog.twitter.com/ja_jp/topics/events/2020/twitter_space_sunrise_2021.html)
+		'KIBO': 'SpaceSunrise_2020',
+		'宇宙からあけおめ': 'SpaceSunrise_2020',
+		'宇宙の初日の出': 'SpaceSunrise_2020',
+		'スペースサンライズ': 'SpaceSunrise_2020',
+		'SPACESUNRISE': 'SpaceSunrise_2020',
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
