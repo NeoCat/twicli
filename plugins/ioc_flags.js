@@ -905,12 +905,11 @@ function tweReplaceEmoji(el) {
 		'嵐と三ツ矢でカンパイ': 'AsahiMitsuyaJapan_2020',
 		'日本にはおいしいサイダーがある': 'AsahiMitsuyaJapan_2020',
 		// AnimalCrossing_Nintendo_2020_NewArtwork
-		'あつまれどうぶつの森': 'AnimalCrossing_Nintendo_2020_NewArtwork',
-		'どうぶつの森': 'AnimalCrossing_Nintendo_2020_NewArtwork',
-		'ACNH': 'AnimalCrossing_Nintendo_2020_NewArtwork',
-		'ANIMALCROSSING': 'AnimalCrossing_Nintendo_2020_NewArtwork',
-		'ANIMALCROSSINGNEWHORIZONS': 'AnimalCrossing_Nintendo_2020_NewArtwork',
-		'TOMNOOK': 'AnimalCrossing_Nintendo_2020_NewArtwork',
+		'あつまれどうぶつの森': 'AnimalCrossing_Nintendo_2020_NewArtwork_v2',
+		'どうぶつの森': 'AnimalCrossing_Nintendo_2020_NewArtwork_v2',
+		'ACNH': 'AnimalCrossing_Nintendo_2020_NewArtwork_v2',
+		'ANIMALCROSSING': 'AnimalCrossing_Nintendo_2020_NewArtwork_v2',
+		'ANIMALCROSSINGNEWHORIZONS': 'AnimalCrossing_Nintendo_2020_NewArtwork_v2',
 		// KIRINSoccerJapan_2020
 		'キリチャレの日': 'KIRINSoccerJapan_2020',
 		'届けてキリン': 'KIRINSoccerJapan_2020',
