@@ -1104,6 +1104,10 @@ function tweReplaceEmoji(el) {
 		'宇宙の初日の出': 'SpaceSunrise_2020',
 		'スペースサンライズ': 'SpaceSunrise_2020',
 		'SPACESUNRISE': 'SpaceSunrise_2020',
+		// ---- SaferInternetDay ----
+		'セーファーインターネットデー': 'SaferInternetDay_2021',
+		'SAFERINTERNETDAY': 'SaferInternetDay_2021',
+		'SID2021': 'SaferInternetDay_2021',
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
