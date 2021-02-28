@@ -725,7 +725,6 @@ function tweReplaceEmoji(el) {
 		'WORLDSUICIDEPREVENTIONDAY': 'WorldSuicidePreventionDay_2020',
 		'世界自殺予防デー': 'WorldSuicidePreventionDay_2020',
 		'自殺予防週間': 'WorldSuicidePreventionDay_2020',
-		'いのち支える': 'WorldSuicidePreventionDay_2020',
 		'相談してみよう': 'WorldSuicidePreventionDay_2020',
 		'弱音を吐こう': 'WorldSuicidePreventionDay_2020',
 		'WSPD': 'WorldSuicidePreventionDay_2020',
@@ -733,6 +732,9 @@ function tweReplaceEmoji(el) {
 		'SUICIDEPREVENTION': 'WorldSuicidePreventionDay_2020',
 		'10SEP': 'WorldSuicidePreventionDay_2020',
 		'LIGHTACANDLE': 'WorldSuicidePreventionDay_2020',
+		'自殺対策強化月間': 'JapanSuicidePreventionMonth_2021',
+		'相談しよう': 'JapanSuicidePreventionMonth_2021',
+		'いのち支える': 'JapanSuicidePreventionMonth_2021',
 		// ---- Rugby_World_Cup_2019_EMOJI_RWC2019 ----
 		'RWC2019': 'Rugby_World_Cup_2019_EMOJI_RWC2019',
 		'WEBBELLISCUP': 'Rugby_World_Cup_2019_EMOJI_WebbEllisCup',
