@@ -142,7 +142,12 @@ registerPlugin({
 		ele.appendChild(hr);
 	},
 	newUserInfoElement: function(ele, user) {
-		ele.innerHTML += '<a href="' + twitterURL + 'search/' + user.screen_name + '" onclick="twsSearch(\'' + user.screen_name + '\'); return false;">[Search]</a>';
+		ele.appendChild((function(a) {
+			a.href = twitterURL + 'search/' + user.screen_name;
+			a.onclick = function() { twsSearch(user.screen_name); return false; };
+			a.innerHTML = '[Search]';
+			return a;
+		})(document.createElement('a')));
 		twsReplaceLinkWithHandler(ele);
 	},
 	newMessageElement: function(ele) {

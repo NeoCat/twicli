@@ -254,7 +254,12 @@ registerPlugin({
 		twl_update_timer = null;
 	},
 	newUserInfoElement: function(ele, user) {
-		ele.innerHTML += '<a href="' + twitterURL + user.screen_name + '/lists/memberships" onclick="twlGetLists(\'' + user.screen_name + '\'); return false;">[Lists]</a>';
+		ele.appendChild((function(a) {
+			a.href = twitterURL + user.screen_name + '/lists/memberships';
+			a.onclick = function() { twlGetLists(user.screen_name); return false; };
+			a.innerHTML = '[Lists]';
+			return a;
+		})(document.createElement('a')));
 	},
 	miscTab: function() {
 		var e = document.createElement("div");
