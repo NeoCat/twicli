@@ -1408,7 +1408,7 @@ function twRelation(rel) {
 		})(document.createElement('a')));
 	userInfo.appendChild((function(button) {
 		button.type = 'button';
-		button.onclick = 'follow(' + !source.following + ')';
+		button.onclick = function() { follow(!source.following); };
 		button.innerHTML = _(source.following ? 'Remove $1' : 'Follow $1', last_user);
 		return button;
 	})(document.createElement('button')));
