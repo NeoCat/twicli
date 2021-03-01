@@ -721,6 +721,16 @@ function tweReplaceEmoji(el) {
 		'東京防災': 'Tokyo_Disaster_Prevention_Day_2019_Mascot_Emoji_GIF',
 		'防サイくん': 'Tokyo_Disaster_Prevention_Day_2019_Mascot_Emoji_GIF',
 		'今やろう': 'Tokyo_Disaster_Prevention_Day_2019_Mascot_Emoji_GIF',
+		// https://twitter.com/TwitterJP/status/1366252059482202113
+		'あの日から10年': '311Tohokumemorial_2021_v3',
+		'あれから10年': '311Tohokumemorial_2021_v3',
+		'あれから私は': '311Tohokumemorial_2021_v3',
+		'これから私は': '311Tohokumemorial_2021_v3',
+		'東北ボランティア': '311Tohokumemorial_2021_v3',
+		'防災いまできること': '311Tohokumemorial_2021_v3',
+		'10YEARSLATER': '311Tohokumemorial_2021_v3',
+		'LOVEFORTOHOKU': '311Tohokumemorial_2021_v3',
+		'PRAYFORTOHOKU': '311Tohokumemorial_2021_v3',
 		// [Twitter、グローバルで自殺防止の取り組みを支援](https://blog.twitter.com/ja_jp/topics/company/2019/WSPD_2019.html)
 		'WORLDSUICIDEPREVENTIONDAY': 'WorldSuicidePreventionDay_2020',
 		'世界自殺予防デー': 'WorldSuicidePreventionDay_2020',
