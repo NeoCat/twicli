@@ -302,6 +302,8 @@ function tweReplaceEmoji(el) {
 		'PARALYMPICS': 'Logo_paralympics_2016_v5',
 		'パラリンピック': 'Logo_paralympics_2016_v5',
 		'PARALYMPICFLAME': 'Rio_Records',
+		'みんなの聖火リレー': 'TokyoOlympic_2021_Part1',
+		'OLYMPICTORCHRELAY': 'TokyoOlympic_2021_Part1',
 		// ---- 開催国 ----
 		'RIORECORDS': 'flame_paralympics_2016',
 		'RIO2016': 'Paralympics_Rio2016___final',
