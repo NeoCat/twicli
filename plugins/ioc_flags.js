@@ -1160,7 +1160,7 @@ function tweReplaceEmoji(el) {
 		'LOVETWITTER': 'LoveTwitter',
 		'METOO': 'MeToo_v3',
 		'MSBUILD': 'MSBuild_2020',
-		'APPLEEVENT': 'AppleEvent_Nov_2020_BL_H2',
+		'APPLEEVENT': 'April_Event_2021',
 		'WWDC20': 'WWDC_2020_V11',
 		'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
 		'午後の紅茶': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
