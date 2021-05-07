@@ -1159,6 +1159,14 @@ function tweReplaceEmoji(el) {
 		'セーファーインターネットデー': 'SaferInternetDay_2021',
 		'SAFERINTERNETDAY': 'SaferInternetDay_2021',
 		'SID2021': 'SaferInternetDay_2021',
+		// ---- 世界赤十字デー ----
+		'世界赤十字デー': 'WorldRedCrossDay_May_2021',
+		'REDCROSS': 'WorldRedCrossDay_May_2021',
+		'REDCRESCENTDAY': 'WorldRedCrossDay_May_2021',
+		'REDCROSSDAY': 'WorldRedCrossDay_May_2021',
+		'WORLDREDCRESCENTDAY': 'WorldRedCrossDay_May_2021',
+		'WORLDREDCROSSDAY': 'WorldRedCrossDay_May_2021',
+		'REDCRESCENT': 'WorldRedCrossDay_May_2021_add2',
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
