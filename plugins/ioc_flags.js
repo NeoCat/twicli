@@ -1170,6 +1170,14 @@ function tweReplaceEmoji(el) {
 		'WORLDREDCRESCENTDAY': 'WorldRedCrossDay_May_2021',
 		'WORLDREDCROSSDAY': 'WorldRedCrossDay_May_2021',
 		'REDCRESCENT': 'WorldRedCrossDay_May_2021_add2',
+		// ---- 世界予防接種週間 ----
+		'世界予防接種週間': 'WorldImmunizationWeek_April_2021',
+		'世界予防接種週間2021': 'WorldImmunizationWeek_April_2021',
+		'ワクチン効果あり': 'WorldImmunizationWeek_April_2021',
+		'VACCINESWORK': 'WorldImmunizationWeek_April_2021',
+		'WORLDIMMUNISATIONWEEK': 'WorldImmunizationWeek_April_2021',
+		'WORLDIMMUNIZATIONWEEK': 'WorldImmunizationWeek_April_2021',
+		'WORLDIMMUNIZATIONWEEK2021': 'WorldImmunizationWeek_April_2021',
 		// ---- その他 ----
 		'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 		'LOVETWITTER': 'LoveTwitter',
