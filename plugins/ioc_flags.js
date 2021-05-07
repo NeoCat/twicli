@@ -1120,7 +1120,12 @@ function tweReplaceEmoji(el) {
 		'REFUGEEDAY': 'WorldRefugees2020',
 		'WITHREFUGEES': 'WorldRefugees2020',
 		// ---- https://twitter.com/TwitterJP/statuses/1289367947610267649 ----
-		'花火': 'JP_FireworksDay_2020_BH',
+		'花火': 'FireworksRelayJP_April_2021',
+		'花火大会': 'FireworksRelayJP_April_2021',
+		'花火打ち上げ': 'FireworksRelayJP_April_2021',
+		'花火の音': 'FireworksRelayJP_April_2021',
+		'花火どこ ': 'FireworksRelayJP_April_2021',
+		'花火駅伝': 'FireworksRelayJP_April_2021',
 		'HANABI': 'JP_FireworksDay_2020_BH',
 		// ---- マスクをしよう ----
 		'マスクをしよう': 'WearAMask_2020_2021_ext2',
