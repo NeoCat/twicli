@@ -285,8 +285,6 @@ function tweReplaceEmoji(el) {
 		'PARALYMPICS': 'Logo_paralympics_2016_v5',
 		'パラリンピック': 'Logo_paralympics_2016_v5',
 		'PARALYMPICFLAME': 'Rio_Records',
-		'みんなの聖火リレー': 'TokyoOlympic_2021_Part1',
-		'OLYMPICTORCHRELAY': 'TokyoOlympic_2021_Part1',
 		// ---- 開催国 ----
 		'RIORECORDS': 'flame_paralympics_2016',
 		'RIO2016': 'Paralympics_Rio2016___final',
@@ -294,8 +292,6 @@ function tweReplaceEmoji(el) {
 		'ROADTORIO': 'Rio2016',
 		'2018平昌': 'PyeongChang_WO_18',
 		'PYEONGCHANG2018': 'PyeongChang_WO_18',
-		'東京2020':'Tokyo2020_Olympics_add',
-		'TOKYO2020':'Tokyo2020_Olympics_add',
 		// ---- 式典 ----
 		'OPENINGCEREMONY': 'openingceremony_WO_18_v2',
 		'開会式': 'openingceremony_WO_18_v2',
@@ -1203,7 +1199,9 @@ function tweReplaceEmoji(el) {
 				['JPN', '日本', 'ニッポン'],
 				['USA', 'TeamUSA']
 			]),
-		'Olympics_2021_Laurier_': [['Olympics', 'OlympicGames', 'オリンピック']]
+		'Olympics_2021_Laurier_': [['Olympics', 'OlympicGames', 'オリンピック']],
+		'TokyoOlympic_2021_Part1': [['みんなの聖火リレー', 'OLYMPICTORCHRELAY']],
+		'Tokyo2020_Olympics_add': [['東京2020', 'TOKYO2020']]
 	};
 	Object.keys(category).forEach(function(key) {
 		category[key].forEach(function(names) {
