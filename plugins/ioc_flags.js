@@ -319,7 +319,6 @@ function tweReplaceEmoji(el) {
 		'CLOSINGCEREMONY': 'closingceremony_WO_18',
 		'閉会式': 'closingceremony_WO_18',
 		// ---- 夏季大会競技 ----
-		'障害馬術': 'Olympics_2021_Sports_Equestrian_add_v2',
 		'体操': 'ArtisticGymnastics',
 		'陸上': 'Athletics',
 		'ビーチバレー': 'BeachVolleyball',
@@ -1201,7 +1200,8 @@ function tweReplaceEmoji(el) {
 			['WaterPolo', '水球'],
 			['Weightlifting', 'ウエイトリフティング'],
 			['Wrestling', 'レスリング'],
-		]
+		],
+		'Olympics_2021_Sports_Equestrian_add_v2': [['障害馬術']]
 	};
 	Object.keys(category).forEach(function(key) {
 		category[key].forEach(function(names) {
