@@ -277,7 +277,6 @@ function tweReplaceEmoji(el) {
 
 	var organization = {
 		// ---- 団体 ----
-		'TPE': 'Taipei',
 		'ROT': 'Refugee_Olympic_Athletes',
 		'REFUGEEOLYMPICTEAMS': 'Refugee_2',
 		'COR': 'COR_wo_2018',
@@ -1193,7 +1192,20 @@ function tweReplaceEmoji(el) {
 			['gold', '金メダル'],
 			['silver', '銀メダル'],
 			['bronze', '銅メダル']
-		]
+		],
+		'Olympics_Countries_2021_#': Object.keys(countryFlags)
+			.filter(function(key) {
+				return !key.match(/^(IRI|LIB|RUS|SIN)$/);
+			})
+			.map(function(key) {
+				return [key];
+			})
+			.concat([
+				['ROC'],
+				['TPE'],
+				['JPN', '日本', 'ニッポン'],
+				['USA', 'TeamUSA']
+			])
 	};
 	Object.keys(category).forEach(function(key) {
 		category[key].forEach(function(names) {
@@ -1204,10 +1216,10 @@ function tweReplaceEmoji(el) {
 	});
 	Array.prototype.forEach.call(el.querySelectorAll('.status > .hashtag, .udesc > .hashtag'), function(elHashtag) {
 		var index = elHashtag.innerHTML.replace(/^[#＃]/, '').toUpperCase();
-		if (countryFlags[index]) {
-			elHashtag.innerHTML += makeHTMLFromAlpha2(countryFlags[index][1]);
-		} else if (organization[index]) {
+		if (organization[index]) {
 			elHashtag.innerHTML += makeHTMLFromIconName(organization[index]);
+		} else if (countryFlags[index]) {
+			elHashtag.innerHTML += makeHTMLFromAlpha2(countryFlags[index][1]);
 		}
 	});
 	Array.prototype.forEach.call(el.querySelectorAll('.uname, .status, #profile > div'), function(unparse) {
