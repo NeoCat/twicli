@@ -1,9 +1,3 @@
-// [Follow the Rio 2016 @Olympics on Twitter, Vine, and Periscope | Twitter Blogs](https://blog.twitter.com/2016/follow-the-rio-2016-olympics-on-twitter-vine-and-periscope)
-// [Twitter、Vine、Periscopeで #オリンピック をより楽しみましょう | Twitter Blogs](https://blog.twitter.com/ja/2016/rio0802)
-// [Join the #Paralympics conversation on Twitter | Twitter Blogs](https://blog.twitter.com/2016/join-the-paralympics-conversation-on-twitter)
-// [Follow the 2018 Winter @Olympics on Twitter](https://blog.twitter.com/official/en_us/topics/events/2018/Follow-the-2018-Winter-Olympics-on-Twitter.html)
-// [冬季 #オリンピック](https://blog.twitter.com/official/ja_jp/topics/events/2018/0209_sports.html)
-
 var tweScript = document.createElement('script');
 tweScript.type = 'text/javascript';
 tweScript.src = '//twemoji.maxcdn.com/v/latest/twemoji.min.js';
