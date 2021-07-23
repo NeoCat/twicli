@@ -559,6 +559,7 @@ var tweCategory = {
 			['TPE'],
 			['FRO'],
 			['MAC'],
+			['EOR'],
 			['JPN', '日本', 'ニッポン'],
 			['USA', 'TeamUSA']
 		]),
