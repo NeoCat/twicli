@@ -292,11 +292,6 @@ function tweReplaceEmoji(el) {
 		'ROADTORIO': 'Rio2016',
 		'2018平昌': 'PyeongChang_WO_18',
 		'PYEONGCHANG2018': 'PyeongChang_WO_18',
-		// ---- 式典 ----
-		'OPENINGCEREMONY': 'openingceremony_WO_18_v2',
-		'開会式': 'openingceremony_WO_18_v2',
-		'CLOSINGCEREMONY': 'closingceremony_WO_18',
-		'閉会式': 'closingceremony_WO_18',
 		// ---- 夏季大会競技 ----
 		'体操': 'ArtisticGymnastics',
 		'陸上': 'Athletics',
@@ -1181,6 +1176,10 @@ function tweReplaceEmoji(el) {
 			['Wrestling', 'レスリング'],
 		],
 		'Olympics_2021_Sports_Equestrian_add_v2': [['障害馬術']],
+		'Olympics_2021_#': [
+			['OpeningCeremony', '開会式'],
+			['ClosingCeremony', '閉会式']
+		],
 		'Olympics_2021_#_add': [
 			['gold', '金メダル'],
 			['silver', '銀メダル'],
