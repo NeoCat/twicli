@@ -282,9 +282,6 @@ function tweReplaceEmoji(el) {
 		'COR': 'COR_wo_2018',
 		'OAR': 'oar_wo_2018', // Olympic Athletes from Russia
 		// ---- オリンピック/パラリンピック ----
-		'OLYMPICGAMES': 'Olympics',
-		'OLYMPICS': 'olympics_WO_18_v2',
-		'オリンピック': 'olympics_WO_18_v2',
 		'PARALYMPICS': 'Logo_paralympics_2016_v5',
 		'パラリンピック': 'Logo_paralympics_2016_v5',
 		'PARALYMPICFLAME': 'Rio_Records',
@@ -1205,7 +1202,8 @@ function tweReplaceEmoji(el) {
 				['TPE'],
 				['JPN', '日本', 'ニッポン'],
 				['USA', 'TeamUSA']
-			])
+			]),
+		'Olympics_2021_Laurier_': [['Olympics', 'OlympicGames', 'オリンピック']]
 	};
 	Object.keys(category).forEach(function(key) {
 		category[key].forEach(function(names) {
