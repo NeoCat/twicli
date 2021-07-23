@@ -152,10 +152,11 @@ var tweCountryFlags = {
 	'LAO': ['LAO', 'LA'], // Lao People's Democratic Republic
 	'LAT': ['LVA', 'LV'], // Latvia
 	'LBA': ['LBY', 'LY'], // Libya
+	'LBN': ['LBN', 'LB'], // Lebanon
 	'LBR': ['LBR', 'LR'], // Liberia
 	'LCA': ['LCA', 'LC'], // Saint Lucia
 	'LES': ['LSO', 'LS'], // Lesotho
-	'LIB': ['LBN', 'LB'], // Lebanon
+	'LIB': ['LBN', 'LB'], // Lebanon (until 2016)
 	'LIE': ['LIE', 'LI'], // Liechtenstein
 	'LTU': ['LTU', 'LT'], // Lithuania
 	'LUX': ['LUX', 'LU'], // Luxembourg
@@ -219,9 +220,10 @@ var tweCountryFlags = {
 	'SAM': ['WSM', 'WS'], // Samoa
 	'SEN': ['SEN', 'SN'], // Senegal
 	'SEY': ['SYC', 'SC'], // Seychelles
+	'SGP': ['SGP', 'SG'], // Singapore
 	//     ['SGS', 'GS'], // South Georgia and the South Sandwich Islands
 	//     ['SHN', 'SH'], // Saint Helena, Ascension and Tristan da Cunha
-	'SIN': ['SGP', 'SG'], // Singapore
+	'SIN': ['SGP', 'SG'], // Singapore (until 2016)
 	//     ['SJM', 'SJ'], // Svalbard and Jan Mayen
 	'SKN': ['KNA', 'KN'], // Saint Kitts and Nevis
 	'SLE': ['SLE', 'SL'], // Sierra Leone
@@ -555,6 +557,8 @@ var tweCategory = {
 		.concat([
 			['ROC'],
 			['TPE'],
+			['FRO'],
+			['MAC'],
 			['JPN', '日本', 'ニッポン'],
 			['USA', 'TeamUSA']
 		]),
