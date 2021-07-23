@@ -279,13 +279,6 @@ function tweReplaceEmoji(el) {
 		'YEM': ['YEM', 'YE'], // Yemen
 		'ZAM': ['ZMB', 'ZM'], // Zambia
 		'ZIM': ['ZWE', 'ZW'], // Zimbabwe
-		// ---- other ----
-		'GOLD': ['', '\uD83E\uDD47'], // First Place Medal
-		'金メダル': ['', '\uD83E\uDD47'], // First Place Medal
-		'SILVER': ['', '\uD83E\uDD48'], // Second Place Medal
-		'銀メダル': ['', '\uD83E\uDD48'], // Second Place Medal
-		'BRONZE': ['', '\uD83E\uDD49'], // Third Place Medal
-		'銅メダル': ['', '\uD83E\uDD49'] // Third Place Medal
 	};
 
 	var organization = {
@@ -1201,7 +1194,12 @@ function tweReplaceEmoji(el) {
 			['Weightlifting', 'ウエイトリフティング'],
 			['Wrestling', 'レスリング'],
 		],
-		'Olympics_2021_Sports_Equestrian_add_v2': [['障害馬術']]
+		'Olympics_2021_Sports_Equestrian_add_v2': [['障害馬術']],
+		'Olympics_2021_#_add': [
+			['gold', '金メダル'],
+			['silver', '銀メダル'],
+			['bronze', '銅メダル']
+		]
 	};
 	Object.keys(category).forEach(function(key) {
 		category[key].forEach(function(names) {
