@@ -280,7 +280,6 @@ var tweHashtag = {
 	'ROT': 'Refugee_Olympic_Athletes',
 	'REFUGEEOLYMPICTEAMS': 'Refugee_2',
 	// ---- オリンピック/パラリンピック ----
-	'PARALYMPICS': 'Logo_paralympics_2016_v5',
 	'パラリンピック': 'Logo_paralympics_2016_v5',
 	'PARALYMPICFLAME': 'Rio_Records',
 	// ---- 開催国 ----
@@ -563,9 +562,13 @@ var tweCategory = {
 			['JPN', '日本', 'ニッポン'],
 			['USA', 'TeamUSA']
 		]),
+	'Olympics_Countries_2021_IRI_': [['IRI']],
+	'Olympics_Countries_2021_BRA_add': [['TeamBrazil', 'TimeBrasil']],
 	'Olympics_2021_Laurier_': [['Olympics', 'OlympicGames', 'オリンピック']],
 	'TokyoOlympic_2021_Part1': [['みんなの聖火リレー', 'OLYMPICTORCHRELAY']],
 	'Tokyo2020_Olympics_add': [['東京2020', 'TOKYO2020']],
+	'Paris_2024_Olympics': [['JeuxOlympiques', 'paris2024', 'ParisHandover', 'SeeYouInParis','TokyoToParis']],
+	'Paralympics_2021': [['Paralympics']],
 	'#_wo_2018': [['COR'], ['oar']],
 	'PyeongChang_WO_18': [['2018平昌', 'PYEONGCHANG2018']],
 	'WBPikachu_#': [
