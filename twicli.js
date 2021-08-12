@@ -531,7 +531,6 @@ var loading_cnt = 0;
 var err_timeout = null;
 var update_post_check = false;
 var tweet_failed_notified = false;
-var tw_config;
 var tw_limits = {};
 var t_co_maxstr = "http://t.co/********";
 var api_resources = ['statuses','friendships','friends','followers','users','search','lists','favorites'];
@@ -611,7 +610,6 @@ function auth() {
 		$("user").innerHTML = last_user;
 		update();
 	}
-	xds.load_default(twitterAPI + 'help/configuration.json', twConfig);
 	xds.load(twitterAPI + "account/verify_credentials.json?" +
 		default_api_args, twAuth, twAuthFallback, 1);
 }
@@ -808,7 +806,7 @@ function updateCount() {
 	var s = $("fst").value.replace(
 			/https?:\/\/[^/\s]*[\w!#$%&'()*+,./:;=?~-]*[\w#/+-]/g,
 			function(t) {return t_co_maxstr.replace(/^http/, t.substr(0, t.indexOf(':')))});
-	$("counter").innerHTML = isMessage() ? tw_config.dm_text_character_limit - RegExp.$2.length  : 140 - footer.length - s.length;
+	$("counter").innerHTML = isMessage() ? 10000 - RegExp.$2.length  : 140 - footer.length - s.length;
 }
 // フォームのフォーカス解除時の処理
 function blurFst() {
@@ -1497,13 +1495,6 @@ function twDirectCheck(tw) {
 	}
 	last_direct_id = id;
 }
-// API情報の受信
-function twConfig(config) {
-	tw_config = config;
-	if (tw_config && tw_config.short_url_length)
-		while (t_co_maxstr.length < tw_config.short_url_length)
-			t_co_maxstr += "*";
-}
 function twRateLimit(limits) {
 	if (limits.errors) return error('', limits);
 	tw_limits = limits;
@@ -2129,8 +2120,8 @@ function setPreps(frm) {
 // 画像ファイルの検証
 function checkMedia() {
 	var m = $('media');
-	if (m.files && m.files[0] && m.files[0].size > tw_config.photo_size_limit) {
-		error(_("This image is larger than $1MB.", tw_config.photo_size_limit>>20));
+	if (m.files && m.files[0] && m.files[0].size > 5*1024*1024) {
+		error(_("This image is larger than $1MB.", 5));
 		m.value = "";
 	}
 }
