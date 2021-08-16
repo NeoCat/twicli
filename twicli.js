@@ -806,7 +806,15 @@ function updateCount() {
 	var s = $("fst").value.replace(
 			/https?:\/\/[^/\s]*[\w!#$%&'()*+,./:;=?~-]*[\w#/+-]/g,
 			function(t) {return t_co_maxstr.replace(/^http/, t.substr(0, t.indexOf(':')))});
-	$("counter").innerHTML = isMessage() ? 10000 - RegExp.$2.length  : 140 - footer.length - s.length;
+	$("counter").innerHTML = Math.floor(isMessage() ? 10000 - charsInTweet(RegExp.$2) : 140 - charsInTweet(footer) - charsInTweet(s));
+}
+function charsInTweet(text) {
+	var chars = 0;
+	text.split('').forEach(function(c) {
+		var code = c.charCodeAt(0);
+		chars += ((code >= 0 && code <= 0x10ff) || (code >= 0xd800 && code <= 0xdfff)) ? 0.5 : 1;
+	});
+	return chars;
 }
 // フォームのフォーカス解除時の処理
 function blurFst() {
