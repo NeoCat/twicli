@@ -68,7 +68,7 @@ function dispEmbedSrc(url, link, type) {
 	var createIframe = function (content) {
 		var ifr = document.getElementById("embedsrc") || document.createElement("iframe");
 		ifr.id = "embedsrc";
-		ifr.sandbox = 'allow-same-origin';
+		ifr.sandbox = 'allow-same-origin allow-scripts';
 		ifr.style.border = "0";
 		ifr.style.width = "100%";
 		ifr.style.height = content.height || "426px";
