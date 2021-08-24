@@ -548,7 +548,7 @@ var tweCategory = {
 			['BHU', 'Bhutan', 'PaldenDrukpa'],
 			['CHI', 'TEAMPARACHILETOKIO2020', 'TEAMPARACHILE'],
 			['GBS', 'TeamGuineaBissau'],
-			['GEO', 'TeamGEO`', 'NPCGEO'],
+			['GEO', 'TeamGEO', 'NPCGEO'],
 			['HKG', 'HongKongTeam', '香港隊', 'TeamHongKong', '港隊'],
 			['IRL', 'TeamIreland'],
 			['ISV', 'USVI', 'USVIParaTeam', 'USVirginIslands'],
