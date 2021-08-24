@@ -98,7 +98,7 @@ var tweCountryFlags = {
 	'FIN': ['FIN', 'FI'], // Finland
 	//     ['FLK', 'FK'], // Falkland Islands (Malvinas)
 	'FRA': ['FRA', 'FR'], // France
-	//     ['FRO', 'FO'], // Faroe Islands
+	'FRO': ['FRO', 'FO'], // Faroe Islands
 	'FSM': ['FSM', 'FM'], // Micronesia, Federated States of
 	'GAB': ['GAB', 'GA'], // Gabon
 	'GAM': ['GMB', 'GM'], // Gambia
@@ -291,8 +291,6 @@ var tweHashtag = {
 	'体操': 'ArtisticGymnastics',
 	'陸上': 'Athletics',
 	'ビーチバレー': 'BeachVolleyball',
-	'BOCCIA': 'Boccia',
-	'ボッチャ': 'Boccia',
 	'CYCLINGBMX': 'CyclingBMX',
 	'CYCLINGMOUNTAINBIKE': 'CyclingMountainBike',
 	'自転車': 'CyclingTrack',
@@ -300,22 +298,13 @@ var tweHashtag = {
 	'5人制サッカー': 'Football_5_A_Side',
 	'FOOTBALL7': 'Football7_a_side_paralympics_2016',
 	'7人制サッカー': 'Football7_a_side_paralympics_2016',
-	'GOALBALL': 'Goalball_v2',
-	'ゴールボール': 'Goalball_v2',
-	'POWERLIFTING': 'Powerlifting_paralympics_2016_v2',
 	'パワーリフティング': 'Powerlifting_paralympics_2016_v2',
 	'RUGBYSEVENS': 'RugbySevens',
 	'SHOOTINGSPORT': 'Shooting_Sport_v2',
 	'SYNCHRONISEDSWIMMING': 'SynchronisedSwimming',
 	'シンクロ': 'SynchronisedSwimming',
 	'バレー': 'Volleyball',
-	'WHEELCHAIRBASKETBALL': 'Wheelchair_Basketball_Fixed',
 	'車椅子バスケットボール': 'Wheelchair_Basketball_Fixed',
-	'WHEELCHAIRFENCING': 'Wheelchair_Fencing_Fixed',
-	'車いすフェンシングバスケットボール': 'Wheelchair_Fencing_Fixed',
-	'WHEELCHAIRTENNIS': 'Wheelchair_Tennis_Fixed',
-	'車いすテニス': 'Wheelchair_Tennis_Fixed',
-	'WHEELCHAIRRUGBY': 'Wheelchair_Rugby_Fixed',
 	// ---- 冬季大会競技 ----
 	'ALPINESKIING': 'AlpineSkiing_WO_18',
 	'アルペンスキー': 'AlpineSkiing_WO_18',
@@ -537,31 +526,7 @@ var tweCategory = {
 		['Wrestling', 'レスリング'],
 	],
 	'Olympics_2021_Sports_Equestrian_add_v2': [['障害馬術']],
-	'Olympics_2021_#': [
-		['OpeningCeremony', '開会式'],
-		['ClosingCeremony', '閉会式']
-	],
-	'Olympics_2021_#_add': [
-		['gold', '金メダル'],
-		['silver', '銀メダル'],
-		['bronze', '銅メダル']
-	],
-	'Olympics_Countries_2021_#': Object.keys(tweCountryFlags)
-		.filter(function(key) {
-			return !key.match(/^(IRI|LIB|RUS|SIN)$/);
-		})
-		.map(function(key) {
-			return [key];
-		})
-		.concat([
-			['ROC'],
-			['TPE'],
-			['FRO'],
-			['MAC'],
-			['EOR'],
-			['JPN', '日本', 'ニッポン'],
-			['USA', 'TeamUSA']
-		]),
+	'Olympics_Countries_2021_#': [['ROC'], ['MAC'], ['EOR']],
 	'Olympics_Countries_2021_IRI_': [['IRI']],
 	'Olympics_Countries_2021_BRA_add': [['TeamBrazil', 'TimeBrasil']],
 	'Olympics_2021_Laurier_': [['Olympics', 'OlympicGames', 'オリンピック']],
@@ -569,6 +534,69 @@ var tweCategory = {
 	'Tokyo2020_Olympics_add': [['東京2020', 'TOKYO2020']],
 	'Paris_2024_Olympics': [['JeuxOlympiques', 'paris2024', 'ParisHandover', 'SeeYouInParis','TokyoToParis']],
 	'Paralympics_2021': [['Paralympics']],
+	'Paralympics_2021_add_': [['パラリンピック']],
+	'Paralympics_2021_#': Object.keys(tweCountryFlags)
+		.filter(function(key) {
+			return !key.match(/^(AFG|AND|ANT|COM|KIR|LIB|LIE|PRK|RUS|SAM|SEY|SMR|SUD|SUR|VAN)$/);
+		})
+		.map(function(key) {
+			return [key];
+		})
+		.concat([
+			['AUT', 'ParalympicTeamAustria'],
+			['BER', 'TeamBermuda'],
+			['BHU', 'Bhutan', 'PaldenDrukpa'],
+			['CHI', 'TEAMPARACHILETOKIO2020', 'TEAMPARACHILE'],
+			['GBS', 'TeamGuineaBissau'],
+			['GEO', 'TeamGEO`', 'NPCGEO'],
+			['HKG', 'HongKongTeam', '香港隊', 'TeamHongKong', '港隊'],
+			['IRL', 'TeamIreland'],
+			['ISV', 'USVI', 'USVIParaTeam', 'USVirginIslands'],
+			['JPN', 'チームパラリンピックジャパン', 'ニッポン', '超えろみんなで', '日本'],
+			['KOR', 'TeamKorea'],
+			['LAT', 'TeamLAT', 'ParaTeamLAT'],
+			['MDV', 'ParaTeamMaldives', 'ParalympiansMDV', 'ParalympicsMDV', 'TeamMaldives'],
+			['NAM', 'TEAMBRAVE', 'NAMKOMESHO', 'TEAMNAM'],
+			['NZL', 'OneTeamOneSpirit'],
+			['PAR', 'TeamParaguay'],
+			['POL', 'TeamPOL', 'PKPar', 'KibicujemyParaolimpijczykom'],
+			['RPT', 'RefugeeParalympicTeam'],
+			['SGP', 'SG', 'SIN', 'Singapore', 'TeamSingapore', 'TeamSG'],
+			['SUI', 'Paralympicswissteam'],
+			['TPE'],
+			['TeamAfghanistan'],
+			['USA', 'TeamUSA']
+		]),
+	'Paralympics_Sports_2021_#': [
+		['BlindFootball', 'Football', '人制サッカー'],
+		['Boccia', 'ParaBoccia', 'ボッチャ'],
+		['CyclingRoad', 'パラサイクリングロード'],
+		['CyclingTrack', 'ParaCycling', 'パラサイクリングトラック'],
+		['Goalball', 'ゴールボール'],
+		['ParaArchery', 'Archery', 'パラアーチェリー'],
+		['ParaAthletics', 'Athletics', 'パラ陸上競技'],
+		['ParaBadminton', 'Badminton', 'パラバドミントン'],
+		['ParaCanoe', 'canoe', 'パラカヌー'],
+		['ParaDressage', 'Equestrian', 'パラ馬術'],
+		['ParaJudo', 'Judo', '視覚障害者柔道'],
+		['ParaRowing', 'Rowing', 'パラローイング'],
+		['ParaSwimming', 'Swimming', 'パラ水泳'],
+		['ParaTableTennis', 'TableTennis', 'パラ卓球'],
+		['ParaTaekwondo', 'Taekwondo', 'パラテコンドー'],
+		['ParaTriathlon', 'Triathlon', 'パラトライアスロン'],
+		['Powerlifting', 'パラパワーリフティング'],
+		['ShootingParaSport', 'Shooting', 'パラ射撃'],
+		['SittingVolleyball', 'Volleyball', 'シッティングバレーボール'],
+		['WheelchairBasketball', 'Basketball', '車いすバスケットボール'],
+		['WheelchairFencing', 'Fencing', '車いすフェンシング'],
+		['WheelchairRugby', 'Rugby', '車いすラグビー'],
+		['WheelchairTennis', 'Tennis', '車いすテニス '],
+		['OpeningCeremony', '開会式'],
+		['ClosingCeremony', '閉会式'],
+		['Gold', '金メダル'],
+		['Silver', '銀メダル'],
+		['Bronze', '銅メダル']
+	],
 	'#_wo_2018': [['COR'], ['oar']],
 	'PyeongChang_WO_18': [['2018平昌', 'PYEONGCHANG2018']],
 	'WBPikachu_#': [
