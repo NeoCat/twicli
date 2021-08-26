@@ -568,7 +568,6 @@ var tweCategory = {
 			['USA', 'TeamUSA']
 		]),
 	'Paralympics_Sports_2021_#': [
-		['BlindFootball', 'Football', '人制サッカー'],
 		['Boccia', 'ParaBoccia', 'ボッチャ'],
 		['CyclingRoad', 'パラサイクリングロード'],
 		['CyclingTrack', 'ParaCycling', 'パラサイクリングトラック'],
@@ -596,6 +595,9 @@ var tweCategory = {
 		['Gold', '金メダル'],
 		['Silver', '銀メダル'],
 		['Bronze', '銅メダル']
+	],
+	'Paralympics_Sports_2021_#_': [
+		['BlindFootball', 'Football', '5人制サッカー'],
 	],
 	'#_wo_2018': [['COR'], ['oar']],
 	'PyeongChang_WO_18': [['2018平昌', 'PYEONGCHANG2018']],
