@@ -453,7 +453,7 @@ var tweHashtag = {
 	'METOO': 'MeToo_v3',
 	'MSBUILD': 'MicrosoftBuild_2021',
 	'MSBUILD2021': 'MicrosoftBuild_2021',
-	'APPLEEVENT': 'April_Event_2021',
+	'APPLEEVENT': 'September_Event_2021',
 	'WWDC20': 'WWDC_2020_V11',
 	'WWDC21': 'USEN_THB_TLB_72x72_BAN_WWDC_PREE_NA_NA_NA_NA_NA',
 	'GOOGLEIO': 'GoogleIO2021',
