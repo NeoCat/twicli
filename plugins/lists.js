@@ -16,11 +16,16 @@ var twl_page = 0;
 var twl_update_timer = null;
 var lists_to_get = readCookie("lists");
 lists_to_get = lists_to_get ? lists_to_get.split("\n") : [];
-var list_names = lists_to_get.map(function(a){ return a.substr(0, 1) == '#' ? a.substr(1) : a });
 var lists_users = {};
+
+function list_names() {
+	return lists_to_get.map(function(a){ a = a.split("//")[0]; return a.substr(0, 1) == '#' ? a.substr(1) : a });
+}
+
 function twlGetListInfo(name) {
 	if (name == "") return;
 	if (name[0] == "#") name = name.substr(1);
+	name = name.split('//')[0];
 	var del = name.indexOf('/');
 	var user = name.substr(0, del), slug = name.substr(del+1);
 	var lists_users_str = readCookie("lists_users." + name);
@@ -51,15 +56,17 @@ function twlSubscribeList(name) {
 	if (name.indexOf('/') < 0)
 		return alert(_('Please specify a list like "@user/list".'));
 	if (name[0] == "@") name = name.substr(1);
-	if (list_names.indexOf(name) >= 0) return; // avoid duplication
+	if (list_names().indexOf(name) >= 0) return; // avoid duplication
 	lists_to_get.push(name);
 	writeCookie("lists", lists_to_get.join("\n"), 3652);
 	twlGetListInfo(name);
 }
 function twlUnsubscribeList(name) {
+	name = name.split('//')[0];
 	if (name[0] == "@") name = name.substr(1);
 	for (var i = 0; i < lists_to_get.length; i++) {
-		if (lists_to_get[i] == name || lists_to_get[i] == "#"+name) {
+		var a = lists_to_get[i].split('//')[0];
+		if (a == name || a == "#"+name) {
 			lists_to_get.splice(i, 1);
 			break;
 		}
@@ -99,11 +106,11 @@ function twlGetLists(user) {
 function twlListLink(a) {
 	return '<div> <a target="_blank" href="' + twitterURL + a.uri.substr(1) +
 		'" onclick="return twlGetListStatus(\'' + a.uri.substr(1) + '\')">' +
-		a.full_name + '</a> (' +
+		a.full_name + '</a> (' + (a.full_name.indexOf(a.name, a.user.name.length) >= 0 ? '' : a.name +' ') +
 		a.member_count + ' / ' + a.subscriber_count + ') '+
 		'<input type="checkbox" id="subscribe-' + a.full_name + '" ' +
-		(list_names.indexOf(a.full_name.replace('@', '')) >= 0 ? 'checked ' : '') +
-		'onclick="twlToggleSubscribe(this, \'' + a.full_name + '\')">' +
+		(list_names().indexOf(a.full_name.replace('@', '')) >= 0 ? 'checked ' : '') +
+		'onclick="twlToggleSubscribe(this, \'' + a.full_name + '//' + a.name + '\')">' +
 		'<label for="subscribe-' + a.full_name +'">' + _('Subscribe') + '</label></div>';
 }
 function twlFollowers(res) {
@@ -165,15 +172,17 @@ function twlShowListStatus(tw, update) {
 
 var init_failed = false;
 function twlUpdateListsList() {
-	list_names = lists_to_get.map(function(a){ return a.substr(0, 1) == '#' ? a.substr(1) : a });
 	// update tab
 	pickup_regexp_ex = lists_to_get.map(function(l){
-		var a = l[0] == '#' ? l.substr(1) : l;
+		var list = l[0] == '#' ? l.substr(1) : l;
+		list = list.split('//');
+		var a = list[0];
+		var name = list[1] || a.substr(a.indexOf('/')+1);
 		var users = lists_users[a];
 		if (!users) return "";
-		return "\\"/*supress closeTab*/ + a.substr(a.indexOf('/')+1) + "\\list#"/*info*/ + a +
+		return "\\"/*supress closeTab*/ + name + "\\list#"/*info*/ + a +
 			':^' + users.join('$|^') + '$' + (l[0] == '#' ? '::1'/*don't display in TL*/ : '') +
-			"\n\\"/*supress closeTab*/ + a.substr(a.indexOf('/')+1) + "\\list#"/*info*/ + a +
+			"\n\\"/*supress closeTab*/ + name + "\\list#"/*info*/ + a +
 			'::\\nby @' + users.join('$|\\nby @') + '$' + (l[0] == '#' ? ':1'/*don't display in TL*/ : '');
 	}).join("\n");
 	if (typeof(setRegexp) == "function") {
@@ -190,12 +199,15 @@ function twlUpdateMisc() {
 	var target_ele = $("lists_list");
 	if (!target_ele) return;
 	target_ele.innerHTML = lists_to_get.map(function(l){
-		var a = l[0] == '#' ? l.substr(1) : l;
+		var list = l[0] == '#' ? l.substr(1) : l;
+		var a = list.split('//');
+		var name = a[1];
+		a = a[0];
 		var chk = l[0] == '#' ? '' : ' checked';
 		var users = lists_users[a];
 		return a != "" ? '<li><a target="twitter" href="' + twitterURL + a + '">@'+ a + '</a>' +
-			' (' + (users ? users.length : "error") + ') ' +
-			'<label><input type="checkbox" onchange="twlToggleListsInTL(\''+a+'\',this)" id="chk-lists-'+a.replace('/','-')+'" '+chk+'>TL</label>&nbsp;&nbsp;'+
+			' (' + (name ? name + ' ' : '') + (users ? users.length : "error") + ') ' +
+			'<label><input type="checkbox" onchange="twlToggleListsInTL(\''+list+'\',this)" id="chk-lists-'+a.replace('/','-')+'" '+chk+'>TL</label>&nbsp;&nbsp;'+
 			' <a class="close" href="javascript:twlUnsubscribeList(\''+a+'\')">'+
 			'<img style="position: relative; top: 2px;" src="images/clr.png"></a>'+
 			'<button type="button" onclick="twlReloadListInfo(\'' + a + '\')">'+ _('Reload') + '</button></a>'+
@@ -217,20 +229,23 @@ function twlUpdateUserPopup(target_ele, user) {
 	for (i = 0; i < lists_to_get.length; i++) {
 		var list = lists_to_get[i];
 		list = list[0] == '#' ? list.substr(1) : list;
+		var cs = list.split('//');
+		var name = cs[1] || cs[0];
+		list = cs[0];
 		var a = document.createElement("a");
 		a.id = 'edit_list_user_' + list.replace('/', '_');
 		if (lists_users[list].indexOf(user) < 0) {
-			a.innerHTML = _('Add this user to list "$1"', list);
+			a.innerHTML = _('Add this user to list "$1"', name);
 			a.href = 'javascript:twlEditUserInList("'+list+'","'+user+'",true)';
 		} else {
-			a.innerHTML = _('Remove this user from list "$1"', list);
+			a.innerHTML = _('Remove this user from list "$1"', name);
 			a.href = 'javascript:twlEditUserInList("'+list+'","'+user+'",false)';
 		}
 		target_ele.appendChild(a);
 	}
 }
 function twlEditUserInList(list, user, f) {
-	var l = list.split('/');
+	var l = list.split('//')[0].split('/');
 	enqueuePost(twitterAPI + 'lists/members/' + (f ? 'create' : 'destroy') + '.json' +
 			'?owner_screen_name=' + l[0] + '&slug=' + l[1] + '&screen_name=' + user,
 		function(){ twlReloadListInfo(list); });
