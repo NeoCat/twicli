@@ -117,8 +117,16 @@ var shortcutkey_plugin = {
 			case 56: // 8 : タブ8
 			case 57: // 9 : タブ9
 			case 48: // 0 : タブ10
-				var num = code == 48 ? 9 : code - 49;
-				var menu = $('menu2').childNodes[num];
+				var num = code == 48 ? 4 : code - 54;
+				var menus = $('menu2').childNodes;
+				var menu = null;
+				for (var i = 5; menus[i]; i++) {
+					if (menus[i].clientWidth == 0) continue;
+					if (--num < 0) {
+						menu = menus[i];
+						break;
+					}
+				}
 				if (!menu || !menu.onclick) return true;
 				try {
 					menu.onclick();
