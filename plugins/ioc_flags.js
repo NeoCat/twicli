@@ -721,6 +721,7 @@ var tweCategory = {
 		['選挙', '参院選', '参院選2019', '令和初の参院選']
 	],
 	'2020_TokyoGubernatorialElection': [['東京都知事選挙', '東京都知事選', '都知事選', '選挙に行こう']],
+	'JapanGeneralElection_2021': [['私たちの選挙', '私たちの一票']],
 	'WorldEmojiDay_2019': [
 		// [7月17日は #世界絵文字デー](https://blog.twitter.com/ja_jp/topics/events/2019/World-Emoji-Day-2019.html)
 		['WORLDEMOJIDAY', '世界絵文字デー', '鳥取', '鳥取県', '絵文字で鳥取県', 'おしどり', '絵文字', 'EMOJI']
@@ -900,11 +901,10 @@ var tweCategory = {
 		// https://twitter.com/TwitterJP/statuses/1256109065106669569
 		['記者に感謝', 'THANKAJOURNALIST', 'WPFD2020']
 	],
-	'MentalHealthMonth_2021_add2': [['一人で抱え込まないで', 'RECOVERTOGETHER', 'TOGETHERWECAN', 'WECARE', '話すのも悪くない', 'LETSTALK']],
-	'WorldMentalHealthDay_2020': [
-		['世界メンタルヘルスデー', 'メンタルヘルス', 'WORLDMENTALHEALTHDAY', 'WMHD2020', 'MENTALHEALTHFORALL', 'MOVEFORMENTALHEALTH']
-	],
-	'MentalHealthMonth_2021': [['MENTALHEALTH', 'MENTALHEALTHMATTERS']],
+	'WMHD_2021': [['世界メンタルヘルスデー', 'メンタルヘルス', 'MOVEFORMENTALHEALTH', '話すのも悪くない']],
+	'WMHD_2021_add_3': [['WorldMentalHealthDay', 'LetsTalk', 'MentalHealth', 'MentalHealthAwarenss', 'MentalHealthForAll', 'MentalHealthMatters', 'WMHD2021']],
+	'MentalHealthMonth_2021_add2': [['一人で抱え込まないで', 'RECOVERTOGETHER', 'TOGETHERWECAN', 'WECARE']],
+	'WorldMentalHealthDay_2020': [['WMHD2020']],
 	'MentalHealthMonth_2021_add': [['MENTALHEALTHMONTH', 'MHM2021', 'GETREAL']],
 	'BullyingPreventionMonth_2020': [
 		[
@@ -979,9 +979,9 @@ var tweCategory = {
 	'MyImmigrantStory_2020': [['海外移住ストーリー', '国外移住ストーリー', 'MYIMMIGRANTSTORY']],
 	'WorldRefugees2020': [['世界難民の日', 'WORLDREFUGEEDAY', 'REFUGEEDAY', 'WITHREFUGEES']],
 	'FireworksRelayJP_April_2021': [['花火', '花火大会', '花火打ち上げ', '花火の音', '花火どこ', '花火駅伝']],
-	'WearAMask_2020_2021_ext2': [['マスクをしよう', 'WEARAMASK']],
+	'WearAMask_2020_2021_ext4': [['マスクをしよう', 'WEARAMASK']],
 	'BlackHistoryMonthUK_BHMUK_2020': [['BLACKHISTORYMONTHUK', 'BHMUK']],
-	'DayOfTheGirl_2020': [['国際ガールズデー', 'DAYOFTHEGIRL']],
+	'DayOfTheGirl_2021': [['国際ガールズデー', 'DAYOFTHEGIRL']],
 	'Christmas_2020': [['クリスマス', 'CHRISTMAS', 'ハッピークリスマス', 'HAPPYCHRISTMAS', 'メリークリスマス', 'MERRYCHRISTMAS']],
 	'HumanRightsDay_2020': [['世界人権デー', '人権デー', '人権', 'HUMANRIGHTSDAY', 'HUMANRIGHTS', 'STANDUP4HUMANRIGHTS']],
 	'SpaceSunrise_2020': [
