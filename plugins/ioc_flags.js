@@ -453,7 +453,7 @@ var tweHashtag = {
 	'METOO': 'MeToo_v3',
 	'MSBUILD': 'MicrosoftBuild_2021',
 	'MSBUILD2021': 'MicrosoftBuild_2021',
-	'APPLEEVENT': 'September_Event_2021',
+	'APPLEEVENT': 'USEN_EVENT_STATIC_72x72_BAN_BRAND_PREE_NA_NA_NA_NA_TEMJ',
 	'WWDC20': 'WWDC_2020_V11',
 	'WWDC21': 'USEN_THB_TLB_72x72_BAN_WWDC_PREE_NA_NA_NA_NA_NA',
 	'GOOGLEIO': 'GoogleIO2021',
@@ -1002,6 +1002,7 @@ var tweCategory = {
 			'WORLDIMMUNIZATIONWEEK2021'
 		]
 	],
+	'NvidiaGTCFall2021': [['GTC2021', 'NVIDIAGTC', 'GTCVisionary', 'NVIDIA']],
 	'#': [
 		// [Twitter上で2020年を共に過ごした皆さんへ](https://blog.twitter.com/ja_jp/topics/company/2020/thishappened-in-2020-ja.html)
 		['ThisHappened2020', '今年のできごと2020', 'THISHAPPENED'],
