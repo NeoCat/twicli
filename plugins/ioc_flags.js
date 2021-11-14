@@ -1003,6 +1003,8 @@ var tweCategory = {
 		]
 	],
 	'NvidiaGTCFall2021': [['GTC2021', 'NVIDIAGTC', 'GTCVisionary', 'NVIDIA']],
+	'COP26_2021': [['COP26', 'RaceToResilience', 'RaceToZero', 'TogetherForOurPlanet']],
+	'PikminBloom_2021': [['ピクミン', 'ピクミンブルーム', 'Pikmin', 'PikminBloom']],
 	'#': [
 		// [Twitter上で2020年を共に過ごした皆さんへ](https://blog.twitter.com/ja_jp/topics/company/2020/thishappened-in-2020-ja.html)
 		['ThisHappened2020', '今年のできごと2020', 'THISHAPPENED'],
