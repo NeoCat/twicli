@@ -35,7 +35,7 @@
   function updateAnchorElement(elem, shortUrl, longUrl) {
     if (removeScheme(longUrl) !== removeScheme(shortUrl)) {
       elem.href = longUrl;
-      elem.className += (elem.className.indexOf('resolved') < 0) ? ' resolved' : '';
+      addClass(elem, 'resolved');
     }
     if (removeScheme(elem.textContent) === removeScheme(shortUrl)) {
       var decoded, textNode = elem.hasChildNodes() && elem.childNodes[0];

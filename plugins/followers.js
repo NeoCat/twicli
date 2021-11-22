@@ -26,7 +26,7 @@ registerPlugin({
 		if (followers_ids_list.length && myid != uid && !followers_ids[uid])
 			for (var i = 0; i  < ele.childNodes.length; i++)
 				if (ele.childNodes[i].className == "status")
-					ele.childNodes[i].className += " non-follower";
+					addClass(ele.childNodes[i], 'non-follower');
 	}
 });
 
