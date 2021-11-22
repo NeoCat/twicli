@@ -60,6 +60,7 @@ overrides:
     no_resize_fst: readonly
     no_since_id: readonly
     nr_limit: readonly
+    openRep: readonly
     pluginstr: readonly
     popup_ele: readonly
     popup_hide: readonly

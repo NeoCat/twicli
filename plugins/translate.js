@@ -41,7 +41,7 @@ function translateResult(result) {
 		$('reps').innerText = result;
 	else
 		$('reps').textContent = result;
-	$('rep').style.display = "block";
+	openRep(true);
 	$('rep').style.top = rep_top;
 	user_picks = [];
 }

@@ -916,7 +916,7 @@ function dispReply2(tw) {
 	} else
 		$('reps').appendChild(document.createElement('hr'));
 	$('reps').appendChild(el);
-	$('rep').style.display = "block";
+	openRep();
 	scrollToDiv(el);
 	user_picks.push(tw.user.screen_name);
 	var in_reply_to = tw.in_reply_to_status_id_str || tw.in_reply_to_status_id;
@@ -929,10 +929,28 @@ function dispReply2(tw) {
 // replyのoverlay表示を閉じる
 function closeRep() {
 	callPlugins('closeRep');
-	$('rep').style.display = 'none';
+	var rep = $('rep');
+	rep.style.display = 'none';
+	removeClass(rep.getElementsByClassName('both')[0], 'hide');
 	$('reps').innerHTML = '';
 	rep_trace_id = null;
 	user_picks = [];
+}
+function openRep(hideBoth) {
+	var rep = $('rep'), both = rep.getElementsByClassName('both')[0];
+	if (hideBoth) addClass(both, 'hide');
+	rep.style.display = 'block';
+}
+function addClass(ele, className) {
+	var classList = ele.className.split(' ').filter(function(c) { return c !== ''; });
+	if (classList.some(function(c) { return c === className; })) return;
+	classList.push(className);
+	ele.className = classList.join(' ');
+}
+function removeClass(ele, className) {
+	ele.className = ele.className.split(' ').filter(function(c) {
+		return c !== '' && c !== className;
+	}).join(' ');
 }
 // quotedStatusをoverlay表示
 function overlayQuoted(ele) {

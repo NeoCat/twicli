@@ -79,7 +79,7 @@ function dispEmbedSrc(url, link, type) {
 		} else if (content.src) {
 			ifr.src = content.src;
 		}
-		$('rep').style.display = "block";
+		openRep(true);
 		$('rep').style.top = rep_top;
 		scrollToDiv($('rep'));
 		user_picks = [];
