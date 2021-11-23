@@ -79,6 +79,7 @@ button { -webkit-appearance: push-button; }
 .verified { background-image: url("../images/verified.png"); display: inline-block; width: 15px; height: 15px; vertical-align: -2px; }
 .lock { background-image: url("../images/lock.png"); background-size: 7px 15px; display: inline-block; width: 7px; height: 11px; vertical-align: -2px; }
 .close { display: inline-block; color: red; margin: 4px; }
+.close.hide { display: none; }
 .get-next { text-align: center; background-color: #999; color: #fec; cursor: pointer; }
 .get-next:before { content: '▽';}
 .get-next span:before { content: '(';}

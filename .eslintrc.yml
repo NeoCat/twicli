@@ -26,6 +26,7 @@ overrides:
   globals: # defined at twicli.js
     "$": readonly
     _: readonly
+    addClass: readonly
     callPlugins: readonly
     closeRep: readonly
     confirm_close: readonly
@@ -60,6 +61,7 @@ overrides:
     no_resize_fst: readonly
     no_since_id: readonly
     nr_limit: readonly
+    openRep: readonly
     pluginstr: readonly
     popup_ele: readonly
     popup_hide: readonly
@@ -70,6 +72,7 @@ overrides:
     quoteStatus: readonly
     readCookie: readonly
     registerPlugin: readonly
+    removeClass: readonly
     removeScheme: readonly
     rep_top: writable
     rep_trace_id: writable

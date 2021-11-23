@@ -180,10 +180,10 @@ registerPlugin({
 					if (alreadyMatched && s.className.match(tab.matchTest))
 							continue;
 					match = true;
-					s.className += " match-" + tab.name;
+					addClass(s, 'match-' + tab.name);
 					// TL,Re内の発言にマッチしたら該当タブに色付け
-					if ((twNodeId == 'tw' || twNodeId == 're') && tab.className.indexOf(' new') < 0)
-						tab.className += ' new';
+					if ((twNodeId == 'tw' || twNodeId == 're'))
+						addClass(tab, 'new');
 					if (tab.pickup[k].filterTL) {
 						// filterTLビットマスク(1:TL 2:@ 4:全タブ)に応じてマッチした発言を隠す
 						if ((tab.pickup[k].filterTL & 1) && twNodeId == 'tw' ||
@@ -193,8 +193,8 @@ registerPlugin({
 					}
 				}
 			}
-			if (match && !alreadyMatched)
-				s.className += " match";
+			if (match)
+				addClass(s, 'match');
 		}
 	},
 	replaceUrl: function(s, link, longUrl, shortUrl) {

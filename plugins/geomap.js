@@ -102,7 +102,7 @@ function showMapCanvas(elem) {
 	L.DomUtil.get('reps').innerHTML = '<div id="map_canvas" style="width: 100%; height: ' + Math.ceil(win_h * 0.67) + 'px;">';
 	var rep = L.DomUtil.get('rep');
 	rep.style.top = rep_top;
-	rep.style.display = 'block';
+	openRep(true);
 	scrollToDiv(rep);
 	user_picks = [];
 }

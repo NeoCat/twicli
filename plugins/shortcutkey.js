@@ -11,7 +11,7 @@ var shortcutkey_plugin = {
 			shortcutkey_plugin.last_selected_div_id = shortcutkey_plugin.selected_div.id;
 		shortcutkey_plugin.deselectTweet(true);
 		div = div || this;
-		div.className += " selected";
+		addClass(div, 'selected');
 		shortcutkey_plugin.selected_div = div;
 		if (div.id.indexOf('reps-') != 0 && !no_scroll)
 			scrollToDiv(div);
@@ -20,7 +20,7 @@ var shortcutkey_plugin = {
 	deselectTweet: function(save) {
 		var selected = shortcutkey_plugin.selected_div;
 		if (selected)
-			selected.className = selected.className.replace(' selected', '');
+			removeClass(selected, 'selected');
 		shortcutkey_plugin.selected_div = null;
 		if (!save) delete selected_menu.last_selected;
 	},
@@ -309,14 +309,14 @@ var shortcutkey_plugin = {
 		}
 		this.inclemental_search_timer = null;
 		var ele = (selected_menu.id == 'TL' ? $('tw') : selected_menu.id == 'reply' ? $('re') : $('tw2c'));
-		if (ele.className.indexOf('filtered') < 0) ele.className += ' filtered';
+		addClass(ele, 'filtered');
 		for (var i = 0; i < ele.childNodes.length; i++) {
 			for (var j = 0; j < ele.childNodes[i].childNodes.length; j++) {
 				var d = ele.childNodes[i].childNodes[j];
 				if (d.tw) {
 					if ((d.tw.user.screen_name + ' ' + text(d.tw)).match(re)) {
-						if (d.className.indexOf('filter-match') < 0) d.className += ' filter-match';
-					} else d.className = d.className.replace(/ ?filter-match/g, '');
+						addClass(d, 'filter-match');
+					} else removeClass(d, 'filter-match');
 				}
 			}
 		}
@@ -329,11 +329,11 @@ var shortcutkey_plugin = {
 		this.filter_div = null;
 		var ele = (selected_menu.id == 'TL' ? $('tw') : selected_menu.id == 'reply' ? $('re') : $('tw2c'));
 		if (ele.className.indexOf('filtered') < 0) return;
-		ele.className = ele.className.replace(/ ?filtered/g, '');
+		removeClass(ele, 'filtered');
 		for (var i = 0; i < ele.childNodes.length; i++) {
 			for (var j = 0; j < ele.childNodes[i].childNodes.length; j++) {
 				var d = ele.childNodes[i].childNodes[j];
-				if (d.tw) d.className = d.className.replace(/ ?filter-match/g, '');
+				if (d.tw) removeClass(d, 'filter-match');
 			}
 		}
 

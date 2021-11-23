@@ -834,18 +834,18 @@ function resetFrm(arg) {
 function setReplyId(id, tw_id) {
 	var t;
 	if (in_reply_to_status_id_tw && (t = $(in_reply_to_status_id_tw)))
-		t.className = t.className.replace(/ ?inrep/, '');
+		removeClass(t, 'inrep');
 	else if (in_reply_to_status_id) for (var i = 0; i < 3; i++) {
 		t = $(['tw-','re-','tw2c-'][i]+in_reply_to_status_id);
-		if (t) t.className = t.className.replace(/ ?inrep/, '');
+		if (t) removeClass(t, 'inrep');
 	}
 	in_reply_to_status_id = id;
 	in_reply_to_status_id_tw = tw_id;
 	if (tw_id)
-		$(tw_id).className += ' inrep';
+		addClass($(tw_id), 'inrep');
 	else if (id) for (i = 0; i < 3; i++) {
 		t = $(['tw-','re-','tw2c-'][i]+id);
-		if (t) t.className += ' inrep';
+		if (t) addClass(t, 'inrep');
 	}
 }
 // reply先を設定
@@ -896,8 +896,8 @@ function dispReply(user, id, ele, cascade) {
 	if (d.parentNode.id != 'reps')
 		closeRep();
 	scrollToDiv(d);
-	d.className += ' emp';
-	setTimeout(function(){d.className = d.className.replace(' emp','')}, 2000);
+	addClass(d, 'emp');
+	setTimeout(function(){ removeClass(d, 'emp'); }, 2000);
 }
 // reply先をoverlay表示
 function dispReply2(tw) {
@@ -916,7 +916,7 @@ function dispReply2(tw) {
 	} else
 		$('reps').appendChild(document.createElement('hr'));
 	$('reps').appendChild(el);
-	$('rep').style.display = "block";
+	openRep();
 	scrollToDiv(el);
 	user_picks.push(tw.user.screen_name);
 	var in_reply_to = tw.in_reply_to_status_id_str || tw.in_reply_to_status_id;
@@ -929,10 +929,28 @@ function dispReply2(tw) {
 // replyのoverlay表示を閉じる
 function closeRep() {
 	callPlugins('closeRep');
-	$('rep').style.display = 'none';
+	var rep = $('rep');
+	rep.style.display = 'none';
+	removeClass(rep.getElementsByClassName('both')[0], 'hide');
 	$('reps').innerHTML = '';
 	rep_trace_id = null;
 	user_picks = [];
+}
+function openRep(hideBoth) {
+	var rep = $('rep'), both = rep.getElementsByClassName('both')[0];
+	if (hideBoth) addClass(both, 'hide');
+	rep.style.display = 'block';
+}
+function addClass(ele, className) {
+	var classList = ele.className.split(' ').filter(function(c) { return c !== ''; });
+	if (classList.some(function(c) { return c === className; })) return;
+	classList.push(className);
+	ele.className = classList.join(' ');
+}
+function removeClass(ele, className) {
+	ele.className = ele.className.split(' ').filter(function(c) {
+		return c !== '' && c !== className;
+	}).join(' ');
 }
 // quotedStatusをoverlay表示
 function overlayQuoted(ele) {
@@ -1047,7 +1065,7 @@ function deleteStatus(id) {
 	for (var i = 0; i < 3; i++) {
 		var target = $(['tw-','re-','tw2c-'][i]+id);
 		if (target) {
-			target.className += " deleted";
+			addClass(target, 'deleted');
 			target.tw.deleted = true;
 		}
 	}
@@ -1498,7 +1516,7 @@ function twDirectCheck(tw) {
 	if (!tw || tw.events.length == 0) return false;
 	var id = tw.events[0].id;
 	if (last_direct_id && last_direct_id != id) {
-		$("direct").className += " new";
+		addClass($('direct'), 'new');
 		callPlugins('notifyDM', tw.events, last_direct_id);
 	}
 	last_direct_id = id;
@@ -1531,8 +1549,7 @@ function updateRateLimit(callback) {
 }
 // 新着reply受信通知
 function noticeNewReply(replies) {
-	if ($("reply").className.indexOf("new") < 0)
-		$("reply").className += " new";
+	addClass($('reply'), 'new');
 	callPlugins("noticeNewReply", replies);
 }
 // 新着repliesを取得
@@ -1730,9 +1747,9 @@ function twShowToNode(tw, tw_node, no_name, after, animation, check_since, ignor
 			if (tw[i].d_dir == 2 || user.screen_name == myname)
 				s.className = "fromme";
 			if (tw[i].retweeted_status && !userdesc)
-				s.className += " retweeted";
+				addClass(s, 'retweeted');
 			if (userdesc)
-				s.className += " userdesc";
+				addClass(s, 'userdesc');
 			callPlugins("newMessageElement", s, tw[i], tw_node.id);
 			pNode.insertBefore(s, pNode.childNodes[0]);
 			nr_show++;

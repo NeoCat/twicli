@@ -26,7 +26,7 @@ function dispImageFromLink(url, e, type) {
       url.map(function(u){return '<source type="' + u[0] + '" src="' + u[1] + '">'}).join('') + '</video>';
   else
     $('reps').innerHTML = url.map(function(u){return '<img src="' + u + '" style="max-width:90%; max-height: 90%; margin: auto; display: block;" onload="imageLoadedFromLink(this)">'}).join('');
-  $('rep').style.display = 'block';
+  openRep(true);
   $('rep').style.top = rep_top + 'px';
 }
 
