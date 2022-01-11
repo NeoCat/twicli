@@ -2,6 +2,12 @@
 function wheel(event) {
 	var delta = 0;
 	if (!event) event = window.event;
+	if (event.wheelDeltaY == 0 || event.deltaY == 0) {
+		if (event.preventDefault)
+			event.preventDefault();
+		event.returnValue = false;
+		return;
+	}
 	if (event.wheelDelta) {
 		delta = event.wheelDelta;
 	} else if (event.detail)
@@ -10,6 +16,7 @@ function wheel(event) {
 		delta *= 10;
 	if (navigator.userAgent.indexOf("AppleWebKit/") >= 0)
 		delta /= 10;
+	delta = Math.floor(delta);
 	if (delta)
 		scrollBy(0, -delta);
 	if (event.preventDefault)
