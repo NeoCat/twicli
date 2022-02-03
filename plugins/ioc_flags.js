@@ -837,6 +837,18 @@ var tweCategory = {
 		// https://twitter.com/TwitterJP/status/1193353369672241152
 		['即位の礼', '祝賀御列の儀', '即位礼正殿の儀', 'JAPANENTHRONEMENT', 'JPNENTHRONEMENT']
 	],
+	'Lunar_New_Year_2022_v2': [
+		[
+			'いーそーぐゎちでーびる',
+			'ソーグヮチ',
+			'そーぐゎち',
+			'旧正月',
+			'HappyNewYear',
+			'LunarNewYear',
+			'SpringFestival',
+			'春節'
+		]
+	],
 	'NewYearCelebration_Japan2020_sunrise': [
 		// [年末年始はTwitterで 「#あけおめ」](https://blog.twitter.com/ja_jp/topics/events/2019/newyear-tweet-2019.html)
 		['あけおめ', '謹賀新年', 'あけましておめでとう']
