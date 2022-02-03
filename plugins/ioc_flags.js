@@ -473,6 +473,7 @@ var tweHashtag = {
 	'КХЛ': 'KHL_Season_Start'
 };
 var tweCategory = {
+	'Japan_Olympic_for_Beijing_2022_v2': [['teamjapan', 'チームジャパン']],
 	'Olympics_2021_Sports_#': [
 		['3x3'],
 		['Archery', 'アーチェリー'],
@@ -836,6 +837,18 @@ var tweCategory = {
 		// https://twitter.com/TwitterJP/status/1193353369672241152
 		['即位の礼', '祝賀御列の儀', '即位礼正殿の儀', 'JAPANENTHRONEMENT', 'JPNENTHRONEMENT']
 	],
+	'Lunar_New_Year_2022_v2': [
+		[
+			'いーそーぐゎちでーびる',
+			'ソーグヮチ',
+			'そーぐゎち',
+			'旧正月',
+			'HappyNewYear',
+			'LunarNewYear',
+			'SpringFestival',
+			'春節'
+		]
+	],
 	'NewYearCelebration_Japan2020_sunrise': [
 		// [年末年始はTwitterで 「#あけおめ」](https://blog.twitter.com/ja_jp/topics/events/2019/newyear-tweet-2019.html)
 		['あけおめ', '謹賀新年', 'あけましておめでとう']
@@ -959,15 +972,14 @@ var tweCategory = {
 		]
 	],
 	'Pride_2020_AlwaysProud': [['常に誇りを', 'ALWAYSPROUD', 'PRIDEMONTH']],
+	'LGBT_History_Month_UK_2022': [[ 'LGBTHistoryMonth', 'LGBTHM2022', 'LGBTHM22', 'LGBTQIAHistoryMonth', 'LGBTQIAHM2022' ]],
 	'LGBTQHistoryMonth_2021': [
 		[
-			'LGBTQIAHISTORYMONTH',
 			'LGBTQIAHM2021',
 			'LGBTQIAHM21',
 			'LGBTQIHISTORYMONTH',
 			'LGBTQHISTORYMONTH',
 			'LGBTQHM2021',
-			'LGBTHISTORYMONTH',
 			'LGBTHM2021',
 			'LGBTHM21'
 		]
