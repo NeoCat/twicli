@@ -473,6 +473,7 @@ var tweHashtag = {
 	'КХЛ': 'KHL_Season_Start'
 };
 var tweCategory = {
+	'Japan_Olympic_for_Beijing_2022_v2': [['teamjapan', 'チームジャパン']],
 	'Olympics_2021_Sports_#': [
 		['3x3'],
 		['Archery', 'アーチェリー'],
