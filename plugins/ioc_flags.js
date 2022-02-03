@@ -959,15 +959,14 @@ var tweCategory = {
 		]
 	],
 	'Pride_2020_AlwaysProud': [['常に誇りを', 'ALWAYSPROUD', 'PRIDEMONTH']],
+	'LGBT_History_Month_UK_2022': [[ 'LGBTHistoryMonth', 'LGBTHM2022', 'LGBTHM22', 'LGBTQIAHistoryMonth', 'LGBTQIAHM2022' ]],
 	'LGBTQHistoryMonth_2021': [
 		[
-			'LGBTQIAHISTORYMONTH',
 			'LGBTQIAHM2021',
 			'LGBTQIAHM21',
 			'LGBTQIHISTORYMONTH',
 			'LGBTQHISTORYMONTH',
 			'LGBTQHM2021',
-			'LGBTHISTORYMONTH',
 			'LGBTHM2021',
 			'LGBTHM21'
 		]
