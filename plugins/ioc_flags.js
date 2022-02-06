@@ -452,6 +452,7 @@ var tweCategory = {
 	'Beijing_Winter_Olympics_#_2022': [
 		['AlpineSkiing', 'アルペンスキー'],
 		['Beijing2022', '北京2022'],
+		['Biathlon', 'バイアスロン'],
 		['Bobsleigh', 'ボブスレー'],
 		['Bronze', '銅メダル'],
 		['ClosingCeremony', '閉会式'],
