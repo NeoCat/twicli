@@ -446,6 +446,20 @@ var tweHashtag = {
 	'КХЛ': 'KHL_Season_Start'
 };
 var tweCategory = {
+	'CatDay_white_2022': [
+		[
+			'Twitter猫の日アンバサダー',
+			'にゃんにゃんにゃんの日',
+			'ねこ',
+			'ねこの日',
+			'ネコ',
+			'ネコの日',
+			'猫',
+			'猫のいる生活',
+			'猫の日',
+			'猫好きさんと繋がりたい'
+		]
+	],
 	'Beijing_Winter_#_2022': [
 		['Olympics', 'OlympicGames', 'オリンピック']
 	],
