@@ -870,17 +870,16 @@ var tweCategory = {
 		['あつまれどうぶつの森', 'どうぶつの森', 'ACNH', 'ANIMALCROSSING', 'ANIMALCROSSINGNEWHORIZONS']
 	],
 	'KIRINSoccerJapan_2020': [['キリチャレの日', '届けてキリン', '聖獣麒麟']],
+	'Twitter_Women_Celebration_Month_March_2022': [['IWD2022']],
+	'Twitter_Women_Celebration_Month_March_2022_add': [['WomensHistoryMonth', 'IWD', 'WHM']],
 	'InternationalWomensDay2021': [
 		[
 			'国際女性デー',
 			'INTERNATIONALWOMENSDAY',
-			'IWD',
 			'IWD2021',
 			'女性デー',
 			'WOMENSDAY',
 			'女性史月間',
-			'WOMENSHISTORYMONTH',
-			'WHM',
 			'WHM2021',
 			'平等を目指す全ての世代',
 			'GENERATIONEQUALITY',
