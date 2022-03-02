@@ -435,8 +435,6 @@ var tweHashtag = {
 	'IO21': 'GoogleIO2021',
 	'ANDROID12': 'GoogleIO2021',
 	'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
-	'午後の紅茶': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
-	'午後ティー': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
 	'ロマサガRS': 'romasaga_rs_2019',
 	'シノアリス': 'Sinoalice_June2019',
 	'GAMEOFTHRONES': 'GameofThrones_S8_2018_v2',
@@ -1023,6 +1021,7 @@ var tweCategory = {
 	'NvidiaGTCFall2021': [['GTC2021', 'NVIDIAGTC', 'GTCVisionary', 'NVIDIA']],
 	'COP26_2021': [['COP26', 'RaceToResilience', 'RaceToZero', 'TogetherForOurPlanet']],
 	'PikminBloom_2021': [['ピクミン', 'ピクミンブルーム', 'Pikmin', 'PikminBloom']],
+	'KIRIN_Gogo_Tea_Japan_Feb_2022': [['午後の紅茶', '午後ティー', '幸せの紅茶']],
 	'#': [
 		// [Twitter上で2020年を共に過ごした皆さんへ](https://blog.twitter.com/ja_jp/topics/company/2020/thishappened-in-2020-ja.html)
 		['ThisHappened2020', '今年のできごと2020', 'THISHAPPENED'],
