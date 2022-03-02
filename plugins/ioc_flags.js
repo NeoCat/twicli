@@ -1021,6 +1021,7 @@ var tweCategory = {
 			'WORLDIMMUNIZATIONWEEK2021'
 		]
 	],
+	'Vaccinated_Japan_2022': [['ワクチン完了']],
 	'NvidiaGTCFall2021': [['GTC2021', 'NVIDIAGTC', 'GTCVisionary', 'NVIDIA']],
 	'COP26_2021': [['COP26', 'RaceToResilience', 'RaceToZero', 'TogetherForOurPlanet']],
 	'PikminBloom_2021': [['ピクミン', 'ピクミンブルーム', 'Pikmin', 'PikminBloom']],
