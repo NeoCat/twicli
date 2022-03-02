@@ -740,6 +740,7 @@ var tweCategory = {
 		['防災の日', '防災', '防災豆知識', '非常時に知っておくと役立つ便利情報']
 	],
 	'Tokyo_Disaster_Prevention_Day_2019_Mascot_Emoji_GIF': [['東京防災', '防サイくん', '今やろう']],
+	'311_for_2022_v2': [['防災いまできること', 'PRAYFORTOHOKU']],
 	'311Tohokumemorial_2021_v3': [
 		// https://twitter.com/TwitterJP/status/1366252059482202113
 		[
@@ -748,7 +749,6 @@ var tweCategory = {
 			'あれから私は',
 			'これから私は',
 			'東北ボランティア',
-			'防災いまできること',
 			'10YEARSLATER',
 			'10ปีถัดมา',
 			'10AÑOSDESPUÉS',
@@ -760,8 +760,7 @@ var tweCategory = {
 			'10YILSONRA',
 			'10ANNIDOPO',
 			'10JAARLATER',
-			'LOVEFORTOHOKU',
-			'PRAYFORTOHOKU'
+			'LOVEFORTOHOKU'
 		]
 	],
 	'WorldSuicidePreventionDay_2020': [
