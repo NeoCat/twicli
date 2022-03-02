@@ -435,8 +435,6 @@ var tweHashtag = {
 	'IO21': 'GoogleIO2021',
 	'ANDROID12': 'GoogleIO2021',
 	'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
-	'午後の紅茶': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
-	'午後ティー': 'KIRIN_GT_2_Japan_2019_Emoji_V2',
 	'ロマサガRS': 'romasaga_rs_2019',
 	'シノアリス': 'Sinoalice_June2019',
 	'GAMEOFTHRONES': 'GameofThrones_S8_2018_v2',
@@ -740,6 +738,7 @@ var tweCategory = {
 		['防災の日', '防災', '防災豆知識', '非常時に知っておくと役立つ便利情報']
 	],
 	'Tokyo_Disaster_Prevention_Day_2019_Mascot_Emoji_GIF': [['東京防災', '防サイくん', '今やろう']],
+	'311_for_2022_v2': [['防災いまできること', 'PRAYFORTOHOKU']],
 	'311Tohokumemorial_2021_v3': [
 		// https://twitter.com/TwitterJP/status/1366252059482202113
 		[
@@ -748,7 +747,6 @@ var tweCategory = {
 			'あれから私は',
 			'これから私は',
 			'東北ボランティア',
-			'防災いまできること',
 			'10YEARSLATER',
 			'10ปีถัดมา',
 			'10AÑOSDESPUÉS',
@@ -760,8 +758,7 @@ var tweCategory = {
 			'10YILSONRA',
 			'10ANNIDOPO',
 			'10JAARLATER',
-			'LOVEFORTOHOKU',
-			'PRAYFORTOHOKU'
+			'LOVEFORTOHOKU'
 		]
 	],
 	'WorldSuicidePreventionDay_2020': [
@@ -870,17 +867,16 @@ var tweCategory = {
 		['あつまれどうぶつの森', 'どうぶつの森', 'ACNH', 'ANIMALCROSSING', 'ANIMALCROSSINGNEWHORIZONS']
 	],
 	'KIRINSoccerJapan_2020': [['キリチャレの日', '届けてキリン', '聖獣麒麟']],
+	'Twitter_Women_Celebration_Month_March_2022': [['IWD2022']],
+	'Twitter_Women_Celebration_Month_March_2022_add': [['WomensHistoryMonth', 'IWD', 'WHM']],
 	'InternationalWomensDay2021': [
 		[
 			'国際女性デー',
 			'INTERNATIONALWOMENSDAY',
-			'IWD',
 			'IWD2021',
 			'女性デー',
 			'WOMENSDAY',
 			'女性史月間',
-			'WOMENSHISTORYMONTH',
-			'WHM',
 			'WHM2021',
 			'平等を目指す全ての世代',
 			'GENERATIONEQUALITY',
@@ -1021,9 +1017,11 @@ var tweCategory = {
 			'WORLDIMMUNIZATIONWEEK2021'
 		]
 	],
+	'Vaccinated_Japan_2022': [['ワクチン完了']],
 	'NvidiaGTCFall2021': [['GTC2021', 'NVIDIAGTC', 'GTCVisionary', 'NVIDIA']],
 	'COP26_2021': [['COP26', 'RaceToResilience', 'RaceToZero', 'TogetherForOurPlanet']],
 	'PikminBloom_2021': [['ピクミン', 'ピクミンブルーム', 'Pikmin', 'PikminBloom']],
+	'KIRIN_Gogo_Tea_Japan_Feb_2022': [['午後の紅茶', '午後ティー', '幸せの紅茶']],
 	'#': [
 		// [Twitter上で2020年を共に過ごした皆さんへ](https://blog.twitter.com/ja_jp/topics/company/2020/thishappened-in-2020-ja.html)
 		['ThisHappened2020', '今年のできごと2020', 'THISHAPPENED'],
