@@ -280,7 +280,6 @@ var tweHashtag = {
 	'ROT': 'Refugee_Olympic_Athletes',
 	'REFUGEEOLYMPICTEAMS': 'Refugee_2',
 	// ---- オリンピック/パラリンピック ----
-	'パラリンピック': 'Logo_paralympics_2016_v5',
 	'PARALYMPICFLAME': 'Rio_Records',
 	// ---- 開催国 ----
 	'RIORECORDS': 'flame_paralympics_2016',
@@ -458,27 +457,38 @@ var tweCategory = {
 			'猫好きさんと繋がりたい'
 		]
 	],
+	'Beijing_Paralympic_Agitos_2022': [['冬季パラリンピック', 'ParalympicGames', 'Paralympics']],
+	'Beijing_Paralympic_xuerongrong_2022': [['ShueyRhonRhon', '雪容融']],
+	'Beijing_Paralympic_ParaCurling_2022': [['WheelchairCurling', '車いすカーリング']],
+	'Beijing_Paralympic_#_2022': [
+		['Beijing2022', '北京2022'],
+		['bingdwendwen', '冰墩墩'],
+		['ClosingCeremony', '閉会式'],
+		['Gold', '金メダル'],
+		['OpeningCeremony', '開会式'],
+		['ParaAlpine', 'パラアルパイン'],
+		['ParaIceHockey', 'パラアイスホッケー'],
+		['ParaNordic', 'パラノルディック'],
+		['ParaSnowboard', 'パラスノーボード'],
+		['bronze', '銅メダル'],
+		['silver', '銀メダル']
+	],
 	'Beijing_Winter_#_2022': [
 		['Olympics', 'OlympicGames', 'オリンピック']
 	],
 	'Beijing_Winter_Olympics_#_2022': [
 		['AlpineSkiing', 'アルペンスキー'],
-		['Beijing2022', '北京2022'],
 		['Biathlon', 'バイアスロン'],
 		['Bobsleigh', 'ボブスレー'],
-		['Bronze', '銅メダル'],
 		['ClosingCeremony', '閉会式'],
 		['CrossCountrySkiing', 'クロスカントリースキー'],
 		['Curling', 'カーリング'],
 		['FigureSkating', 'フィギュアスケート'],
 		['FreestyleSkiing', 'Freestyle', 'SkiFreestyle', 'フリースタイルスキー'],
-		['Gold', '金メダル'],
 		['IceHockey', 'アイスホッケー'],
 		['Luge', 'リュージュ'],
 		['NordicCombined', 'ノルディック複合'],
-		['OpeningCeremony', '開会式'],
 		['ShortTrackSkating', 'ShortTrack', 'ショートトラック'],
-		['Silver', '銀メダル'],
 		['Skeleton', 'スケルトン'],
 		['SkiJumping', 'スキージャンプ'],
 		['Snowboard', 'スノーボード'],
@@ -544,7 +554,6 @@ var tweCategory = {
 	'TokyoOlympic_2021_Part1': [['みんなの聖火リレー', 'OLYMPICTORCHRELAY']],
 	'Tokyo2020_Olympics_add': [['東京2020', 'TOKYO2020']],
 	'Paris_2024_Olympics': [['JeuxOlympiques', 'paris2024', 'ParisHandover', 'SeeYouInParis','TokyoToParis']],
-	'Paralympics_2021': [['Paralympics']],
 	'Paralympics_2021_add_': [['パラリンピック']],
 	'Paralympics_2021_#': Object.keys(tweCountryFlags)
 		.filter(function(key) {
