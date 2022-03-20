@@ -784,7 +784,7 @@ var tweCategory = {
 			'LIGHTACANDLE',
 		]
 	],
-	'JapanSuicidePreventionMonth_2021': [['自殺対策強化月間', '相談しよう', 'いのち支える']],
+	'Japan_Suicide_Prevention_Month_2022': [['自殺対策強化月間', '相談しよう', 'いのち支える']],
 	'Rugby_World_Cup_2019_EMOJI_#': [
 		['RWC2019'],
 		['WebbEllisCup'],
