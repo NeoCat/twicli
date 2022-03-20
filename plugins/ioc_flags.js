@@ -443,6 +443,7 @@ var tweHashtag = {
 	'КХЛ': 'KHL_Season_Start'
 };
 var tweCategory = {
+	'Spring_High_School_Baseball_MBS_2022': [['選抜高校野球', 'みんなの甲子園', 'センバツ', 'センバツLIVE', '春はセンバツから']],
 	'CatDay_white_2022': [
 		[
 			'Twitter猫の日アンバサダー',
@@ -784,7 +785,7 @@ var tweCategory = {
 			'LIGHTACANDLE',
 		]
 	],
-	'JapanSuicidePreventionMonth_2021': [['自殺対策強化月間', '相談しよう', 'いのち支える']],
+	'Japan_Suicide_Prevention_Month_2022': [['自殺対策強化月間', '相談しよう', 'いのち支える']],
 	'Rugby_World_Cup_2019_EMOJI_#': [
 		['RWC2019'],
 		['WebbEllisCup'],
