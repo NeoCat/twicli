@@ -423,16 +423,9 @@ var tweHashtag = {
 	'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 	'LOVETWITTER': 'LoveTwitter',
 	'METOO': 'MeToo_v3',
-	'MSBUILD': 'MicrosoftBuild_2021',
-	'MSBUILD2021': 'MicrosoftBuild_2021',
 	'APPLEEVENT': 'MarchAppleEvent',
 	'WWDC20': 'WWDC_2020_V11',
 	'WWDC21': 'USEN_THB_TLB_72x72_BAN_WWDC_PREE_NA_NA_NA_NA_NA',
-	'GOOGLEIO': 'GoogleIO2021',
-	'GOOGLEIO2021': 'GoogleIO2021',
-	'IO2021': 'GoogleIO2021',
-	'IO21': 'GoogleIO2021',
-	'ANDROID12': 'GoogleIO2021',
 	'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
 	'ロマサガRS': 'romasaga_rs_2019',
 	'シノアリス': 'Sinoalice_June2019',
@@ -443,6 +436,10 @@ var tweHashtag = {
 	'КХЛ': 'KHL_Season_Start'
 };
 var tweCategory = {
+	'Google_IO_Q2_2022': [['GoogleIO', 'GoogleIO2022', 'GoogleIO22', 'IO2022', 'IO22']],
+	'GoogleIO2021': [['GoogleIO2021', 'GoogleIO21', 'IO2021', 'IO21', 'Android12']],
+	'Microsoft_Build_May_2022': [['MSBuild']],
+	'MicrosoftBuild_2021': [['MSBUILD2021']],
 	'Spring_High_School_Baseball_MBS_2022': [['選抜高校野球', 'みんなの甲子園', 'センバツ', 'センバツLIVE', '春はセンバツから']],
 	'CatDay_white_2022': [
 		[
