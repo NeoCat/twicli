@@ -969,16 +969,24 @@ var tweCategory = {
 			'THANKFUL'
 		]
 	],
+	'WeBelong_Pride_2022': [
+		[
+			'GlobalPride',
+			'GlobalPride2022',
+			'LoveIsLove',
+			'Pride',
+			'Pride2022',
+			'TRP2022',
+			'WeBelong',
+			'好きだから好き',
+			'東京レインボープライド',
+		]
+	],
 	'Pride_2020': [
 		[
-			'東京レインボープライド',
 			'TRP2020',
-			'好きだから好き',
-			'PRIDE',
 			'PRIDE2020',
-			'GLOBALPRIDE',
 			'GLOBALPRIDE2020',
-			'LOVEISLOVE'
 		]
 	],
 	'Pride_2020_AlwaysProud': [['常に誇りを', 'ALWAYSPROUD', 'PRIDEMONTH']],
