@@ -734,7 +734,7 @@ var tweCategory = {
 		['選挙', '参院選', '参院選2019', '令和初の参院選']
 	],
 	'2020_TokyoGubernatorialElection': [['東京都知事選挙', '東京都知事選', '都知事選', '選挙に行こう']],
-	'JapanGeneralElection_2021': [['私たちの選挙', '私たちの一票']],
+	'Japan_Upper_House_Election_Jun_2022': [['私たちの選挙', '私たちの一票']],
 	'WorldEmojiDay_2019': [
 		// [7月17日は #世界絵文字デー](https://blog.twitter.com/ja_jp/topics/events/2019/World-Emoji-Day-2019.html)
 		['WORLDEMOJIDAY', '世界絵文字デー', '鳥取', '鳥取県', '絵文字で鳥取県', 'おしどり', '絵文字', 'EMOJI']
