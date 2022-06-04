@@ -424,8 +424,6 @@ var tweHashtag = {
 	'LOVETWITTER': 'LoveTwitter',
 	'METOO': 'MeToo_v3',
 	'APPLEEVENT': 'MarchAppleEvent',
-	'WWDC20': 'WWDC_2020_V11',
-	'WWDC21': 'USEN_THB_TLB_72x72_BAN_WWDC_PREE_NA_NA_NA_NA_NA',
 	'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
 	'ロマサガRS': 'romasaga_rs_2019',
 	'シノアリス': 'Sinoalice_June2019',
@@ -436,6 +434,9 @@ var tweHashtag = {
 	'КХЛ': 'KHL_Season_Start'
 };
 var tweCategory = {
+	'USEN_EVENT_STATIC_72x72_BAN_BRAND_PREE_NA_NA_NA_NA_NA_TWCE_GLD': [['WWDC22']],
+	'USEN_THB_TLB_72x72_BAN_WWDC_PREE_NA_NA_NA_NA_NA': [['WWDC21']],
+	'WWDC_2020_V11': [['WWDC20']],
 	'Google_IO_Q2_2022': [['GoogleIO', 'GoogleIO2022', 'GoogleIO22', 'IO2022', 'IO22']],
 	'GoogleIO2021': [['GoogleIO2021', 'GoogleIO21', 'IO2021', 'IO21', 'Android12']],
 	'Microsoft_Build_May_2022': [['MSBuild']],
