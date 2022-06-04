@@ -424,8 +424,6 @@ var tweHashtag = {
 	'LOVETWITTER': 'LoveTwitter',
 	'METOO': 'MeToo_v3',
 	'APPLEEVENT': 'MarchAppleEvent',
-	'WWDC20': 'WWDC_2020_V11',
-	'WWDC21': 'USEN_THB_TLB_72x72_BAN_WWDC_PREE_NA_NA_NA_NA_NA',
 	'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
 	'ロマサガRS': 'romasaga_rs_2019',
 	'シノアリス': 'Sinoalice_June2019',
@@ -436,6 +434,9 @@ var tweHashtag = {
 	'КХЛ': 'KHL_Season_Start'
 };
 var tweCategory = {
+	'USEN_EVENT_STATIC_72x72_BAN_BRAND_PREE_NA_NA_NA_NA_NA_TWCE_GLD': [['WWDC22']],
+	'USEN_THB_TLB_72x72_BAN_WWDC_PREE_NA_NA_NA_NA_NA': [['WWDC21']],
+	'WWDC_2020_V11': [['WWDC20']],
 	'Google_IO_Q2_2022': [['GoogleIO', 'GoogleIO2022', 'GoogleIO22', 'IO2022', 'IO22']],
 	'GoogleIO2021': [['GoogleIO2021', 'GoogleIO21', 'IO2021', 'IO21', 'Android12']],
 	'Microsoft_Build_May_2022': [['MSBuild']],
@@ -734,7 +735,7 @@ var tweCategory = {
 		['選挙', '参院選', '参院選2019', '令和初の参院選']
 	],
 	'2020_TokyoGubernatorialElection': [['東京都知事選挙', '東京都知事選', '都知事選', '選挙に行こう']],
-	'JapanGeneralElection_2021': [['私たちの選挙', '私たちの一票']],
+	'Japan_Upper_House_Election_Jun_2022': [['私たちの選挙', '私たちの一票']],
 	'WorldEmojiDay_2019': [
 		// [7月17日は #世界絵文字デー](https://blog.twitter.com/ja_jp/topics/events/2019/World-Emoji-Day-2019.html)
 		['WORLDEMOJIDAY', '世界絵文字デー', '鳥取', '鳥取県', '絵文字で鳥取県', 'おしどり', '絵文字', 'EMOJI']
@@ -969,16 +970,24 @@ var tweCategory = {
 			'THANKFUL'
 		]
 	],
+	'WeBelong_Pride_2022': [
+		[
+			'GlobalPride',
+			'GlobalPride2022',
+			'LoveIsLove',
+			'Pride',
+			'Pride2022',
+			'TRP2022',
+			'WeBelong',
+			'好きだから好き',
+			'東京レインボープライド',
+		]
+	],
 	'Pride_2020': [
 		[
-			'東京レインボープライド',
 			'TRP2020',
-			'好きだから好き',
-			'PRIDE',
 			'PRIDE2020',
-			'GLOBALPRIDE',
 			'GLOBALPRIDE2020',
-			'LOVEISLOVE'
 		]
 	],
 	'Pride_2020_AlwaysProud': [['常に誇りを', 'ALWAYSPROUD', 'PRIDEMONTH']],
