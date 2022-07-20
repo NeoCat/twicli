@@ -63,6 +63,7 @@
 }());
 
 function dispEmbedSrc(url, link, type) {
+	closeRep()
 	rep_top = Math.max(cumulativeOffset(link)[1] + 20, $("control").offsetHeight);
 	var win_h = window.innerHeight || document.documentElement.clientHeight;
 	var createIframe = function (content) {
