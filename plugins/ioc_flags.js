@@ -423,7 +423,6 @@ var tweHashtag = {
 	'MYTWITTERANNIVERSARY': 'MyTwitterAnniversary',
 	'LOVETWITTER': 'LoveTwitter',
 	'METOO': 'MeToo_v3',
-	'APPLEEVENT': 'MarchAppleEvent',
 	'夏はサボテンダー': 'DFF_OperaOmnia_2019_Emoji',
 	'ロマサガRS': 'romasaga_rs_2019',
 	'シノアリス': 'Sinoalice_June2019',
@@ -434,6 +433,7 @@ var tweHashtag = {
 	'КХЛ': 'KHL_Season_Start'
 };
 var tweCategory = {
+	'AppleEvent_824_global_launch_Aug_2022': [['AppleEvent']],
 	'USEN_EVENT_STATIC_72x72_BAN_BRAND_PREE_NA_NA_NA_NA_NA_TWCE_GLD': [['WWDC22']],
 	'USEN_THB_TLB_72x72_BAN_WWDC_PREE_NA_NA_NA_NA_NA': [['WWDC21']],
 	'WWDC_2020_V11': [['WWDC20']],
