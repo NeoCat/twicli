@@ -19,13 +19,18 @@ function imageLoadedFromLink(e) {
     }
   }
 }
-function dispImageFromLink(url, e, type) {
+function dispImageFromLink(e, media) {
   if (e.parentNode.parentNode.parentNode.id != 'reps') rep_top = cumulativeOffset(e)[1] + 20;
-  if (type == "video" || type == "animated_gif")
-	$('reps').innerHTML = '<video controls autoplay '+(type == "animated_gif" ? 'loop ' : '')+'style="max-width:90%; max-height: 90%; margin: auto; display: block;">' +
+  var html = '';
+  for (var i = 0; i < media.length; i++) {
+    var url = media[i][0], type = media[i][1];
+    if (type == "video" || type == "animated_gif")
+      html += '<video controls autoplay '+(type == "animated_gif" ? 'loop ' : '')+'style="max-width:90%; max-height: 90%; margin: auto; display: block;">' +
       url.map(function(u){return '<source type="' + u[0] + '" src="' + u[1] + '">'}).join('') + '</video>';
-  else
-    $('reps').innerHTML = url.map(function(u){return '<img src="' + u + '" style="max-width:90%; max-height: 90%; margin: auto; display: block;" onload="imageLoadedFromLink(this)">'}).join('');
+    else
+      html += '<img src="' + url + '" style="max-width:90%; max-height: 90%; margin: auto; display: block;" onload="imageLoadedFromLink(this)">';
+  }
+  $('reps').innerHTML = html;
   openRep(true);
   $('rep').style.top = rep_top + 'px';
 }
@@ -53,26 +58,48 @@ function dispImageFromLink(url, e, type) {
     tw = tw.retweeted_status || tw;
     a.tweetUrlChecked = true;
     var entities = ent(tw);
+    var className = 'dispReply';
     var script = 'dispReply(\'' + m[1] + '\',\'' + m[2] + '\',this); event.preventDefault(); return false;';
     if (tw.id_str === id_str && (a.href.indexOf('/photo/1') >= 0 || a.href.indexOf('/video/1') >= 0) &&
         entities.media && entities.media[0]) {
       var media = entities.media;
-      script = 'dispImageFromLink([' +
-        Array.prototype.map.call(media, function(x){
-          return x.video_info ?
-            Array.prototype.map.call(x.video_info.variants, function(y){return '[\'' + y.content_type + '\',\'' + y.url + '\']'}) :
-            '\'' + x.media_url_https + ':medium\''
-        }).join(',') +
-       '], this, \'' + media[0].type +'\'); return false;';
+      className = 'dispImage';
+      script = 'dispImageFromLink(this, [' +
+        Array.prototype.map.call(media, function(x) {
+          return '[' + (
+            x.video_info ?
+              '[' + Array.prototype.map.call(x.video_info.variants, function(y){return '[\'' + y.content_type + '\',\'' + y.url + '\']'}) + ']' :
+              '\'' + x.media_url_https + ':medium\''
+          ) + ', \'' + x.type +'\']';
+        }).join(',') + ']); return false;';
     }
     var dummy = document.createElement('div');
-    dummy.innerHTML = '<a class="button" href="#" onClick="' + script + '"><img src="images/jump.png" alt="☞" width="14" height="14"></a>';
+    dummy.innerHTML = '<a class="button ' + className + '" href="#" onClick="' + script + '"><img src="images/jump.png" alt="☞" width="14" height="14"></a>';
     a.parentNode.insertBefore(dummy.firstChild, a.nextSibling);
+  }
+
+  function updateDispImageV2(elem) {
+    var a = elem.querySelector('.dispImage');
+    if (!a) return;
+    a.onclick = function() {
+      var media = {};
+      for (var i = 0; i < elem.tw_v2.includes.media.length; i++) {
+	var m = elem.tw_v2.includes.media[i];
+	media[m.media_key] = m;
+      }
+      var list = Array.prototype.map.call(elem.tw_v2.data.attachments.media_keys, function(key) {
+        return [media[key].url || Array.prototype.map.call(media[key].variants, function(m) { return [m.content_type, m.url]; }),
+                media[key].type];
+      });
+      dispImageFromLink(elem, list);
+      return false;
+    };
   }
 
   registerPlugin({
     newMessageElement : tweetUrlReply,
-    replaceUrl : urlReplaced
+    replaceUrl : urlReplaced,
+    setTweetV2: updateDispImageV2
   });
 
 }());

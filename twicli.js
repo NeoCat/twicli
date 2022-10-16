@@ -34,7 +34,8 @@ function setupOAuthArgs(args) {
 	}
 }
 function setupOAuthURL(url, post, post_agent, multipart) {
-	if (url.indexOf(twitterAPI) != 0) return url;
+	var twapi2 = url.indexOf(twitterAPI2) == 0;
+	if (url.indexOf(twitterAPI) != 0 && !twapi2) return url;
 	var media_upload = url.indexOf('update_with_media.json') >= 0 && post;
 	var json_post = url.indexOf('?_body=') >= 0 && post;
 	if (media_upload || json_post) multipart = true;
@@ -64,6 +65,8 @@ function setupOAuthURL(url, post, post_agent, multipart) {
 	if (post_agent) {
 		var sid = ['','2'][((new Date).getTime()/1000/60/60/12|0)%2];
 		url = url.replace(twitterAPI, 'https://tweet-agent'+sid+'.appspot.com/1.1/');
+	} else if (twapi2) {
+		url = url.replace(twitterAPI2, 'https://thumbnail-url-t2yaxfegmq-uw.a.run.app/twitter-api/2/');
 	}
 	for (e = 0; e < nosign.length; e++)
 		document.request.appendChild(nosign[e]);
@@ -90,8 +93,10 @@ function loadXDomainScript(url, ele) {
 // クロスドメインJavaScript呼び出し(エラー処理+リトライ付き, Twitter APIはOAuth認証)
 var xds = {
 	load: function(url, callback, onerror, retry, callback_key, post_agent) {
-		var url2 = setupOAuthURL(url + (url.indexOf('?')<0?'?':'&') +
-								(callback_key?callback_key:'callback') + '=cb', false, post_agent);
+		var url2 = setupOAuthURL(url +
+					 (callback_key === false ? '' :
+					  (url.indexOf('?')<0?'?':'&') + (callback_key?callback_key:'callback') + '=cb'),
+					 false, post_agent);
 		if (!url2) return null;
 		loading(true);
 		var ifr = document.createElement("iframe");
@@ -137,7 +142,7 @@ var xds = {
 			loading(false);
 		}
 	},
-	
+
 	load_default: function(url, callback, old, callback_key) {
 		this.abort(old);
 		return this.load(url, callback, twFail, 3, callback_key);
@@ -436,6 +441,7 @@ document.write('<style id="usercss">' + user_style + '</style>');
 
 var twitterURL = 'https://twitter.com/';
 var twitterAPI = 'https://api.twitter.com/1.1/';
+var twitterAPI2 = 'https://api.twitter.com/2/';
 var myname = null;		// 自ユーザ名
 var myid = null;		// 自ユーザID
 var last_user = null;	// user TLに表示するユーザ名

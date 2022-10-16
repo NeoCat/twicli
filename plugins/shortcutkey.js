@@ -260,7 +260,7 @@ var shortcutkey_plugin = {
 					if (target.id && target.id.substr(0,5) == 'text-') {
 						for (i = 0; i < target.childNodes.length; i++) {
 							target2 = target.childNodes[i];
-							if (target2.tagName == 'A' && target2.className == 'button' && target2.onclick) {
+							if (target2.tagName == 'A' && target2.className.match('button') && target2.onclick) {
 								target2.onclick();
 								break;
 							}

@@ -14,10 +14,11 @@ registerPlugin(thumbnail_plugin = {
 				for (var i = 0; i < entities.media.length; i++) {
 					if (['photo', 'animated_gif', 'video'].indexOf(entities.media[i].type) >= 0) {
 						addThumbnail(elem,
-							entities.media[i].media_url_https + ":thumb",
-								entities.media[i].type == 'photo' && thumbnail_twitter_photo_link == 'original' ?
-								entities.media[i].media_url_https + ":orig" :
-								entities.media[i].expanded_url);
+							     entities.media[i].media_url_https + ":thumb",
+							     entities.media[i].type == 'photo' && thumbnail_twitter_photo_link == 'original' ?
+							     entities.media[i].media_url_https + ":orig" :
+							     entities.media[i].expanded_urls,
+							     null, "entities");
 					}
 				}
 			}
@@ -33,6 +34,26 @@ registerPlugin(thumbnail_plugin = {
 		var flickr_id, id, _url;
 		if (link.thumbnailed && link.thumbnailed == url) return;
 		link.thumbnailed = url;
+                if (url.match(/^https?:\/\/twitter\.com\/i\/web\/status\/(\d+)/)) {
+			// multiple media attachment
+			return xds.load(twitterAPI2 + 'tweets/' + RegExp.$1 + '?expansions=attachments.media_keys&media.fields=variants,preview_image_url',
+				function(r) {
+					elem.tw_v2 = r;
+					var keys = r.data.attachments.media_keys;
+					var media = {};
+					for (var i = 0; i < r.includes.media.length; i++) {
+						var m = r.includes.media[i];
+						media[m.media_key] = m;
+					}
+					Array.prototype.forEach.call(elem.querySelectorAll('.entities'), function(a) {
+						a.parentNode.removeChild(a);
+					});
+					for (var i = 0; i < keys.length; i++) {
+						addThumbnail(elem, media[keys[i]].preview_image_url + ':thumb', media[keys[i]].variants[0].url);
+					}
+					callPlugins('setTweetV2', elem);
+				 }, null, null, false);
+                }
 		if (url.indexOf(twitterURL) == 0 || url.indexOf("javascript:") == 0)
 			return; // skip @... or #...
 		if (url.match(/^http:\/\/movapic\.com\/pic\/(\w+)$/)) {
@@ -179,7 +200,7 @@ function decodeBase58(snipcode) {
 var thumbnail_mode = readCookie('thumbnail_mode') || 'top';
 var thumbnail_twitter_photo_link = readCookie('thumbnail_twitter_photo_link') || 'tweet';
 
-function addThumbnail(elem, src, url, title) {
+function addThumbnail(elem, src, url, title, class_name) {
 	var thm = document.createElement('img');
 	if (typeof(src) == 'string')
 	  thm.src = src;
@@ -194,7 +215,7 @@ function addThumbnail(elem, src, url, title) {
 	a.href = url;
 	if (title) a.title = title;
 	a.target = 'twitter';
-	a.className = 'thumbnail-link';
+	a.className = 'thumbnail-link ' + (class_name || '');
 	a.onclick = function(){ return link(a); };
 	a.appendChild(thm);
 	if (thumbnail_mode == 'top')
@@ -205,10 +226,10 @@ function addThumbnail(elem, src, url, title) {
 			var span = elem.childNodes[i];
 			if (span.className == "utils") {
 				span = document.createElement('span');
-				span.className = 'thumbnail-link';
+				span.className = 'thumbnail-link ' + (class_name || '');
 				elem.insertBefore(span, elem.childNodes[i]);
 			}
-			if (span.className == 'thumbnail-link')
+			if (span.className && span.className.match(/^thumbnail-link/))
 				return span.appendChild(a);
 		}
 	}
