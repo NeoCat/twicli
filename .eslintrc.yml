@@ -96,6 +96,7 @@ overrides:
     twShow2: readonly
     twShowToNode: readonly
     twitterAPI: readonly
+    twitterAPI2: readonly
     twitterURL: readonly
     updateInterval: readonly
     user_picks: writable
