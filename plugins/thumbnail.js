@@ -6,6 +6,15 @@ langResources['Link for Twitter photo'] =	['Twitterの写真のリンク先'];
 langResources['Tweet page'] =	['ツイートページ'];
 langResources['Original image'] = ['オリジナル画像'];
 
+// version check
+if (document.twicli_js_ver < 12) {
+	if (location.href.indexOf('?') < 0) {
+		location.href = location.href + '?' + 12;
+	} else {
+		alert(_('An old HTML file is loaded. Please reload it. If the problem is not fixed, please try erasing caches.'));
+	}
+}
+
 registerPlugin(thumbnail_plugin = {
 	newMessageElement: function(elem, tw) {
 		tw = tw.retweeted_status || tw;
