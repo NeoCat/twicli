@@ -26,7 +26,7 @@ registerPlugin(thumbnail_plugin = {
 							     entities.media[i].media_url_https + ":thumb",
 							     entities.media[i].type == 'photo' && thumbnail_twitter_photo_link == 'original' ?
 							     entities.media[i].media_url_https + ":orig" :
-							     entities.media[i].expanded_urls,
+							     entities.media[i].expanded_url,
 							     null, "entities");
 					}
 				}
@@ -45,7 +45,7 @@ registerPlugin(thumbnail_plugin = {
 		link.thumbnailed = url;
                 if (url.match(/^https?:\/\/twitter\.com\/i\/web\/status\/(\d+)/)) {
 			// multiple media attachment
-			return xds.load(twitterAPI2 + 'tweets/' + RegExp.$1 + '?expansions=attachments.media_keys&media.fields=variants,preview_image_url',
+			return xds.load(twitterAPI2 + 'tweets/' + RegExp.$1 + '?expansions=attachments.media_keys&media.fields=variants,preview_image_url,url',
 				function(r) {
 					elem.tw_v2 = r;
 					var keys = r.data.attachments.media_keys;
@@ -58,11 +58,13 @@ registerPlugin(thumbnail_plugin = {
 						a.parentNode.removeChild(a);
 					});
 					for (var i = 0; i < keys.length; i++) {
-						addThumbnail(elem, media[keys[i]].preview_image_url + ':thumb', media[keys[i]].variants[0].url);
+						addThumbnail(elem,
+							(media[keys[i]].url || media[keys[i]].preview_image_url) + ':thumb',
+							media[keys[i]].url ? media[keys[i]].url + ':orig' : media[keys[i]].variants[0].url);
 					}
 					callPlugins('setTweetV2', elem);
 				 }, null, null, false);
-                }
+		}
 		if (url.indexOf(twitterURL) == 0 || url.indexOf("javascript:") == 0)
 			return; // skip @... or #...
 		if (url.match(/^http:\/\/movapic\.com\/pic\/(\w+)$/)) {
