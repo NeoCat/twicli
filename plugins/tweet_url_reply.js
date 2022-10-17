@@ -80,7 +80,7 @@ function dispImageFromLink(e, media) {
 
   function updateDispImageV2(elem) {
     var a = elem.querySelector('.dispImage');
-    if (!a) return;
+    if (!a || !elem.tw_v2.data.attachments) return;
     a.onclick = function() {
       var media = {};
       for (var i = 0; i < elem.tw_v2.includes.media.length; i++) {

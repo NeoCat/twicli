@@ -48,19 +48,21 @@ registerPlugin(thumbnail_plugin = {
 			return xds.load(twitterAPI2 + 'tweets/' + RegExp.$1 + '?expansions=attachments.media_keys&media.fields=variants,preview_image_url,url',
 				function(r) {
 					elem.tw_v2 = r;
-					var keys = r.data.attachments.media_keys;
-					var media = {};
-					for (var i = 0; i < r.includes.media.length; i++) {
-						var m = r.includes.media[i];
-						media[m.media_key] = m;
-					}
-					Array.prototype.forEach.call(elem.querySelectorAll('.entities'), function(a) {
-						a.parentNode.removeChild(a);
-					});
-					for (var i = 0; i < keys.length; i++) {
-						addThumbnail(elem,
-							(media[keys[i]].url || media[keys[i]].preview_image_url) + ':thumb',
-							media[keys[i]].url ? media[keys[i]].url + ':orig' : media[keys[i]].variants[0].url);
+					if (r.data.attachments) {
+						var keys = r.data.attachments.media_keys;
+						var media = {};
+						for (var i = 0; i < r.includes.media.length; i++) {
+							var m = r.includes.media[i];
+							media[m.media_key] = m;
+						}
+						Array.prototype.forEach.call(elem.querySelectorAll('.entities'), function(a) {
+							a.parentNode.removeChild(a);
+						});
+						for (var i = 0; i < keys.length; i++) {
+							addThumbnail(elem,
+								     (media[keys[i]].url || media[keys[i]].preview_image_url) + ':thumb',
+								     media[keys[i]].url ? media[keys[i]].url + ':orig' : media[keys[i]].variants[0].url);
+						}
 					}
 					callPlugins('setTweetV2', elem);
 				 }, null, null, false);
