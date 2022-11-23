@@ -317,11 +317,6 @@ var tweHashtag = {
 	'令和': 'Reiwa_NewEra_2019',
 	'令和元年': 'Reiwa_NewEra_2019',
 	'ハロー令和': 'Reiwa_NewEra_2019',
-	// ---- 新海誠監督映画 ----
-	'君の名は': 'YourNameMovie_2019',
-	'YOURNAME': 'YourNameMovie_2019',
-	'天気の子': 'Toho_Tenkinoko_2019',
-	'WEATHERINGWITHYOU': 'Toho_Tenkinoko_2019',
 	// ---- Amazon PrimeDay ----
 	'AMAZON': 'AmazonPrimeDay_2019',
 	'PRIMEDAYAMAZON': 'AmazonHotSale2019',
@@ -669,6 +664,11 @@ var tweCategory = {
 	'JFA_World_Cup_21_Nov_2022': [['上田綺世']],
 	'JFA_World_Cup_24_Nov_2022': [['相馬勇紀']],
 	'JFA_World_Cup_26_Nov_2022': [['伊藤洋輝']],
+	'YourNameMovie_2019': [['君の名は', '三葉', '入れ替わってる', '瀧', 'yourname']],
+	'Toho_Tenkinoko_2019': [['天気の子', '百パーセントの晴れ女', 'WeatheringWithYou', '愛にできることはまだあるかい']],
+	'Toho_Suzume_no_Tojimari_Movie_Launch_2022': [
+		['すずめの戸締まり', 'すずめ行ってきます', 'ダイジン', 'ダイジンといっしょ', '映画すずめの戸締まり']
+	],
 	'WBPikachu_#': [
 		['Bulbasaur', 'フシギダネ', 'BULBIZARRE', 'BISASAM', '이상해씨', '妙蛙种子', '妙蛙種子', 'БУЛЬБАЗАВР'],
 		['Charmander', 'ヒトカゲ', 'SALAMÈCHE', 'GLUMANDA', '파이리', '小火龙', '小火龍', 'ЧАРМАНДЕР'],
