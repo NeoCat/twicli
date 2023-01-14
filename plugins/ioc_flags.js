@@ -1,6 +1,6 @@
 var tweScript = document.createElement('script');
 tweScript.type = 'text/javascript';
-tweScript.src = '//unpkg.com/twemoji@latest/dist/twemoji.min.js';
+tweScript.src = '//cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js';
 tweScript.crossorigin = 'anonymous';
 document.getElementsByTagName('body')[0].appendChild(tweScript);
 
