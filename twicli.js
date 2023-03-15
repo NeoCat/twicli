@@ -763,7 +763,6 @@ function press(e) {
 	do_post(true);
 	callPlugins("postQueued", text);
 	in_reply_to_user = null;
-	setReplyId(false);
 	return false;
 }
 // GeoTag
