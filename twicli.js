@@ -1192,7 +1192,7 @@ function makeHTML(tw, no_name, pid, userdesc, noctl) {
 					quoted = true;
 					return '<blockquote class="quoted">' + makeHTML(tw.quoted_status, false, pid, null, true) + '</blockquote>';
 				}
-				var status_url = twitterURL + tw.user.screen_name + '/status/' + id2 + '/'
+				var status_url = twitterURL + tw.user.screen_name + '/status/' + id2 + '/';
 				return '<a class="link" target="_blank" href="' + e.replace(/"/g, '%22') + '" onclick="return link(this);">'
 					+ (e.indexOf(status_url) === 0 ? (e.replace(status_url, '')) : removeScheme(e)).replace(/&/g, '&amp;')
 					+ '</a>';
