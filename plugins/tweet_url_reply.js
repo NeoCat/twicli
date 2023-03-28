@@ -21,14 +21,15 @@ function imageLoadedFromLink(e) {
 }
 function dispImageFromLink(e, media) {
   if (e.parentNode.parentNode.parentNode.id != 'reps') rep_top = cumulativeOffset(e)[1] + 20;
-  var html = '';
+  var html = '', maxHeight = (document.body.clientHeight - $('control').clientHeight) * 0.9;
+  var styleAttr = 'style="max-width: 90%; max-height: ' + maxHeight + 'px; margin: auto; display: block;"';
   for (var i = 0; i < media.length; i++) {
     var url = media[i][0], type = media[i][1];
     if (type == "video" || type == "animated_gif")
-      html += '<video controls autoplay '+(type == "animated_gif" ? 'loop ' : '')+'style="max-width:90%; max-height: 90%; margin: auto; display: block;">' +
+      html += '<video controls autoplay ' + (type == "animated_gif" ? 'loop ' : '') + styleAttr + '>' +
       url.map(function(u){return '<source type="' + u[0] + '" src="' + u[1] + '">'}).join('') + '</video>';
     else
-      html += '<img src="' + url + '" style="max-width:90%; max-height: 90%; margin: auto; display: block;" onload="imageLoadedFromLink(this)">';
+      html += '<img src="' + url + '" ' + styleAttr + 'onload="imageLoadedFromLink(this)">';
   }
   $('reps').innerHTML = html;
   openRep(true);
@@ -84,8 +85,8 @@ function dispImageFromLink(e, media) {
     a.onclick = function() {
       var media = {};
       for (var i = 0; i < elem.tw_v2.includes.media.length; i++) {
-	var m = elem.tw_v2.includes.media[i];
-	media[m.media_key] = m;
+        var m = elem.tw_v2.includes.media[i];
+        media[m.media_key] = m;
       }
       var list = Array.prototype.map.call(elem.tw_v2.data.attachments.media_keys, function(key) {
         return [media[key].url || Array.prototype.map.call(media[key].variants, function(m) { return [m.content_type, m.url]; }),
